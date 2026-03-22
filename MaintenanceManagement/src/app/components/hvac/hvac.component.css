@@ -1,0 +1,11 @@
+.page-container { padding: 2rem; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.page-header h2 { font-size: 1.5rem; color: #333; }
+.btn-back { color: #0f3460; text-decoration: none; font-weight: 500; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+.hvac-card { background: white; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.hvac-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+.hvac-card h3 { color: #333; margin-bottom: 1rem; }
+.detail-row { display: flex; gap: 0.5rem; font-size: 0.85rem; margin-bottom: 0.4rem; }
+.label { color: #888; min-width: 90px; }
+.empty-state { text-align: center; padding: 3rem; color: #888; background: white; border-radius: 0.75rem; }

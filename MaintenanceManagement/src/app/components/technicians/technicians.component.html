@@ -1,0 +1,35 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>👷 Technicians</h2>
+    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading">Loading technicians...</div>
+  } @else {
+    <div class="card-grid">
+      @for (tech of technicians(); track tech.id) {
+        <div class="tech-card">
+          <div class="tech-avatar">{{ tech.firstName[0] }}{{ tech.lastName[0] }}</div>
+          <div class="tech-info">
+            <h3>{{ tech.fullName }}</h3>
+            <p class="spec">{{ tech.specialization }}</p>
+            <p class="email">{{ tech.email }}</p>
+            <p class="phone">{{ tech.phone }}</p>
+            <span class="status-badge" [class]="getStatusClass(tech.status)">
+              {{ getStatusLabel(tech.status) }}
+            </span>
+          </div>
+          @if (tech.latitude && tech.longitude) {
+            <div class="location-info">
+              📍 {{ tech.latitude.toFixed(4) }}, {{ tech.longitude.toFixed(4) }}
+            </div>
+          }
+        </div>
+      }
+      @empty {
+        <div class="empty-state">No technicians found.</div>
+      }
+    </div>
+  }
+</div>

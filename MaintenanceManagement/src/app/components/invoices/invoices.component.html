@@ -1,0 +1,35 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>💰 Invoices</h2>
+    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+  </div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Invoice #</th>
+          <th>Client</th>
+          <th>Issue Date</th>
+          <th>Due Date</th>
+          <th>Total</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (inv of invoices(); track inv.id) {
+          <tr>
+            <td><strong>{{ inv.invoiceNumber }}</strong></td>
+            <td>{{ inv.clientName }}</td>
+            <td>{{ inv.issueDate | date:'mediumDate' }}</td>
+            <td>{{ inv.dueDate ? (inv.dueDate | date:'mediumDate') : '—' }}</td>
+            <td><strong>${{ inv.totalAmount.toFixed(2) }}</strong></td>
+            <td><span class="badge" [class]="getStatusClass(inv.status)">{{ getStatusLabel(inv.status) }}</span></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    @if (invoices().length === 0) {
+      <div class="empty-state">No invoices found.</div>
+    }
+  </div>
+</div>
