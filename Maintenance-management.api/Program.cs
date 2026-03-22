@@ -1,14 +1,13 @@
-﻿using Maintenance_management.domain.Interfaces;
+using Maintenance_management.api.Hubs;
+using Maintenance_management.domain.Interfaces;
 using Maintenance_management.infrastructure.Data;
 using Maintenance_management.infrastructure.Identity;
 using Maintenance_management.infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -101,6 +100,28 @@ builder.Services.AddCors(options =>
 // ===================== REPOSITORIES =====================
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITechnicianRepository, Maintenance_management.infrastructure.Repositories.TechnicianRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITaskOrderRepository, Maintenance_management.infrastructure.Repositories.TaskOrderRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IEquipmentRepository, Maintenance_management.infrastructure.Repositories.EquipmentRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IGroupRepository, Maintenance_management.infrastructure.Repositories.GroupRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IHVACSystemRepository, Maintenance_management.infrastructure.Repositories.HVACSystemRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IInvoiceRepository, Maintenance_management.infrastructure.Repositories.InvoiceRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IReportRepository, Maintenance_management.infrastructure.Repositories.ReportRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IAvailabilityRepository, Maintenance_management.infrastructure.Repositories.AvailabilityRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IDocumentRepository, Maintenance_management.infrastructure.Repositories.DocumentRepository>();
+
+// Application services
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAuthService, Maintenance_management.infrastructure.Services.AuthService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IJwtService, Maintenance_management.infrastructure.Services.JwtService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IIdentityService, Maintenance_management.infrastructure.Services.IdentityService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITechnicianService, Maintenance_management.application.Services.TechnicianService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITaskOrderService, Maintenance_management.application.Services.TaskOrderService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IGroupService, Maintenance_management.application.Services.GroupService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IEquipmentService, Maintenance_management.application.Services.EquipmentService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IHVACService, Maintenance_management.application.Services.HVACService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IReportService, Maintenance_management.application.Services.ReportService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IInvoiceService, Maintenance_management.application.Services.InvoiceService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAvailabilityService, Maintenance_management.application.Services.AvailabilityService>();
 
 // ===================== SERVICES =====================
 
@@ -149,7 +170,7 @@ using (var scope = app.Services.CreateScope())
 {
     try
     {
-       // await DataSeeder.SeedAsync(scope.ServiceProvider);
+        await DataSeeder.SeedAsync(scope.ServiceProvider);
     }
     catch (Exception ex)
     {
@@ -174,6 +195,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAll");
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapHub<NotificationHub>("/hubs/notifications").RequireCors("AllowSignalR");
