@@ -16,9 +16,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        // EF Core + SQLite
+        // EF Core + SQL Server
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         // ASP.NET Core Identity
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
