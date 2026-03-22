@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { TaskOrderService } from '../../services/api.service';
+import { TaskOrderService } from '../../services/task-order.service';
 import { TaskOrder, TaskStatus, TaskPriority } from '../../models';
 
 @Component({
