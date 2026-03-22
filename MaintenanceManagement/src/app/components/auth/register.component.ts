@@ -1,8 +1,15 @@
 import { Component, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+
+const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const password = control.get('password');
+  const confirmPassword = control.get('confirmPassword');
+  if (!password || !confirmPassword) return null;
+  return password.value !== confirmPassword.value ? { passwordMismatch: true } : null;
+};
 
 @Component({
   selector: 'app-register',
@@ -37,6 +44,9 @@ import { AuthService } from '../../services/auth.service';
           <div class="form-group">
             <label>Confirm Password</label>
             <input type="password" formControlName="confirmPassword" placeholder="Repeat password" />
+            @if (form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched) {
+              <span class="error">Passwords do not match</span>
+            }
           </div>
           @if (errorMessage()) {
             <div class="alert alert-error">{{ errorMessage() }}</div>
@@ -83,6 +93,7 @@ import { AuthService } from '../../services/auth.service';
       box-sizing: border-box;
     }
     .form-group input:focus { outline: none; border-color: #0f3460; }
+    .error { color: #e74c3c; font-size: 0.8rem; margin-top: 0.3rem; display: block; }
     .alert-error { background: #fdf0f0; color: #e74c3c; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 0.9rem; }
     .btn-primary {
       width: 100%;
@@ -112,7 +123,7 @@ export class RegisterComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
-    });
+    }, { validators: passwordMatchValidator });
   }
 
   onSubmit() {

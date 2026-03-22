@@ -15,6 +15,9 @@ import { Availability } from '../../models';
         <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
       </div>
       <div class="avail-list">
+        @if (errorMessage()) {
+          <div class="alert-error">{{ errorMessage() }}</div>
+        }
         @for (avail of availabilities(); track avail.id) {
           <div class="avail-card" [class.available]="avail.isAvailable" [class.unavailable]="!avail.isAvailable">
             <div class="avail-indicator"></div>
@@ -67,14 +70,22 @@ import { Availability } from '../../models';
     .a-available { background: #d4edda; color: #155724; }
     .a-unavailable { background: #f8d7da; color: #721c24; }
     .empty-state { text-align: center; padding: 3rem; color: #888; background: white; border-radius: 0.75rem; }
+    .alert-error { background: #fdf0f0; color: #e74c3c; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 0.9rem; }
   `]
 })
 export class AvailabilityComponent implements OnInit {
   availabilities = signal<Availability[]>([]);
+  errorMessage = signal('');
 
   constructor(private service: AvailabilityService) {}
 
   ngOnInit() {
-    this.service.getAll().subscribe({ next: d => this.availabilities.set(d), error: () => {} });
+    this.service.getAll().subscribe({
+      next: d => this.availabilities.set(d),
+      error: (err) => {
+        console.error('Failed to load availabilities', err);
+        this.errorMessage.set('Failed to load availability records. Please try again.');
+      }
+    });
   }
 }
