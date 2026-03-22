@@ -1,35 +1,42 @@
-using System.Text;
-using Maintenance_management.api.Middleware;
-using Maintenance_management.infrastructure;
+﻿using Maintenance_management.domain.Interfaces;
 using Maintenance_management.infrastructure.Data;
 using Maintenance_management.infrastructure.Identity;
+using Maintenance_management.infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Infrastructure (EF Core, Identity, services, repositories)
-builder.Services.AddInfrastructure(builder.Configuration);
+var configuration = builder.Configuration;
+var jwtSettings = configuration.GetSection("JwtSettings");
 
-// Controllers
-builder.Services.AddControllers();
+// ===================== DATABASE =====================
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+);
 
-// CORS
-builder.Services.AddCors(options =>
+// ===================== IDENTITY =====================
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.AddPolicy("AllowAngular", policy =>
-        policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials());
-});
+    options.Password.RequiredLength = 8;
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
-// JWT Bearer Authentication
-var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = jwtSettings["SecretKey"]!;
+// ===================== JWT AUTH =====================
+var jwtSecurityKey = new SymmetricSecurityKey(
+    Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!)
+);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -46,106 +53,132 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+        IssuerSigningKey = jwtSecurityKey,
         ClockSkew = TimeSpan.Zero
+    };
+
+    // Allow SignalR clients to pass the JWT token via the query string
+    // (WebSocket and Server-Sent Events connections cannot set HTTP headers)
+    options.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+
+            if (!string.IsNullOrEmpty(accessToken) &&
+                path.StartsWithSegments("/hubs"))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
     };
 });
 
-// Swagger
+builder.Services.AddAuthorization();
+
+// ===================== CORS =====================
+builder.Services.AddCors(options =>
+{
+    // Development: allow any origin (cannot be combined with AllowCredentials)
+    options.AddPolicy("AllowAll", policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader());
+
+    // Production-ready policy for SignalR: restrict to known origins and allow credentials
+    options.AddPolicy("AllowSignalR", policy =>
+        policy.WithOrigins(
+                  builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()
+                  ?? new[] { "http://localhost:3000", "http://localhost:4200" })
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials());
+});
+
+// ===================== REPOSITORIES =====================
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+// ===================== SERVICES =====================
+
+// Add SignalR services
+builder.Services.AddSignalR();
+
+
+//builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+// ===================== CONTROLLERS =====================
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// ===================== SWAGGER =====================
+const string swaggerSchemeId = "Bearer";
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Maintenance Management API",
-        Version = "v1",
-        Description = "API for managing maintenance tasks, technicians, equipment, and more."
+        Title = "Municipal Licensing System API",
+        Version = "v1"
     });
 
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    // ✅ Swashbuckle v10 compatible security definition
+    options.AddSecurityDefinition(swaggerSchemeId, new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
+        Description = "Enter your JWT token below.",
         In = ParameterLocation.Header,
-        Description = "Enter your JWT token. Example: eyJhbGci..."
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",        // must be lowercase
+        BearerFormat = "JWT"
     });
 
-    options.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
+    options.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
     {
-    { new OpenApiSecuritySchemeReference("Bearer", doc), [] }
+        [new OpenApiSecuritySchemeReference(swaggerSchemeId)] = []
     });
 });
 
 var app = builder.Build();
 
-// Exception handling middleware
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-// Configure HTTP pipeline
-if (app.Environment.IsDevelopment())
+// ===================== DATABASE SEEDING =====================
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
+    try
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Maintenance Management API v1");
-        options.RoutePrefix = "swagger";
-    });
+       // await DataSeeder.SeedAsync(scope.ServiceProvider);
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
 }
 
-app.UseHttpsRedirection();
-app.UseCors("AllowAngular");
 
+// ===================== PIPELINE =====================
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Municipal Licensing System API v1");
+    c.RoutePrefix = string.Empty;
+});
+
+// Only use HTTPS redirection in production
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapHub<NotificationHub>("/hubs/notifications").RequireCors("AllowSignalR");
+app.MapHub<ChatHub>("/hubs/chat").RequireCors("AllowSignalR");
 
 app.MapControllers();
 
-// Seed the database and roles on startup
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await db.Database.MigrateAsync();
-
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-    await SeedRolesAsync(roleManager);
-    await SeedAdminAsync(userManager, builder.Configuration);
-}
-
 app.Run();
-
-static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
-{
-    string[] roles = ["Admin", "Manager", "Technician", "User"];
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role))
-            await roleManager.CreateAsync(new IdentityRole(role));
-    }
-}
-
-static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager, IConfiguration config)
-{
-    var adminEmail = config["AdminSettings:Email"] ?? "admin@maintenance.com";
-    var adminPassword = config["AdminSettings:Password"] ?? "Admin123!";
-
-    if (await userManager.FindByEmailAsync(adminEmail) is null)
-    {
-        var admin = new ApplicationUser
-        {
-            UserName = adminEmail,
-            Email = adminEmail,
-            FirstName = "System",
-            LastName = "Admin",
-            IsActive = true,
-            EmailConfirmed = true
-        };
-
-        var result = await userManager.CreateAsync(admin, adminPassword);
-        if (result.Succeeded)
-            await userManager.AddToRoleAsync(admin, "Admin");
-    }
-}

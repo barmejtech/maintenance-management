@@ -4,4 +4,3 @@
   <Project Path="Maintenance-management.domain/Maintenance-management.domain.csproj" />
   <Project Path="Maintenance-management.infrastructure/Maintenance-management.infrastructure.csproj" />
 </Solution>
-
