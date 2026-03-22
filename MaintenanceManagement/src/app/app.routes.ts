@@ -58,6 +58,17 @@ export const routes: Routes = [
     loadComponent: () => import('./components/availability/availability.component').then(m => m.AvailabilityComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'chat',
+    loadComponent: () => import('./components/chat/chat.component').then(m => m.ChatComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'notifications',
+    loadComponent: () => import('./components/notifications/notifications.component').then(m => m.NotificationsComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/dashboard' }
 ];
+
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { GroupService } from '../../services/api.service';
+import { GroupService } from '../../services/group.service';
 import { TechnicianGroup } from '../../models';
 
 @Component({

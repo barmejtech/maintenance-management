@@ -1,15 +1,17 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { TaskOrderService } from '../../services/api.service';
-import { TechnicianService } from '../../services/api.service';
-import { EquipmentService } from '../../services/api.service';
+import { TaskOrderService } from '../../services/task-order.service';
+import { TechnicianService } from '../../services/technician.service';
+import { EquipmentService } from '../../services/equipment.service';
+import { NotificationService } from '../../services/notification.service';
+import { NotificationsComponent } from '../notifications/notifications.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NotificationsComponent],
   template: `
     <div class="dashboard">
       <header class="dash-header">
@@ -18,6 +20,7 @@ import { EquipmentService } from '../../services/api.service';
           <h1>Maintenance Management</h1>
         </div>
         <div class="dash-user">
+          <app-notifications />
           <span>{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</span>
           <span class="role-badge">{{ auth.currentUser()?.roles?.[0] ?? 'User' }}</span>
           <button (click)="auth.logout()" class="btn-logout">Sign Out</button>
@@ -31,12 +34,14 @@ import { EquipmentService } from '../../services/api.service';
         <a routerLink="/tasks" routerLinkActive="active" class="nav-item">
           <span>✅</span> Work Orders
         </a>
-        <a routerLink="/technicians" routerLinkActive="active" class="nav-item">
-          <span>👷</span> Technicians
-        </a>
-        <a routerLink="/groups" routerLinkActive="active" class="nav-item">
-          <span>👥</span> Groups
-        </a>
+        @if (isManagerOrAdmin()) {
+          <a routerLink="/technicians" routerLinkActive="active" class="nav-item">
+            <span>👷</span> Technicians
+          </a>
+          <a routerLink="/groups" routerLinkActive="active" class="nav-item">
+            <span>👥</span> Groups
+          </a>
+        }
         <a routerLink="/equipment" routerLinkActive="active" class="nav-item">
           <span>🔩</span> Equipment
         </a>
@@ -46,12 +51,24 @@ import { EquipmentService } from '../../services/api.service';
         <a routerLink="/reports" routerLinkActive="active" class="nav-item">
           <span>📄</span> Reports
         </a>
-        <a routerLink="/invoices" routerLinkActive="active" class="nav-item">
-          <span>💰</span> Invoices
-        </a>
+        @if (isManagerOrAdmin()) {
+          <a routerLink="/invoices" routerLinkActive="active" class="nav-item">
+            <span>💰</span> Invoices
+          </a>
+        }
         <a routerLink="/availability" routerLinkActive="active" class="nav-item">
           <span>📅</span> Availability
         </a>
+        <a routerLink="/chat" routerLinkActive="active" class="nav-item">
+          <span>💬</span> Team Chat
+        </a>
+        <div class="sidebar-divider"></div>
+        @if (isAdmin()) {
+          <div class="sidebar-section-label">Admin</div>
+          <a routerLink="/technicians" routerLinkActive="active" class="nav-item admin-item">
+            <span>⚙️</span> Manage Technicians
+          </a>
+        }
       </nav>
 
       <main class="main-content">
@@ -85,14 +102,21 @@ import { EquipmentService } from '../../services/api.service';
             <a routerLink="/tasks" class="action-btn">
               <span>➕</span> New Work Order
             </a>
-            <a routerLink="/technicians" class="action-btn">
-              <span>👷</span> Manage Technicians
-            </a>
+            @if (isManagerOrAdmin()) {
+              <a routerLink="/technicians" class="action-btn">
+                <span>👷</span> Manage Technicians
+              </a>
+            }
             <a routerLink="/reports" class="action-btn">
               <span>📄</span> Create Report
             </a>
-            <a routerLink="/invoices" class="action-btn">
-              <span>💰</span> New Invoice
+            @if (isManagerOrAdmin()) {
+              <a routerLink="/invoices" class="action-btn">
+                <span>💰</span> New Invoice
+              </a>
+            }
+            <a routerLink="/chat" class="action-btn">
+              <span>💬</span> Team Chat
             </a>
           </div>
         </div>
@@ -162,6 +186,17 @@ import { EquipmentService } from '../../services/api.service';
       color: #0f3460;
       border-left: 3px solid #0f3460;
     }
+    .sidebar-divider { height: 1px; background: #f0f0f0; margin: 0.75rem 0; }
+    .sidebar-section-label {
+      padding: 0.4rem 1.5rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #aaa;
+    }
+    .admin-item { color: #7f5af0; }
+    .admin-item:hover, .admin-item.active { background: #f5f0ff; color: #7f5af0; border-left-color: #7f5af0; }
     .main-content {
       grid-area: main;
       padding: 2rem;
@@ -206,7 +241,7 @@ import { EquipmentService } from '../../services/api.service';
     .action-btn:hover { border-color: #0f3460; color: #0f3460; background: #f0f4ff; }
   `]
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   taskCount = signal(0);
   technicianCount = signal(0);
   equipmentCount = signal(0);
@@ -216,7 +251,8 @@ export class DashboardComponent implements OnInit {
     public auth: AuthService,
     private taskService: TaskOrderService,
     private techService: TechnicianService,
-    private eqService: EquipmentService
+    private eqService: EquipmentService,
+    private notifService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -224,5 +260,21 @@ export class DashboardComponent implements OnInit {
     this.techService.getAll().subscribe({ next: t => this.technicianCount.set(t.length), error: () => {} });
     this.eqService.getAll().subscribe({ next: e => this.equipmentCount.set(e.length), error: () => {} });
     this.eqService.getDueMaintenance().subscribe({ next: e => this.dueMaintenance.set(e.length), error: () => {} });
+    const token = this.auth.getAccessToken();
+    if (token) {
+      this.notifService.startConnection(token);
+    }
+  }
+
+  ngOnDestroy() {
+    this.notifService.stopConnection();
+  }
+
+  isAdmin(): boolean {
+    return this.auth.isAdmin();
+  }
+
+  isManagerOrAdmin(): boolean {
+    return this.auth.isManager();
   }
 }

@@ -279,3 +279,36 @@ export interface CreateAvailabilityRequest {
   isAvailable: boolean;
   notes?: string;
 }
+
+// Notification models
+export interface AppNotification {
+  id: string;
+  title: string;
+  message: string;
+  type: NotificationType;
+  isRead: boolean;
+  createdAt: string;
+  relatedEntityId?: string;
+  relatedEntityType?: string;
+}
+
+export enum NotificationType {
+  Info = 0,
+  Success = 1,
+  Warning = 2,
+  Error = 3
+}
+
+// Chat models
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  content: string;
+  sentAt: string;
+  isOwn?: boolean;
+}
+
+export interface SendMessageRequest {
+  content: string;
+}

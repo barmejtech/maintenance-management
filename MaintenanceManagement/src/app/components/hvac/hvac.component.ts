@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { HVACService } from '../../services/api.service';
+import { HVACService } from '../../services/hvac.service';
 import { HVACSystem } from '../../models';
 
 @Component({

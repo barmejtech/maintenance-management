@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { EquipmentService } from '../../services/api.service';
+import { EquipmentService } from '../../services/equipment.service';
 import { Equipment, EquipmentStatus } from '../../models';
 
 @Component({

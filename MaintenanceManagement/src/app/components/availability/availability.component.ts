@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { AvailabilityService } from '../../services/api.service';
+import { AvailabilityService } from '../../services/availability.service';
 import { Availability } from '../../models';
 
 @Component({

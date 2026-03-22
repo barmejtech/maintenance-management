@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { InvoiceService } from '../../services/api.service';
+import { InvoiceService } from '../../services/invoice.service';
 import { Invoice, InvoiceStatus } from '../../models';
 
 @Component({
