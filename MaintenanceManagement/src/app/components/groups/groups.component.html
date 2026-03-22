@@ -1,0 +1,19 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>👥 Technician Groups</h2>
+    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+  </div>
+  <div class="card-grid">
+    @for (group of groups(); track group.id) {
+      <div class="group-card">
+        <div class="group-icon">👥</div>
+        <h3>{{ group.name }}</h3>
+        <p>{{ group.description }}</p>
+        <div class="member-count">{{ group.memberCount }} members</div>
+      </div>
+    }
+    @empty {
+      <div class="empty-state">No groups found.</div>
+    }
+  </div>
+</div>

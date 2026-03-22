@@ -1,0 +1,33 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>📅 Technician Availability</h2>
+    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+  </div>
+  <div class="avail-list">
+    @if (errorMessage()) {
+      <div class="alert-error">{{ errorMessage() }}</div>
+    }
+    @for (avail of availabilities(); track avail.id) {
+      <div class="avail-card" [class.available]="avail.isAvailable" [class.unavailable]="!avail.isAvailable">
+        <div class="avail-indicator"></div>
+        <div class="avail-info">
+          <h3>{{ avail.technicianName || 'Unknown Technician' }}</h3>
+          <div class="avail-time">
+            <span>{{ avail.startTime | date:'short' }}</span>
+            <span class="arrow">→</span>
+            <span>{{ avail.endTime | date:'short' }}</span>
+          </div>
+          @if (avail.notes) {
+            <p class="avail-notes">{{ avail.notes }}</p>
+          }
+        </div>
+        <span class="avail-badge" [class.a-available]="avail.isAvailable" [class.a-unavailable]="!avail.isAvailable">
+          {{ avail.isAvailable ? 'Available' : 'Unavailable' }}
+        </span>
+      </div>
+    }
+    @empty {
+      <div class="empty-state">No availability records found.</div>
+    }
+  </div>
+</div>

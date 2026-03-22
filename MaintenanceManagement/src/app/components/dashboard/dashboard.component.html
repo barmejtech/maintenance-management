@@ -1,0 +1,109 @@
+<div class="dashboard">
+  <header class="dash-header">
+    <div class="dash-title">
+      <span class="logo">🔧</span>
+      <h1>Maintenance Management</h1>
+    </div>
+    <div class="dash-user">
+      <app-notifications />
+      <span>{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</span>
+      <span class="role-badge">{{ auth.currentUser()?.roles?.[0] ?? 'User' }}</span>
+      <button (click)="auth.logout()" class="btn-logout">Sign Out</button>
+    </div>
+  </header>
+
+  <nav class="sidebar">
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+      <span>📊</span> Dashboard
+    </a>
+    <a routerLink="/tasks" routerLinkActive="active" class="nav-item">
+      <span>✅</span> Work Orders
+    </a>
+    @if (isManagerOrAdmin()) {
+      <a routerLink="/technicians" routerLinkActive="active" class="nav-item">
+        <span>👷</span> Technicians
+      </a>
+      <a routerLink="/groups" routerLinkActive="active" class="nav-item">
+        <span>👥</span> Groups
+      </a>
+    }
+    <a routerLink="/equipment" routerLinkActive="active" class="nav-item">
+      <span>🔩</span> Equipment
+    </a>
+    <a routerLink="/hvac" routerLinkActive="active" class="nav-item">
+      <span>❄️</span> HVAC
+    </a>
+    <a routerLink="/reports" routerLinkActive="active" class="nav-item">
+      <span>📄</span> Reports
+    </a>
+    @if (isManagerOrAdmin()) {
+      <a routerLink="/invoices" routerLinkActive="active" class="nav-item">
+        <span>💰</span> Invoices
+      </a>
+    }
+    <a routerLink="/availability" routerLinkActive="active" class="nav-item">
+      <span>📅</span> Availability
+    </a>
+    <a routerLink="/chat" routerLinkActive="active" class="nav-item">
+      <span>💬</span> Team Chat
+    </a>
+    <div class="sidebar-divider"></div>
+    @if (isAdmin()) {
+      <div class="sidebar-section-label">Admin</div>
+      <a routerLink="/technicians" routerLinkActive="active" class="nav-item admin-item">
+        <span>⚙️</span> Manage Technicians
+      </a>
+    }
+  </nav>
+
+  <main class="main-content">
+    <h2>Dashboard Overview</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value">{{ taskCount() }}</div>
+        <div class="stat-label">Active Work Orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👷</div>
+        <div class="stat-value">{{ technicianCount() }}</div>
+        <div class="stat-label">Technicians</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔩</div>
+        <div class="stat-value">{{ equipmentCount() }}</div>
+        <div class="stat-label">Equipment</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-value">{{ dueMaintenance() }}</div>
+        <div class="stat-label">Due Maintenance</div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <h3>Quick Actions</h3>
+      <div class="actions-grid">
+        <a routerLink="/tasks" class="action-btn">
+          <span>➕</span> New Work Order
+        </a>
+        @if (isManagerOrAdmin()) {
+          <a routerLink="/technicians" class="action-btn">
+            <span>👷</span> Manage Technicians
+          </a>
+        }
+        <a routerLink="/reports" class="action-btn">
+          <span>📄</span> Create Report
+        </a>
+        @if (isManagerOrAdmin()) {
+          <a routerLink="/invoices" class="action-btn">
+            <span>💰</span> New Invoice
+          </a>
+        }
+        <a routerLink="/chat" class="action-btn">
+          <span>💬</span> Team Chat
+        </a>
+      </div>
+    </div>
+  </main>
+</div>

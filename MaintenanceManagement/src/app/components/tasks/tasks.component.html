@@ -1,0 +1,53 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>✅ Work Orders</h2>
+    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+  </div>
+
+  <div class="filter-bar">
+    <button (click)="filterStatus.set(null)" [class.active]="filterStatus() === null" class="filter-btn">All</button>
+    <button (click)="filterStatus.set(0)" [class.active]="filterStatus() === 0" class="filter-btn">Pending</button>
+    <button (click)="filterStatus.set(1)" [class.active]="filterStatus() === 1" class="filter-btn">In Progress</button>
+    <button (click)="filterStatus.set(2)" [class.active]="filterStatus() === 2" class="filter-btn">Completed</button>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading">Loading work orders...</div>
+  } @else {
+    <div class="task-list">
+      @for (task of filteredTasks(); track task.id) {
+        <div class="task-card" [class]="'priority-' + task.priority">
+          <div class="task-header">
+            <h3>{{ task.title }}</h3>
+            <div class="task-badges">
+              <span class="badge priority" [class]="getPriorityClass(task.priority)">
+                {{ getPriorityLabel(task.priority) }}
+              </span>
+              <span class="badge status" [class]="getStatusClass(task.status)">
+                {{ getStatusLabel(task.status) }}
+              </span>
+            </div>
+          </div>
+          <p class="task-desc">{{ task.description }}</p>
+          <div class="task-meta">
+            @if (task.technicianName) {
+              <span>👷 {{ task.technicianName }}</span>
+            }
+            @if (task.groupName) {
+              <span>👥 {{ task.groupName }}</span>
+            }
+            @if (task.equipmentName) {
+              <span>🔩 {{ task.equipmentName }}</span>
+            }
+            @if (task.dueDate) {
+              <span>📅 Due: {{ task.dueDate | date:'mediumDate' }}</span>
+            }
+          </div>
+        </div>
+      }
+      @empty {
+        <div class="empty-state">No work orders found.</div>
+      }
+    </div>
+  }
+</div>

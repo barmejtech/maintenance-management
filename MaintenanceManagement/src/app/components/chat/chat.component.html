@@ -1,0 +1,51 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>💬 Team Chat</h2>
+    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+  </div>
+
+  <div class="chat-layout">
+    <div class="chat-box">
+      <div class="chat-status" [class.connected]="chatService.isConnected()">
+        <span class="status-dot"></span>
+        {{ chatService.isConnected() ? 'Connected' : 'Connecting...' }}
+      </div>
+
+      <div class="messages-area" #messagesContainer>
+        @if (chatService.messages().length === 0) {
+          <div class="no-messages">No messages yet. Say hello! 👋</div>
+        }
+        @for (msg of chatService.messages(); track msg.id) {
+          <div class="message-row" [class.own]="msg.isOwn">
+            <div class="message-bubble" [class.own]="msg.isOwn">
+              @if (!msg.isOwn) {
+                <div class="msg-sender">{{ msg.senderName }}</div>
+              }
+              <div class="msg-content">{{ msg.content }}</div>
+              <div class="msg-time">{{ msg.sentAt | date:'shortTime' }}</div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="chat-input-area">
+        <input
+          #messageInput
+          type="text"
+          [(ngModel)]="newMessage"
+          (keydown.enter)="sendMessage()"
+          placeholder="Type a message..."
+          class="chat-input"
+          [disabled]="!chatService.isConnected()"
+        />
+        <button
+          (click)="sendMessage()"
+          class="btn-send"
+          [disabled]="!newMessage.trim() || !chatService.isConnected()"
+        >
+          Send ➤
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

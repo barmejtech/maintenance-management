@@ -1,0 +1,42 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>📄 Maintenance Reports</h2>
+    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+  </div>
+  <div class="report-list">
+    @for (report of reports(); track report.id) {
+      <div class="report-card">
+        <div class="report-header">
+          <h3>{{ report.title }}</h3>
+          <span class="report-date">{{ report.reportDate | date:'mediumDate' }}</span>
+        </div>
+        <p class="tech-name">👷 {{ report.technicianName }}</p>
+        <p class="content">{{ report.content | slice:0:200 }}{{ report.content.length > 200 ? '...' : '' }}</p>
+        @if (report.taskTitle) {
+          <p class="task-ref">🔗 Task: {{ report.taskTitle }}</p>
+        }
+        <div class="report-meta">
+          @if (report.laborHours) {
+            <span>⏱ {{ report.laborHours }}h</span>
+          }
+          @if (report.materialCost) {
+            <span>💰 ${{ report.materialCost }}</span>
+          }
+        </div>
+        @if (report.beforePhotoUrl || report.afterPhotoUrl) {
+          <div class="photos">
+            @if (report.beforePhotoUrl) {
+              <div class="photo-label">Before: <a [href]="report.beforePhotoUrl" target="_blank">📷 View</a></div>
+            }
+            @if (report.afterPhotoUrl) {
+              <div class="photo-label">After: <a [href]="report.afterPhotoUrl" target="_blank">📷 View</a></div>
+            }
+          </div>
+        }
+      </div>
+    }
+    @empty {
+      <div class="empty-state">No reports found.</div>
+    }
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>🔩 Equipment</h2>
+    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+  </div>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Serial No.</th>
+          <th>Manufacturer</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Next Maintenance</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (eq of equipment(); track eq.id) {
+          <tr>
+            <td><strong>{{ eq.name }}</strong></td>
+            <td>{{ eq.serialNumber }}</td>
+            <td>{{ eq.manufacturer }}</td>
+            <td>{{ eq.location }}</td>
+            <td><span class="badge" [class]="getStatusClass(eq.status)">{{ getStatusLabel(eq.status) }}</span></td>
+            <td>{{ eq.nextMaintenanceDate ? (eq.nextMaintenanceDate | date:'mediumDate') : '—' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    @if (equipment().length === 0) {
+      <div class="empty-state">No equipment found.</div>
+    }
+  </div>
+</div>
