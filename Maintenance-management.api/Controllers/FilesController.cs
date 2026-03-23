@@ -20,6 +20,12 @@ public class FilesController : ControllerBase
         ".txt", ".csv", ".zip", ".mp4"
     };
 
+    // Permitted extensions for photo uploads
+    private static readonly HashSet<string> AllowedPhotoExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"
+    };
+
     // Maximum file size: 50 MB
     private const long MaxFileSizeBytes = 50L * 1024 * 1024;
 
@@ -76,6 +82,88 @@ public class FilesController : ControllerBase
         }
 
         return Ok(results);
+    }
+
+    /// <summary>Upload one or more photos (images only). Photos are stored in the dedicated photos folder.</summary>
+    [HttpPost("photos/upload")]
+    [RequestSizeLimit(50 * 1024 * 1024)]
+    public async Task<IActionResult> UploadPhotos(List<IFormFile> files)
+    {
+        if (files is null || files.Count == 0)
+            return BadRequest(new { message = "No files provided." });
+
+        var photosFolder = Path.Combine(_env.WebRootPath, "photos");
+        Directory.CreateDirectory(photosFolder);
+
+        var results = new List<object>();
+
+        foreach (var file in files)
+        {
+            if (file.Length == 0)
+                continue;
+
+            if (file.Length > MaxFileSizeBytes)
+                return BadRequest(new { message = $"File '{file.FileName}' exceeds the 50 MB size limit." });
+
+            var ext = Path.GetExtension(file.FileName);
+            if (!AllowedPhotoExtensions.Contains(ext))
+                return BadRequest(new { message = $"Extension '{ext}' is not allowed for photo uploads. Only image files are accepted." });
+
+            // Generate a unique file name to prevent overwrite attacks
+            var safeFileName = $"{Guid.NewGuid()}{ext}";
+            var filePath = Path.Combine(photosFolder, safeFileName);
+
+            await using var stream = System.IO.File.Create(filePath);
+            await file.CopyToAsync(stream);
+
+            var relativeUrl = $"/photos/{safeFileName}";
+
+            _logger.LogInformation("Photo '{Original}' saved as '{Saved}'.", file.FileName, safeFileName);
+
+            results.Add(new
+            {
+                originalName = file.FileName,
+                fileName = safeFileName,
+                url = relativeUrl,
+                contentType = file.ContentType,
+                sizeBytes = file.Length
+            });
+        }
+
+        return Ok(results);
+    }
+
+    /// <summary>Download / serve a photo by its saved name from the photos folder.</summary>
+    [HttpGet("photos/{fileName}")]
+    public IActionResult DownloadPhoto(string fileName)
+    {
+        var safeFileName = Path.GetFileName(fileName);
+        var filePath = Path.Combine(_env.WebRootPath, "photos", safeFileName);
+
+        if (!System.IO.File.Exists(filePath))
+            return NotFound(new { message = "Photo not found." });
+
+        var provider = new FileExtensionContentTypeProvider();
+        if (!provider.TryGetContentType(safeFileName, out var contentType))
+            contentType = "application/octet-stream";
+
+        return PhysicalFile(filePath, contentType, safeFileName);
+    }
+
+    /// <summary>Delete a photo by its saved name (Admin / Manager only).</summary>
+    [HttpDelete("photos/{fileName}")]
+    [Authorize(Roles = "Admin,Manager")]
+    public IActionResult DeletePhoto(string fileName)
+    {
+        var safeFileName = Path.GetFileName(fileName);
+        var filePath = Path.Combine(_env.WebRootPath, "photos", safeFileName);
+
+        if (!System.IO.File.Exists(filePath))
+            return NotFound(new { message = "Photo not found." });
+
+        System.IO.File.Delete(filePath);
+        _logger.LogInformation("Photo '{FileName}' deleted.", safeFileName);
+        return NoContent();
     }
 
     /// <summary>Download / serve a file by its saved name.</summary>

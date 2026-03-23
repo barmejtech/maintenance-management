@@ -81,9 +81,9 @@ export class EquipmentComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
     this.isUploadingBefore.set(true);
-    this.fileService.upload(Array.from(input.files)).subscribe({
+    this.fileService.uploadPhoto(Array.from(input.files)).subscribe({
       next: (results) => {
-        if (results.length > 0) this.form.beforeMaintenancePhotoUrl = results[0].url;
+        if (results.length > 0) this.form.beforeMaintenancePhotoUrl = this.fileService.getPhotoUrl(results[0].url);
         this.isUploadingBefore.set(false);
       },
       error: () => this.isUploadingBefore.set(false)
@@ -94,9 +94,9 @@ export class EquipmentComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
     this.isUploadingAfter.set(true);
-    this.fileService.upload(Array.from(input.files)).subscribe({
+    this.fileService.uploadPhoto(Array.from(input.files)).subscribe({
       next: (results) => {
-        if (results.length > 0) this.form.afterMaintenancePhotoUrl = results[0].url;
+        if (results.length > 0) this.form.afterMaintenancePhotoUrl = this.fileService.getPhotoUrl(results[0].url);
         this.isUploadingAfter.set(false);
       },
       error: () => this.isUploadingAfter.set(false)
