@@ -1,12 +1,12 @@
 <div class="container-fluid py-3">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0 fw-bold"><i class="bi bi-tools text-primary me-2"></i>Equipment</h4>
+    <h4 class="mb-0 fw-bold"><i class="bi bi-tools text-primary me-2"></i>{{ 'asset.title' | translate }}</h4>
     <div class="d-flex gap-2">
       <button class="btn btn-primary btn-sm" (click)="openAdd()">
-        <i class="bi bi-plus-circle me-1"></i>Add Equipment
+        <i class="bi bi-plus-circle me-1"></i>{{ 'asset.addButton' | translate }}
       </button>
       <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left me-1"></i>Dashboard
+        <i class="bi bi-arrow-left me-1"></i>{{ 'asset.backToDashboard' | translate }}
       </a>
     </div>
   </div>
@@ -15,14 +15,14 @@
       <table class="table table-hover table-striped mb-0">
         <thead class="table-light">
           <tr>
-            <th>Name</th>
-            <th>Serial No.</th>
-            <th>Manufacturer</th>
-            <th>Location</th>
-            <th>Status</th>
-            <th>Next Maintenance</th>
-            <th>Photos</th>
-            <th class="text-end">Actions</th>
+            <th>{{ 'asset.table.name' | translate }}</th>
+            <th>{{ 'asset.table.serialNo' | translate }}</th>
+            <th>{{ 'asset.table.manufacturer' | translate }}</th>
+            <th>{{ 'asset.table.location' | translate }}</th>
+            <th>{{ 'asset.table.status' | translate }}</th>
+            <th>{{ 'asset.table.nextMaintenance' | translate }}</th>
+            <th>{{ 'asset.table.photos' | translate }}</th>
+            <th class="text-end">{{ 'asset.table.actions' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -52,10 +52,10 @@
                 </div>
               </td>
               <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(eq)" title="Edit">
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(eq)" [title]="'buttons.edit' | translate">
                   <i class="bi bi-pencil"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="delete(eq.id)" title="Delete">
+                <button class="btn btn-sm btn-outline-danger" (click)="delete(eq.id)" [title]="'buttons.delete' | translate">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
@@ -64,7 +64,7 @@
           @if (equipment().length === 0) {
             <tr>
               <td colspan="8" class="text-center text-muted py-4">
-                <i class="bi bi-tools fs-4 d-block mb-1"></i>No equipment found.
+                <i class="bi bi-tools fs-4 d-block mb-1"></i>{{ 'asset.empty' | translate }}
               </td>
             </tr>
           }
@@ -80,66 +80,66 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">
-            <i class="bi bi-tools me-2"></i>{{ isEditing() ? 'Edit Equipment' : 'Add Equipment' }}
+            <i class="bi bi-tools me-2"></i>{{ isEditing() ? ('asset.form.editTitle' | translate) : ('asset.form.addTitle' | translate) }}
           </h5>
           <button type="button" class="btn-close" (click)="closeModal()"></button>
         </div>
         <div class="modal-body">
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Name *</label>
-              <input class="form-control" [(ngModel)]="form.name" placeholder="Equipment name" />
+              <label class="form-label fw-semibold">{{ 'asset.form.name' | translate }} *</label>
+              <input class="form-control" [(ngModel)]="form.name" [placeholder]="'asset.form.namePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Serial Number</label>
-              <input class="form-control" [(ngModel)]="form.serialNumber" placeholder="Serial number" />
+              <label class="form-label fw-semibold">{{ 'asset.form.serialNumber' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.serialNumber" [placeholder]="'asset.form.serialPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Model</label>
-              <input class="form-control" [(ngModel)]="form.model" placeholder="Model" />
+              <label class="form-label fw-semibold">{{ 'asset.form.model' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.model" [placeholder]="'asset.form.modelPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Manufacturer</label>
-              <input class="form-control" [(ngModel)]="form.manufacturer" placeholder="Manufacturer" />
+              <label class="form-label fw-semibold">{{ 'asset.form.manufacturer' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.manufacturer" [placeholder]="'asset.form.manufacturerPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Location</label>
-              <input class="form-control" [(ngModel)]="form.location" placeholder="Location" />
+              <label class="form-label fw-semibold">{{ 'asset.form.location' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.location" [placeholder]="'asset.form.locationPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Status</label>
+              <label class="form-label fw-semibold">{{ 'asset.form.status' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.status">
-                <option [value]="EquipmentStatus.Operational">Operational</option>
-                <option [value]="EquipmentStatus.UnderMaintenance">Under Maintenance</option>
-                <option [value]="EquipmentStatus.OutOfService">Out of Service</option>
-                <option [value]="EquipmentStatus.Decommissioned">Decommissioned</option>
+                <option [value]="EquipmentStatus.Operational">{{ 'asset.status.operational' | translate }}</option>
+                <option [value]="EquipmentStatus.UnderMaintenance">{{ 'asset.status.underMaintenance' | translate }}</option>
+                <option [value]="EquipmentStatus.OutOfService">{{ 'asset.status.outOfService' | translate }}</option>
+                <option [value]="EquipmentStatus.Decommissioned">{{ 'asset.status.decommissioned' | translate }}</option>
               </select>
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">Installation Date</label>
+              <label class="form-label fw-semibold">{{ 'asset.form.installationDate' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.installationDate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">Last Maintenance</label>
+              <label class="form-label fw-semibold">{{ 'asset.form.lastMaintenance' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.lastMaintenanceDate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">Next Maintenance</label>
+              <label class="form-label fw-semibold">{{ 'asset.form.nextMaintenance' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.nextMaintenanceDate" />
             </div>
             <div class="col-12">
-              <label class="form-label fw-semibold">Notes</label>
-              <textarea class="form-control" rows="2" [(ngModel)]="form.notes" placeholder="Notes"></textarea>
+              <label class="form-label fw-semibold">{{ 'asset.form.notes' | translate }}</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="form.notes" [placeholder]="'asset.form.notesPlaceholder' | translate"></textarea>
             </div>
 
             <!-- Before Maintenance Photo -->
             <div class="col-md-6">
               <label class="form-label fw-semibold">
-                <i class="bi bi-camera me-1"></i>Before Maintenance Photo
+                <i class="bi bi-camera me-1"></i>{{ 'asset.form.photoBefore' | translate }}
               </label>
               <input type="file" class="form-control" accept="image/*" (change)="uploadBeforePhoto($event)" />
               @if (isUploadingBefore()) {
-                <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+                <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'asset.form.uploading' | translate }}</div>
               }
               @if (form.beforeMaintenancePhotoUrl) {
                 <div class="mt-2">
@@ -151,11 +151,11 @@
             <!-- After Maintenance Photo -->
             <div class="col-md-6">
               <label class="form-label fw-semibold">
-                <i class="bi bi-camera-fill me-1"></i>After Maintenance Photo
+                <i class="bi bi-camera-fill me-1"></i>{{ 'asset.form.photoAfter' | translate }}
               </label>
               <input type="file" class="form-control" accept="image/*" (change)="uploadAfterPhoto($event)" />
               @if (isUploadingAfter()) {
-                <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+                <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'asset.form.uploading' | translate }}</div>
               }
               @if (form.afterMaintenancePhotoUrl) {
                 <div class="mt-2">
@@ -166,10 +166,10 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'asset.cancel' | translate }}</button>
           <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.name || isUploadingBefore() || isUploadingAfter()">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
-            {{ isEditing() ? 'Update' : 'Create' }}
+            {{ isEditing() ? ('asset.update' | translate) : ('asset.create' | translate) }}
           </button>
         </div>
       </div>

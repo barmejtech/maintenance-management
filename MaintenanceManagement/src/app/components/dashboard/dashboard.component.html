@@ -2,7 +2,7 @@
   <header class="dash-header">
     <div class="dash-title">
       <span class="logo">🔧</span>
-      <h1>Maintenance Management</h1>
+      <h1>{{ 'dashboard.header.title' | translate }}</h1>
     </div>
     <div class="dash-user">
       <app-notifications />
@@ -10,64 +10,67 @@
       <span class="role-badge" [ngClass]="{'badge-admin': isAdmin(), 'badge-manager': isManagerOrAdmin() && !isAdmin(), 'badge-tech': isTechnicianRole()}">
         {{ getRoleName() }}
       </span>
-      <button (click)="auth.logout()" class="btn-logout">Sign Out</button>
+      <button class="btn-lang" (click)="translation.toggleLanguage()" title="Switch Language">
+        <i class="bi bi-globe2"></i> {{ 'lang.toggle' | translate }}
+      </button>
+      <button (click)="auth.logout()" class="btn-logout">{{ 'dashboard.header.signOut' | translate }}</button>
     </div>
   </header>
 
   <nav class="sidebar">
     <a routerLink="/home" routerLinkActive="active" class="nav-item">
-      <span>🏠</span> Home
+      <span>🏠</span> {{ 'dashboard.sidebar.home' | translate }}
     </a>
     <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
-      <span>📊</span> Dashboard
+      <span>📊</span> {{ 'dashboard.sidebar.dashboard' | translate }}
     </a>
     <a routerLink="/tasks" routerLinkActive="active" class="nav-item">
-      <span>✅</span> Work Orders
+      <span>✅</span> {{ 'dashboard.sidebar.workOrders' | translate }}
     </a>
     <a routerLink="/equipment" routerLinkActive="active" class="nav-item">
-      <span>🔩</span> Equipment
+      <span>🔩</span> {{ 'dashboard.sidebar.equipment' | translate }}
     </a>
     <a routerLink="/hvac" routerLinkActive="active" class="nav-item">
-      <span>❄️</span> HVAC
+      <span>❄️</span> {{ 'dashboard.sidebar.hvac' | translate }}
     </a>
     <a routerLink="/reports" routerLinkActive="active" class="nav-item">
-      <span>📄</span> Reports
+      <span>📄</span> {{ 'dashboard.sidebar.reports' | translate }}
     </a>
     <a routerLink="/availability" routerLinkActive="active" class="nav-item">
-      <span>📅</span> Availability
+      <span>📅</span> {{ 'dashboard.sidebar.availability' | translate }}
     </a>
     <a routerLink="/calendar" routerLinkActive="active" class="nav-item">
-      <span>🗓️</span> Schedule Calendar
+      <span>🗓️</span> {{ 'dashboard.sidebar.schedule' | translate }}
     </a>
     <a routerLink="/chat" routerLinkActive="active" class="nav-item">
-      <span>💬</span> Team Chat
+      <span>💬</span> {{ 'dashboard.sidebar.chat' | translate }}
     </a>
     <div class="sidebar-divider"></div>
-    <div class="sidebar-section-label">Intelligence</div>
+    <div class="sidebar-section-label">{{ 'dashboard.sidebar.intelligence' | translate }}</div>
     <a routerLink="/predictive-maintenance" routerLinkActive="active" class="nav-item">
-      <span>🔮</span> Predictive Maintenance
+      <span>🔮</span> {{ 'dashboard.sidebar.predictiveMaintenance' | translate }}
     </a>
     <a routerLink="/equipment-digital-twin" routerLinkActive="active" class="nav-item">
-      <span>🏭</span> Digital Twin
+      <span>🏭</span> {{ 'dashboard.sidebar.digitalTwin' | translate }}
     </a>
     @if (isManagerOrAdmin()) {
       <div class="sidebar-divider"></div>
-      <div class="sidebar-section-label">Management</div>
+      <div class="sidebar-section-label">{{ 'dashboard.sidebar.management' | translate }}</div>
       <a routerLink="/technicians" routerLinkActive="active" class="nav-item">
-        <span>👷</span> Technicians
+        <span>👷</span> {{ 'dashboard.sidebar.technicians' | translate }}
       </a>
       <a routerLink="/groups" routerLinkActive="active" class="nav-item">
-        <span>👥</span> Groups
+        <span>👥</span> {{ 'dashboard.sidebar.groups' | translate }}
       </a>
       <a routerLink="/invoices" routerLinkActive="active" class="nav-item">
-        <span>💰</span> Invoices
+        <span>💰</span> {{ 'dashboard.sidebar.invoices' | translate }}
       </a>
     }
     @if (isAdmin()) {
       <div class="sidebar-divider"></div>
-      <div class="sidebar-section-label">Admin</div>
+      <div class="sidebar-section-label">{{ 'dashboard.sidebar.admin' | translate }}</div>
       <a routerLink="/technicians" routerLinkActive="active" class="nav-item admin-item">
-        <span>⚙️</span> Manage Users
+        <span>⚙️</span> {{ 'dashboard.sidebar.manageUsers' | translate }}
       </a>
     }
   </nav>
@@ -82,9 +85,9 @@
           <p class="dashboard-subtitle">{{ getDashboardSubtitle() }}</p>
         </div>
         @if (isAdmin()) {
-          <span class="hero-badge hero-badge--admin">🔑 Full Access</span>
+          <span class="hero-badge hero-badge--admin">🔑 {{ 'dashboard.hero.fullAccess' | translate }}</span>
         } @else {
-          <span class="hero-badge hero-badge--manager">🛠️ Management View</span>
+          <span class="hero-badge hero-badge--manager">🛠️ {{ 'dashboard.hero.managementView' | translate }}</span>
         }
       </div>
 
@@ -94,37 +97,37 @@
           <div class="stat-icon-box">✅</div>
           <div class="stat-info">
             <div class="stat-value">{{ taskCount() }}</div>
-            <div class="stat-label">Active Work Orders</div>
+            <div class="stat-label">{{ 'dashboard.stats.activeWorkOrders' | translate }}</div>
           </div>
         </div>
         <div class="stat-card stat-card--technicians">
           <div class="stat-icon-box">👷</div>
           <div class="stat-info">
             <div class="stat-value">{{ technicianCount() }}</div>
-            <div class="stat-label">Technicians</div>
+            <div class="stat-label">{{ 'dashboard.stats.technicians' | translate }}</div>
           </div>
         </div>
         <div class="stat-card stat-card--equipment">
           <div class="stat-icon-box">🔩</div>
           <div class="stat-info">
             <div class="stat-value">{{ equipmentCount() }}</div>
-            <div class="stat-label">Equipment</div>
+            <div class="stat-label">{{ 'dashboard.stats.equipment' | translate }}</div>
           </div>
         </div>
         <div class="stat-card stat-card--maintenance">
           <div class="stat-icon-box">⚠️</div>
           <div class="stat-info">
             <div class="stat-value">{{ dueMaintenance() }}</div>
-            <div class="stat-label">Due Maintenance</div>
+            <div class="stat-label">{{ 'dashboard.stats.dueMaintenance' | translate }}</div>
           </div>
         </div>
         <div class="stat-card stat-card--invoices">
           <div class="stat-icon-box">💰</div>
           <div class="stat-info">
             <div class="stat-value">{{ invoiceCount() }}</div>
-            <div class="stat-label">Total Invoices</div>
+            <div class="stat-label">{{ 'dashboard.stats.totalInvoices' | translate }}</div>
             @if (pendingInvoices() > 0) {
-              <div class="stat-badge">{{ pendingInvoices() }} pending</div>
+              <div class="stat-badge">{{ pendingInvoices() }} {{ 'dashboard.stats.pending' | translate }}</div>
             }
           </div>
         </div>
@@ -132,7 +135,7 @@
           <div class="stat-icon-box">📄</div>
           <div class="stat-info">
             <div class="stat-value">{{ reportCount() }}</div>
-            <div class="stat-label">Reports</div>
+            <div class="stat-label">{{ 'dashboard.stats.reports' | translate }}</div>
           </div>
         </div>
       </div>
@@ -142,7 +145,7 @@
         <div class="chart-card">
           <div class="chart-header chart-header--blue">
             <span class="chart-header-icon">📊</span>
-            <h3>Work Orders by Status</h3>
+            <h3>{{ 'dashboard.charts.workOrdersByStatus' | translate }}</h3>
           </div>
           <div class="chart-body">
             <div class="chart-wrapper">
@@ -153,7 +156,7 @@
         <div class="chart-card">
           <div class="chart-header chart-header--amber">
             <span class="chart-header-icon">🔩</span>
-            <h3>Equipment Status</h3>
+            <h3>{{ 'dashboard.charts.equipmentStatus' | translate }}</h3>
           </div>
           <div class="chart-body">
             <div class="chart-wrapper">
@@ -164,7 +167,7 @@
         <div class="chart-card">
           <div class="chart-header chart-header--green">
             <span class="chart-header-icon">👷</span>
-            <h3>Technician Availability</h3>
+            <h3>{{ 'dashboard.charts.technicianAvailability' | translate }}</h3>
           </div>
           <div class="chart-body">
             <div class="chart-wrapper">
@@ -175,7 +178,7 @@
         <div class="chart-card chart-card--wide">
           <div class="chart-header chart-header--purple">
             <span class="chart-header-icon">📈</span>
-            <h3>7-Day Task Creation Trend</h3>
+            <h3>{{ 'dashboard.charts.sevenDayTrend' | translate }}</h3>
           </div>
           <div class="chart-body">
             <div class="chart-wrapper chart-wrapper--tall">
@@ -187,26 +190,26 @@
 
       <!-- Quick Actions -->
       <div class="quick-actions">
-        <h3>Quick Actions</h3>
+        <h3>{{ 'dashboard.quickActions.title' | translate }}</h3>
         <div class="actions-grid">
           <a routerLink="/tasks" class="action-btn action-btn--blue">
-            <span>➕</span> New Work Order
+            <span>➕</span> {{ 'dashboard.quickActions.newWorkOrder' | translate }}
           </a>
           <a routerLink="/technicians" class="action-btn action-btn--green">
-            <span>👷</span> Manage Technicians
+            <span>👷</span> {{ 'dashboard.quickActions.manageTechnicians' | translate }}
           </a>
           <a routerLink="/reports" class="action-btn action-btn--cyan">
-            <span>📄</span> Create Report
+            <span>📄</span> {{ 'dashboard.quickActions.createReport' | translate }}
           </a>
           <a routerLink="/invoices" class="action-btn action-btn--purple">
-            <span>💰</span> New Invoice
+            <span>💰</span> {{ 'dashboard.quickActions.newInvoice' | translate }}
           </a>
           <a routerLink="/chat" class="action-btn action-btn--default">
-            <span>💬</span> Team Chat
+            <span>💬</span> {{ 'dashboard.quickActions.teamChat' | translate }}
           </a>
           @if (isAdmin()) {
             <a routerLink="/groups" class="action-btn action-btn--admin">
-              <span>⚙️</span> Manage Groups
+              <span>⚙️</span> {{ 'dashboard.quickActions.manageGroups' | translate }}
             </a>
           }
         </div>
@@ -220,7 +223,7 @@
           <h2>{{ getDashboardTitle() }}</h2>
           <p class="dashboard-subtitle">{{ getDashboardSubtitle() }}</p>
         </div>
-        <span class="hero-badge hero-badge--tech">🔧 Technician View</span>
+        <span class="hero-badge hero-badge--tech">🔧 {{ 'dashboard.hero.technicianView' | translate }}</span>
       </div>
 
       <!-- Personal Stats Grid -->
@@ -229,42 +232,42 @@
           <div class="stat-icon-box">📋</div>
           <div class="stat-info">
             <div class="stat-value">{{ myTaskCount() }}</div>
-            <div class="stat-label">My Total Tasks</div>
+            <div class="stat-label">{{ 'dashboard.stats.myTotalTasks' | translate }}</div>
           </div>
         </div>
         <div class="stat-card stat-card--pending">
           <div class="stat-icon-box">⏳</div>
           <div class="stat-info">
             <div class="stat-value">{{ myPendingCount() }}</div>
-            <div class="stat-label">Pending</div>
+            <div class="stat-label">{{ 'dashboard.stats.pending' | translate }}</div>
           </div>
         </div>
         <div class="stat-card stat-card--inprogress">
           <div class="stat-icon-box">🔄</div>
           <div class="stat-info">
             <div class="stat-value">{{ myInProgressCount() }}</div>
-            <div class="stat-label">In Progress</div>
+            <div class="stat-label">{{ 'dashboard.stats.inProgress' | translate }}</div>
           </div>
         </div>
         <div class="stat-card stat-card--completed">
           <div class="stat-icon-box">✅</div>
           <div class="stat-info">
             <div class="stat-value">{{ myCompletedCount() }}</div>
-            <div class="stat-label">Completed</div>
+            <div class="stat-label">{{ 'dashboard.stats.completed' | translate }}</div>
           </div>
         </div>
         <div class="stat-card stat-card--equipment">
           <div class="stat-icon-box">🔩</div>
           <div class="stat-info">
             <div class="stat-value">{{ equipmentCount() }}</div>
-            <div class="stat-label">Equipment</div>
+            <div class="stat-label">{{ 'dashboard.stats.equipment' | translate }}</div>
           </div>
         </div>
         <div class="stat-card stat-card--maintenance">
           <div class="stat-icon-box">⚠️</div>
           <div class="stat-info">
             <div class="stat-value">{{ dueMaintenance() }}</div>
-            <div class="stat-label">Due Maintenance</div>
+            <div class="stat-label">{{ 'dashboard.stats.dueMaintenance' | translate }}</div>
           </div>
         </div>
       </div>
@@ -274,7 +277,7 @@
         <div class="chart-card">
           <div class="chart-header chart-header--blue">
             <span class="chart-header-icon">📊</span>
-            <h3>My Tasks by Status</h3>
+            <h3>{{ 'dashboard.charts.myTasksByStatus' | translate }}</h3>
           </div>
           <div class="chart-body">
             <div class="chart-wrapper">
@@ -285,7 +288,7 @@
         <div class="chart-card">
           <div class="chart-header chart-header--red">
             <span class="chart-header-icon">🚦</span>
-            <h3>My Tasks by Priority</h3>
+            <h3>{{ 'dashboard.charts.myTasksByPriority' | translate }}</h3>
           </div>
           <div class="chart-body">
             <div class="chart-wrapper">
@@ -297,25 +300,25 @@
 
       <!-- Quick Actions -->
       <div class="quick-actions">
-        <h3>Quick Actions</h3>
+        <h3>{{ 'dashboard.quickActions.title' | translate }}</h3>
         <div class="actions-grid">
           <a routerLink="/tasks" class="action-btn action-btn--blue">
-            <span>✅</span> My Work Orders
+            <span>✅</span> {{ 'dashboard.quickActions.myWorkOrders' | translate }}
           </a>
           <a routerLink="/reports" class="action-btn action-btn--cyan">
-            <span>📄</span> Create Report
+            <span>📄</span> {{ 'dashboard.quickActions.createReport' | translate }}
           </a>
           <a routerLink="/equipment" class="action-btn action-btn--amber">
-            <span>🔩</span> View Equipment
+            <span>🔩</span> {{ 'dashboard.quickActions.viewEquipment' | translate }}
           </a>
           <a routerLink="/availability" class="action-btn action-btn--green">
-            <span>📅</span> My Availability
+            <span>📅</span> {{ 'dashboard.quickActions.myAvailability' | translate }}
           </a>
           <a routerLink="/chat" class="action-btn action-btn--default">
-            <span>💬</span> Team Chat
+            <span>💬</span> {{ 'dashboard.quickActions.teamChat' | translate }}
           </a>
           <a routerLink="/calendar" class="action-btn action-btn--default">
-            <span>🗓️</span> Schedule
+            <span>🗓️</span> {{ 'dashboard.quickActions.schedule' | translate }}
           </a>
         </div>
       </div>
@@ -323,4 +326,3 @@
 
   </main>
 </div>
-
