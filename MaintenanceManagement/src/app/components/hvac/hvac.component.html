@@ -1,7 +1,10 @@
 <div class="page-container">
   <div class="page-header">
     <h2>❄️ HVAC Systems</h2>
-    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+    <div class="header-actions">
+      <button class="btn-add" (click)="openAdd()">➕ Add HVAC</button>
+      <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+    </div>
   </div>
   <div class="card-grid">
     @for (hvac of systems(); track hvac.id) {
@@ -22,6 +25,10 @@
             </div>
           }
         </div>
+        <div class="card-actions">
+          <button class="btn-icon btn-edit" (click)="openEdit(hvac)" title="Edit">✏️</button>
+          <button class="btn-icon btn-delete" (click)="delete(hvac.id)" title="Delete">🗑️</button>
+        </div>
       </div>
     }
     @empty {
@@ -29,3 +36,36 @@
     }
   </div>
 </div>
+
+@if (showModal()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ isEditing() ? 'Edit HVAC System' : 'Add HVAC System' }}</h3>
+        <button class="modal-close" (click)="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group"><label>Name *</label><input [(ngModel)]="form.name" placeholder="Name" class="form-control" /></div>
+          <div class="form-group"><label>System Type</label><input [(ngModel)]="form.systemType" placeholder="e.g. Central Air" class="form-control" /></div>
+          <div class="form-group"><label>Brand</label><input [(ngModel)]="form.brand" placeholder="Brand" class="form-control" /></div>
+          <div class="form-group"><label>Model</label><input [(ngModel)]="form.model" placeholder="Model" class="form-control" /></div>
+          <div class="form-group"><label>Capacity</label><input type="number" [(ngModel)]="form.capacity" class="form-control" /></div>
+          <div class="form-group"><label>Capacity Unit</label><input [(ngModel)]="form.capacityUnit" placeholder="kW, BTU…" class="form-control" /></div>
+          <div class="form-group"><label>Refrigerant Type</label><input [(ngModel)]="form.refrigerantType" placeholder="R-410A…" class="form-control" /></div>
+          <div class="form-group"><label>Location</label><input [(ngModel)]="form.location" placeholder="Location" class="form-control" /></div>
+          <div class="form-group"><label>Installation Date</label><input type="date" [(ngModel)]="form.installationDate" class="form-control" /></div>
+          <div class="form-group"><label>Last Inspection</label><input type="date" [(ngModel)]="form.lastInspectionDate" class="form-control" /></div>
+          <div class="form-group"><label>Next Inspection</label><input type="date" [(ngModel)]="form.nextInspectionDate" class="form-control" /></div>
+          <div class="form-group form-group-full"><label>Notes</label><textarea [(ngModel)]="form.notes" class="form-control" rows="2"></textarea></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeModal()">Cancel</button>
+        <button class="btn-save" (click)="save()" [disabled]="isSaving() || !form.name">
+          {{ isSaving() ? 'Saving...' : (isEditing() ? 'Update' : 'Create') }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

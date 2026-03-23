@@ -113,3 +113,25 @@
   transition: all 0.2s;
 }
 .action-btn:hover { border-color: #0f3460; color: #0f3460; background: #f0f4ff; }
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.chart-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 1.25rem;
+}
+.chart-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+.chart-wrapper {
+  position: relative;
+  height: 220px;
+}

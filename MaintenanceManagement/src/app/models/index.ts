@@ -300,15 +300,29 @@ export enum NotificationType {
 }
 
 // Chat models
+export enum MessageType {
+  Text = 0,
+  File = 1,
+  Photo = 2
+}
+
 export interface ChatMessage {
   id: string;
   senderId: string;
   senderName: string;
-  content: string;
+  content?: string;
+  messageType: MessageType;
+  fileUrl?: string;
+  fileName?: string;
+  contentType?: string;
   sentAt: string;
   isOwn?: boolean;
 }
 
 export interface SendMessageRequest {
-  content: string;
+  content?: string;
+  messageType?: MessageType;
+  fileUrl?: string;
+  fileName?: string;
+  contentType?: string;
 }

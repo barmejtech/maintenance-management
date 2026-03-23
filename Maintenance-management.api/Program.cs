@@ -109,6 +109,7 @@ builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IInvoiceRepo
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IReportRepository, Maintenance_management.infrastructure.Repositories.ReportRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IAvailabilityRepository, Maintenance_management.infrastructure.Repositories.AvailabilityRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IDocumentRepository, Maintenance_management.infrastructure.Repositories.DocumentRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IChatMessageRepository, Maintenance_management.infrastructure.Repositories.ChatMessageRepository>();
 
 // Application services
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAuthService, Maintenance_management.infrastructure.Services.AuthService>();

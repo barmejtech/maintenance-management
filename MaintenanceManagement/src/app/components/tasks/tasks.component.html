@@ -1,7 +1,10 @@
 <div class="page-container">
   <div class="page-header">
     <h2>✅ Work Orders</h2>
-    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+    <div class="header-actions">
+      <button class="btn-add" (click)="openAdd()">➕ New Work Order</button>
+      <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+    </div>
   </div>
 
   <div class="filter-bar">
@@ -43,6 +46,10 @@
               <span>📅 Due: {{ task.dueDate | date:'mediumDate' }}</span>
             }
           </div>
+          <div class="task-actions">
+            <button class="btn-icon btn-edit" (click)="openEdit(task)" title="Edit">✏️</button>
+            <button class="btn-icon btn-delete" (click)="delete(task.id)" title="Delete">🗑️</button>
+          </div>
         </div>
       }
       @empty {
@@ -51,3 +58,99 @@
     </div>
   }
 </div>
+
+@if (showModal()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ isEditing() ? 'Edit Work Order' : 'New Work Order' }}</h3>
+        <button class="modal-close" (click)="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group form-group-full">
+            <label>Title *</label>
+            <input [(ngModel)]="form.title" placeholder="Work order title" class="form-control" />
+          </div>
+          <div class="form-group form-group-full">
+            <label>Description</label>
+            <textarea [(ngModel)]="form.description" placeholder="Description" class="form-control" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select [(ngModel)]="form.status" class="form-control">
+              <option [value]="TaskStatus.Pending">Pending</option>
+              <option [value]="TaskStatus.InProgress">In Progress</option>
+              <option [value]="TaskStatus.Completed">Completed</option>
+              <option [value]="TaskStatus.Cancelled">Cancelled</option>
+              <option [value]="TaskStatus.OnHold">On Hold</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Priority</label>
+            <select [(ngModel)]="form.priority" class="form-control">
+              <option [value]="TaskPriority.Low">Low</option>
+              <option [value]="TaskPriority.Medium">Medium</option>
+              <option [value]="TaskPriority.High">High</option>
+              <option [value]="TaskPriority.Critical">Critical</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Maintenance Type</label>
+            <select [(ngModel)]="form.maintenanceType" class="form-control">
+              <option [value]="MaintenanceType.Preventive">Preventive</option>
+              <option [value]="MaintenanceType.Corrective">Corrective</option>
+              <option [value]="MaintenanceType.Inspection">Inspection</option>
+              <option [value]="MaintenanceType.Emergency">Emergency</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Technician</label>
+            <select [(ngModel)]="form.technicianId" class="form-control">
+              <option value="">— None —</option>
+              @for (t of technicians(); track t.id) {
+                <option [value]="t.id">{{ t.fullName }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Group</label>
+            <select [(ngModel)]="form.groupId" class="form-control">
+              <option value="">— None —</option>
+              @for (g of groups(); track g.id) {
+                <option [value]="g.id">{{ g.name }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Equipment</label>
+            <select [(ngModel)]="form.equipmentId" class="form-control">
+              <option value="">— None —</option>
+              @for (e of equipmentList(); track e.id) {
+                <option [value]="e.id">{{ e.name }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Scheduled Date</label>
+            <input type="date" [(ngModel)]="form.scheduledDate" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Due Date</label>
+            <input type="date" [(ngModel)]="form.dueDate" class="form-control" />
+          </div>
+          <div class="form-group form-group-full">
+            <label>Notes</label>
+            <textarea [(ngModel)]="form.notes" placeholder="Notes" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeModal()">Cancel</button>
+        <button class="btn-save" (click)="save()" [disabled]="isSaving() || !form.title">
+          {{ isSaving() ? 'Saving...' : (isEditing() ? 'Update' : 'Create') }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

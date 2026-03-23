@@ -1,3 +1,6 @@
+using Maintenance_management.domain.Entities;
+using Maintenance_management.domain.Enums;
+using Maintenance_management.domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
@@ -6,6 +9,13 @@ namespace Maintenance_management.api.Hubs;
 [Authorize]
 public class ChatHub : Hub
 {
+    private readonly IChatMessageRepository _chatRepo;
+
+    public ChatHub(IChatMessageRepository chatRepo)
+    {
+        _chatRepo = chatRepo;
+    }
+
     /// <summary>
     /// Called when a client connects. Announces the user's arrival to all clients.
     /// </summary>
@@ -41,29 +51,63 @@ public class ChatHub : Hub
     }
 
     /// <summary>
-    /// Broadcasts a message to all connected clients.
+    /// Broadcasts a text message to all connected clients and persists it to DB.
     /// </summary>
     public async Task SendMessage(string message)
     {
         var userId = Context.UserIdentifier ?? "unknown";
         var userName = Context.User?.Identity?.Name ?? "Unknown";
-        var timestamp = DateTime.UtcNow;
 
-        await Clients.Group("global-chat").SendAsync("ReceiveMessage", userId, userName, message, timestamp);
+        var entity = new ChatMessage
+        {
+            SenderId = userId,
+            SenderName = userName,
+            Content = message,
+            MessageType = MessageType.Text
+        };
+
+        var saved = await _chatRepo.AddAsync(entity);
+
+        var dto = MapToDto(saved);
+        await Clients.Group("global-chat").SendAsync("ReceiveMessage", dto);
     }
 
     /// <summary>
-    /// Sends a private message to a specific user.
+    /// Broadcasts a file/photo message to all connected clients and persists it to DB.
     /// </summary>
-    public async Task SendPrivateMessage(string recipientUserId, string message)
+    public async Task SendFileMessage(string fileUrl, string fileName, string contentType, bool isPhoto)
     {
-        var senderId = Context.UserIdentifier ?? "unknown";
-        var senderName = Context.User?.Identity?.Name ?? "Unknown";
-        var timestamp = DateTime.UtcNow;
+        var userId = Context.UserIdentifier ?? "unknown";
+        var userName = Context.User?.Identity?.Name ?? "Unknown";
 
-        // Send to the recipient
-        await Clients.User(recipientUserId).SendAsync("ReceivePrivateMessage", senderId, senderName, message, timestamp);
-        // Echo back to sender
-        await Clients.Caller.SendAsync("ReceivePrivateMessage", senderId, senderName, message, timestamp);
+        var entity = new ChatMessage
+        {
+            SenderId = userId,
+            SenderName = userName,
+            Content = fileName,
+            MessageType = isPhoto ? MessageType.Photo : MessageType.File,
+            FileUrl = fileUrl,
+            FileName = fileName,
+            ContentType = contentType
+        };
+
+        var saved = await _chatRepo.AddAsync(entity);
+
+        var dto = MapToDto(saved);
+        await Clients.Group("global-chat").SendAsync("ReceiveMessage", dto);
     }
+
+    private static object MapToDto(ChatMessage m) => new
+    {
+        id = m.Id,
+        senderId = m.SenderId,
+        senderName = m.SenderName,
+        content = m.Content,
+        messageType = (int)m.MessageType,
+        fileUrl = m.FileUrl,
+        fileName = m.FileName,
+        contentType = m.ContentType,
+        sentAt = m.CreatedAt
+    };
 }
+
