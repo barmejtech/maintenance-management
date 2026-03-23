@@ -1,4 +1,4 @@
-<div class="dashboard">
+<div class="dashboard" [ngClass]="{'role-admin': isAdmin(), 'role-manager': isManagerOrAdmin() && !isAdmin(), 'role-tech': isTechnicianRole()}">
   <header class="dash-header">
     <div class="dash-title">
       <span class="logo">🔧</span>
@@ -6,8 +6,10 @@
     </div>
     <div class="dash-user">
       <app-notifications />
-      <span>{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</span>
-      <span class="role-badge">{{ auth.currentUser()?.roles?.[0] ?? 'User' }}</span>
+      <span class="user-name">{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</span>
+      <span class="role-badge" [ngClass]="{'badge-admin': isAdmin(), 'badge-manager': isManagerOrAdmin() && !isAdmin(), 'badge-tech': isTechnicianRole()}">
+        {{ getRoleName() }}
+      </span>
       <button (click)="auth.logout()" class="btn-logout">Sign Out</button>
     </div>
   </header>
@@ -63,75 +65,254 @@
   </nav>
 
   <main class="main-content">
-    <h2>Dashboard Overview</h2>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon">✅</div>
-        <div class="stat-value">{{ taskCount() }}</div>
-        <div class="stat-label">Active Work Orders</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">👷</div>
-        <div class="stat-value">{{ technicianCount() }}</div>
-        <div class="stat-label">Technicians</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🔩</div>
-        <div class="stat-value">{{ equipmentCount() }}</div>
-        <div class="stat-label">Equipment</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">⚠️</div>
-        <div class="stat-value">{{ dueMaintenance() }}</div>
-        <div class="stat-label">Due Maintenance</div>
-      </div>
-    </div>
 
-    <!-- Charts Section -->
-    <div class="charts-grid">
-      <div class="chart-card">
-        <h3 class="chart-title">Work Orders by Status</h3>
-        <div class="chart-wrapper">
-          <canvas #taskChart></canvas>
+    <!-- ===== ADMIN / MANAGER DASHBOARD ===== -->
+    @if (isManagerOrAdmin()) {
+      <div class="dashboard-hero">
+        <div>
+          <h2>{{ getDashboardTitle() }}</h2>
+          <p class="dashboard-subtitle">{{ getDashboardSubtitle() }}</p>
         </div>
+        @if (isAdmin()) {
+          <span class="hero-badge hero-badge--admin">🔑 Full Access</span>
+        } @else {
+          <span class="hero-badge hero-badge--manager">🛠️ Management View</span>
+        }
       </div>
-      <div class="chart-card">
-        <h3 class="chart-title">Equipment Status</h3>
-        <div class="chart-wrapper">
-          <canvas #equipmentChart></canvas>
-        </div>
-      </div>
-      <div class="chart-card">
-        <h3 class="chart-title">Technician Availability</h3>
-        <div class="chart-wrapper">
-          <canvas #technicianChart></canvas>
-        </div>
-      </div>
-    </div>
 
-    <div class="quick-actions">
-      <h3>Quick Actions</h3>
-      <div class="actions-grid">
-        <a routerLink="/tasks" class="action-btn">
-          <span>➕</span> New Work Order
-        </a>
-        @if (isManagerOrAdmin()) {
-          <a routerLink="/technicians" class="action-btn">
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card stat-card--tasks">
+          <div class="stat-icon-box">✅</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ taskCount() }}</div>
+            <div class="stat-label">Active Work Orders</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card--technicians">
+          <div class="stat-icon-box">👷</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ technicianCount() }}</div>
+            <div class="stat-label">Technicians</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card--equipment">
+          <div class="stat-icon-box">🔩</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ equipmentCount() }}</div>
+            <div class="stat-label">Equipment</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card--maintenance">
+          <div class="stat-icon-box">⚠️</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ dueMaintenance() }}</div>
+            <div class="stat-label">Due Maintenance</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card--invoices">
+          <div class="stat-icon-box">💰</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ invoiceCount() }}</div>
+            <div class="stat-label">Total Invoices</div>
+            @if (pendingInvoices() > 0) {
+              <div class="stat-badge">{{ pendingInvoices() }} pending</div>
+            }
+          </div>
+        </div>
+        <div class="stat-card stat-card--reports">
+          <div class="stat-icon-box">📄</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ reportCount() }}</div>
+            <div class="stat-label">Reports</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header chart-header--blue">
+            <span class="chart-header-icon">📊</span>
+            <h3>Work Orders by Status</h3>
+          </div>
+          <div class="chart-body">
+            <div class="chart-wrapper">
+              <canvas #taskChart></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header chart-header--amber">
+            <span class="chart-header-icon">🔩</span>
+            <h3>Equipment Status</h3>
+          </div>
+          <div class="chart-body">
+            <div class="chart-wrapper">
+              <canvas #equipmentChart></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header chart-header--green">
+            <span class="chart-header-icon">👷</span>
+            <h3>Technician Availability</h3>
+          </div>
+          <div class="chart-body">
+            <div class="chart-wrapper">
+              <canvas #technicianChart></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card chart-card--wide">
+          <div class="chart-header chart-header--purple">
+            <span class="chart-header-icon">📈</span>
+            <h3>7-Day Task Creation Trend</h3>
+          </div>
+          <div class="chart-body">
+            <div class="chart-wrapper chart-wrapper--tall">
+              <canvas #trendChart></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <div class="actions-grid">
+          <a routerLink="/tasks" class="action-btn action-btn--blue">
+            <span>➕</span> New Work Order
+          </a>
+          <a routerLink="/technicians" class="action-btn action-btn--green">
             <span>👷</span> Manage Technicians
           </a>
-        }
-        <a routerLink="/reports" class="action-btn">
-          <span>📄</span> Create Report
-        </a>
-        @if (isManagerOrAdmin()) {
-          <a routerLink="/invoices" class="action-btn">
+          <a routerLink="/reports" class="action-btn action-btn--cyan">
+            <span>📄</span> Create Report
+          </a>
+          <a routerLink="/invoices" class="action-btn action-btn--purple">
             <span>💰</span> New Invoice
           </a>
-        }
-        <a routerLink="/chat" class="action-btn">
-          <span>💬</span> Team Chat
-        </a>
+          <a routerLink="/chat" class="action-btn action-btn--default">
+            <span>💬</span> Team Chat
+          </a>
+          @if (isAdmin()) {
+            <a routerLink="/groups" class="action-btn action-btn--admin">
+              <span>⚙️</span> Manage Groups
+            </a>
+          }
+        </div>
       </div>
-    </div>
+    }
+
+    <!-- ===== TECHNICIAN DASHBOARD ===== -->
+    @if (isTechnicianRole()) {
+      <div class="dashboard-hero">
+        <div>
+          <h2>{{ getDashboardTitle() }}</h2>
+          <p class="dashboard-subtitle">{{ getDashboardSubtitle() }}</p>
+        </div>
+        <span class="hero-badge hero-badge--tech">🔧 Technician View</span>
+      </div>
+
+      <!-- Personal Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card stat-card--tasks">
+          <div class="stat-icon-box">📋</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ myTaskCount() }}</div>
+            <div class="stat-label">My Total Tasks</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card--pending">
+          <div class="stat-icon-box">⏳</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ myPendingCount() }}</div>
+            <div class="stat-label">Pending</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card--inprogress">
+          <div class="stat-icon-box">🔄</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ myInProgressCount() }}</div>
+            <div class="stat-label">In Progress</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card--completed">
+          <div class="stat-icon-box">✅</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ myCompletedCount() }}</div>
+            <div class="stat-label">Completed</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card--equipment">
+          <div class="stat-icon-box">🔩</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ equipmentCount() }}</div>
+            <div class="stat-label">Equipment</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card--maintenance">
+          <div class="stat-icon-box">⚠️</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ dueMaintenance() }}</div>
+            <div class="stat-label">Due Maintenance</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid charts-grid--two">
+        <div class="chart-card">
+          <div class="chart-header chart-header--blue">
+            <span class="chart-header-icon">📊</span>
+            <h3>My Tasks by Status</h3>
+          </div>
+          <div class="chart-body">
+            <div class="chart-wrapper">
+              <canvas #myTaskChart></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header chart-header--red">
+            <span class="chart-header-icon">🚦</span>
+            <h3>My Tasks by Priority</h3>
+          </div>
+          <div class="chart-body">
+            <div class="chart-wrapper">
+              <canvas #myPriorityChart></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <div class="actions-grid">
+          <a routerLink="/tasks" class="action-btn action-btn--blue">
+            <span>✅</span> My Work Orders
+          </a>
+          <a routerLink="/reports" class="action-btn action-btn--cyan">
+            <span>📄</span> Create Report
+          </a>
+          <a routerLink="/equipment" class="action-btn action-btn--amber">
+            <span>🔩</span> View Equipment
+          </a>
+          <a routerLink="/availability" class="action-btn action-btn--green">
+            <span>📅</span> My Availability
+          </a>
+          <a routerLink="/chat" class="action-btn action-btn--default">
+            <span>💬</span> Team Chat
+          </a>
+          <a routerLink="/calendar" class="action-btn action-btn--default">
+            <span>🗓️</span> Schedule
+          </a>
+        </div>
+      </div>
+    }
+
   </main>
 </div>
+
