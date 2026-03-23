@@ -22,6 +22,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Document> Documents => Set<Document>();
     public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
     public DbSet<AppNotification> AppNotifications => Set<AppNotification>();
+    public DbSet<EquipmentHealthPrediction> EquipmentHealthPredictions => Set<EquipmentHealthPrediction>();
+    public DbSet<EquipmentDigitalTwin> EquipmentDigitalTwins => Set<EquipmentDigitalTwin>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -187,6 +189,29 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.Property(n => n.RelatedEntityId).HasMaxLength(450);
             e.Property(n => n.RelatedEntityType).HasMaxLength(100);
             e.HasIndex(n => new { n.UserId, n.IsDeleted });
+        });
+
+        builder.Entity<EquipmentHealthPrediction>(e =>
+        {
+            e.HasKey(p => p.Id);
+            e.Property(p => p.Recommendation).HasMaxLength(1000);
+            e.HasOne(p => p.Equipment)
+                .WithMany()
+                .HasForeignKey(p => p.EquipmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasIndex(p => p.EquipmentId);
+        });
+
+        builder.Entity<EquipmentDigitalTwin>(e =>
+        {
+            e.HasKey(t => t.Id);
+            e.Property(t => t.LastKnownIssue).HasMaxLength(1000);
+            e.Property(t => t.SimulationNotes).HasMaxLength(2000);
+            e.HasOne(t => t.Equipment)
+                .WithMany()
+                .HasForeignKey(t => t.EquipmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasIndex(t => t.EquipmentId).IsUnique();
         });
     }
 }

@@ -43,6 +43,8 @@ public static class DependencyInjection
         services.AddScoped<IInvoiceRepository, InvoiceRepository>();
         services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
         services.AddScoped<IDocumentRepository, DocumentRepository>();
+        services.AddScoped<IEquipmentHealthPredictionRepository, EquipmentHealthPredictionRepository>();
+        services.AddScoped<IEquipmentDigitalTwinRepository, EquipmentDigitalTwinRepository>();
 
         // Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -61,6 +63,8 @@ public static class DependencyInjection
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IInvoiceService, InvoiceService>();
         services.AddScoped<IAvailabilityService, AvailabilityService>();
+        services.AddScoped<IPredictiveMaintenanceService, PredictiveMaintenanceService>();
+        services.AddScoped<IEquipmentDigitalTwinService, EquipmentDigitalTwinService>();
 
         return services;
     }

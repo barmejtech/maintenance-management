@@ -1,0 +1,12 @@
+.twin-card {
+  transition: box-shadow 0.2s ease;
+}
+.twin-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12) !important;
+}
+.metric-box {
+  background: #f8f9fa;
+}
+.progress {
+  border-radius: 4px;
+}
