@@ -517,6 +517,294 @@ public static class DataSeeder
         }
 
         await context.SaveChangesAsync();
+
+        // ── TechnicianGroupMembers ───────────────────────────────────────────────
+        var member1Id = new Guid("00000000-0000-0000-0006-000000000006");
+        var member2Id = new Guid("00000000-0000-0000-0007-000000000007");
+
+        if (!await context.TechnicianGroupMembers.AnyAsync(m => m.Id == member1Id)
+            && await context.Technicians.AnyAsync(t => t.Id == tech1Id)
+            && await context.TechnicianGroups.AnyAsync(g => g.Id == group1Id))
+        {
+            context.TechnicianGroupMembers.Add(new TechnicianGroupMember
+            {
+                Id = member1Id,
+                TechnicianId = tech1Id,
+                GroupId = group1Id,
+                JoinedAt = DateTime.UtcNow.AddMonths(-6),
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.TechnicianGroupMembers.AnyAsync(m => m.Id == member2Id)
+            && await context.Technicians.AnyAsync(t => t.Id == tech2Id)
+            && await context.TechnicianGroups.AnyAsync(g => g.Id == group2Id))
+        {
+            context.TechnicianGroupMembers.Add(new TechnicianGroupMember
+            {
+                Id = member2Id,
+                TechnicianId = tech2Id,
+                GroupId = group2Id,
+                JoinedAt = DateTime.UtcNow.AddMonths(-4),
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── Documents ────────────────────────────────────────────────────────────
+        var doc1Id = new Guid("00000000-0000-0000-0008-000000000008");
+        var doc2Id = new Guid("00000000-0000-0000-0009-000000000009");
+
+        if (!await context.Documents.AnyAsync(d => d.Id == doc1Id))
+        {
+            context.Documents.Add(new Document
+            {
+                Id = doc1Id,
+                FileName = "hvac-inspection-checklist.pdf",
+                FileUrl = "/uploads/hvac-inspection-checklist.pdf",
+                ContentType = "application/pdf",
+                FileSize = 204800,
+                DocumentType = "Checklist",
+                UploadedByUserId = adminUserId,
+                TaskOrderId = task1Id,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.Documents.AnyAsync(d => d.Id == doc2Id))
+        {
+            context.Documents.Add(new Document
+            {
+                Id = doc2Id,
+                FileName = "chiller-unit-manual.pdf",
+                FileUrl = "/uploads/chiller-unit-manual.pdf",
+                ContentType = "application/pdf",
+                FileSize = 1048576,
+                DocumentType = "Manual",
+                UploadedByUserId = adminUserId,
+                EquipmentId = eq2Id,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── ChatMessages ─────────────────────────────────────────────────────────
+        var msg1Id = new Guid("00000000-0000-0000-0010-000000000010");
+        var msg2Id = new Guid("00000000-0000-0000-0011-000000000011");
+
+        if (techUser is not null && managerUser is not null)
+        {
+            if (!await context.ChatMessages.AnyAsync(m => m.Id == msg1Id))
+            {
+                context.ChatMessages.Add(new ChatMessage
+                {
+                    Id = msg1Id,
+                    SenderId = techUser.Id,
+                    SenderName = "Demo Technician",
+                    ReceiverId = managerUser.Id,
+                    Content = "The HVAC inspection in Building A is complete. All filters have been replaced.",
+                    MessageType = MessageType.Text,
+                    CreatedAt = DateTime.UtcNow.AddHours(-2)
+                });
+            }
+
+            if (!await context.ChatMessages.AnyAsync(m => m.Id == msg2Id))
+            {
+                context.ChatMessages.Add(new ChatMessage
+                {
+                    Id = msg2Id,
+                    SenderId = managerUser.Id,
+                    SenderName = "Maintenance Manager",
+                    ReceiverId = techUser.Id,
+                    Content = "Great work! Please proceed with the chiller assessment next.",
+                    MessageType = MessageType.Text,
+                    CreatedAt = DateTime.UtcNow.AddHours(-1)
+                });
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        // ── AppNotifications ─────────────────────────────────────────────────────
+        var notif1Id = new Guid("00000000-0000-0000-0012-000000000012");
+        var notif2Id = new Guid("00000000-0000-0000-0013-000000000013");
+        var notif3Id = new Guid("00000000-0000-0000-0014-000000000014");
+
+        if (techUser is not null && !await context.AppNotifications.AnyAsync(n => n.Id == notif1Id))
+        {
+            context.AppNotifications.Add(new AppNotification
+            {
+                Id = notif1Id,
+                UserId = techUser.Id,
+                Title = "New Task Assigned",
+                Message = "You have been assigned a new task: Quarterly HVAC Inspection.",
+                Type = NotificationType.Info,
+                IsRead = false,
+                RelatedEntityId = task1Id.ToString(),
+                RelatedEntityType = "TaskOrder",
+                CreatedAt = DateTime.UtcNow.AddDays(-7)
+            });
+        }
+
+        if (managerUser is not null && !await context.AppNotifications.AnyAsync(n => n.Id == notif2Id))
+        {
+            context.AppNotifications.Add(new AppNotification
+            {
+                Id = notif2Id,
+                UserId = managerUser.Id,
+                Title = "Task Completed",
+                Message = "HVAC Q1 Inspection has been completed successfully.",
+                Type = NotificationType.Success,
+                IsRead = true,
+                RelatedEntityId = task1Id.ToString(),
+                RelatedEntityType = "TaskOrder",
+                CreatedAt = DateTime.UtcNow.AddDays(-5)
+            });
+        }
+
+        if (!await context.AppNotifications.AnyAsync(n => n.Id == notif3Id))
+        {
+            context.AppNotifications.Add(new AppNotification
+            {
+                Id = notif3Id,
+                UserId = adminUserId,
+                Title = "Invoice Overdue",
+                Message = "Invoice INV-2024-001 is approaching its due date.",
+                Type = NotificationType.Warning,
+                IsRead = false,
+                RelatedEntityId = inv1Id.ToString(),
+                RelatedEntityType = "Invoice",
+                CreatedAt = DateTime.UtcNow.AddDays(-1)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── EquipmentHealthPredictions ───────────────────────────────────────────
+        var pred1Id = new Guid("00000000-0000-0000-0015-000000000015");
+        var pred2Id = new Guid("00000000-0000-0000-0016-000000000016");
+
+        if (!await context.EquipmentHealthPredictions.AnyAsync(p => p.Id == pred1Id))
+        {
+            context.EquipmentHealthPredictions.Add(new EquipmentHealthPrediction
+            {
+                Id = pred1Id,
+                EquipmentId = eq1Id,
+                PredictedFailureDate = DateTime.UtcNow.AddMonths(8),
+                FailureProbability = 0.15,
+                Recommendation = "Schedule filter replacement and belt inspection at next quarterly service.",
+                TotalInterventions = 5,
+                AverageDaysBetweenFailures = 365,
+                AverageDaysBetweenMaintenance = 90,
+                LastAnalyzedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.EquipmentHealthPredictions.AnyAsync(p => p.Id == pred2Id))
+        {
+            context.EquipmentHealthPredictions.Add(new EquipmentHealthPrediction
+            {
+                Id = pred2Id,
+                EquipmentId = eq2Id,
+                PredictedFailureDate = DateTime.UtcNow.AddMonths(2),
+                FailureProbability = 0.65,
+                Recommendation = "Immediate pump seal replacement required. Schedule emergency maintenance.",
+                TotalInterventions = 8,
+                AverageDaysBetweenFailures = 180,
+                AverageDaysBetweenMaintenance = 120,
+                LastAnalyzedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── EquipmentDigitalTwins ────────────────────────────────────────────────
+        var twin1Id = new Guid("00000000-0000-0000-0017-000000000017");
+        var twin2Id = new Guid("00000000-0000-0000-0018-000000000018");
+
+        if (!await context.EquipmentDigitalTwins.AnyAsync(t => t.Id == twin1Id))
+        {
+            context.EquipmentDigitalTwins.Add(new EquipmentDigitalTwin
+            {
+                Id = twin1Id,
+                EquipmentId = eq1Id,
+                CurrentStatus = EquipmentStatus.Operational,
+                WearPercentage = 22.5,
+                PerformanceScore = 91.0,
+                TemperatureCelsius = 18.5,
+                UsageHours = 14600,
+                LastKnownIssue = "Minor belt wear detected during last inspection",
+                LastSyncedAt = DateTime.UtcNow,
+                SimulationNotes = "Operating within normal parameters",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.EquipmentDigitalTwins.AnyAsync(t => t.Id == twin2Id))
+        {
+            context.EquipmentDigitalTwins.Add(new EquipmentDigitalTwin
+            {
+                Id = twin2Id,
+                EquipmentId = eq2Id,
+                CurrentStatus = EquipmentStatus.UnderMaintenance,
+                WearPercentage = 61.0,
+                PerformanceScore = 63.5,
+                TemperatureCelsius = 7.2,
+                UsageHours = 21900,
+                LastKnownIssue = "Pump seal oil leak; elevated vibration levels",
+                LastSyncedAt = DateTime.UtcNow,
+                SimulationNotes = "Immediate maintenance required to prevent failure",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── TechnicianPerformanceScores ──────────────────────────────────────────
+        var score1Id = new Guid("00000000-0000-0000-0019-000000000019");
+        var score2Id = new Guid("00000000-0000-0000-0020-000000000020");
+
+        if (!await context.TechnicianPerformanceScores.AnyAsync(s => s.Id == score1Id)
+            && await context.Technicians.AnyAsync(t => t.Id == tech1Id))
+        {
+            context.TechnicianPerformanceScores.Add(new TechnicianPerformanceScore
+            {
+                Id = score1Id,
+                TechnicianId = tech1Id,
+                AverageInterventionTimeMinutes = 95.0,
+                SuccessRate = 0.94,
+                CustomerSatisfactionScore = 4.7,
+                OnTimeRate = 0.91,
+                TotalTasksCompleted = 47,
+                TotalTasksDelayed = 4,
+                LastCalculatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.TechnicianPerformanceScores.AnyAsync(s => s.Id == score2Id)
+            && await context.Technicians.AnyAsync(t => t.Id == tech2Id))
+        {
+            context.TechnicianPerformanceScores.Add(new TechnicianPerformanceScore
+            {
+                Id = score2Id,
+                TechnicianId = tech2Id,
+                AverageInterventionTimeMinutes = 120.0,
+                SuccessRate = 0.88,
+                CustomerSatisfactionScore = 4.4,
+                OnTimeRate = 0.85,
+                TotalTasksCompleted = 32,
+                TotalTasksDelayed = 5,
+                LastCalculatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
         logger.LogInformation("Domain entity seeding complete.");
     }
 }
