@@ -5,10 +5,30 @@
     <span>MaintenancePro</span>
   </div>
   <div class="nav-links">
-    <a href="#features" class="nav-link-item">Features</a>
-    <a href="#testimonials" class="nav-link-item">Testimonials</a>
-    <a routerLink="/login" class="btn-nav-login">Sign In</a>
-    <a routerLink="/register" class="btn-nav-register">Get Started</a>
+    @if (!auth.isAuthenticated()) {
+      <a href="#features" class="nav-link-item">Features</a>
+      <a href="#testimonials" class="nav-link-item">Testimonials</a>
+      <a routerLink="/login" class="btn-nav-login">Sign In</a>
+      <a routerLink="/register" class="btn-nav-register">Get Started</a>
+    } @else {
+      <a routerLink="/dashboard" class="nav-link-item"><i class="bi bi-speedometer2"></i> Dashboard</a>
+      <a routerLink="/tasks" class="nav-link-item"><i class="bi bi-clipboard2-check"></i> Tasks</a>
+      <a routerLink="/equipment" class="nav-link-item"><i class="bi bi-gear"></i> Equipment</a>
+      @if (auth.isManager()) {
+        <a routerLink="/technicians" class="nav-link-item"><i class="bi bi-people"></i> Technicians</a>
+        <a routerLink="/groups" class="nav-link-item"><i class="bi bi-diagram-3"></i> Groups</a>
+        <a routerLink="/invoices" class="nav-link-item"><i class="bi bi-receipt"></i> Invoices</a>
+      }
+      <a routerLink="/chat" class="nav-link-item"><i class="bi bi-chat-dots"></i> Chat</a>
+      <a routerLink="/notifications" class="nav-link-item"><i class="bi bi-bell"></i> Notifications</a>
+      <span class="nav-user-name">
+        <i class="bi bi-person-circle"></i>
+        {{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}
+      </span>
+      <button class="btn-nav-logout" (click)="auth.logout()">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </button>
+    }
   </div>
 </nav>
 
@@ -23,12 +43,27 @@
             <h1 class="slide-title">{{ slide.title }}</h1>
             <p class="slide-subtitle">{{ slide.subtitle }}</p>
             <div class="slide-cta">
-              <a routerLink="/register" class="btn-hero-primary">
-                <i class="bi bi-rocket-takeoff"></i> Start Free Trial
-              </a>
-              <a routerLink="/login" class="btn-hero-secondary">
-                <i class="bi bi-box-arrow-in-right"></i> Sign In
-              </a>
+              @if (!auth.isAuthenticated()) {
+                <a routerLink="/register" class="btn-hero-primary">
+                  <i class="bi bi-rocket-takeoff"></i> Start Free Trial
+                </a>
+                <a routerLink="/login" class="btn-hero-secondary">
+                  <i class="bi bi-box-arrow-in-right"></i> Sign In
+                </a>
+              } @else {
+                <a routerLink="/dashboard" class="btn-hero-primary">
+                  <i class="bi bi-speedometer2"></i> Go to Dashboard
+                </a>
+                @if (auth.isManager()) {
+                  <a routerLink="/technicians" class="btn-hero-secondary">
+                    <i class="bi bi-people"></i> Manage Technicians
+                  </a>
+                } @else {
+                  <a routerLink="/tasks" class="btn-hero-secondary">
+                    <i class="bi bi-clipboard2-check"></i> View My Tasks
+                  </a>
+                }
+              }
             </div>
           </div>
         </div>
@@ -173,12 +208,27 @@
     <h2>Ready to transform your maintenance operations?</h2>
     <p>Join hundreds of facility managers who rely on MaintenancePro every day.</p>
     <div class="cta-buttons">
-      <a routerLink="/register" class="btn-cta-primary">
-        <i class="bi bi-rocket-takeoff"></i> Get Started Free
-      </a>
-      <a routerLink="/login" class="btn-cta-secondary">
-        <i class="bi bi-box-arrow-in-right"></i> Sign In
-      </a>
+      @if (!auth.isAuthenticated()) {
+        <a routerLink="/register" class="btn-cta-primary">
+          <i class="bi bi-rocket-takeoff"></i> Get Started Free
+        </a>
+        <a routerLink="/login" class="btn-cta-secondary">
+          <i class="bi bi-box-arrow-in-right"></i> Sign In
+        </a>
+      } @else {
+        <a routerLink="/dashboard" class="btn-cta-primary">
+          <i class="bi bi-speedometer2"></i> Go to Dashboard
+        </a>
+        @if (auth.isManager()) {
+          <a routerLink="/reports" class="btn-cta-secondary">
+            <i class="bi bi-bar-chart-line"></i> View Reports
+          </a>
+        } @else {
+          <a routerLink="/tasks" class="btn-cta-secondary">
+            <i class="bi bi-clipboard2-check"></i> View My Tasks
+          </a>
+        }
+      }
     </div>
   </div>
 </section>
@@ -192,9 +242,23 @@
     </div>
     <p class="footer-tagline">Professional maintenance management for modern facilities.</p>
     <div class="footer-links">
-      <a routerLink="/login">Sign In</a>
-      <span>·</span>
-      <a routerLink="/register">Register</a>
+      @if (!auth.isAuthenticated()) {
+        <a routerLink="/login">Sign In</a>
+        <span>·</span>
+        <a routerLink="/register">Register</a>
+      } @else {
+        <a routerLink="/dashboard">Dashboard</a>
+        <span>·</span>
+        <a routerLink="/tasks">Tasks</a>
+        <span>·</span>
+        <a routerLink="/equipment">Equipment</a>
+        @if (auth.isManager()) {
+          <span>·</span>
+          <a routerLink="/technicians">Technicians</a>
+          <span>·</span>
+          <a routerLink="/invoices">Invoices</a>
+        }
+      }
     </div>
     <p class="footer-copy">© {{ currentYear }} MaintenancePro. All rights reserved.</p>
   </div>
