@@ -1,7 +1,10 @@
 <div class="page-container">
   <div class="page-header">
     <h2>👷 Technicians</h2>
-    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+    <div class="header-actions">
+      <button class="btn-add" (click)="openAdd()">➕ Add Technician</button>
+      <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+    </div>
   </div>
 
   @if (isLoading()) {
@@ -25,6 +28,10 @@
               📍 {{ tech.latitude.toFixed(4) }}, {{ tech.longitude.toFixed(4) }}
             </div>
           }
+          <div class="card-actions">
+            <button class="btn-icon btn-edit" (click)="openEdit(tech)" title="Edit">✏️</button>
+            <button class="btn-icon btn-delete" (click)="delete(tech.id)" title="Delete">🗑️</button>
+          </div>
         </div>
       }
       @empty {
@@ -33,3 +40,60 @@
     </div>
   }
 </div>
+
+@if (showModal()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ isEditing() ? 'Edit Technician' : 'Add Technician' }}</h3>
+        <button class="modal-close" (click)="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input [(ngModel)]="form.firstName" placeholder="First name" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input [(ngModel)]="form.lastName" placeholder="Last name" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input [(ngModel)]="form.email" type="email" placeholder="Email" class="form-control" [disabled]="isEditing()" />
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input [(ngModel)]="form.phone" placeholder="Phone" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Specialization</label>
+            <input [(ngModel)]="form.specialization" placeholder="Specialization" class="form-control" />
+          </div>
+          @if (isEditing()) {
+            <div class="form-group">
+              <label>Status</label>
+              <select [(ngModel)]="form.status" class="form-control">
+                <option [value]="TechnicianStatus.Available">Available</option>
+                <option [value]="TechnicianStatus.Busy">Busy</option>
+                <option [value]="TechnicianStatus.OnLeave">On Leave</option>
+                <option [value]="TechnicianStatus.Inactive">Inactive</option>
+              </select>
+            </div>
+          } @else {
+            <div class="form-group">
+              <label>Password *</label>
+              <input [(ngModel)]="form.password" type="password" placeholder="Password" class="form-control" />
+            </div>
+          }
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeModal()">Cancel</button>
+        <button class="btn-save" (click)="save()" [disabled]="isSaving() || !form.firstName || !form.lastName">
+          {{ isSaving() ? 'Saving...' : (isEditing() ? 'Update' : 'Create') }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

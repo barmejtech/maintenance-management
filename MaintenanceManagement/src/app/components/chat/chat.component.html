@@ -21,7 +21,19 @@
               @if (!msg.isOwn) {
                 <div class="msg-sender">{{ msg.senderName }}</div>
               }
-              <div class="msg-content">{{ msg.content }}</div>
+              @if (msg.messageType === MessageType.Text) {
+                <div class="msg-content">{{ msg.content }}</div>
+              } @else if (msg.messageType === MessageType.Photo) {
+                <div class="msg-photo">
+                  <img [src]="getFileUrl(msg.fileUrl)" [alt]="msg.fileName" class="chat-image" />
+                </div>
+              } @else {
+                <div class="msg-file">
+                  <a [href]="getFileUrl(msg.fileUrl)" target="_blank" class="file-link">
+                    📎 {{ msg.fileName }}
+                  </a>
+                </div>
+              }
               <div class="msg-time">{{ msg.sentAt | date:'shortTime' }}</div>
             </div>
           </div>
@@ -29,6 +41,22 @@
       </div>
 
       <div class="chat-input-area">
+        <input
+          type="file"
+          #fileInput
+          (change)="onFileSelected($event)"
+          accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip"
+          class="hidden-file-input"
+          [disabled]="!chatService.isConnected() || isUploading()"
+        />
+        <button
+          class="btn-attach"
+          (click)="fileInput.click()"
+          [disabled]="!chatService.isConnected() || isUploading()"
+          title="Attach file or photo"
+        >
+          @if (isUploading()) { ⏳ } @else { 📎 }
+        </button>
         <input
           #messageInput
           type="text"

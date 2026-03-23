@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ChatService } from '../../services/chat.service';
+import { FileUploadService } from '../../services/file-upload.service';
+import { MessageType } from '../../models';
 
 @Component({
   selector: 'app-chat',
@@ -14,12 +16,16 @@ import { ChatService } from '../../services/chat.service';
 })
 export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
+  @ViewChild('fileInput') private fileInput!: ElementRef<HTMLInputElement>;
   newMessage = '';
+  isUploading = signal(false);
+  MessageType = MessageType;
   private shouldScrollToBottom = false;
 
   constructor(
     public chatService: ChatService,
-    private auth: AuthService
+    private auth: AuthService,
+    private fileUploadService: FileUploadService
   ) {}
 
   ngOnInit() {
@@ -47,6 +53,35 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.newMessage = '';
     this.chatService.sendViaHub(content);
     this.shouldScrollToBottom = true;
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    const file = input.files[0];
+    this.isUploading.set(true);
+    this.fileUploadService.upload([file]).subscribe({
+      next: (results) => {
+        const result = results[0];
+        const isPhoto = file.type.startsWith('image/');
+        this.chatService.sendFileViaHub(result.url, result.originalName, result.contentType, isPhoto);
+        this.shouldScrollToBottom = true;
+        this.isUploading.set(false);
+        if (this.fileInput) this.fileInput.nativeElement.value = '';
+      },
+      error: () => this.isUploading.set(false)
+    });
+  }
+
+  isImage(contentType?: string): boolean {
+    return !!contentType?.startsWith('image/');
+  }
+
+  getFileUrl(fileUrl?: string): string {
+    if (!fileUrl) return '';
+    if (fileUrl.startsWith('http')) return fileUrl;
+    const base = (window as any).__env?.apiUrl?.replace('/api', '') ?? 'https://localhost:44352';
+    return `${base}${fileUrl}`;
   }
 
   private scrollToBottom(): void {

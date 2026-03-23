@@ -20,6 +20,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<InvoiceLineItem> InvoiceLineItems => Set<InvoiceLineItem>();
     public DbSet<Availability> Availabilities => Set<Availability>();
     public DbSet<Document> Documents => Set<Document>();
+    public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -162,6 +163,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .WithMany(h => h.Documents)
                 .HasForeignKey(d => d.HVACSystemId)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        builder.Entity<ChatMessage>(e =>
+        {
+            e.HasKey(m => m.Id);
+            e.Property(m => m.SenderId).IsRequired().HasMaxLength(450);
+            e.Property(m => m.SenderName).IsRequired().HasMaxLength(200);
+            e.Property(m => m.Content).HasMaxLength(4000);
+            e.Property(m => m.FileUrl).HasMaxLength(1000);
+            e.Property(m => m.FileName).HasMaxLength(500);
+            e.Property(m => m.ContentType).HasMaxLength(100);
         });
     }
 }

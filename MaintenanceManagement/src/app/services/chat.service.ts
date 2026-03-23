@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import * as signalR from '@microsoft/signalr';
-import { ChatMessage, SendMessageRequest } from '../models';
+import { ChatMessage, MessageType, SendMessageRequest } from '../models';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
   private readonly base = `${environment.apiUrl}/chat`;
   private hubConnection: signalR.HubConnection | null = null;
+  private currentUserId = '';
 
   private messagesSignal = signal<ChatMessage[]>([]);
   readonly messages = computed(() => this.messagesSignal());
@@ -18,6 +19,7 @@ export class ChatService {
   constructor(private http: HttpClient) {}
 
   startConnection(token: string, currentUserId: string): void {
+    this.currentUserId = currentUserId;
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${environment.hubsUrl}/hubs/chat`, {
         accessTokenFactory: () => token
@@ -26,7 +28,7 @@ export class ChatService {
       .build();
 
     this.hubConnection.on('ReceiveMessage', (message: ChatMessage) => {
-      const msg = { ...message, isOwn: message.senderId === currentUserId };
+      const msg = { ...message, isOwn: message.senderId === this.currentUserId };
       this.messagesSignal.update(list => [...list, msg]);
     });
 
@@ -45,7 +47,10 @@ export class ChatService {
 
   loadHistory(): Observable<ChatMessage[]> {
     return this.http.get<ChatMessage[]>(`${this.base}/history`).pipe(
-      tap(data => this.messagesSignal.set(data))
+      tap(data => {
+        const mapped = data.map(m => ({ ...m, isOwn: m.senderId === this.currentUserId }));
+        this.messagesSignal.set(mapped);
+      })
     );
   }
 
@@ -59,6 +64,14 @@ export class ChatService {
     if (this.hubConnection?.state === signalR.HubConnectionState.Connected) {
       this.hubConnection.invoke('SendMessage', content).catch(err =>
         console.error('Send message error:', err)
+      );
+    }
+  }
+
+  sendFileViaHub(fileUrl: string, fileName: string, contentType: string, isPhoto: boolean): void {
+    if (this.hubConnection?.state === signalR.HubConnectionState.Connected) {
+      this.hubConnection.invoke('SendFileMessage', fileUrl, fileName, contentType, isPhoto).catch(err =>
+        console.error('Send file message error:', err)
       );
     }
   }
