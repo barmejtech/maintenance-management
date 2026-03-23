@@ -87,6 +87,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/equipment-digital-twin/equipment-digital-twin.component').then(m => m.EquipmentDigitalTwinComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'performance',
+    loadComponent: () => import('./components/performance/performance.component').then(m => m.PerformanceComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/dashboard' }
 ];
 

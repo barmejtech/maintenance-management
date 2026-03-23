@@ -22,6 +22,12 @@ public class TaskOrderDto
     public Guid? EquipmentId { get; set; }
     public string? EquipmentName { get; set; }
     public DateTime CreatedAt { get; set; }
+    public double? ArrivalLatitude { get; set; }
+    public double? ArrivalLongitude { get; set; }
+    public DateTime? ArrivalTime { get; set; }
+    public string? ProofPhotoUrl { get; set; }
+    public string? CustomerSignatureUrl { get; set; }
+    public bool IsGpsValidated { get; set; }
 }
 
 public class CreateTaskOrderDto

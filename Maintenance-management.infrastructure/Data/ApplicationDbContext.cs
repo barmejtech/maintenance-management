@@ -24,6 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<AppNotification> AppNotifications => Set<AppNotification>();
     public DbSet<EquipmentHealthPrediction> EquipmentHealthPredictions => Set<EquipmentHealthPrediction>();
     public DbSet<EquipmentDigitalTwin> EquipmentDigitalTwins => Set<EquipmentDigitalTwin>();
+    public DbSet<TechnicianPerformanceScore> TechnicianPerformanceScores => Set<TechnicianPerformanceScore>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -212,6 +213,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .HasForeignKey(t => t.EquipmentId)
                 .OnDelete(DeleteBehavior.Cascade);
             e.HasIndex(t => t.EquipmentId).IsUnique();
+        });
+
+        builder.Entity<TechnicianPerformanceScore>(e =>
+        {
+            e.HasKey(s => s.Id);
+            e.HasOne(s => s.Technician)
+                .WithMany()
+                .HasForeignKey(s => s.TechnicianId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasIndex(s => s.TechnicianId).IsUnique();
         });
     }
 }

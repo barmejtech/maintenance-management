@@ -15,6 +15,14 @@ public class TaskOrder : BaseEntity
     public string? Notes { get; set; }
     public string CreatedByUserId { get; set; } = string.Empty;
 
+    // Intervention Proof (Feature 2)
+    public double? ArrivalLatitude { get; set; }
+    public double? ArrivalLongitude { get; set; }
+    public DateTime? ArrivalTime { get; set; }
+    public string? ProofPhotoUrl { get; set; }
+    public string? CustomerSignatureUrl { get; set; }
+    public bool IsGpsValidated { get; set; } = false;
+
     public Guid? TechnicianId { get; set; }
     public Technician? Technician { get; set; }
 

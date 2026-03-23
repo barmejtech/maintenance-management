@@ -90,6 +90,12 @@ export interface TaskOrder {
   equipmentId?: string;
   equipmentName?: string;
   createdAt: string;
+  arrivalLatitude?: number;
+  arrivalLongitude?: number;
+  arrivalTime?: string;
+  proofPhotoUrl?: string;
+  customerSignatureUrl?: string;
+  isGpsValidated: boolean;
 }
 
 export interface CreateTaskOrderRequest {
@@ -379,4 +385,38 @@ export interface UpsertDigitalTwinRequest {
   usageHours?: number;
   lastKnownIssue?: string;
   simulationNotes?: string;
+}
+
+// Performance models
+export interface TechnicianPerformanceScore {
+  id: string;
+  technicianId: string;
+  technicianName: string;
+  averageInterventionTimeMinutes: number;
+  successRate: number;
+  customerSatisfactionScore: number;
+  onTimeRate: number;
+  totalTasksCompleted: number;
+  totalTasksDelayed: number;
+  lastCalculatedAt: string;
+  createdAt: string;
+}
+
+export interface SmartDispatchResult {
+  technicianId: string;
+  technicianName: string;
+  specialization: string;
+  latitude?: number;
+  longitude?: number;
+  distanceScore: number;
+  performanceScore: number;
+  overallScore: number;
+  assignmentReason: string;
+}
+
+export interface SubmitInterventionProofRequest {
+  arrivalLatitude?: number;
+  arrivalLongitude?: number;
+  proofPhotoUrl?: string;
+  customerSignatureUrl?: string;
 }
