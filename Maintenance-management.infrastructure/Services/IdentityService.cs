@@ -47,4 +47,10 @@ public class IdentityService : IIdentityService
         var user = await _userManager.FindByIdAsync(userId);
         return user?.Email;
     }
+
+    public async Task<IEnumerable<string>> GetUserIdsByRoleAsync(string role)
+    {
+        var users = await _userManager.GetUsersInRoleAsync(role);
+        return users.Select(u => u.Id);
+    }
 }

@@ -161,6 +161,8 @@ export interface Equipment {
   nextMaintenanceDate?: string;
   status: EquipmentStatus;
   notes?: string;
+  beforeMaintenancePhotoUrl?: string;
+  afterMaintenancePhotoUrl?: string;
   createdAt: string;
 }
 

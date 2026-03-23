@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EquipmentService } from '../../services/equipment.service';
+import { FileUploadService } from '../../services/file-upload.service';
 import { Equipment, EquipmentStatus } from '../../models';
 
 @Component({
@@ -17,6 +18,8 @@ export class EquipmentComponent implements OnInit {
   showModal = signal(false);
   isEditing = signal(false);
   isSaving = signal(false);
+  isUploadingBefore = signal(false);
+  isUploadingAfter = signal(false);
   EquipmentStatus = EquipmentStatus;
 
   form = {
@@ -29,11 +32,13 @@ export class EquipmentComponent implements OnInit {
     lastMaintenanceDate: '',
     nextMaintenanceDate: '',
     status: EquipmentStatus.Operational,
-    notes: ''
+    notes: '',
+    beforeMaintenancePhotoUrl: '',
+    afterMaintenancePhotoUrl: ''
   };
   private editingId = '';
 
-  constructor(private service: EquipmentService) {}
+  constructor(private service: EquipmentService, private fileService: FileUploadService) {}
 
   ngOnInit() {
     this.load();
@@ -46,7 +51,7 @@ export class EquipmentComponent implements OnInit {
   openAdd() {
     this.isEditing.set(false);
     this.editingId = '';
-    this.form = { name: '', serialNumber: '', model: '', manufacturer: '', location: '', installationDate: '', lastMaintenanceDate: '', nextMaintenanceDate: '', status: EquipmentStatus.Operational, notes: '' };
+    this.form = { name: '', serialNumber: '', model: '', manufacturer: '', location: '', installationDate: '', lastMaintenanceDate: '', nextMaintenanceDate: '', status: EquipmentStatus.Operational, notes: '', beforeMaintenancePhotoUrl: '', afterMaintenancePhotoUrl: '' };
     this.showModal.set(true);
   }
 
@@ -63,12 +68,40 @@ export class EquipmentComponent implements OnInit {
       lastMaintenanceDate: eq.lastMaintenanceDate ? eq.lastMaintenanceDate.substring(0, 10) : '',
       nextMaintenanceDate: eq.nextMaintenanceDate ? eq.nextMaintenanceDate.substring(0, 10) : '',
       status: eq.status,
-      notes: eq.notes ?? ''
+      notes: eq.notes ?? '',
+      beforeMaintenancePhotoUrl: eq.beforeMaintenancePhotoUrl ?? '',
+      afterMaintenancePhotoUrl: eq.afterMaintenancePhotoUrl ?? ''
     };
     this.showModal.set(true);
   }
 
   closeModal() { this.showModal.set(false); }
+
+  uploadBeforePhoto(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    this.isUploadingBefore.set(true);
+    this.fileService.upload(Array.from(input.files)).subscribe({
+      next: (results) => {
+        if (results.length > 0) this.form.beforeMaintenancePhotoUrl = results[0].url;
+        this.isUploadingBefore.set(false);
+      },
+      error: () => this.isUploadingBefore.set(false)
+    });
+  }
+
+  uploadAfterPhoto(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    this.isUploadingAfter.set(true);
+    this.fileService.upload(Array.from(input.files)).subscribe({
+      next: (results) => {
+        if (results.length > 0) this.form.afterMaintenancePhotoUrl = results[0].url;
+        this.isUploadingAfter.set(false);
+      },
+      error: () => this.isUploadingAfter.set(false)
+    });
+  }
 
   save() {
     this.isSaving.set(true);
@@ -77,7 +110,9 @@ export class EquipmentComponent implements OnInit {
       installationDate: this.form.installationDate || null,
       lastMaintenanceDate: this.form.lastMaintenanceDate || null,
       nextMaintenanceDate: this.form.nextMaintenanceDate || null,
-      status: Number(this.form.status)
+      status: Number(this.form.status),
+      beforeMaintenancePhotoUrl: this.form.beforeMaintenancePhotoUrl || null,
+      afterMaintenancePhotoUrl: this.form.afterMaintenancePhotoUrl || null
     };
     const obs = this.isEditing()
       ? this.service.update(this.editingId, dto)

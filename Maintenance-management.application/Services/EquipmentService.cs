@@ -34,7 +34,9 @@ public class EquipmentService : IEquipmentService
             Location = dto.Location,
             InstallationDate = dto.InstallationDate,
             NextMaintenanceDate = dto.NextMaintenanceDate,
-            Notes = dto.Notes
+            Notes = dto.Notes,
+            BeforeMaintenancePhotoUrl = dto.BeforeMaintenancePhotoUrl,
+            AfterMaintenancePhotoUrl = dto.AfterMaintenancePhotoUrl
         };
 
         var created = await _repo.AddAsync(entity);
@@ -56,6 +58,8 @@ public class EquipmentService : IEquipmentService
         item.NextMaintenanceDate = dto.NextMaintenanceDate;
         item.Status = dto.Status;
         item.Notes = dto.Notes;
+        item.BeforeMaintenancePhotoUrl = dto.BeforeMaintenancePhotoUrl;
+        item.AfterMaintenancePhotoUrl = dto.AfterMaintenancePhotoUrl;
         item.UpdatedAt = DateTime.UtcNow;
 
         await _repo.UpdateAsync(item);
@@ -92,6 +96,8 @@ public class EquipmentService : IEquipmentService
         NextMaintenanceDate = e.NextMaintenanceDate,
         Status = e.Status,
         Notes = e.Notes,
+        BeforeMaintenancePhotoUrl = e.BeforeMaintenancePhotoUrl,
+        AfterMaintenancePhotoUrl = e.AfterMaintenancePhotoUrl,
         CreatedAt = e.CreatedAt
     };
 }
