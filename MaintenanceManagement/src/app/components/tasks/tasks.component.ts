@@ -114,7 +114,7 @@ export class TasksComponent implements OnInit {
   }
 
   getPriorityLabel(p: TaskPriority): string { return ['Low', 'Medium', 'High', 'Critical'][p]; }
-  getPriorityClass(p: TaskPriority): string { return ['p-low', 'p-medium', 'p-high', 'p-critical'][p]; }
+  getPriorityClass(p: TaskPriority): string { return ['bg-secondary', 'bg-info text-dark', 'bg-warning text-dark', 'bg-danger'][p]; }
   getStatusLabel(s: TaskStatus): string { return ['Pending', 'In Progress', 'Completed', 'Cancelled', 'On Hold'][s]; }
-  getStatusClass(s: TaskStatus): string { return ['s-pending', 's-inprogress', 's-completed', 's-cancelled', 's-onhold'][s]; }
+  getStatusClass(s: TaskStatus): string { return ['bg-warning text-dark', 'bg-info text-dark', 'bg-success', 'bg-danger', 'bg-secondary'][s]; }
 }

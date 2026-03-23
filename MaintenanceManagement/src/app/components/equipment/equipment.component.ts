@@ -94,5 +94,5 @@ export class EquipmentComponent implements OnInit {
   }
 
   getStatusLabel(s: EquipmentStatus): string { return ['Operational', 'Under Maintenance', 'Out of Service', 'Decommissioned'][s]; }
-  getStatusClass(s: EquipmentStatus): string { return ['s-operational', 's-maintenance', 's-out-of-service', 's-decommissioned'][s]; }
+  getStatusClass(s: EquipmentStatus): string { return ['bg-success', 'bg-warning text-dark', 'bg-danger', 'bg-secondary'][s]; }
 }

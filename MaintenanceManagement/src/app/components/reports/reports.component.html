@@ -1,42 +1,132 @@
-<div class="page-container">
-  <div class="page-header">
-    <h2>📄 Maintenance Reports</h2>
-    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-file-earmark-text-fill text-primary me-2"></i>Maintenance Reports</h4>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary btn-sm" (click)="openAdd()">
+        <i class="bi bi-plus-circle me-1"></i>New Report
+      </button>
+      <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Dashboard
+      </a>
+    </div>
   </div>
-  <div class="report-list">
+
+  <div class="row g-3">
     @for (report of reports(); track report.id) {
-      <div class="report-card">
-        <div class="report-header">
-          <h3>{{ report.title }}</h3>
-          <span class="report-date">{{ report.reportDate | date:'mediumDate' }}</span>
-        </div>
-        <p class="tech-name">👷 {{ report.technicianName }}</p>
-        <p class="content">{{ report.content | slice:0:200 }}{{ report.content.length > 200 ? '...' : '' }}</p>
-        @if (report.taskTitle) {
-          <p class="task-ref">🔗 Task: {{ report.taskTitle }}</p>
-        }
-        <div class="report-meta">
-          @if (report.laborHours) {
-            <span>⏱ {{ report.laborHours }}h</span>
-          }
-          @if (report.materialCost) {
-            <span>💰 ${{ report.materialCost }}</span>
-          }
-        </div>
-        @if (report.beforePhotoUrl || report.afterPhotoUrl) {
-          <div class="photos">
-            @if (report.beforePhotoUrl) {
-              <div class="photo-label">Before: <a [href]="report.beforePhotoUrl" target="_blank">📷 View</a></div>
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5 class="card-title mb-0">{{ report.title }}</h5>
+              <div class="d-flex align-items-center gap-2">
+                <small class="text-muted">{{ report.reportDate | date:'mediumDate' }}</small>
+                <button class="btn btn-sm btn-outline-primary" (click)="openEdit(report)" title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="delete(report.id)" title="Delete">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+            <p class="text-muted small mb-2"><i class="bi bi-person-hard-hat me-1"></i>{{ report.technicianName }}</p>
+            <p class="card-text mb-2">{{ report.content | slice:0:250 }}{{ report.content.length > 250 ? '...' : '' }}</p>
+            @if (report.taskTitle) {
+              <p class="mb-2 small"><i class="bi bi-link-45deg me-1 text-primary"></i>Task: <span class="text-primary">{{ report.taskTitle }}</span></p>
             }
-            @if (report.afterPhotoUrl) {
-              <div class="photo-label">After: <a [href]="report.afterPhotoUrl" target="_blank">📷 View</a></div>
-            }
+            <div class="d-flex gap-3">
+              @if (report.laborHours) {
+                <span class="badge bg-light text-dark border"><i class="bi bi-clock me-1"></i>{{ report.laborHours }}h labor</span>
+              }
+              @if (report.materialCost) {
+                <span class="badge bg-light text-dark border"><i class="bi bi-currency-dollar me-1"></i>{{ report.materialCost }} materials</span>
+              }
+              @if (report.beforePhotoUrl) {
+                <a [href]="report.beforePhotoUrl" target="_blank" class="badge bg-light text-dark border text-decoration-none">
+                  <i class="bi bi-camera me-1"></i>Before
+                </a>
+              }
+              @if (report.afterPhotoUrl) {
+                <a [href]="report.afterPhotoUrl" target="_blank" class="badge bg-light text-dark border text-decoration-none">
+                  <i class="bi bi-camera-fill me-1"></i>After
+                </a>
+              }
+            </div>
           </div>
-        }
+        </div>
       </div>
     }
     @empty {
-      <div class="empty-state">No reports found.</div>
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body text-center text-muted py-5">
+            <i class="bi bi-file-earmark-x fs-3 d-block mb-2"></i>No reports found.
+          </div>
+        </div>
+      </div>
     }
   </div>
 </div>
+
+@if (showModal()) {
+  <div class="modal-backdrop-custom" (click)="closeModal()">
+    <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-file-earmark-plus me-2"></i>{{ isEditing() ? 'Edit Report' : 'New Report' }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label fw-semibold">Title *</label>
+              <input class="form-control" [(ngModel)]="form.title" placeholder="Report title" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Technician Name *</label>
+              <input class="form-control" [(ngModel)]="form.technicianName" placeholder="Technician name" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Report Date *</label>
+              <input type="date" class="form-control" [(ngModel)]="form.reportDate" />
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Content *</label>
+              <textarea class="form-control" rows="4" [(ngModel)]="form.content" placeholder="Report content..."></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Labor Hours</label>
+              <input type="number" class="form-control" [(ngModel)]="form.laborHours" min="0" step="0.5" placeholder="0" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Material Cost ($)</label>
+              <input type="number" class="form-control" [(ngModel)]="form.materialCost" min="0" step="0.01" placeholder="0.00" />
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Recommendations</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="form.recommendations" placeholder="Optional recommendations..."></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Related Task Order</label>
+              <select class="form-select" [(ngModel)]="form.taskOrderId">
+                <option value="">— None —</option>
+                @for (t of taskOrders(); track t.id) {
+                  <option [value]="t.id">{{ t.title }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="save()"
+                  [disabled]="isSaving() || !form.title || !form.content || !form.technicianName">
+            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            {{ isEditing() ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
