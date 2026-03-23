@@ -8,8 +8,18 @@ namespace Maintenance_management.application.Services;
 public class TaskOrderService : ITaskOrderService
 {
     private readonly ITaskOrderRepository _repo;
+    private readonly ITechnicianRepository _technicianRepo;
+    private readonly INotificationService _notificationService;
 
-    public TaskOrderService(ITaskOrderRepository repo) => _repo = repo;
+    public TaskOrderService(
+        ITaskOrderRepository repo,
+        ITechnicianRepository technicianRepo,
+        INotificationService notificationService)
+    {
+        _repo = repo;
+        _technicianRepo = technicianRepo;
+        _notificationService = notificationService;
+    }
 
     public async Task<IEnumerable<TaskOrderDto>> GetAllAsync()
     {
@@ -66,6 +76,23 @@ public class TaskOrderService : ITaskOrderService
         };
 
         var created = await _repo.AddAsync(entity);
+
+        // Notify the assigned technician
+        if (dto.TechnicianId.HasValue)
+        {
+            var technician = await _technicianRepo.GetByIdAsync(dto.TechnicianId.Value);
+            if (technician is not null && !string.IsNullOrEmpty(technician.UserId))
+            {
+                await _notificationService.SendToUserAsync(
+                    technician.UserId,
+                    "New Task Assigned",
+                    $"You have been assigned to work order: \"{dto.Title}\"",
+                    "info",
+                    created.Id.ToString(),
+                    "TaskOrder");
+            }
+        }
+
         return MapToDto(created);
     }
 
@@ -73,6 +100,9 @@ public class TaskOrderService : ITaskOrderService
     {
         var task = await _repo.GetByIdAsync(id);
         if (task is null || task.IsDeleted) return null;
+
+        var previousStatus = task.Status;
+        var previousTechId = task.TechnicianId;
 
         task.Title = dto.Title;
         task.Description = dto.Description;
@@ -91,6 +121,44 @@ public class TaskOrderService : ITaskOrderService
             task.CompletedDate = DateTime.UtcNow;
 
         await _repo.UpdateAsync(task);
+
+        // Notify managers and admins when a job is completed
+        if (previousStatus != domain.Enums.TaskStatus.Completed &&
+            dto.Status == domain.Enums.TaskStatus.Completed)
+        {
+            await _notificationService.SendToRoleAsync(
+                "Manager",
+                "Work Order Completed",
+                $"Work order \"{task.Title}\" has been marked as completed.",
+                "success",
+                task.Id.ToString(),
+                "TaskOrder");
+
+            await _notificationService.SendToRoleAsync(
+                "Admin",
+                "Work Order Completed",
+                $"Work order \"{task.Title}\" has been marked as completed.",
+                "success",
+                task.Id.ToString(),
+                "TaskOrder");
+        }
+
+        // Notify the newly assigned technician if technician changed
+        if (dto.TechnicianId.HasValue && dto.TechnicianId != previousTechId)
+        {
+            var technician = await _technicianRepo.GetByIdAsync(dto.TechnicianId.Value);
+            if (technician is not null && !string.IsNullOrEmpty(technician.UserId))
+            {
+                await _notificationService.SendToUserAsync(
+                    technician.UserId,
+                    "Task Assignment Updated",
+                    $"You have been assigned to work order: \"{task.Title}\"",
+                    "info",
+                    task.Id.ToString(),
+                    "TaskOrder");
+            }
+        }
+
         return MapToDto(task);
     }
 

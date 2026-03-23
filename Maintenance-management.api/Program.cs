@@ -124,6 +124,9 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IReport
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IInvoiceService, Maintenance_management.application.Services.InvoiceService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAvailabilityService, Maintenance_management.application.Services.AvailabilityService>();
 
+// Notification service (SignalR-based)
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.INotificationService, Maintenance_management.api.Services.HubNotificationService>();
+
 // ===================== SERVICES =====================
 
 // Add SignalR services

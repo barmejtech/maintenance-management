@@ -14,6 +14,8 @@ public class Equipment : BaseEntity
     public DateTime? NextMaintenanceDate { get; set; }
     public EquipmentStatus Status { get; set; } = EquipmentStatus.Operational;
     public string? Notes { get; set; }
+    public string? BeforeMaintenancePhotoUrl { get; set; }
+    public string? AfterMaintenancePhotoUrl { get; set; }
 
     public ICollection<TaskOrder> Tasks { get; set; } = new List<TaskOrder>();
     public ICollection<Document> Documents { get; set; } = new List<Document>();
