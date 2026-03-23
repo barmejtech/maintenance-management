@@ -1,0 +1,64 @@
+{
+  "app": {
+    "title": " Maintenance Management System",
+    "subtitle": "  An application for efficient maintenance management",
+    "year": "2026"
+  },
+  "nav": {
+    "mainMenu": "MAIN MENU",
+    "system": "SYSTEM",
+    "settings": "Settings",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "register": "Register"
+  },
+    "home": {
+        "welcome": "Welcome to MuniSys",
+        "description": "Efficiently manage municipal licensing processes"
+    },
+    "login": {
+        "title": "Login",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Login",
+        "error": "Invalid login credentials"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "welcome": "Welcome, {{name}}!",
+        "stats": {
+            "totalLicenses": "Total Licenses",
+            "pendingApplications": "Pending Applications",
+            "approvedLicenses": "Approved Licenses"
+        },
+        "recentActivities": "Recent Activities"
+    },
+    "settings": {
+        "title": "Settings",
+        "language": "Language",
+        "theme": "Theme",
+        "save": "Save Changes"
+    },
+    "errors": {
+        "404": "Page Not Found",
+        "500": "Server Error"
+    },
+    "labels": {
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password"
+    },
+    "buttons": {
+        "submit": "Submit",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete"
+    },
+    "messages": {
+        "success": "Operation completed successfully",
+        "error": "An error occurred, please try again"
+    }
+
+
+}

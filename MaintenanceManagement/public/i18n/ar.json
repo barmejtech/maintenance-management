@@ -1,0 +1,98 @@
+{
+  "app": {
+    "title": "نظام إدارة الصيانة",
+    "subtitle": "  تطبيق لإدارة عمليات الصيانة بكفاءة",
+    "year": "2026"
+  },
+  "nav": {
+    "mainMenu": "القائمة الرئيسية",
+    "system": "النظام",
+    "settings": "الإعدادات",
+    "dashboard": "لوحة التحكم",
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب"
+    },
+    "home": {
+      "welcome": "مرحبًا بك في نظام إدارة الصيانة",
+      "description": "قم بإدارة عمليات الصيانة بكفاءة وسهولة"
+    },
+    "login": {
+      "title": "تسجيل الدخول",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "error": "بيانات تسجيل الدخول غير صحيحة"
+    },
+    "dashboard": {
+      "title": "لوحة التحكم",
+      "welcome": "مرحبًا، {{name}}!",
+      "stats": {
+        "totalRequests": "إجمالي طلبات الصيانة",
+        "pendingRequests": "طلبات الصيانة المعلقة",
+        "completedRequests": "طلبات الصيانة المكتملة"
+      },
+      "recentActivities": "الأنشطة الأخيرة"
+    },
+    "settings": {
+      "title": "الإعدادات",
+      "language": "اللغة",
+      "theme": "السمة",
+      "save": "حفظ التغييرات"
+    },
+    "errors": {
+      "404": "الصفحة غير موجودة",
+      "500": "خطأ في الخادم"
+    },
+    "labels": {
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور"
+    },
+    "buttons": {
+      "submit": "إرسال",
+      "cancel": "إلغاء",
+      "edit": "تعديل",
+      "delete": "حذف"
+    },
+    "messages": {
+      "success": "تمت العملية بنجاح",
+      "error": "حدث خطأ، يرجى المحاولة مرة أخرى"
+    },
+    "placeholders": {
+      "search": "ابحث هنا...",
+      "email": "أدخل بريدك الإلكتروني",
+      "password": "أدخل كلمة المرور"
+    },
+    "validation": {
+      "required": "هذا الحقل مطلوب",
+      "email": "يرجى إدخال بريد إلكتروني صالح",
+      "minLength": "يجب أن يكون على الأقل {{length}} حرفًا",
+      "maxLength": "يجب ألا يتجاوز {{length}} حرفًا"
+    },
+    "roles": {
+      "admin": "المسؤول",
+      "manager": "المدير",
+      "technician": "الفني",
+      "user": "المستخدم"
+    },
+    "statuses": {
+      "pending": "معلق",
+      "inProgress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "cancelled": "ملغي"
+    },
+    "notifications": {
+      "newRequest": "طلب صيانة جديد",
+      "requestUpdated": "تم تحديث طلب الصيانة",
+      "requestCompleted": "تم إكمال طلب الصيانة"
+    },
+    "footer": {
+      "contact": "اتصل بنا",
+      "privacy": "سياسة الخصوصية",
+      "terms": "الشروط والأحكام"
+    }
+
+   
+
+}
