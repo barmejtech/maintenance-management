@@ -127,7 +127,12 @@ public static class DataSeeder
         var techUser    = await userManager.FindByEmailAsync(techEmail);
         var managerUser = await userManager.FindByEmailAsync(managerEmail);
         var adminUser   = await userManager.FindByEmailAsync(configuration["AdminSettings:Email"] ?? "admin@maintenance.com");
-        var adminUserId = adminUser?.Id ?? "unknown";
+        if (adminUser is null)
+        {
+            logger.LogWarning("Admin user not found; skipping domain entity seeding.");
+            return;
+        }
+        var adminUserId = adminUser.Id;
 
         // ── Technicians ──────────────────────────────────────────────────────────
         var tech1Id = new Guid("11111111-1111-1111-1111-111111111111");
