@@ -18,17 +18,32 @@
           </h6>
         </div>
         <div class="card-body p-0 overflow-auto users-list">
-          @for (user of chatService.users(); track user.id) {
-            <div class="d-flex align-items-center gap-2 px-3 py-2 border-bottom user-row">
-              <span class="status-dot rounded-circle flex-shrink-0"
-                    [class.bg-success]="user.isOnline"
-                    [class.bg-secondary]="!user.isOnline">
-              </span>
-              <div class="flex-grow-1 overflow-hidden">
-                <div class="text-truncate fw-medium small">{{ user.fullName }}</div>
-                <div class="text-muted" style="font-size:0.7rem">{{ user.isOnline ? 'Online' : 'Offline' }}</div>
-              </div>
+          <!-- Public channel option -->
+          <div class="d-flex align-items-center gap-2 px-3 py-2 border-bottom user-row"
+               [class.active-conversation]="!selectedRecipient"
+               (click)="selectUser(null)" style="cursor:pointer">
+            <span class="status-dot rounded-circle flex-shrink-0 bg-primary"></span>
+            <div class="flex-grow-1 overflow-hidden">
+              <div class="text-truncate fw-medium small">🌐 Public Channel</div>
+              <div class="text-muted" style="font-size:0.7rem">All users</div>
             </div>
+          </div>
+          @for (user of chatService.users(); track user.id) {
+            @if (!isOwnUser(user.id)) {
+              <div class="d-flex align-items-center gap-2 px-3 py-2 border-bottom user-row"
+                   [class.active-conversation]="selectedRecipient?.id === user.id"
+                   (click)="selectUser(user)" style="cursor:pointer">
+                <span class="status-dot rounded-circle flex-shrink-0"
+                      [class.bg-success]="user.isOnline"
+                      [class.bg-secondary]="!user.isOnline">
+                </span>
+                <div class="flex-grow-1 overflow-hidden">
+                  <div class="text-truncate fw-medium small">{{ user.fullName }}</div>
+                  <div class="text-muted" style="font-size:0.7rem">{{ user.isOnline ? 'Online' : 'Offline' }}</div>
+                </div>
+                <i class="bi bi-lock-fill text-muted" style="font-size:0.65rem" title="Private message"></i>
+              </div>
+            }
           }
           @if (chatService.users().length === 0) {
             <div class="text-center text-muted py-3 small">No users found</div>
@@ -50,24 +65,33 @@
                  [class.text-muted]="!chatService.isConnected()">
             {{ chatService.isConnected() ? 'Connected' : 'Connecting...' }}
           </small>
+          <span class="ms-auto fw-semibold small">{{ channelLabel }}</span>
         </div>
 
         <!-- Messages -->
         <div class="card-body overflow-auto messages-area p-3" #messagesContainer>
-          @if (chatService.messages().length === 0) {
+          @if (chatService.visibleMessages().length === 0) {
             <div class="text-center text-muted py-4">
               <i class="bi bi-chat-text fs-3 d-block mb-2"></i>
-              No messages yet. Say hello!
+              @if (selectedRecipient) {
+                No private messages with {{ selectedRecipient.fullName }} yet.
+              } @else {
+                No messages yet. Say hello!
+              }
             </div>
           }
-          @for (msg of chatService.messages(); track msg.id) {
+          @for (msg of chatService.visibleMessages(); track msg.id) {
             <div class="d-flex mb-2" [class.justify-content-end]="msg.isOwn">
               <div class="message-bubble rounded-3 p-2 px-3"
                    [class.bubble-own]="msg.isOwn"
-                   [class.bubble-other]="!msg.isOwn">
+                   [class.bubble-other]="!msg.isOwn"
+                   [class.bubble-private]="!!msg.receiverId">
                 @if (!msg.isOwn) {
                   <div class="sender-name fw-semibold mb-1" style="font-size:0.75rem">
                     <i class="bi bi-person-circle me-1"></i>{{ msg.senderName }}
+                    @if (msg.receiverId) {
+                      <span class="ms-1 text-warning" title="Private message"><i class="bi bi-lock-fill"></i></span>
+                    }
                   </div>
                 }
                 @if (msg.messageType === MessageType.Text) {
@@ -83,6 +107,9 @@
                 <div class="text-end mt-1" style="font-size:0.7rem"
                      [class.text-light]="msg.isOwn" [class.text-muted]="!msg.isOwn">
                   {{ msg.sentAt | date:'shortTime' }}
+                  @if (msg.isOwn && msg.receiverId) {
+                    <i class="bi bi-lock-fill ms-1" title="Private"></i>
+                  }
                 </div>
               </div>
             </div>
@@ -91,6 +118,13 @@
 
         <!-- Input Area -->
         <div class="card-footer bg-white p-2">
+          @if (selectedRecipient) {
+            <div class="alert alert-info py-1 px-2 mb-2 small d-flex align-items-center gap-1">
+              <i class="bi bi-lock-fill"></i>
+              Private message to <strong class="ms-1">{{ selectedRecipient.fullName }}</strong>
+              <button class="btn btn-sm btn-link p-0 ms-auto text-secondary" (click)="selectUser(null)" title="Switch to public">✕</button>
+            </div>
+          }
           <input type="file" #fileInput (change)="onFileSelected($event)"
                  accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip"
                  class="d-none" [disabled]="!chatService.isConnected() || isUploading()" />
@@ -107,7 +141,7 @@
             </button>
             <input type="text" class="form-control" [(ngModel)]="newMessage"
                    (keydown.enter)="sendMessage()"
-                   placeholder="Type a message..."
+                   [placeholder]="selectedRecipient ? 'Message ' + selectedRecipient.fullName + '...' : 'Message everyone...'"
                    [disabled]="!chatService.isConnected()" />
             <button class="btn btn-primary" type="button"
                     (click)="sendMessage()"

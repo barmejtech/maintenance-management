@@ -12,7 +12,20 @@ public class ChatMessageRepository : Repository<ChatMessage>, IChatMessageReposi
     public async Task<IEnumerable<ChatMessage>> GetHistoryAsync(int count = 100)
     {
         return await _context.ChatMessages
-            .Where(m => !m.IsDeleted)
+            .Where(m => !m.IsDeleted && m.ReceiverId == null)
+            .OrderByDescending(m => m.CreatedAt)
+            .Take(count)
+            .OrderBy(m => m.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<ChatMessage>> GetHistoryForUserAsync(string userId, int count = 100)
+    {
+        return await _context.ChatMessages
+            .Where(m => !m.IsDeleted &&
+                        (m.ReceiverId == null ||                          // public
+                         m.SenderId == userId ||                          // sent by user
+                         m.ReceiverId == userId))                         // received by user
             .OrderByDescending(m => m.CreatedAt)
             .Take(count)
             .OrderBy(m => m.CreatedAt)

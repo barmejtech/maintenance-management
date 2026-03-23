@@ -23,16 +23,18 @@ public class ChatController : ControllerBase
         _userManager = userManager;
     }
 
-    /// <summary>Returns the last 100 chat messages ordered oldest-first.</summary>
+    /// <summary>Returns chat history for the current user (public + private messages).</summary>
     [HttpGet("history")]
     public async Task<IActionResult> GetHistory([FromQuery] int count = 100)
     {
-        var messages = await _chatRepo.GetHistoryAsync(count);
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+        var messages = await _chatRepo.GetHistoryForUserAsync(userId, count);
         var result = messages.Select(m => new
         {
             id = m.Id,
             senderId = m.SenderId,
             senderName = m.SenderName,
+            receiverId = m.ReceiverId,
             content = m.Content,
             messageType = (int)m.MessageType,
             fileUrl = m.FileUrl,

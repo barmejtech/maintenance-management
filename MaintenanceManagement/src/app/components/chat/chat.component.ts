@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ChatService } from '../../services/chat.service';
 import { FileUploadService } from '../../services/file-upload.service';
-import { MessageType } from '../../models';
+import { ChatUser, MessageType } from '../../models';
 
 @Component({
   selector: 'app-chat',
@@ -21,6 +21,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   isUploading = signal(false);
   MessageType = MessageType;
   private shouldScrollToBottom = false;
+  private currentUserId = '';
 
   constructor(
     public chatService: ChatService,
@@ -30,8 +31,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   ngOnInit() {
     const token = this.auth.getAccessToken() ?? '';
-    const userId = this.auth.currentUser()?.userId ?? '';
-    this.chatService.startConnection(token, userId);
+    this.currentUserId = this.auth.currentUser()?.userId ?? '';
+    this.chatService.startConnection(token, this.currentUserId);
     this.chatService.loadHistory().subscribe();
     this.chatService.loadUsers();
     this.shouldScrollToBottom = true;
@@ -48,11 +49,34 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
+  get selectedRecipient(): ChatUser | null {
+    return this.chatService.selectedRecipient();
+  }
+
+  get channelLabel(): string {
+    const r = this.selectedRecipient;
+    return r ? `🔒 ${r.fullName}` : '🌐 Public Channel';
+  }
+
+  selectUser(user: ChatUser | null): void {
+    this.chatService.selectRecipient(user);
+    this.shouldScrollToBottom = true;
+  }
+
+  isOwnUser(userId: string): boolean {
+    return userId === this.currentUserId;
+  }
+
   sendMessage(): void {
     const content = this.newMessage.trim();
     if (!content) return;
     this.newMessage = '';
-    this.chatService.sendViaHub(content);
+    const recipient = this.selectedRecipient;
+    if (recipient) {
+      this.chatService.sendPrivateViaHub(recipient.id, content);
+    } else {
+      this.chatService.sendViaHub(content);
+    }
     this.shouldScrollToBottom = true;
   }
 
@@ -65,7 +89,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       next: (results) => {
         const result = results[0];
         const isPhoto = file.type.startsWith('image/');
-        this.chatService.sendFileViaHub(result.url, result.originalName, result.contentType, isPhoto);
+        const recipient = this.selectedRecipient;
+        if (recipient) {
+          this.chatService.sendPrivateFileViaHub(recipient.id, result.url, result.originalName, result.contentType, isPhoto);
+        } else {
+          this.chatService.sendFileViaHub(result.url, result.originalName, result.contentType, isPhoto);
+        }
         this.shouldScrollToBottom = true;
         this.isUploading.set(false);
         if (this.fileInput) this.fileInput.nativeElement.value = '';
