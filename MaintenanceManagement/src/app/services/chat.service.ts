@@ -74,7 +74,7 @@ export class ChatService {
     this.getUsers().pipe(
       tap(data => {
         const onlineIds = this.onlineUsers();
-        const merged = data.map(u => ({ ...u, isOnline: u.isOnline || onlineIds.includes(u.id) }));
+        const merged = data.map(u => ({ ...u, isOnline: onlineIds.includes(u.id) || u.isOnline }));
         this.users.set(merged);
         this.onlineUsers.set(merged.filter(u => u.isOnline).map(u => u.id));
       })

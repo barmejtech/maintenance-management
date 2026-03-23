@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TaskStatus = Maintenance_management.domain.Enums.TaskStatus;
 
 namespace Maintenance_management.infrastructure.Data;
 
@@ -301,7 +302,7 @@ public static class DataSeeder
                 Id = task1Id,
                 Title = "Quarterly HVAC Inspection",
                 Description = "Perform quarterly inspection of all HVAC units in Building A",
-                Status = domain.Enums.TaskStatus.InProgress,
+                Status = TaskStatus.InProgress,
                 Priority = TaskPriority.High,
                 MaintenanceType = MaintenanceType.Inspection,
                 ScheduledDate = DateTime.UtcNow.AddDays(-7),
@@ -321,7 +322,7 @@ public static class DataSeeder
                 Id = task2Id,
                 Title = "Chiller Preventive Maintenance",
                 Description = "Annual preventive maintenance for Chiller Unit #2",
-                Status = domain.Enums.TaskStatus.Pending,
+                Status = TaskStatus.Pending,
                 Priority = TaskPriority.Medium,
                 MaintenanceType = MaintenanceType.Preventive,
                 ScheduledDate = DateTime.UtcNow.AddDays(14),
