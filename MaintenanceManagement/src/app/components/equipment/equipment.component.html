@@ -21,6 +21,7 @@
             <th>Location</th>
             <th>Status</th>
             <th>Next Maintenance</th>
+            <th>Photos</th>
             <th class="text-end">Actions</th>
           </tr>
         </thead>
@@ -33,6 +34,23 @@
               <td>{{ eq.location }}</td>
               <td><span class="badge" [class]="getStatusClass(eq.status)">{{ getStatusLabel(eq.status) }}</span></td>
               <td>{{ eq.nextMaintenanceDate ? (eq.nextMaintenanceDate | date:'mediumDate') : '—' }}</td>
+              <td>
+                <div class="d-flex gap-1 align-items-center">
+                  @if (eq.beforeMaintenancePhotoUrl) {
+                    <a [href]="eq.beforeMaintenancePhotoUrl" target="_blank" title="Before photo">
+                      <img [src]="eq.beforeMaintenancePhotoUrl" alt="Before" class="photo-thumb" />
+                    </a>
+                  }
+                  @if (eq.afterMaintenancePhotoUrl) {
+                    <a [href]="eq.afterMaintenancePhotoUrl" target="_blank" title="After photo">
+                      <img [src]="eq.afterMaintenancePhotoUrl" alt="After" class="photo-thumb" />
+                    </a>
+                  }
+                  @if (!eq.beforeMaintenancePhotoUrl && !eq.afterMaintenancePhotoUrl) {
+                    <span class="text-muted small">—</span>
+                  }
+                </div>
+              </td>
               <td class="text-end">
                 <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(eq)" title="Edit">
                   <i class="bi bi-pencil"></i>
@@ -45,7 +63,7 @@
           }
           @if (equipment().length === 0) {
             <tr>
-              <td colspan="7" class="text-center text-muted py-4">
+              <td colspan="8" class="text-center text-muted py-4">
                 <i class="bi bi-tools fs-4 d-block mb-1"></i>No equipment found.
               </td>
             </tr>
@@ -113,11 +131,43 @@
               <label class="form-label fw-semibold">Notes</label>
               <textarea class="form-control" rows="2" [(ngModel)]="form.notes" placeholder="Notes"></textarea>
             </div>
+
+            <!-- Before Maintenance Photo -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-camera me-1"></i>Before Maintenance Photo
+              </label>
+              <input type="file" class="form-control" accept="image/*" (change)="uploadBeforePhoto($event)" />
+              @if (isUploadingBefore()) {
+                <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+              }
+              @if (form.beforeMaintenancePhotoUrl) {
+                <div class="mt-2">
+                  <img [src]="form.beforeMaintenancePhotoUrl" alt="Before photo preview" class="photo-preview" />
+                </div>
+              }
+            </div>
+
+            <!-- After Maintenance Photo -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-camera-fill me-1"></i>After Maintenance Photo
+              </label>
+              <input type="file" class="form-control" accept="image/*" (change)="uploadAfterPhoto($event)" />
+              @if (isUploadingAfter()) {
+                <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+              }
+              @if (form.afterMaintenancePhotoUrl) {
+                <div class="mt-2">
+                  <img [src]="form.afterMaintenancePhotoUrl" alt="After photo preview" class="photo-preview" />
+                </div>
+              }
+            </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.name">
+          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.name || isUploadingBefore() || isUploadingAfter()">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
             {{ isEditing() ? 'Update' : 'Create' }}
           </button>

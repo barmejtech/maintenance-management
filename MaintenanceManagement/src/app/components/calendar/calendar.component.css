@@ -1,0 +1,127 @@
+.calendar-header-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1px solid #dee2e6;
+}
+
+.calendar-header-cell {
+  padding: 8px 4px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #6c757d;
+  text-transform: uppercase;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-cell {
+  min-height: 110px;
+  border-right: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+  padding: 4px;
+  vertical-align: top;
+  position: relative;
+  background: #fff;
+}
+
+.calendar-cell:nth-child(7n) {
+  border-right: none;
+}
+
+.calendar-cell.other-month {
+  background: #f8f9fa;
+}
+
+.calendar-cell.today {
+  background: #e8f4ff;
+}
+
+.calendar-cell.today .cell-date {
+  background: #0d6efd;
+  color: #fff;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.cell-date {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 4px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.other-month .cell-date {
+  color: #ced4da;
+}
+
+.cell-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.task-chip {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: 3px;
+  padding: 2px 5px;
+  font-size: 0.72rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 500;
+  transition: opacity 0.15s;
+}
+
+.task-chip:hover { opacity: 0.85; }
+
+.task-low     { background: #6c757d; }
+.task-medium  { background: #0dcaf0; color: #000; }
+.task-high    { background: #ffc107; color: #000; }
+.task-critical { background: #dc3545; }
+
+.task-more {
+  font-size: 0.7rem;
+  padding-left: 4px;
+}
+
+/* Legend */
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #495057;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+/* Task detail modal */
+.modal-backdrop-custom {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 1050; display: flex; align-items: center; justify-content: center; padding: 1rem;
+}
+.modal-dialog-custom { width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }

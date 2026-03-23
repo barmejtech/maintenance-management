@@ -15,6 +15,8 @@ public class EquipmentDto
     public DateTime? NextMaintenanceDate { get; set; }
     public EquipmentStatus Status { get; set; }
     public string? Notes { get; set; }
+    public string? BeforeMaintenancePhotoUrl { get; set; }
+    public string? AfterMaintenancePhotoUrl { get; set; }
     public DateTime CreatedAt { get; set; }
 }
 
@@ -28,6 +30,8 @@ public class CreateEquipmentDto
     public DateTime? InstallationDate { get; set; }
     public DateTime? NextMaintenanceDate { get; set; }
     public string? Notes { get; set; }
+    public string? BeforeMaintenancePhotoUrl { get; set; }
+    public string? AfterMaintenancePhotoUrl { get; set; }
 }
 
 public class UpdateEquipmentDto
@@ -42,4 +46,6 @@ public class UpdateEquipmentDto
     public DateTime? NextMaintenanceDate { get; set; }
     public EquipmentStatus Status { get; set; }
     public string? Notes { get; set; }
+    public string? BeforeMaintenancePhotoUrl { get; set; }
+    public string? AfterMaintenancePhotoUrl { get; set; }
 }
