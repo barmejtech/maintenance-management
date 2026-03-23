@@ -312,6 +312,7 @@ export interface ChatMessage {
   id: string;
   senderId: string;
   senderName: string;
+  recipientId?: string;
   content?: string;
   messageType: MessageType;
   fileUrl?: string;

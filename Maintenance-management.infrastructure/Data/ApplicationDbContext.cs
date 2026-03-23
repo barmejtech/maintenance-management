@@ -170,6 +170,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.HasKey(m => m.Id);
             e.Property(m => m.SenderId).IsRequired().HasMaxLength(450);
             e.Property(m => m.SenderName).IsRequired().HasMaxLength(200);
+            e.Property(m => m.RecipientId).HasMaxLength(450);
             e.Property(m => m.Content).HasMaxLength(4000);
             e.Property(m => m.FileUrl).HasMaxLength(1000);
             e.Property(m => m.FileName).HasMaxLength(500);

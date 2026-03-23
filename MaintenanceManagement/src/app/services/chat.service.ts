@@ -12,11 +12,20 @@ export class ChatService {
   private hubConnection: signalR.HubConnection | null = null;
   private currentUserId = '';
 
-  private messagesSignal = signal<ChatMessage[]>([]);
-  readonly messages = computed(() => this.messagesSignal());
+  private publicMessagesSignal = signal<ChatMessage[]>([]);
+  private privateMessagesSignal = signal<ChatMessage[]>([]);
   readonly isConnected = signal(false);
   readonly onlineUsers = signal<string[]>([]);
   readonly users = signal<ChatUser[]>([]);
+
+  /** Currently selected user for private chat; null = public channel */
+  readonly selectedUser = signal<ChatUser | null>(null);
+
+  /** Messages shown in the active conversation (public or private). */
+  readonly messages = computed(() => {
+    const peer = this.selectedUser();
+    return peer ? this.privateMessagesSignal() : this.publicMessagesSignal();
+  });
 
   constructor(private http: HttpClient) {}
 
@@ -31,7 +40,16 @@ export class ChatService {
 
     this.hubConnection.on('ReceiveMessage', (message: ChatMessage) => {
       const msg = { ...message, isOwn: message.senderId === this.currentUserId };
-      this.messagesSignal.update(list => [...list, msg]);
+      this.publicMessagesSignal.update(list => [...list, msg]);
+    });
+
+    this.hubConnection.on('ReceivePrivateMessage', (message: ChatMessage) => {
+      const msg = { ...message, isOwn: message.senderId === this.currentUserId };
+      const peer = this.selectedUser();
+      // Only append to the active private conversation if it matches the current peer
+      if (peer && (msg.senderId === peer.id || msg.recipientId === peer.id)) {
+        this.privateMessagesSignal.update(list => [...list, msg]);
+      }
     });
 
     this.hubConnection.on('UserConnected', (userId: string) => {
@@ -57,11 +75,28 @@ export class ChatService {
     this.isConnected.set(false);
   }
 
+  selectUser(user: ChatUser | null): void {
+    this.selectedUser.set(user);
+    if (user) {
+      this.privateMessagesSignal.set([]);
+      this.loadPrivateHistory(user.id).subscribe();
+    }
+  }
+
   loadHistory(): Observable<ChatMessage[]> {
     return this.http.get<ChatMessage[]>(`${this.base}/history`).pipe(
       tap(data => {
         const mapped = data.map(m => ({ ...m, isOwn: m.senderId === this.currentUserId }));
-        this.messagesSignal.set(mapped);
+        this.publicMessagesSignal.set(mapped);
+      })
+    );
+  }
+
+  loadPrivateHistory(otherUserId: string): Observable<ChatMessage[]> {
+    return this.http.get<ChatMessage[]>(`${this.base}/private-history/${otherUserId}`).pipe(
+      tap(data => {
+        const mapped = data.map(m => ({ ...m, isOwn: m.senderId === this.currentUserId }));
+        this.privateMessagesSignal.set(mapped);
       })
     );
   }
@@ -83,7 +118,7 @@ export class ChatService {
 
   sendMessage(dto: SendMessageRequest): Observable<ChatMessage> {
     return this.http.post<ChatMessage>(`${this.base}/messages`, dto).pipe(
-      tap(msg => this.messagesSignal.update(list => [...list, { ...msg, isOwn: true }]))
+      tap(msg => this.publicMessagesSignal.update(list => [...list, { ...msg, isOwn: true }]))
     );
   }
 
@@ -95,10 +130,26 @@ export class ChatService {
     }
   }
 
+  sendPrivateViaHub(recipientId: string, content: string): void {
+    if (this.hubConnection?.state === signalR.HubConnectionState.Connected) {
+      this.hubConnection.invoke('SendPrivateMessage', recipientId, content).catch(err =>
+        console.error('Send private message error:', err)
+      );
+    }
+  }
+
   sendFileViaHub(fileUrl: string, fileName: string, contentType: string, isPhoto: boolean): void {
     if (this.hubConnection?.state === signalR.HubConnectionState.Connected) {
       this.hubConnection.invoke('SendFileMessage', fileUrl, fileName, contentType, isPhoto).catch(err =>
         console.error('Send file message error:', err)
+      );
+    }
+  }
+
+  sendPrivateFileViaHub(recipientId: string, fileUrl: string, fileName: string, contentType: string, isPhoto: boolean): void {
+    if (this.hubConnection?.state === signalR.HubConnectionState.Connected) {
+      this.hubConnection.invoke('SendPrivateFileMessage', recipientId, fileUrl, fileName, contentType, isPhoto).catch(err =>
+        console.error('Send private file message error:', err)
       );
     }
   }

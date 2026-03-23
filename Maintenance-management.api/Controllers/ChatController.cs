@@ -23,7 +23,7 @@ public class ChatController : ControllerBase
         _userManager = userManager;
     }
 
-    /// <summary>Returns the last 100 chat messages ordered oldest-first.</summary>
+    /// <summary>Returns the last 100 public chat messages ordered oldest-first.</summary>
     [HttpGet("history")]
     public async Task<IActionResult> GetHistory([FromQuery] int count = 100)
     {
@@ -33,6 +33,32 @@ public class ChatController : ControllerBase
             id = m.Id,
             senderId = m.SenderId,
             senderName = m.SenderName,
+            recipientId = m.RecipientId,
+            content = m.Content,
+            messageType = (int)m.MessageType,
+            fileUrl = m.FileUrl,
+            fileName = m.FileName,
+            contentType = m.ContentType,
+            sentAt = m.CreatedAt
+        });
+        return Ok(result);
+    }
+
+    /// <summary>Returns the last 100 private messages between the current user and another user.</summary>
+    [HttpGet("private-history/{otherUserId}")]
+    public async Task<IActionResult> GetPrivateHistory(string otherUserId, [FromQuery] int count = 100)
+    {
+        var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(currentUserId))
+            return Unauthorized();
+
+        var messages = await _chatRepo.GetPrivateHistoryAsync(currentUserId, otherUserId, count);
+        var result = messages.Select(m => new
+        {
+            id = m.Id,
+            senderId = m.SenderId,
+            senderName = m.SenderName,
+            recipientId = m.RecipientId,
             content = m.Content,
             messageType = (int)m.MessageType,
             fileUrl = m.FileUrl,
@@ -89,6 +115,7 @@ public class ChatController : ControllerBase
             id = saved.Id,
             senderId = saved.SenderId,
             senderName = saved.SenderName,
+            recipientId = saved.RecipientId,
             content = saved.Content,
             messageType = (int)saved.MessageType,
             fileUrl = saved.FileUrl,

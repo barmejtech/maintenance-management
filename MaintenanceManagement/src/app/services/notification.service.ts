@@ -13,7 +13,15 @@ export class NotificationService {
 
   private notificationsSignal = signal<AppNotification[]>([]);
   readonly notifications = computed(() => this.notificationsSignal());
-  readonly unreadCount = computed(() => this.notificationsSignal().filter(n => !n.isRead).length);
+
+  /** Notifications from the last 5 days only. */
+  readonly recentNotifications = computed(() => {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 5);
+    return this.notificationsSignal().filter(n => new Date(n.createdAt) >= cutoff);
+  });
+
+  readonly unreadCount = computed(() => this.recentNotifications().filter(n => !n.isRead).length);
 
   constructor(private http: HttpClient) {}
 

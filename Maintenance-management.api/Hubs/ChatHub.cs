@@ -104,11 +104,64 @@ public class ChatHub : Hub
         await Clients.Group("global-chat").SendAsync("ReceiveMessage", dto);
     }
 
+    /// <summary>
+    /// Sends a private text message to a specific user and persists it to DB.
+    /// </summary>
+    public async Task SendPrivateMessage(string recipientId, string message)
+    {
+        var userId = Context.UserIdentifier ?? "unknown";
+        var userName = Context.User?.Identity?.Name ?? "Unknown";
+
+        var entity = new ChatMessage
+        {
+            SenderId = userId,
+            SenderName = userName,
+            RecipientId = recipientId,
+            Content = message,
+            MessageType = MessageType.Text
+        };
+
+        var saved = await _chatRepo.AddAsync(entity);
+
+        var dto = MapToDto(saved);
+        // Send to recipient and to the sender (so sender sees it in their own view)
+        await Clients.User(recipientId).SendAsync("ReceivePrivateMessage", dto);
+        await Clients.Caller.SendAsync("ReceivePrivateMessage", dto);
+    }
+
+    /// <summary>
+    /// Sends a private file/photo message to a specific user and persists it to DB.
+    /// </summary>
+    public async Task SendPrivateFileMessage(string recipientId, string fileUrl, string fileName, string contentType, bool isPhoto)
+    {
+        var userId = Context.UserIdentifier ?? "unknown";
+        var userName = Context.User?.Identity?.Name ?? "Unknown";
+
+        var entity = new ChatMessage
+        {
+            SenderId = userId,
+            SenderName = userName,
+            RecipientId = recipientId,
+            Content = fileName,
+            MessageType = isPhoto ? MessageType.Photo : MessageType.File,
+            FileUrl = fileUrl,
+            FileName = fileName,
+            ContentType = contentType
+        };
+
+        var saved = await _chatRepo.AddAsync(entity);
+
+        var dto = MapToDto(saved);
+        await Clients.User(recipientId).SendAsync("ReceivePrivateMessage", dto);
+        await Clients.Caller.SendAsync("ReceivePrivateMessage", dto);
+    }
+
     private static object MapToDto(ChatMessage m) => new
     {
         id = m.Id,
         senderId = m.SenderId,
         senderName = m.SenderName,
+        recipientId = m.RecipientId,
         content = m.Content,
         messageType = (int)m.MessageType,
         fileUrl = m.FileUrl,
