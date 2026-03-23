@@ -1,78 +1,121 @@
-<div class="page-container">
-  <div class="page-header">
-    <h2>💬 Team Chat</h2>
-    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+<div class="container-fluid py-3 h-100">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-chat-dots-fill text-primary me-2"></i>Team Chat</h4>
+    <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left me-1"></i>Dashboard
+    </a>
   </div>
 
-  <div class="chat-layout">
-    <div class="chat-box">
-      <div class="chat-status" [class.connected]="chatService.isConnected()">
-        <span class="status-dot"></span>
-        {{ chatService.isConnected() ? 'Connected' : 'Connecting...' }}
-      </div>
-
-      <div class="messages-area" #messagesContainer>
-        @if (chatService.messages().length === 0) {
-          <div class="no-messages">No messages yet. Say hello! 👋</div>
-        }
-        @for (msg of chatService.messages(); track msg.id) {
-          <div class="message-row" [class.own]="msg.isOwn">
-            <div class="message-bubble" [class.own]="msg.isOwn">
-              @if (!msg.isOwn) {
-                <div class="msg-sender">{{ msg.senderName }}</div>
-              }
-              @if (msg.messageType === MessageType.Text) {
-                <div class="msg-content">{{ msg.content }}</div>
-              } @else if (msg.messageType === MessageType.Photo) {
-                <div class="msg-photo">
-                  <img [src]="getFileUrl(msg.fileUrl)" [alt]="msg.fileName" class="chat-image" />
-                </div>
-              } @else {
-                <div class="msg-file">
-                  <a [href]="getFileUrl(msg.fileUrl)" target="_blank" class="file-link">
-                    📎 {{ msg.fileName }}
-                  </a>
-                </div>
-              }
-              <div class="msg-time">{{ msg.sentAt | date:'shortTime' }}</div>
+  <div class="row g-3 chat-layout-row">
+    <!-- Users Sidebar -->
+    <div class="col-12 col-md-3">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header bg-light py-2">
+          <h6 class="mb-0 fw-semibold"><i class="bi bi-people-fill me-2"></i>Users
+            <span class="badge bg-success ms-2 rounded-pill">
+              {{ chatService.users().length }}
+            </span>
+          </h6>
+        </div>
+        <div class="card-body p-0 overflow-auto users-list">
+          @for (user of chatService.users(); track user.id) {
+            <div class="d-flex align-items-center gap-2 px-3 py-2 border-bottom user-row">
+              <span class="status-dot rounded-circle flex-shrink-0"
+                    [class.bg-success]="user.isOnline"
+                    [class.bg-secondary]="!user.isOnline">
+              </span>
+              <div class="flex-grow-1 overflow-hidden">
+                <div class="text-truncate fw-medium small">{{ user.fullName }}</div>
+                <div class="text-muted" style="font-size:0.7rem">{{ user.isOnline ? 'Online' : 'Offline' }}</div>
+              </div>
             </div>
-          </div>
-        }
+          }
+          @if (chatService.users().length === 0) {
+            <div class="text-center text-muted py-3 small">No users found</div>
+          }
+        </div>
       </div>
+    </div>
 
-      <div class="chat-input-area">
-        <input
-          type="file"
-          #fileInput
-          (change)="onFileSelected($event)"
-          accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip"
-          class="hidden-file-input"
-          [disabled]="!chatService.isConnected() || isUploading()"
-        />
-        <button
-          class="btn-attach"
-          (click)="fileInput.click()"
-          [disabled]="!chatService.isConnected() || isUploading()"
-          title="Attach file or photo"
-        >
-          @if (isUploading()) { ⏳ } @else { 📎 }
-        </button>
-        <input
-          #messageInput
-          type="text"
-          [(ngModel)]="newMessage"
-          (keydown.enter)="sendMessage()"
-          placeholder="Type a message..."
-          class="chat-input"
-          [disabled]="!chatService.isConnected()"
-        />
-        <button
-          (click)="sendMessage()"
-          class="btn-send"
-          [disabled]="!newMessage.trim() || !chatService.isConnected()"
-        >
-          Send ➤
-        </button>
+    <!-- Chat Area -->
+    <div class="col-12 col-md-9">
+      <div class="card shadow-sm d-flex flex-column chat-card">
+        <!-- Status bar -->
+        <div class="card-header py-2 d-flex align-items-center gap-2">
+          <span class="status-dot rounded-circle"
+                [class.bg-success]="chatService.isConnected()"
+                [class.bg-secondary]="!chatService.isConnected()">
+          </span>
+          <small [class.text-success]="chatService.isConnected()"
+                 [class.text-muted]="!chatService.isConnected()">
+            {{ chatService.isConnected() ? 'Connected' : 'Connecting...' }}
+          </small>
+        </div>
+
+        <!-- Messages -->
+        <div class="card-body overflow-auto messages-area p-3" #messagesContainer>
+          @if (chatService.messages().length === 0) {
+            <div class="text-center text-muted py-4">
+              <i class="bi bi-chat-text fs-3 d-block mb-2"></i>
+              No messages yet. Say hello!
+            </div>
+          }
+          @for (msg of chatService.messages(); track msg.id) {
+            <div class="d-flex mb-2" [class.justify-content-end]="msg.isOwn">
+              <div class="message-bubble rounded-3 p-2 px-3"
+                   [class.bubble-own]="msg.isOwn"
+                   [class.bubble-other]="!msg.isOwn">
+                @if (!msg.isOwn) {
+                  <div class="sender-name fw-semibold mb-1" style="font-size:0.75rem">
+                    <i class="bi bi-person-circle me-1"></i>{{ msg.senderName }}
+                  </div>
+                }
+                @if (msg.messageType === MessageType.Text) {
+                  <div class="msg-text" style="font-size:0.9rem;word-break:break-word">{{ msg.content }}</div>
+                } @else if (msg.messageType === MessageType.Photo) {
+                  <img [src]="getFileUrl(msg.fileUrl)" [alt]="msg.fileName" class="rounded img-fluid" style="max-width:200px;max-height:200px" />
+                } @else {
+                  <a [href]="getFileUrl(msg.fileUrl)" target="_blank" class="d-flex align-items-center gap-1 text-decoration-none"
+                     [class.text-light]="msg.isOwn" [class.text-primary]="!msg.isOwn">
+                    <i class="bi bi-paperclip"></i>{{ msg.fileName }}
+                  </a>
+                }
+                <div class="text-end mt-1" style="font-size:0.7rem"
+                     [class.text-light]="msg.isOwn" [class.text-muted]="!msg.isOwn">
+                  {{ msg.sentAt | date:'shortTime' }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Input Area -->
+        <div class="card-footer bg-white p-2">
+          <input type="file" #fileInput (change)="onFileSelected($event)"
+                 accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip"
+                 class="d-none" [disabled]="!chatService.isConnected() || isUploading()" />
+          <div class="input-group">
+            <button class="btn btn-outline-secondary" type="button"
+                    (click)="fileInput.click()"
+                    [disabled]="!chatService.isConnected() || isUploading()"
+                    title="Attach file">
+              @if (isUploading()) {
+                <span class="spinner-border spinner-border-sm"></span>
+              } @else {
+                <i class="bi bi-paperclip"></i>
+              }
+            </button>
+            <input type="text" class="form-control" [(ngModel)]="newMessage"
+                   (keydown.enter)="sendMessage()"
+                   placeholder="Type a message..."
+                   [disabled]="!chatService.isConnected()" />
+            <button class="btn btn-primary" type="button"
+                    (click)="sendMessage()"
+                    [disabled]="!newMessage.trim() || !chatService.isConnected()">
+              <i class="bi bi-send-fill"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

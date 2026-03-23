@@ -1,155 +1,180 @@
-<div class="page-container">
-  <div class="page-header">
-    <h2>✅ Work Orders</h2>
-    <div class="header-actions">
-      <button class="btn-add" (click)="openAdd()">➕ New Work Order</button>
-      <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-clipboard-check-fill text-primary me-2"></i>Work Orders</h4>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary btn-sm" (click)="openAdd()">
+        <i class="bi bi-plus-circle me-1"></i>New Work Order
+      </button>
+      <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Dashboard
+      </a>
     </div>
   </div>
 
-  <div class="filter-bar">
-    <button (click)="filterStatus.set(null)" [class.active]="filterStatus() === null" class="filter-btn">All</button>
-    <button (click)="filterStatus.set(0)" [class.active]="filterStatus() === 0" class="filter-btn">Pending</button>
-    <button (click)="filterStatus.set(1)" [class.active]="filterStatus() === 1" class="filter-btn">In Progress</button>
-    <button (click)="filterStatus.set(2)" [class.active]="filterStatus() === 2" class="filter-btn">Completed</button>
+  <div class="d-flex gap-2 mb-3 flex-wrap">
+    <button class="btn btn-sm" [class.btn-primary]="filterStatus() === null" [class.btn-outline-secondary]="filterStatus() !== null"
+            (click)="filterStatus.set(null)">All</button>
+    <button class="btn btn-sm" [class.btn-warning]="filterStatus() === 0" [class.btn-outline-secondary]="filterStatus() !== 0"
+            (click)="filterStatus.set(0)">Pending</button>
+    <button class="btn btn-sm" [class.btn-info]="filterStatus() === 1" [class.btn-outline-secondary]="filterStatus() !== 1"
+            (click)="filterStatus.set(1)">In Progress</button>
+    <button class="btn btn-sm" [class.btn-success]="filterStatus() === 2" [class.btn-outline-secondary]="filterStatus() !== 2"
+            (click)="filterStatus.set(2)">Completed</button>
   </div>
 
   @if (isLoading()) {
-    <div class="loading">Loading work orders...</div>
+    <div class="text-center text-muted py-4">
+      <span class="spinner-border spinner-border-sm me-2"></span>Loading work orders...
+    </div>
   } @else {
-    <div class="task-list">
+    <div class="d-flex flex-column gap-3">
       @for (task of filteredTasks(); track task.id) {
-        <div class="task-card" [class]="'priority-' + task.priority">
-          <div class="task-header">
-            <h3>{{ task.title }}</h3>
-            <div class="task-badges">
-              <span class="badge priority" [class]="getPriorityClass(task.priority)">
-                {{ getPriorityLabel(task.priority) }}
-              </span>
-              <span class="badge status" [class]="getStatusClass(task.status)">
-                {{ getStatusLabel(task.status) }}
-              </span>
+        <div class="card shadow-sm task-card border-start border-4"
+             [class.border-danger]="task.priority === 3"
+             [class.border-warning]="task.priority === 2"
+             [class.border-primary]="task.priority === 1"
+             [class.border-secondary]="task.priority === 0">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5 class="card-title mb-0">{{ task.title }}</h5>
+              <div class="d-flex gap-1 flex-wrap">
+                <span class="badge" [class]="getPriorityClass(task.priority)">{{ getPriorityLabel(task.priority) }}</span>
+                <span class="badge" [class]="getStatusClass(task.status)">{{ getStatusLabel(task.status) }}</span>
+              </div>
+            </div>
+            <p class="card-text text-muted small mb-2">{{ task.description }}</p>
+            <div class="d-flex flex-wrap gap-3 small text-muted">
+              @if (task.technicianName) {
+                <span><i class="bi bi-person-fill me-1"></i>{{ task.technicianName }}</span>
+              }
+              @if (task.groupName) {
+                <span><i class="bi bi-people-fill me-1"></i>{{ task.groupName }}</span>
+              }
+              @if (task.equipmentName) {
+                <span><i class="bi bi-tools me-1"></i>{{ task.equipmentName }}</span>
+              }
+              @if (task.dueDate) {
+                <span><i class="bi bi-calendar-event me-1"></i>Due: {{ task.dueDate | date:'mediumDate' }}</span>
+              }
             </div>
           </div>
-          <p class="task-desc">{{ task.description }}</p>
-          <div class="task-meta">
-            @if (task.technicianName) {
-              <span>👷 {{ task.technicianName }}</span>
-            }
-            @if (task.groupName) {
-              <span>👥 {{ task.groupName }}</span>
-            }
-            @if (task.equipmentName) {
-              <span>🔩 {{ task.equipmentName }}</span>
-            }
-            @if (task.dueDate) {
-              <span>📅 Due: {{ task.dueDate | date:'mediumDate' }}</span>
-            }
-          </div>
-          <div class="task-actions">
-            <button class="btn-icon btn-edit" (click)="openEdit(task)" title="Edit">✏️</button>
-            <button class="btn-icon btn-delete" (click)="delete(task.id)" title="Delete">🗑️</button>
+          <div class="card-footer bg-transparent d-flex justify-content-end gap-2 py-2">
+            <button class="btn btn-sm btn-outline-primary" (click)="openEdit(task)" title="Edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="delete(task.id)" title="Delete">
+              <i class="bi bi-trash"></i>
+            </button>
           </div>
         </div>
       }
       @empty {
-        <div class="empty-state">No work orders found.</div>
+        <div class="card shadow-sm">
+          <div class="card-body text-center text-muted py-5">
+            <i class="bi bi-clipboard-x fs-3 d-block mb-2"></i>No work orders found.
+          </div>
+        </div>
       }
     </div>
   }
 </div>
 
 @if (showModal()) {
-  <div class="modal-overlay" (click)="closeModal()">
-    <div class="modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>{{ isEditing() ? 'Edit Work Order' : 'New Work Order' }}</h3>
-        <button class="modal-close" (click)="closeModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-grid">
-          <div class="form-group form-group-full">
-            <label>Title *</label>
-            <input [(ngModel)]="form.title" placeholder="Work order title" class="form-control" />
-          </div>
-          <div class="form-group form-group-full">
-            <label>Description</label>
-            <textarea [(ngModel)]="form.description" placeholder="Description" class="form-control" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label>Status</label>
-            <select [(ngModel)]="form.status" class="form-control">
-              <option [value]="TaskStatus.Pending">Pending</option>
-              <option [value]="TaskStatus.InProgress">In Progress</option>
-              <option [value]="TaskStatus.Completed">Completed</option>
-              <option [value]="TaskStatus.Cancelled">Cancelled</option>
-              <option [value]="TaskStatus.OnHold">On Hold</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Priority</label>
-            <select [(ngModel)]="form.priority" class="form-control">
-              <option [value]="TaskPriority.Low">Low</option>
-              <option [value]="TaskPriority.Medium">Medium</option>
-              <option [value]="TaskPriority.High">High</option>
-              <option [value]="TaskPriority.Critical">Critical</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Maintenance Type</label>
-            <select [(ngModel)]="form.maintenanceType" class="form-control">
-              <option [value]="MaintenanceType.Preventive">Preventive</option>
-              <option [value]="MaintenanceType.Corrective">Corrective</option>
-              <option [value]="MaintenanceType.Inspection">Inspection</option>
-              <option [value]="MaintenanceType.Emergency">Emergency</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Technician</label>
-            <select [(ngModel)]="form.technicianId" class="form-control">
-              <option value="">— None —</option>
-              @for (t of technicians(); track t.id) {
-                <option [value]="t.id">{{ t.fullName }}</option>
-              }
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Group</label>
-            <select [(ngModel)]="form.groupId" class="form-control">
-              <option value="">— None —</option>
-              @for (g of groups(); track g.id) {
-                <option [value]="g.id">{{ g.name }}</option>
-              }
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Equipment</label>
-            <select [(ngModel)]="form.equipmentId" class="form-control">
-              <option value="">— None —</option>
-              @for (e of equipmentList(); track e.id) {
-                <option [value]="e.id">{{ e.name }}</option>
-              }
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Scheduled Date</label>
-            <input type="date" [(ngModel)]="form.scheduledDate" class="form-control" />
-          </div>
-          <div class="form-group">
-            <label>Due Date</label>
-            <input type="date" [(ngModel)]="form.dueDate" class="form-control" />
-          </div>
-          <div class="form-group form-group-full">
-            <label>Notes</label>
-            <textarea [(ngModel)]="form.notes" placeholder="Notes" class="form-control" rows="2"></textarea>
+  <div class="modal-backdrop-custom" (click)="closeModal()">
+    <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-clipboard-plus me-2"></i>{{ isEditing() ? 'Edit Work Order' : 'New Work Order' }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label fw-semibold">Title *</label>
+              <input class="form-control" [(ngModel)]="form.title" placeholder="Work order title" />
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Description</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="form.description" placeholder="Description"></textarea>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Status</label>
+              <select class="form-select" [(ngModel)]="form.status">
+                <option [value]="TaskStatus.Pending">Pending</option>
+                <option [value]="TaskStatus.InProgress">In Progress</option>
+                <option [value]="TaskStatus.Completed">Completed</option>
+                <option [value]="TaskStatus.Cancelled">Cancelled</option>
+                <option [value]="TaskStatus.OnHold">On Hold</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Priority</label>
+              <select class="form-select" [(ngModel)]="form.priority">
+                <option [value]="TaskPriority.Low">Low</option>
+                <option [value]="TaskPriority.Medium">Medium</option>
+                <option [value]="TaskPriority.High">High</option>
+                <option [value]="TaskPriority.Critical">Critical</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Maintenance Type</label>
+              <select class="form-select" [(ngModel)]="form.maintenanceType">
+                <option [value]="MaintenanceType.Preventive">Preventive</option>
+                <option [value]="MaintenanceType.Corrective">Corrective</option>
+                <option [value]="MaintenanceType.Inspection">Inspection</option>
+                <option [value]="MaintenanceType.Emergency">Emergency</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Technician</label>
+              <select class="form-select" [(ngModel)]="form.technicianId">
+                <option value="">— None —</option>
+                @for (t of technicians(); track t.id) {
+                  <option [value]="t.id">{{ t.fullName }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Group</label>
+              <select class="form-select" [(ngModel)]="form.groupId">
+                <option value="">— None —</option>
+                @for (g of groups(); track g.id) {
+                  <option [value]="g.id">{{ g.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Equipment</label>
+              <select class="form-select" [(ngModel)]="form.equipmentId">
+                <option value="">— None —</option>
+                @for (e of equipmentList(); track e.id) {
+                  <option [value]="e.id">{{ e.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Scheduled Date</label>
+              <input type="date" class="form-control" [(ngModel)]="form.scheduledDate" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Due Date</label>
+              <input type="date" class="form-control" [(ngModel)]="form.dueDate" />
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Notes</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="form.notes" placeholder="Notes"></textarea>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-cancel" (click)="closeModal()">Cancel</button>
-        <button class="btn-save" (click)="save()" [disabled]="isSaving() || !form.title">
-          {{ isSaving() ? 'Saving...' : (isEditing() ? 'Update' : 'Create') }}
-        </button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.title">
+            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            {{ isEditing() ? 'Update' : 'Create' }}
+          </button>
+        </div>
       </div>
     </div>
   </div>

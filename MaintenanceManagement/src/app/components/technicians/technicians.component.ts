@@ -84,6 +84,6 @@ export class TechniciansComponent implements OnInit {
   }
 
   getStatusClass(status: TechnicianStatus): string {
-    return ['status-available', 'status-busy', 'status-on-leave', 'status-inactive'][status];
+    return ['bg-success', 'bg-warning text-dark', 'bg-info text-dark', 'bg-secondary'][status];
   }
 }

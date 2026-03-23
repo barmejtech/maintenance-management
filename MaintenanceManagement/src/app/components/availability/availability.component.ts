@@ -1,29 +1,84 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AvailabilityService } from '../../services/availability.service';
-import { Availability } from '../../models';
+import { TechnicianService } from '../../services/technician.service';
+import { Availability, CreateAvailabilityRequest, Technician } from '../../models';
 
 @Component({
   selector: 'app-availability',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './availability.component.html',
   styleUrls: ['./availability.component.css']
 })
 export class AvailabilityComponent implements OnInit {
   availabilities = signal<Availability[]>([]);
+  technicians = signal<Technician[]>([]);
   errorMessage = signal('');
+  showModal = signal(false);
+  isEditing = signal(false);
+  isSaving = signal(false);
 
-  constructor(private service: AvailabilityService) {}
+  form: CreateAvailabilityRequest = {
+    technicianId: '',
+    startTime: '',
+    endTime: '',
+    isAvailable: true,
+    notes: ''
+  };
+  private editingId = '';
+
+  constructor(private service: AvailabilityService, private techService: TechnicianService) {}
 
   ngOnInit() {
+    this.load();
+    this.techService.getAll().subscribe({ next: d => this.technicians.set(d), error: () => {} });
+  }
+
+  load() {
     this.service.getAll().subscribe({
-      next: d => this.availabilities.set(d),
-      error: (err) => {
-        console.error('Failed to load availabilities', err);
-        this.errorMessage.set('Failed to load availability records. Please try again.');
-      }
+      next: d => { this.availabilities.set(d); this.errorMessage.set(''); },
+      error: () => this.errorMessage.set('Failed to load availability records.')
     });
+  }
+
+  openAdd() {
+    this.isEditing.set(false);
+    this.editingId = '';
+    this.form = { technicianId: '', startTime: '', endTime: '', isAvailable: true, notes: '' };
+    this.showModal.set(true);
+  }
+
+  openEdit(avail: Availability) {
+    this.isEditing.set(true);
+    this.editingId = avail.id;
+    this.form = {
+      technicianId: avail.technicianId,
+      startTime: avail.startTime ? avail.startTime.substring(0, 16) : '',
+      endTime: avail.endTime ? avail.endTime.substring(0, 16) : '',
+      isAvailable: avail.isAvailable,
+      notes: avail.notes ?? ''
+    };
+    this.showModal.set(true);
+  }
+
+  closeModal() { this.showModal.set(false); }
+
+  save() {
+    this.isSaving.set(true);
+    const obs = this.isEditing()
+      ? this.service.update(this.editingId, this.form)
+      : this.service.create(this.form);
+    obs.subscribe({
+      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
+      error: () => this.isSaving.set(false)
+    });
+  }
+
+  delete(id: string) {
+    if (!confirm('Delete this availability record?')) return;
+    this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
   }
 }

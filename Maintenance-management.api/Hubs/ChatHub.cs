@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Maintenance_management.domain.Entities;
 using Maintenance_management.domain.Enums;
 using Maintenance_management.domain.Interfaces;
@@ -10,6 +11,10 @@ namespace Maintenance_management.api.Hubs;
 public class ChatHub : Hub
 {
     private readonly IChatMessageRepository _chatRepo;
+
+    private static readonly ConcurrentDictionary<string, string> _onlineUsers = new();
+
+    public static IEnumerable<string> GetOnlineUserIds() => _onlineUsers.Keys;
 
     public ChatHub(IChatMessageRepository chatRepo)
     {
@@ -26,6 +31,7 @@ public class ChatHub : Hub
 
         if (!string.IsNullOrEmpty(userId))
         {
+            _onlineUsers[userId] = userName;
             await Groups.AddToGroupAsync(Context.ConnectionId, "global-chat");
             await Clients.Others.SendAsync("UserConnected", userId, userName);
         }
@@ -43,6 +49,7 @@ public class ChatHub : Hub
 
         if (!string.IsNullOrEmpty(userId))
         {
+            _onlineUsers.TryRemove(userId, out _);
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, "global-chat");
             await Clients.Others.SendAsync("UserDisconnected", userId, userName);
         }

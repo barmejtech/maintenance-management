@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import * as signalR from '@microsoft/signalr';
-import { ChatMessage, MessageType, SendMessageRequest } from '../models';
+import { ChatMessage, ChatUser, MessageType, SendMessageRequest } from '../models';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -15,6 +15,8 @@ export class ChatService {
   private messagesSignal = signal<ChatMessage[]>([]);
   readonly messages = computed(() => this.messagesSignal());
   readonly isConnected = signal(false);
+  readonly onlineUsers = signal<string[]>([]);
+  readonly users = signal<ChatUser[]>([]);
 
   constructor(private http: HttpClient) {}
 
@@ -30,6 +32,16 @@ export class ChatService {
     this.hubConnection.on('ReceiveMessage', (message: ChatMessage) => {
       const msg = { ...message, isOwn: message.senderId === this.currentUserId };
       this.messagesSignal.update(list => [...list, msg]);
+    });
+
+    this.hubConnection.on('UserConnected', (userId: string) => {
+      this.onlineUsers.update(ids => ids.includes(userId) ? ids : [...ids, userId]);
+      this.users.update(list => list.map(u => u.id === userId ? { ...u, isOnline: true } : u));
+    });
+
+    this.hubConnection.on('UserDisconnected', (userId: string) => {
+      this.onlineUsers.update(ids => ids.filter(id => id !== userId));
+      this.users.update(list => list.map(u => u.id === userId ? { ...u, isOnline: false } : u));
     });
 
     this.hubConnection.onreconnected(() => this.isConnected.set(true));
@@ -52,6 +64,21 @@ export class ChatService {
         this.messagesSignal.set(mapped);
       })
     );
+  }
+
+  getUsers(): Observable<ChatUser[]> {
+    return this.http.get<ChatUser[]>(`${this.base}/users`);
+  }
+
+  loadUsers(): void {
+    this.getUsers().pipe(
+      tap(data => {
+        const onlineIds = this.onlineUsers();
+        const merged = data.map(u => ({ ...u, isOnline: onlineIds.includes(u.id) || u.isOnline }));
+        this.users.set(merged);
+        this.onlineUsers.set(merged.filter(u => u.isOnline).map(u => u.id));
+      })
+    ).subscribe({ error: err => console.error('Failed to load users:', err) });
   }
 
   sendMessage(dto: SendMessageRequest): Observable<ChatMessage> {

@@ -33,6 +33,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     const userId = this.auth.currentUser()?.userId ?? '';
     this.chatService.startConnection(token, userId);
     this.chatService.loadHistory().subscribe();
+    this.chatService.loadUsers();
     this.shouldScrollToBottom = true;
   }
 

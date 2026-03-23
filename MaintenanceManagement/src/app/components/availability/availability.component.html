@@ -1,33 +1,116 @@
-<div class="page-container">
-  <div class="page-header">
-    <h2>📅 Technician Availability</h2>
-    <a routerLink="/dashboard" class="btn-back">← Dashboard</a>
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-calendar-check-fill text-primary me-2"></i>Technician Availability</h4>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary btn-sm" (click)="openAdd()">
+        <i class="bi bi-plus-circle me-1"></i>Add Availability
+      </button>
+      <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Dashboard
+      </a>
+    </div>
   </div>
-  <div class="avail-list">
-    @if (errorMessage()) {
-      <div class="alert-error">{{ errorMessage() }}</div>
-    }
-    @for (avail of availabilities(); track avail.id) {
-      <div class="avail-card" [class.available]="avail.isAvailable" [class.unavailable]="!avail.isAvailable">
-        <div class="avail-indicator"></div>
-        <div class="avail-info">
-          <h3>{{ avail.technicianName || 'Unknown Technician' }}</h3>
-          <div class="avail-time">
-            <span>{{ avail.startTime | date:'short' }}</span>
-            <span class="arrow">→</span>
-            <span>{{ avail.endTime | date:'short' }}</span>
-          </div>
-          @if (avail.notes) {
-            <p class="avail-notes">{{ avail.notes }}</p>
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger py-2">{{ errorMessage() }}</div>
+  }
+
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <table class="table table-hover table-striped mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Technician</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (avail of availabilities(); track avail.id) {
+            <tr>
+              <td class="fw-medium">{{ avail.technicianName || 'Unknown' }}</td>
+              <td>{{ avail.startTime | date:'short' }}</td>
+              <td>{{ avail.endTime | date:'short' }}</td>
+              <td>
+                <span class="badge" [class.bg-success]="avail.isAvailable" [class.bg-danger]="!avail.isAvailable">
+                  {{ avail.isAvailable ? 'Available' : 'Unavailable' }}
+                </span>
+              </td>
+              <td class="text-muted small">{{ avail.notes || '—' }}</td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(avail)" title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="delete(avail.id)" title="Delete">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
           }
-        </div>
-        <span class="avail-badge" [class.a-available]="avail.isAvailable" [class.a-unavailable]="!avail.isAvailable">
-          {{ avail.isAvailable ? 'Available' : 'Unavailable' }}
-        </span>
-      </div>
-    }
-    @empty {
-      <div class="empty-state">No availability records found.</div>
-    }
+          @empty {
+            <tr>
+              <td colspan="6" class="text-center text-muted py-4">
+                <i class="bi bi-calendar-x fs-4 d-block mb-1"></i>No availability records found.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
+
+@if (showModal()) {
+  <div class="modal-backdrop-custom" (click)="closeModal()">
+    <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-calendar-plus me-2"></i>{{ isEditing() ? 'Edit Availability' : 'Add Availability' }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Technician *</label>
+            <select class="form-select" [(ngModel)]="form.technicianId">
+              <option value="">— Select Technician —</option>
+              @for (t of technicians(); track t.id) {
+                <option [value]="t.id">{{ t.fullName }}</option>
+              }
+            </select>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Start Time *</label>
+              <input type="datetime-local" class="form-control" [(ngModel)]="form.startTime" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">End Time *</label>
+              <input type="datetime-local" class="form-control" [(ngModel)]="form.endTime" />
+            </div>
+          </div>
+          <div class="mb-3 form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="isAvailableCheck" [(ngModel)]="form.isAvailable" />
+            <label class="form-check-label" for="isAvailableCheck">Is Available</label>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Notes</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="form.notes" placeholder="Optional notes..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="save()"
+                  [disabled]="isSaving() || !form.technicianId || !form.startTime || !form.endTime">
+            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            {{ isEditing() ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

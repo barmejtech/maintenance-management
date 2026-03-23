@@ -1,29 +1,5 @@
-.page-container { padding: 2rem; }
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-.page-header h2 { font-size: 1.5rem; color: #333; }
-.btn-back { color: #0f3460; text-decoration: none; font-weight: 500; }
-.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-.hvac-card { background: white; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-.hvac-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-.hvac-card h3 { color: #333; margin-bottom: 1rem; }
-.detail-row { display: flex; gap: 0.5rem; font-size: 0.85rem; margin-bottom: 0.4rem; }
-.label { color: #888; min-width: 90px; }
-.empty-state { text-align: center; padding: 3rem; color: #888; background: white; border-radius: 0.75rem; }
-.header-actions { display: flex; gap: 1rem; align-items: center; }
-.btn-add { background: #0f3460; color: white; border: none; border-radius: 0.5rem; padding: 0.5rem 1.25rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-.card-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.75rem; border-top: 1px solid #f0f0f0; padding-top: 0.5rem; }
-.btn-icon { background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0.25rem 0.4rem; border-radius: 0.3rem; }
-.btn-edit:hover { background: #e3f2fd; } .btn-delete:hover { background: #fdecea; }
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; }
-.modal { background: white; border-radius: 0.75rem; box-shadow: 0 8px 32px rgba(0,0,0,0.18); width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; }
-.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid #f0f0f0; }
-.modal-header h3 { margin: 0; font-size: 1.1rem; color: #333; }
-.modal-close { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: #888; }
-.modal-body { padding: 1.5rem; } .modal-footer { display: flex; justify-content: flex-end; gap: 0.75rem; padding: 1rem 1.5rem; border-top: 1px solid #f0f0f0; }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.form-group-full { grid-column: 1 / -1; }
-.form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: #555; margin-bottom: 0.3rem; }
-.form-control { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #ddd; border-radius: 0.4rem; font-size: 0.9rem; box-sizing: border-box; }
-.btn-cancel { background: #f5f5f5; color: #555; border: 1px solid #ddd; border-radius: 0.4rem; padding: 0.5rem 1.25rem; cursor: pointer; }
-.btn-save { background: #0f3460; color: white; border: none; border-radius: 0.4rem; padding: 0.5rem 1.5rem; cursor: pointer; font-weight: 600; }
-.btn-save:disabled { background: #ccc; cursor: not-allowed; }
+.modal-backdrop-custom {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 1050; display: flex; align-items: center; justify-content: center; padding: 1rem;
+}
+.modal-dialog-custom { width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; }

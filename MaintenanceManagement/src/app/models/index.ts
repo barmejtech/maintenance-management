@@ -326,3 +326,10 @@ export interface SendMessageRequest {
   fileName?: string;
   contentType?: string;
 }
+
+export interface ChatUser {
+  id: string;
+  fullName: string;
+  email: string;
+  isOnline: boolean;
+}
