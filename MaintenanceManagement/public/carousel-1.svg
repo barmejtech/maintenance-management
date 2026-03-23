@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f3460;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e94560;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5a623;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="500" fill="url(#bg1)"/>
+  <!-- Grid pattern -->
+  <g opacity="0.08">
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="white" stroke-width="1"/>
+    <line x1="200" y1="0" x2="200" y2="500" stroke="white" stroke-width="1"/>
+    <line x1="400" y1="0" x2="400" y2="500" stroke="white" stroke-width="1"/>
+    <line x1="600" y1="0" x2="600" y2="500" stroke="white" stroke-width="1"/>
+    <line x1="800" y1="0" x2="800" y2="500" stroke="white" stroke-width="1"/>
+    <line x1="1000" y1="0" x2="1000" y2="500" stroke="white" stroke-width="1"/>
+  </g>
+  <!-- Wrench icon -->
+  <g transform="translate(750, 120)" opacity="0.15">
+    <circle cx="80" cy="80" r="120" fill="white"/>
+  </g>
+  <!-- Large gear -->
+  <g transform="translate(820, 60)" opacity="0.12">
+    <circle cx="100" cy="100" r="80" fill="none" stroke="white" stroke-width="12"/>
+    <circle cx="100" cy="100" r="35" fill="white"/>
+    <rect x="88" y="10" width="24" height="30" rx="5" fill="white"/>
+    <rect x="88" y="160" width="24" height="30" rx="5" fill="white"/>
+    <rect x="10" y="88" width="30" height="24" rx="5" fill="white"/>
+    <rect x="160" y="88" width="30" height="24" rx="5" fill="white"/>
+    <rect x="30" y="30" width="24" height="30" rx="5" fill="white" transform="rotate(45, 42, 45)"/>
+    <rect x="148" y="148" width="24" height="30" rx="5" fill="white" transform="rotate(45, 160, 163)"/>
+    <rect x="148" y="30" width="24" height="30" rx="5" fill="white" transform="rotate(-45, 160, 45)"/>
+    <rect x="30" y="148" width="24" height="30" rx="5" fill="white" transform="rotate(-45, 42, 163)"/>
+  </g>
+  <!-- Main text -->
+  <text x="120" y="180" font-family="Arial, sans-serif" font-size="52" font-weight="bold" fill="white">Smart Maintenance</text>
+  <text x="120" y="240" font-family="Arial, sans-serif" font-size="52" font-weight="bold" fill="white">Management</text>
+  <rect x="120" y="265" width="180" height="5" rx="2" fill="url(#accent1)"/>
+  <text x="120" y="320" font-family="Arial, sans-serif" font-size="22" fill="rgba(255,255,255,0.85)">Streamline your facility operations</text>
+  <text x="120" y="355" font-family="Arial, sans-serif" font-size="22" fill="rgba(255,255,255,0.85)">with real-time work order tracking</text>
+  <!-- Stats row -->
+  <g transform="translate(120, 400)">
+    <rect width="140" height="60" rx="8" fill="rgba(255,255,255,0.1)"/>
+    <text x="70" y="28" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold" fill="white">500+</text>
+    <text x="70" y="50" text-anchor="middle" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.7)">Work Orders</text>
+    <rect x="160" width="140" height="60" rx="8" fill="rgba(255,255,255,0.1)"/>
+    <text x="230" y="28" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold" fill="white">98%</text>
+    <text x="230" y="50" text-anchor="middle" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.7)">Uptime</text>
+    <rect x="320" width="140" height="60" rx="8" fill="rgba(255,255,255,0.1)"/>
+    <text x="390" y="28" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold" fill="white">50+</text>
+    <text x="390" y="50" text-anchor="middle" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.7)">Technicians</text>
+  </g>
+</svg>
