@@ -1,7 +1,37 @@
-.task-card { transition: box-shadow 0.2s; }
-.task-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important; }
-.modal-backdrop-custom {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-  z-index: 1050; display: flex; align-items: center; justify-content: center; padding: 1rem;
+.task-card {
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1px solid #eef0f5;
 }
-.modal-dialog-custom { width: 100%; max-width: 720px; max-height: 90vh; overflow-y: auto; }
+
+.task-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-1px);
+}
+
+.modal-backdrop-custom {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-dialog-custom {
+  width: 100%;
+  max-width: 720px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 1rem !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modal-slide-in 0.2s ease;
+}
+
+@keyframes modal-slide-in {
+  from { opacity: 0; transform: translateY(-20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+

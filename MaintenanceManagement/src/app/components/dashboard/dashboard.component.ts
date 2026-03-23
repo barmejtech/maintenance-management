@@ -49,10 +49,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.loadData();
-    const token = this.auth.getAccessToken();
-    if (token) {
-      this.notifService.startConnection(token);
-    }
     // Refresh every 30 seconds for real-time feel
     this.refreshInterval = setInterval(() => this.loadData(), 30000);
   }
@@ -62,7 +58,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.notifService.stopConnection();
     if (this.refreshInterval) clearInterval(this.refreshInterval);
     this.taskChart?.destroy();
     this.equipmentChart?.destroy();

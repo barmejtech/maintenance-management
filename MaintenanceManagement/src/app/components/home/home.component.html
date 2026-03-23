@@ -1,0 +1,201 @@
+<!-- ===== NAVIGATION ===== -->
+<nav class="home-nav">
+  <div class="nav-brand">
+    <i class="bi bi-gear-wide-connected"></i>
+    <span>MaintenancePro</span>
+  </div>
+  <div class="nav-links">
+    <a href="#features" class="nav-link-item">Features</a>
+    <a href="#testimonials" class="nav-link-item">Testimonials</a>
+    <a routerLink="/login" class="btn-nav-login">Sign In</a>
+    <a routerLink="/register" class="btn-nav-register">Get Started</a>
+  </div>
+</nav>
+
+<!-- ===== HERO CAROUSEL ===== -->
+<section class="hero-section">
+  <div class="carousel-container">
+    @for (slide of slides; track slide.image; let i = $index) {
+      <div class="carousel-slide" [class.active]="i === currentSlide">
+        <img [src]="slide.image" [alt]="slide.title" class="carousel-img" />
+        <div class="slide-overlay">
+          <div class="slide-content">
+            <h1 class="slide-title">{{ slide.title }}</h1>
+            <p class="slide-subtitle">{{ slide.subtitle }}</p>
+            <div class="slide-cta">
+              <a routerLink="/register" class="btn-hero-primary">
+                <i class="bi bi-rocket-takeoff"></i> Start Free Trial
+              </a>
+              <a routerLink="/login" class="btn-hero-secondary">
+                <i class="bi bi-box-arrow-in-right"></i> Sign In
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Controls -->
+    <button class="carousel-btn carousel-prev" (click)="prevSlide()" aria-label="Previous slide">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <button class="carousel-btn carousel-next" (click)="nextSlide()" aria-label="Next slide">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+      @for (slide of slides; track slide.image; let i = $index) {
+        <button
+          class="carousel-dot"
+          [class.active]="i === currentSlide"
+          (click)="goToSlide(i)"
+          [attr.aria-label]="'Go to slide ' + (i + 1)"
+        ></button>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS BAND ===== -->
+<section class="stats-band">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-number">500+</div>
+      <div class="stat-label">Work Orders Managed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">98%</div>
+      <div class="stat-label">System Uptime</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">50+</div>
+      <div class="stat-label">Active Technicians</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">40%</div>
+      <div class="stat-label">Downtime Reduction</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features-section" id="features">
+  <div class="section-header">
+    <span class="section-badge">Features</span>
+    <h2>Everything you need to manage maintenance</h2>
+    <p>A complete platform built for facility managers and maintenance teams</p>
+  </div>
+  <div class="features-grid">
+    @for (feature of features; track feature.title) {
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i [class]="'bi ' + feature.icon"></i>
+        </div>
+        <h3 class="feature-title">{{ feature.title }}</h3>
+        <p class="feature-desc">{{ feature.description }}</p>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how-section">
+  <div class="section-header">
+    <span class="section-badge">How It Works</span>
+    <h2>Get up and running in minutes</h2>
+    <p>Simple, intuitive workflow designed for real maintenance teams</p>
+  </div>
+  <div class="steps-row">
+    <div class="step-card">
+      <div class="step-number">1</div>
+      <div class="step-icon"><i class="bi bi-person-plus"></i></div>
+      <h4>Register your team</h4>
+      <p>Create accounts for managers, technicians and admins in seconds.</p>
+    </div>
+    <div class="step-connector"><i class="bi bi-arrow-right"></i></div>
+    <div class="step-card">
+      <div class="step-number">2</div>
+      <div class="step-icon"><i class="bi bi-clipboard2-plus"></i></div>
+      <h4>Create work orders</h4>
+      <p>Log maintenance tasks with priority, equipment, and due dates.</p>
+    </div>
+    <div class="step-connector"><i class="bi bi-arrow-right"></i></div>
+    <div class="step-card">
+      <div class="step-number">3</div>
+      <div class="step-icon"><i class="bi bi-person-check"></i></div>
+      <h4>Assign technicians</h4>
+      <p>Auto-notify the right technician instantly via real-time push.</p>
+    </div>
+    <div class="step-connector"><i class="bi bi-arrow-right"></i></div>
+    <div class="step-card">
+      <div class="step-number">4</div>
+      <div class="step-icon"><i class="bi bi-graph-up-arrow"></i></div>
+      <h4>Track & analyze</h4>
+      <p>Monitor progress and generate reports to improve operations.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials-section" id="testimonials">
+  <div class="section-header">
+    <span class="section-badge">Testimonials</span>
+    <h2>Trusted by maintenance professionals</h2>
+    <p>See what our users say about transforming their maintenance operations</p>
+  </div>
+  <div class="testimonials-grid">
+    @for (t of testimonials; track t.name) {
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+        </div>
+        <p class="testimonial-text">"{{ t.text }}"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">{{ t.avatar }}</div>
+          <div class="author-info">
+            <div class="author-name">{{ t.name }}</div>
+            <div class="author-role">{{ t.role }} · {{ t.company }}</div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ===== CTA BANNER ===== -->
+<section class="cta-section">
+  <div class="cta-content">
+    <h2>Ready to transform your maintenance operations?</h2>
+    <p>Join hundreds of facility managers who rely on MaintenancePro every day.</p>
+    <div class="cta-buttons">
+      <a routerLink="/register" class="btn-cta-primary">
+        <i class="bi bi-rocket-takeoff"></i> Get Started Free
+      </a>
+      <a routerLink="/login" class="btn-cta-secondary">
+        <i class="bi bi-box-arrow-in-right"></i> Sign In
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="home-footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <i class="bi bi-gear-wide-connected"></i>
+      <span>MaintenancePro</span>
+    </div>
+    <p class="footer-tagline">Professional maintenance management for modern facilities.</p>
+    <div class="footer-links">
+      <a routerLink="/login">Sign In</a>
+      <span>·</span>
+      <a routerLink="/register">Register</a>
+    </div>
+    <p class="footer-copy">© {{ currentYear }} MaintenancePro. All rights reserved.</p>
+  </div>
+</footer>
