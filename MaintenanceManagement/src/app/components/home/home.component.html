@@ -12,15 +12,6 @@
       <a routerLink="/register" class="btn-nav-register">Get Started</a>
     } @else {
       <a routerLink="/dashboard" class="nav-link-item"><i class="bi bi-speedometer2"></i> Dashboard</a>
-      <a routerLink="/tasks" class="nav-link-item"><i class="bi bi-clipboard2-check"></i> Tasks</a>
-      <a routerLink="/equipment" class="nav-link-item"><i class="bi bi-gear"></i> Equipment</a>
-      @if (auth.isManager()) {
-        <a routerLink="/technicians" class="nav-link-item"><i class="bi bi-people"></i> Technicians</a>
-        <a routerLink="/groups" class="nav-link-item"><i class="bi bi-diagram-3"></i> Groups</a>
-        <a routerLink="/invoices" class="nav-link-item"><i class="bi bi-receipt"></i> Invoices</a>
-      }
-      <a routerLink="/chat" class="nav-link-item"><i class="bi bi-chat-dots"></i> Chat</a>
-      <a routerLink="/notifications" class="nav-link-item"><i class="bi bi-bell"></i> Notifications</a>
       <span class="nav-user-name">
         <i class="bi bi-person-circle"></i>
         {{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}
