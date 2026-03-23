@@ -1,7 +1,7 @@
 {
   "app": {
-    "title": " Maintenance Management System",
-    "subtitle": "  An application for efficient maintenance management",
+    "title": "Maintenance Management System",
+    "subtitle": "An application for efficient maintenance management",
     "year": "2026"
   },
   "nav": {
@@ -12,53 +12,276 @@
     "login": "Login",
     "register": "Register"
   },
-    "home": {
-        "welcome": "Welcome to MuniSys",
-        "description": "Efficiently manage municipal licensing processes"
+  "home": {
+    "brand": "MaintenancePro",
+    "welcome": "Welcome to Maintenance Management",
+    "description": "Efficiently manage maintenance operations",
+    "nav": {
+      "features": "Features",
+      "testimonials": "Testimonials",
+      "signIn": "Sign In",
+      "getStarted": "Get Started",
+      "logout": "Logout"
     },
-    "login": {
-        "title": "Login",
-        "email": "Email",
-        "password": "Password",
-        "submit": "Login",
-        "error": "Invalid login credentials"
+    "slides": {
+      "slide1": {
+        "title": "Smart Maintenance Management",
+        "subtitle": "Streamline your facility operations with real-time work order tracking and automated scheduling."
+      },
+      "slide2": {
+        "title": "Preventive Maintenance Scheduling",
+        "subtitle": "Schedule, track and complete maintenance tasks before equipment failures occur."
+      },
+      "slide3": {
+        "title": "Analytics & Real-Time Insights",
+        "subtitle": "Comprehensive dashboards showing KPIs, trends and team performance at a glance."
+      }
     },
-    "dashboard": {
-        "title": "Dashboard",
-        "welcome": "Welcome, {{name}}!",
-        "stats": {
-            "totalLicenses": "Total Licenses",
-            "pendingApplications": "Pending Applications",
-            "approvedLicenses": "Approved Licenses"
-        },
-        "recentActivities": "Recent Activities"
+    "cta": {
+      "startTrial": "Start Free Trial",
+      "goToDashboard": "Go to Dashboard",
+      "manageTechnicians": "Manage Technicians",
+      "viewMyTasks": "View My Tasks"
     },
-    "settings": {
-        "title": "Settings",
-        "language": "Language",
-        "theme": "Theme",
-        "save": "Save Changes"
+    "stats": {
+      "workOrders": "Work Orders Managed",
+      "uptime": "System Uptime",
+      "technicians": "Active Technicians",
+      "downtimeReduction": "Downtime Reduction"
     },
-    "errors": {
-        "404": "Page Not Found",
-        "500": "Server Error"
+    "features": {
+      "badge": "Features",
+      "heading": "Everything you need to manage maintenance",
+      "subheading": "A complete platform built for facility managers and maintenance teams",
+      "workOrder": {
+        "title": "Work Order Management",
+        "description": "Create, assign and track work orders with priorities, due dates and real-time status updates."
+      },
+      "technician": {
+        "title": "Technician Coordination",
+        "description": "Manage your maintenance team, track availability and assign tasks to the right people."
+      },
+      "equipment": {
+        "title": "Equipment Tracking",
+        "description": "Keep a full inventory of all assets, maintenance history and upcoming service schedules."
+      },
+      "notifications": {
+        "title": "Real-Time Notifications",
+        "description": "Instant alerts via SignalR when tasks are assigned, updated or completed."
+      },
+      "reports": {
+        "title": "Reports & Analytics",
+        "description": "Generate detailed maintenance reports with charts, cost breakdowns and KPI dashboards."
+      },
+      "collaboration": {
+        "title": "Team Collaboration",
+        "description": "Built-in chat so technicians and managers can communicate without leaving the platform."
+      }
     },
-    "labels": {
-        "name": "Name",
-        "email": "Email",
-        "password": "Password",
-        "confirmPassword": "Confirm Password"
+    "how": {
+      "badge": "How It Works",
+      "heading": "Get up and running in minutes",
+      "subheading": "Simple, intuitive workflow designed for real maintenance teams",
+      "step1": { "title": "Register your team", "description": "Create accounts for managers, technicians and admins in seconds." },
+      "step2": { "title": "Create work orders", "description": "Log maintenance tasks with priority, equipment, and due dates." },
+      "step3": { "title": "Assign technicians", "description": "Auto-notify the right technician instantly via real-time push." },
+      "step4": { "title": "Track & analyze", "description": "Monitor progress and generate reports to improve operations." }
     },
-    "buttons": {
-        "submit": "Submit",
-        "cancel": "Cancel",
-        "edit": "Edit",
-        "delete": "Delete"
+    "testimonials": {
+      "badge": "Testimonials",
+      "heading": "Trusted by maintenance professionals",
+      "subheading": "See what our users say about transforming their maintenance operations"
     },
-    "messages": {
-        "success": "Operation completed successfully",
-        "error": "An error occurred, please try again"
+    "ctaBanner": {
+      "heading": "Ready to transform your maintenance operations?",
+      "subheading": "Join hundreds of facility managers who rely on MaintenancePro every day.",
+      "getStartedFree": "Get Started Free",
+      "signIn": "Sign In",
+      "goToDashboard": "Go to Dashboard",
+      "viewReports": "View Reports",
+      "viewMyTasks": "View My Tasks"
+    },
+    "footer": {
+      "tagline": "Professional maintenance management for modern facilities.",
+      "copyright": "All rights reserved.",
+      "signIn": "Sign In",
+      "register": "Register",
+      "tasks": "Tasks",
+      "equipment": "Equipment",
+      "technicians": "Technicians",
+      "invoices": "Invoices"
     }
-
-
+  },
+  "login": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Login",
+    "error": "Invalid login credentials"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome, {{name}}!",
+    "header": {
+      "title": "Maintenance Management",
+      "signOut": "Sign Out"
+    },
+    "sidebar": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "workOrders": "Work Orders",
+      "equipment": "Equipment",
+      "hvac": "HVAC",
+      "reports": "Reports",
+      "availability": "Availability",
+      "schedule": "Schedule Calendar",
+      "chat": "Team Chat",
+      "intelligence": "Intelligence",
+      "predictiveMaintenance": "Predictive Maintenance",
+      "digitalTwin": "Digital Twin",
+      "management": "Management",
+      "technicians": "Technicians",
+      "groups": "Groups",
+      "invoices": "Invoices",
+      "admin": "Admin",
+      "manageUsers": "Manage Users"
+    },
+    "hero": {
+      "fullAccess": "Full Access",
+      "managementView": "Management View",
+      "technicianView": "Technician View"
+    },
+    "stats": {
+      "activeWorkOrders": "Active Work Orders",
+      "technicians": "Technicians",
+      "equipment": "Equipment",
+      "dueMaintenance": "Due Maintenance",
+      "totalInvoices": "Total Invoices",
+      "pending": "pending",
+      "reports": "Reports",
+      "myTotalTasks": "My Total Tasks",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "totalRequests": "Total Maintenance Requests",
+      "pendingRequests": "Pending Maintenance Requests",
+      "completedRequests": "Completed Maintenance Requests"
+    },
+    "charts": {
+      "workOrdersByStatus": "Work Orders by Status",
+      "equipmentStatus": "Equipment Status",
+      "technicianAvailability": "Technician Availability",
+      "sevenDayTrend": "7-Day Task Creation Trend",
+      "myTasksByStatus": "My Tasks by Status",
+      "myTasksByPriority": "My Tasks by Priority"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "newWorkOrder": "New Work Order",
+      "manageTechnicians": "Manage Technicians",
+      "createReport": "Create Report",
+      "newInvoice": "New Invoice",
+      "teamChat": "Team Chat",
+      "manageGroups": "Manage Groups",
+      "myWorkOrders": "My Work Orders",
+      "viewEquipment": "View Equipment",
+      "myAvailability": "My Availability",
+      "schedule": "Schedule"
+    },
+    "roles": {
+      "administrator": "Administrator",
+      "manager": "Manager",
+      "technician": "Technician"
+    },
+    "titles": {
+      "admin": "Admin Dashboard",
+      "manager": "Manager Dashboard",
+      "technician": "My Dashboard"
+    },
+    "subtitles": {
+      "admin": "Complete system overview — all data visible",
+      "manager": "Team & operations management overview",
+      "technician": "Your personal work overview"
+    },
+    "recentActivities": "Recent Activities"
+  },
+  "asset": {
+    "title": "Equipment",
+    "addButton": "Add Equipment",
+    "backToDashboard": "Dashboard",
+    "table": {
+      "name": "Name",
+      "serialNo": "Serial No.",
+      "manufacturer": "Manufacturer",
+      "location": "Location",
+      "status": "Status",
+      "nextMaintenance": "Next Maintenance",
+      "photos": "Photos",
+      "actions": "Actions"
+    },
+    "form": {
+      "addTitle": "Add Equipment",
+      "editTitle": "Edit Equipment",
+      "name": "Name",
+      "serialNumber": "Serial Number",
+      "model": "Model",
+      "manufacturer": "Manufacturer",
+      "location": "Location",
+      "status": "Status",
+      "installationDate": "Installation Date",
+      "lastMaintenance": "Last Maintenance",
+      "nextMaintenance": "Next Maintenance",
+      "notes": "Notes",
+      "photoBefore": "Before Maintenance Photo",
+      "photoAfter": "After Maintenance Photo",
+      "namePlaceholder": "Equipment name",
+      "serialPlaceholder": "Serial number",
+      "modelPlaceholder": "Model",
+      "manufacturerPlaceholder": "Manufacturer",
+      "locationPlaceholder": "Location",
+      "notesPlaceholder": "Notes",
+      "uploading": "Uploading..."
+    },
+    "status": {
+      "operational": "Operational",
+      "underMaintenance": "Under Maintenance",
+      "outOfService": "Out of Service",
+      "decommissioned": "Decommissioned"
+    },
+    "empty": "No equipment found.",
+    "deleteConfirm": "Delete this equipment?",
+    "saving": "Saving...",
+    "create": "Create",
+    "update": "Update",
+    "cancel": "Cancel"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "save": "Save Changes"
+  },
+  "errors": {
+    "404": "Page Not Found",
+    "500": "Server Error"
+  },
+  "labels": {
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password"
+  },
+  "buttons": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "messages": {
+    "success": "Operation completed successfully",
+    "error": "An error occurred, please try again"
+  },
+  "lang": {
+    "toggle": "AR",
+    "current": "EN"
+  }
 }

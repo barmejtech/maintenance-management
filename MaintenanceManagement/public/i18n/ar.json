@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "نظام إدارة الصيانة",
-    "subtitle": "  تطبيق لإدارة عمليات الصيانة بكفاءة",
+    "subtitle": "تطبيق لإدارة عمليات الصيانة بكفاءة",
     "year": "2026"
   },
   "nav": {
@@ -11,88 +11,310 @@
     "dashboard": "لوحة التحكم",
     "login": "تسجيل الدخول",
     "register": "إنشاء حساب"
+  },
+  "home": {
+    "brand": "MaintenancePro",
+    "welcome": "مرحبًا بك في نظام إدارة الصيانة",
+    "description": "قم بإدارة عمليات الصيانة بكفاءة وسهولة",
+    "nav": {
+      "features": "المميزات",
+      "testimonials": "آراء العملاء",
+      "signIn": "تسجيل الدخول",
+      "getStarted": "ابدأ الآن",
+      "logout": "تسجيل الخروج"
     },
-    "home": {
-      "welcome": "مرحبًا بك في نظام إدارة الصيانة",
-      "description": "قم بإدارة عمليات الصيانة بكفاءة وسهولة"
-    },
-    "login": {
-      "title": "تسجيل الدخول",
-      "email": "البريد الإلكتروني",
-      "password": "كلمة المرور",
-      "submit": "تسجيل الدخول",
-      "error": "بيانات تسجيل الدخول غير صحيحة"
-    },
-    "dashboard": {
-      "title": "لوحة التحكم",
-      "welcome": "مرحبًا، {{name}}!",
-      "stats": {
-        "totalRequests": "إجمالي طلبات الصيانة",
-        "pendingRequests": "طلبات الصيانة المعلقة",
-        "completedRequests": "طلبات الصيانة المكتملة"
+    "slides": {
+      "slide1": {
+        "title": "إدارة الصيانة الذكية",
+        "subtitle": "تبسيط عمليات المنشأة مع تتبع أوامر العمل في الوقت الفعلي والجدولة التلقائية."
       },
-      "recentActivities": "الأنشطة الأخيرة"
+      "slide2": {
+        "title": "جدولة الصيانة الوقائية",
+        "subtitle": "جدولة وتتبع وإنجاز مهام الصيانة قبل حدوث أعطال المعدات."
+      },
+      "slide3": {
+        "title": "التحليلات والرؤى الفورية",
+        "subtitle": "لوحات معلومات شاملة تعرض مؤشرات الأداء والاتجاهات وأداء الفريق بلمحة واحدة."
+      }
     },
-    "settings": {
-      "title": "الإعدادات",
-      "language": "اللغة",
-      "theme": "السمة",
-      "save": "حفظ التغييرات"
+    "cta": {
+      "startTrial": "ابدأ التجربة المجانية",
+      "goToDashboard": "الذهاب إلى لوحة التحكم",
+      "manageTechnicians": "إدارة الفنيين",
+      "viewMyTasks": "عرض مهامي"
     },
-    "errors": {
-      "404": "الصفحة غير موجودة",
-      "500": "خطأ في الخادم"
+    "stats": {
+      "workOrders": "أوامر العمل المُدارة",
+      "uptime": "وقت تشغيل النظام",
+      "technicians": "الفنيون النشطون",
+      "downtimeReduction": "تقليل وقت التوقف"
     },
-    "labels": {
-      "name": "الاسم",
-      "email": "البريد الإلكتروني",
-      "password": "كلمة المرور",
-      "confirmPassword": "تأكيد كلمة المرور"
+    "features": {
+      "badge": "المميزات",
+      "heading": "كل ما تحتاجه لإدارة الصيانة",
+      "subheading": "منصة متكاملة مصممة لمديري المنشآت وفرق الصيانة",
+      "workOrder": {
+        "title": "إدارة أوامر العمل",
+        "description": "إنشاء وتعيين وتتبع أوامر العمل مع الأولويات والمواعيد النهائية وتحديثات الحالة الفورية."
+      },
+      "technician": {
+        "title": "تنسيق الفنيين",
+        "description": "إدارة فريق الصيانة وتتبع التوافر وتعيين المهام للأشخاص المناسبين."
+      },
+      "equipment": {
+        "title": "تتبع المعدات",
+        "description": "احتفظ بجرد كامل لجميع الأصول وتاريخ الصيانة وجداول الخدمة القادمة."
+      },
+      "notifications": {
+        "title": "الإشعارات الفورية",
+        "description": "تنبيهات فورية عبر SignalR عند تعيين المهام أو تحديثها أو إكمالها."
+      },
+      "reports": {
+        "title": "التقارير والتحليلات",
+        "description": "إنشاء تقارير صيانة تفصيلية مع الرسوم البيانية وتفاصيل التكاليف ولوحات مؤشرات الأداء."
+      },
+      "collaboration": {
+        "title": "تعاون الفريق",
+        "description": "دردشة مدمجة حتى يتمكن الفنيون والمديرون من التواصل دون مغادرة المنصة."
+      }
     },
-    "buttons": {
-      "submit": "إرسال",
-      "cancel": "إلغاء",
-      "edit": "تعديل",
-      "delete": "حذف"
+    "how": {
+      "badge": "كيف يعمل",
+      "heading": "ابدأ العمل في دقائق",
+      "subheading": "سير عمل بسيط وبديهي مصمم لفرق الصيانة الحقيقية",
+      "step1": { "title": "سجّل فريقك", "description": "أنشئ حسابات للمديرين والفنيين والمسؤولين في ثوانٍ." },
+      "step2": { "title": "أنشئ أوامر العمل", "description": "سجّل مهام الصيانة مع الأولوية والمعدات والمواعيد النهائية." },
+      "step3": { "title": "عيّن الفنيين", "description": "أخطر الفني المناسب فورًا عبر الدفع الفوري في الوقت الحقيقي." },
+      "step4": { "title": "تتبع وحلّل", "description": "راقب التقدم وأنشئ تقارير لتحسين العمليات." }
     },
-    "messages": {
-      "success": "تمت العملية بنجاح",
-      "error": "حدث خطأ، يرجى المحاولة مرة أخرى"
+    "testimonials": {
+      "badge": "آراء العملاء",
+      "heading": "موثوق به من قِبل محترفي الصيانة",
+      "subheading": "اطلع على ما يقوله مستخدمونا حول تحويل عمليات الصيانة لديهم"
     },
-    "placeholders": {
-      "search": "ابحث هنا...",
-      "email": "أدخل بريدك الإلكتروني",
-      "password": "أدخل كلمة المرور"
-    },
-    "validation": {
-      "required": "هذا الحقل مطلوب",
-      "email": "يرجى إدخال بريد إلكتروني صالح",
-      "minLength": "يجب أن يكون على الأقل {{length}} حرفًا",
-      "maxLength": "يجب ألا يتجاوز {{length}} حرفًا"
-    },
-    "roles": {
-      "admin": "المسؤول",
-      "manager": "المدير",
-      "technician": "الفني",
-      "user": "المستخدم"
-    },
-    "statuses": {
-      "pending": "معلق",
-      "inProgress": "قيد التنفيذ",
-      "completed": "مكتمل",
-      "cancelled": "ملغي"
-    },
-    "notifications": {
-      "newRequest": "طلب صيانة جديد",
-      "requestUpdated": "تم تحديث طلب الصيانة",
-      "requestCompleted": "تم إكمال طلب الصيانة"
+    "ctaBanner": {
+      "heading": "هل أنت مستعد لتحويل عمليات الصيانة لديك؟",
+      "subheading": "انضم إلى مئات مديري المنشآت الذين يعتمدون على MaintenancePro يوميًا.",
+      "getStartedFree": "ابدأ مجانًا",
+      "signIn": "تسجيل الدخول",
+      "goToDashboard": "الذهاب إلى لوحة التحكم",
+      "viewReports": "عرض التقارير",
+      "viewMyTasks": "عرض مهامي"
     },
     "footer": {
-      "contact": "اتصل بنا",
-      "privacy": "سياسة الخصوصية",
-      "terms": "الشروط والأحكام"
+      "tagline": "إدارة صيانة احترافية للمنشآت الحديثة.",
+      "copyright": "جميع الحقوق محفوظة.",
+      "signIn": "تسجيل الدخول",
+      "register": "إنشاء حساب",
+      "tasks": "المهام",
+      "equipment": "المعدات",
+      "technicians": "الفنيون",
+      "invoices": "الفواتير"
     }
-
-   
-
+  },
+  "login": {
+    "title": "تسجيل الدخول",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "submit": "تسجيل الدخول",
+    "error": "بيانات تسجيل الدخول غير صحيحة"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "welcome": "مرحبًا، {{name}}!",
+    "header": {
+      "title": "إدارة الصيانة",
+      "signOut": "تسجيل الخروج"
+    },
+    "sidebar": {
+      "home": "الرئيسية",
+      "dashboard": "لوحة التحكم",
+      "workOrders": "أوامر العمل",
+      "equipment": "المعدات",
+      "hvac": "التكييف",
+      "reports": "التقارير",
+      "availability": "التوافر",
+      "schedule": "جدول المواعيد",
+      "chat": "محادثة الفريق",
+      "intelligence": "الذكاء",
+      "predictiveMaintenance": "الصيانة التنبؤية",
+      "digitalTwin": "التوأم الرقمي",
+      "management": "الإدارة",
+      "technicians": "الفنيون",
+      "groups": "المجموعات",
+      "invoices": "الفواتير",
+      "admin": "المسؤول",
+      "manageUsers": "إدارة المستخدمين"
+    },
+    "hero": {
+      "fullAccess": "صلاحية كاملة",
+      "managementView": "عرض الإدارة",
+      "technicianView": "عرض الفني"
+    },
+    "stats": {
+      "activeWorkOrders": "أوامر العمل النشطة",
+      "technicians": "الفنيون",
+      "equipment": "المعدات",
+      "dueMaintenance": "الصيانة المستحقة",
+      "totalInvoices": "إجمالي الفواتير",
+      "pending": "معلق",
+      "reports": "التقارير",
+      "myTotalTasks": "مجموع مهامي",
+      "inProgress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "totalRequests": "إجمالي طلبات الصيانة",
+      "pendingRequests": "طلبات الصيانة المعلقة",
+      "completedRequests": "طلبات الصيانة المكتملة"
+    },
+    "charts": {
+      "workOrdersByStatus": "أوامر العمل حسب الحالة",
+      "equipmentStatus": "حالة المعدات",
+      "technicianAvailability": "توافر الفنيين",
+      "sevenDayTrend": "اتجاه إنشاء المهام (7 أيام)",
+      "myTasksByStatus": "مهامي حسب الحالة",
+      "myTasksByPriority": "مهامي حسب الأولوية"
+    },
+    "quickActions": {
+      "title": "إجراءات سريعة",
+      "newWorkOrder": "أمر عمل جديد",
+      "manageTechnicians": "إدارة الفنيين",
+      "createReport": "إنشاء تقرير",
+      "newInvoice": "فاتورة جديدة",
+      "teamChat": "محادثة الفريق",
+      "manageGroups": "إدارة المجموعات",
+      "myWorkOrders": "أوامر عملي",
+      "viewEquipment": "عرض المعدات",
+      "myAvailability": "توافري",
+      "schedule": "الجدول"
+    },
+    "roles": {
+      "administrator": "المسؤول",
+      "manager": "المدير",
+      "technician": "الفني"
+    },
+    "titles": {
+      "admin": "لوحة تحكم المسؤول",
+      "manager": "لوحة تحكم المدير",
+      "technician": "لوحتي الشخصية"
+    },
+    "subtitles": {
+      "admin": "نظرة عامة كاملة على النظام — جميع البيانات مرئية",
+      "manager": "نظرة عامة على إدارة الفريق والعمليات",
+      "technician": "نظرة عامة على عملك الشخصي"
+    },
+    "recentActivities": "الأنشطة الأخيرة"
+  },
+  "asset": {
+    "title": "المعدات",
+    "addButton": "إضافة معدة",
+    "backToDashboard": "لوحة التحكم",
+    "table": {
+      "name": "الاسم",
+      "serialNo": "الرقم التسلسلي",
+      "manufacturer": "الشركة المصنعة",
+      "location": "الموقع",
+      "status": "الحالة",
+      "nextMaintenance": "الصيانة القادمة",
+      "photos": "الصور",
+      "actions": "الإجراءات"
+    },
+    "form": {
+      "addTitle": "إضافة معدة",
+      "editTitle": "تعديل المعدة",
+      "name": "الاسم",
+      "serialNumber": "الرقم التسلسلي",
+      "model": "الموديل",
+      "manufacturer": "الشركة المصنعة",
+      "location": "الموقع",
+      "status": "الحالة",
+      "installationDate": "تاريخ التركيب",
+      "lastMaintenance": "آخر صيانة",
+      "nextMaintenance": "الصيانة القادمة",
+      "notes": "ملاحظات",
+      "photoBefore": "صورة قبل الصيانة",
+      "photoAfter": "صورة بعد الصيانة",
+      "namePlaceholder": "اسم المعدة",
+      "serialPlaceholder": "الرقم التسلسلي",
+      "modelPlaceholder": "الموديل",
+      "manufacturerPlaceholder": "الشركة المصنعة",
+      "locationPlaceholder": "الموقع",
+      "notesPlaceholder": "ملاحظات",
+      "uploading": "جارٍ الرفع..."
+    },
+    "status": {
+      "operational": "يعمل",
+      "underMaintenance": "تحت الصيانة",
+      "outOfService": "خارج الخدمة",
+      "decommissioned": "مُوقف"
+    },
+    "empty": "لا توجد معدات.",
+    "deleteConfirm": "حذف هذه المعدة؟",
+    "saving": "جارٍ الحفظ...",
+    "create": "إنشاء",
+    "update": "تحديث",
+    "cancel": "إلغاء"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة",
+    "theme": "السمة",
+    "save": "حفظ التغييرات"
+  },
+  "errors": {
+    "404": "الصفحة غير موجودة",
+    "500": "خطأ في الخادم"
+  },
+  "labels": {
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور"
+  },
+  "buttons": {
+    "submit": "إرسال",
+    "cancel": "إلغاء",
+    "edit": "تعديل",
+    "delete": "حذف"
+  },
+  "messages": {
+    "success": "تمت العملية بنجاح",
+    "error": "حدث خطأ، يرجى المحاولة مرة أخرى"
+  },
+  "placeholders": {
+    "search": "ابحث هنا...",
+    "email": "أدخل بريدك الإلكتروني",
+    "password": "أدخل كلمة المرور"
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "email": "يرجى إدخال بريد إلكتروني صالح",
+    "minLength": "يجب أن يكون على الأقل {{length}} حرفًا",
+    "maxLength": "يجب ألا يتجاوز {{length}} حرفًا"
+  },
+  "roles": {
+    "admin": "المسؤول",
+    "manager": "المدير",
+    "technician": "الفني",
+    "user": "المستخدم"
+  },
+  "statuses": {
+    "pending": "معلق",
+    "inProgress": "قيد التنفيذ",
+    "completed": "مكتمل",
+    "cancelled": "ملغي"
+  },
+  "notifications": {
+    "newRequest": "طلب صيانة جديد",
+    "requestUpdated": "تم تحديث طلب الصيانة",
+    "requestCompleted": "تم إكمال طلب الصيانة"
+  },
+  "footer": {
+    "contact": "اتصل بنا",
+    "privacy": "سياسة الخصوصية",
+    "terms": "الشروط والأحكام"
+  },
+  "lang": {
+    "toggle": "EN",
+    "current": "AR"
+  }
 }

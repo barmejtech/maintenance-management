@@ -2,16 +2,18 @@ import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { TranslationService } from '../../services/translate.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements AfterViewInit, OnDestroy {
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService, public translation: TranslationService) {}
   currentSlide = 0;
   readonly currentYear = new Date().getFullYear();
   private slideInterval: ReturnType<typeof setInterval> | null = null;
@@ -19,52 +21,28 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   readonly slides = [
     {
       image: 'carousel-1.svg',
-      title: 'Smart Maintenance Management',
-      subtitle: 'Streamline your facility operations with real-time work order tracking and automated scheduling.'
+      titleKey: 'home.slides.slide1.title',
+      subtitleKey: 'home.slides.slide1.subtitle'
     },
     {
       image: 'carousel-2.svg',
-      title: 'Preventive Maintenance Scheduling',
-      subtitle: 'Schedule, track and complete maintenance tasks before equipment failures occur.'
+      titleKey: 'home.slides.slide2.title',
+      subtitleKey: 'home.slides.slide2.subtitle'
     },
     {
       image: 'carousel-3.svg',
-      title: 'Analytics & Real-Time Insights',
-      subtitle: 'Comprehensive dashboards showing KPIs, trends and team performance at a glance.'
+      titleKey: 'home.slides.slide3.title',
+      subtitleKey: 'home.slides.slide3.subtitle'
     }
   ];
 
   readonly features = [
-    {
-      icon: 'bi-clipboard2-check',
-      title: 'Work Order Management',
-      description: 'Create, assign and track work orders with priorities, due dates and real-time status updates.'
-    },
-    {
-      icon: 'bi-people',
-      title: 'Technician Coordination',
-      description: 'Manage your maintenance team, track availability and assign tasks to the right people.'
-    },
-    {
-      icon: 'bi-gear',
-      title: 'Equipment Tracking',
-      description: 'Keep a full inventory of all assets, maintenance history and upcoming service schedules.'
-    },
-    {
-      icon: 'bi-bell',
-      title: 'Real-Time Notifications',
-      description: 'Instant alerts via SignalR when tasks are assigned, updated or completed.'
-    },
-    {
-      icon: 'bi-bar-chart-line',
-      title: 'Reports & Analytics',
-      description: 'Generate detailed maintenance reports with charts, cost breakdowns and KPI dashboards.'
-    },
-    {
-      icon: 'bi-chat-dots',
-      title: 'Team Collaboration',
-      description: 'Built-in chat so technicians and managers can communicate without leaving the platform.'
-    }
+    { icon: 'bi-clipboard2-check', titleKey: 'home.features.workOrder.title', descriptionKey: 'home.features.workOrder.description' },
+    { icon: 'bi-people',           titleKey: 'home.features.technician.title', descriptionKey: 'home.features.technician.description' },
+    { icon: 'bi-gear',             titleKey: 'home.features.equipment.title', descriptionKey: 'home.features.equipment.description' },
+    { icon: 'bi-bell',             titleKey: 'home.features.notifications.title', descriptionKey: 'home.features.notifications.description' },
+    { icon: 'bi-bar-chart-line',   titleKey: 'home.features.reports.title', descriptionKey: 'home.features.reports.description' },
+    { icon: 'bi-chat-dots',        titleKey: 'home.features.collaboration.title', descriptionKey: 'home.features.collaboration.description' }
   ];
 
   readonly testimonials = [

@@ -2,24 +2,27 @@
 <nav class="home-nav">
   <div class="nav-brand">
     <i class="bi bi-gear-wide-connected"></i>
-    <span>MaintenancePro</span>
+    <span>{{ 'home.brand' | translate }}</span>
   </div>
   <div class="nav-links">
     @if (!auth.isAuthenticated()) {
-      <a href="#features" class="nav-link-item">Features</a>
-      <a href="#testimonials" class="nav-link-item">Testimonials</a>
-      <a routerLink="/login" class="btn-nav-login">Sign In</a>
-      <a routerLink="/register" class="btn-nav-register">Get Started</a>
+      <a href="#features" class="nav-link-item">{{ 'home.nav.features' | translate }}</a>
+      <a href="#testimonials" class="nav-link-item">{{ 'home.nav.testimonials' | translate }}</a>
+      <a routerLink="/login" class="btn-nav-login">{{ 'home.nav.signIn' | translate }}</a>
+      <a routerLink="/register" class="btn-nav-register">{{ 'home.nav.getStarted' | translate }}</a>
     } @else {
-      <a routerLink="/dashboard" class="nav-link-item"><i class="bi bi-speedometer2"></i> Dashboard</a>
+      <a routerLink="/dashboard" class="nav-link-item"><i class="bi bi-speedometer2"></i> {{ 'nav.dashboard' | translate }}</a>
       <span class="nav-user-name">
         <i class="bi bi-person-circle"></i>
         {{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}
       </span>
       <button class="btn-nav-logout" (click)="auth.logout()">
-        <i class="bi bi-box-arrow-right"></i> Logout
+        <i class="bi bi-box-arrow-right"></i> {{ 'home.nav.logout' | translate }}
       </button>
     }
+    <button class="btn-lang-toggle" (click)="translation.toggleLanguage()" title="Switch Language">
+      <i class="bi bi-globe2"></i> {{ 'lang.toggle' | translate }}
+    </button>
   </div>
 </nav>
 
@@ -28,30 +31,30 @@
   <div class="carousel-container">
     @for (slide of slides; track slide.image; let i = $index) {
       <div class="carousel-slide" [class.active]="i === currentSlide">
-        <img [src]="slide.image" [alt]="slide.title" class="carousel-img" />
+        <img [src]="slide.image" [alt]="slide.titleKey | translate" class="carousel-img" />
         <div class="slide-overlay">
           <div class="slide-content">
-            <h1 class="slide-title">{{ slide.title }}</h1>
-            <p class="slide-subtitle">{{ slide.subtitle }}</p>
+            <h1 class="slide-title">{{ slide.titleKey | translate }}</h1>
+            <p class="slide-subtitle">{{ slide.subtitleKey | translate }}</p>
             <div class="slide-cta">
               @if (!auth.isAuthenticated()) {
                 <a routerLink="/register" class="btn-hero-primary">
-                  <i class="bi bi-rocket-takeoff"></i> Start Free Trial
+                  <i class="bi bi-rocket-takeoff"></i> {{ 'home.cta.startTrial' | translate }}
                 </a>
                 <a routerLink="/login" class="btn-hero-secondary">
-                  <i class="bi bi-box-arrow-in-right"></i> Sign In
+                  <i class="bi bi-box-arrow-in-right"></i> {{ 'home.nav.signIn' | translate }}
                 </a>
               } @else {
                 <a routerLink="/dashboard" class="btn-hero-primary">
-                  <i class="bi bi-speedometer2"></i> Go to Dashboard
+                  <i class="bi bi-speedometer2"></i> {{ 'home.cta.goToDashboard' | translate }}
                 </a>
                 @if (auth.isManager()) {
                   <a routerLink="/technicians" class="btn-hero-secondary">
-                    <i class="bi bi-people"></i> Manage Technicians
+                    <i class="bi bi-people"></i> {{ 'home.cta.manageTechnicians' | translate }}
                   </a>
                 } @else {
                   <a routerLink="/tasks" class="btn-hero-secondary">
-                    <i class="bi bi-clipboard2-check"></i> View My Tasks
+                    <i class="bi bi-clipboard2-check"></i> {{ 'home.cta.viewMyTasks' | translate }}
                   </a>
                 }
               }
@@ -88,19 +91,19 @@
   <div class="stats-grid">
     <div class="stat-item">
       <div class="stat-number">500+</div>
-      <div class="stat-label">Work Orders Managed</div>
+      <div class="stat-label">{{ 'home.stats.workOrders' | translate }}</div>
     </div>
     <div class="stat-item">
       <div class="stat-number">98%</div>
-      <div class="stat-label">System Uptime</div>
+      <div class="stat-label">{{ 'home.stats.uptime' | translate }}</div>
     </div>
     <div class="stat-item">
       <div class="stat-number">50+</div>
-      <div class="stat-label">Active Technicians</div>
+      <div class="stat-label">{{ 'home.stats.technicians' | translate }}</div>
     </div>
     <div class="stat-item">
       <div class="stat-number">40%</div>
-      <div class="stat-label">Downtime Reduction</div>
+      <div class="stat-label">{{ 'home.stats.downtimeReduction' | translate }}</div>
     </div>
   </div>
 </section>
@@ -108,18 +111,18 @@
 <!-- ===== FEATURES ===== -->
 <section class="features-section" id="features">
   <div class="section-header">
-    <span class="section-badge">Features</span>
-    <h2>Everything you need to manage maintenance</h2>
-    <p>A complete platform built for facility managers and maintenance teams</p>
+    <span class="section-badge">{{ 'home.features.badge' | translate }}</span>
+    <h2>{{ 'home.features.heading' | translate }}</h2>
+    <p>{{ 'home.features.subheading' | translate }}</p>
   </div>
   <div class="features-grid">
-    @for (feature of features; track feature.title) {
+    @for (feature of features; track feature.titleKey) {
       <div class="feature-card">
         <div class="feature-icon">
           <i [class]="'bi ' + feature.icon"></i>
         </div>
-        <h3 class="feature-title">{{ feature.title }}</h3>
-        <p class="feature-desc">{{ feature.description }}</p>
+        <h3 class="feature-title">{{ feature.titleKey | translate }}</h3>
+        <p class="feature-desc">{{ feature.descriptionKey | translate }}</p>
       </div>
     }
   </div>
@@ -128,37 +131,37 @@
 <!-- ===== HOW IT WORKS ===== -->
 <section class="how-section">
   <div class="section-header">
-    <span class="section-badge">How It Works</span>
-    <h2>Get up and running in minutes</h2>
-    <p>Simple, intuitive workflow designed for real maintenance teams</p>
+    <span class="section-badge">{{ 'home.how.badge' | translate }}</span>
+    <h2>{{ 'home.how.heading' | translate }}</h2>
+    <p>{{ 'home.how.subheading' | translate }}</p>
   </div>
   <div class="steps-row">
     <div class="step-card">
       <div class="step-number">1</div>
       <div class="step-icon"><i class="bi bi-person-plus"></i></div>
-      <h4>Register your team</h4>
-      <p>Create accounts for managers, technicians and admins in seconds.</p>
+      <h4>{{ 'home.how.step1.title' | translate }}</h4>
+      <p>{{ 'home.how.step1.description' | translate }}</p>
     </div>
     <div class="step-connector"><i class="bi bi-arrow-right"></i></div>
     <div class="step-card">
       <div class="step-number">2</div>
       <div class="step-icon"><i class="bi bi-clipboard2-plus"></i></div>
-      <h4>Create work orders</h4>
-      <p>Log maintenance tasks with priority, equipment, and due dates.</p>
+      <h4>{{ 'home.how.step2.title' | translate }}</h4>
+      <p>{{ 'home.how.step2.description' | translate }}</p>
     </div>
     <div class="step-connector"><i class="bi bi-arrow-right"></i></div>
     <div class="step-card">
       <div class="step-number">3</div>
       <div class="step-icon"><i class="bi bi-person-check"></i></div>
-      <h4>Assign technicians</h4>
-      <p>Auto-notify the right technician instantly via real-time push.</p>
+      <h4>{{ 'home.how.step3.title' | translate }}</h4>
+      <p>{{ 'home.how.step3.description' | translate }}</p>
     </div>
     <div class="step-connector"><i class="bi bi-arrow-right"></i></div>
     <div class="step-card">
       <div class="step-number">4</div>
       <div class="step-icon"><i class="bi bi-graph-up-arrow"></i></div>
-      <h4>Track & analyze</h4>
-      <p>Monitor progress and generate reports to improve operations.</p>
+      <h4>{{ 'home.how.step4.title' | translate }}</h4>
+      <p>{{ 'home.how.step4.description' | translate }}</p>
     </div>
   </div>
 </section>
@@ -166,9 +169,9 @@
 <!-- ===== TESTIMONIALS ===== -->
 <section class="testimonials-section" id="testimonials">
   <div class="section-header">
-    <span class="section-badge">Testimonials</span>
-    <h2>Trusted by maintenance professionals</h2>
-    <p>See what our users say about transforming their maintenance operations</p>
+    <span class="section-badge">{{ 'home.testimonials.badge' | translate }}</span>
+    <h2>{{ 'home.testimonials.heading' | translate }}</h2>
+    <p>{{ 'home.testimonials.subheading' | translate }}</p>
   </div>
   <div class="testimonials-grid">
     @for (t of testimonials; track t.name) {
@@ -196,27 +199,27 @@
 <!-- ===== CTA BANNER ===== -->
 <section class="cta-section">
   <div class="cta-content">
-    <h2>Ready to transform your maintenance operations?</h2>
-    <p>Join hundreds of facility managers who rely on MaintenancePro every day.</p>
+    <h2>{{ 'home.ctaBanner.heading' | translate }}</h2>
+    <p>{{ 'home.ctaBanner.subheading' | translate }}</p>
     <div class="cta-buttons">
       @if (!auth.isAuthenticated()) {
         <a routerLink="/register" class="btn-cta-primary">
-          <i class="bi bi-rocket-takeoff"></i> Get Started Free
+          <i class="bi bi-rocket-takeoff"></i> {{ 'home.ctaBanner.getStartedFree' | translate }}
         </a>
         <a routerLink="/login" class="btn-cta-secondary">
-          <i class="bi bi-box-arrow-in-right"></i> Sign In
+          <i class="bi bi-box-arrow-in-right"></i> {{ 'home.ctaBanner.signIn' | translate }}
         </a>
       } @else {
         <a routerLink="/dashboard" class="btn-cta-primary">
-          <i class="bi bi-speedometer2"></i> Go to Dashboard
+          <i class="bi bi-speedometer2"></i> {{ 'home.ctaBanner.goToDashboard' | translate }}
         </a>
         @if (auth.isManager()) {
           <a routerLink="/reports" class="btn-cta-secondary">
-            <i class="bi bi-bar-chart-line"></i> View Reports
+            <i class="bi bi-bar-chart-line"></i> {{ 'home.ctaBanner.viewReports' | translate }}
           </a>
         } @else {
           <a routerLink="/tasks" class="btn-cta-secondary">
-            <i class="bi bi-clipboard2-check"></i> View My Tasks
+            <i class="bi bi-clipboard2-check"></i> {{ 'home.ctaBanner.viewMyTasks' | translate }}
           </a>
         }
       }
@@ -229,28 +232,28 @@
   <div class="footer-content">
     <div class="footer-brand">
       <i class="bi bi-gear-wide-connected"></i>
-      <span>MaintenancePro</span>
+      <span>{{ 'home.brand' | translate }}</span>
     </div>
-    <p class="footer-tagline">Professional maintenance management for modern facilities.</p>
+    <p class="footer-tagline">{{ 'home.footer.tagline' | translate }}</p>
     <div class="footer-links">
       @if (!auth.isAuthenticated()) {
-        <a routerLink="/login">Sign In</a>
+        <a routerLink="/login">{{ 'home.footer.signIn' | translate }}</a>
         <span>·</span>
-        <a routerLink="/register">Register</a>
+        <a routerLink="/register">{{ 'home.footer.register' | translate }}</a>
       } @else {
-        <a routerLink="/dashboard">Dashboard</a>
+        <a routerLink="/dashboard">{{ 'nav.dashboard' | translate }}</a>
         <span>·</span>
-        <a routerLink="/tasks">Tasks</a>
+        <a routerLink="/tasks">{{ 'home.footer.tasks' | translate }}</a>
         <span>·</span>
-        <a routerLink="/equipment">Equipment</a>
+        <a routerLink="/equipment">{{ 'home.footer.equipment' | translate }}</a>
         @if (auth.isManager()) {
           <span>·</span>
-          <a routerLink="/technicians">Technicians</a>
+          <a routerLink="/technicians">{{ 'home.footer.technicians' | translate }}</a>
           <span>·</span>
-          <a routerLink="/invoices">Invoices</a>
+          <a routerLink="/invoices">{{ 'home.footer.invoices' | translate }}</a>
         }
       }
     </div>
-    <p class="footer-copy">© {{ currentYear }} MaintenancePro. All rights reserved.</p>
+    <p class="footer-copy">© {{ currentYear }} {{ 'home.brand' | translate }}. {{ 'home.footer.copyright' | translate }}</p>
   </div>
 </footer>

@@ -9,6 +9,8 @@ import { NotificationService } from '../../services/notification.service';
 import { InvoiceService } from '../../services/invoice.service';
 import { ReportService } from '../../services/report.service';
 import { NotificationsComponent } from '../notifications/notifications.component';
+import { TranslationService } from '../../services/translate.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TaskStatus, EquipmentStatus, TechnicianStatus, TaskPriority, InvoiceStatus, TaskOrder } from '../../models';
 import {
   Chart, ArcElement, DoughnutController, BarController, BarElement,
@@ -25,7 +27,7 @@ Chart.register(
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, NotificationsComponent],
+  imports: [CommonModule, RouterLink, NotificationsComponent, TranslatePipe],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -72,6 +74,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     public auth: AuthService,
+    public translation: TranslationService,
     private taskService: TaskOrderService,
     private techService: TechnicianService,
     private eqService: EquipmentService,
@@ -382,20 +385,20 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   isTechnicianRole(): boolean { return !this.auth.isManager() && this.auth.isAuthenticated(); }
 
   getRoleName(): string {
-    if (this.auth.isAdmin()) return 'Administrator';
-    if (this.auth.isManager()) return 'Manager';
-    return 'Technician';
+    if (this.auth.isAdmin()) return this.translation.translate('dashboard.roles.administrator');
+    if (this.auth.isManager()) return this.translation.translate('dashboard.roles.manager');
+    return this.translation.translate('dashboard.roles.technician');
   }
 
   getDashboardTitle(): string {
-    if (this.auth.isAdmin()) return 'Admin Dashboard';
-    if (this.auth.isManager()) return 'Manager Dashboard';
-    return 'My Dashboard';
+    if (this.auth.isAdmin()) return this.translation.translate('dashboard.titles.admin');
+    if (this.auth.isManager()) return this.translation.translate('dashboard.titles.manager');
+    return this.translation.translate('dashboard.titles.technician');
   }
 
   getDashboardSubtitle(): string {
-    if (this.auth.isAdmin()) return 'Complete system overview — all data visible';
-    if (this.auth.isManager()) return 'Team & operations management overview';
-    return 'Your personal work overview';
+    if (this.auth.isAdmin()) return this.translation.translate('dashboard.subtitles.admin');
+    if (this.auth.isManager()) return this.translation.translate('dashboard.subtitles.manager');
+    return this.translation.translate('dashboard.subtitles.technician');
   }
 }

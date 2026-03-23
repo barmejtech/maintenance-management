@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EquipmentService } from '../../services/equipment.service';
 import { FileUploadService } from '../../services/file-upload.service';
+import { TranslationService } from '../../services/translate.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { Equipment, EquipmentStatus } from '../../models';
 
 @Component({
   selector: 'app-equipment',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
   templateUrl: './equipment.component.html',
   styleUrls: ['./equipment.component.css']
 })
@@ -38,7 +40,7 @@ export class EquipmentComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: EquipmentService, private fileService: FileUploadService) {}
+  constructor(private service: EquipmentService, private fileService: FileUploadService, private translation: TranslationService) {}
 
   ngOnInit() {
     this.load();
@@ -124,10 +126,13 @@ export class EquipmentComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm('Delete this equipment?')) return;
+    if (!confirm(this.translation.translate('asset.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
   }
 
-  getStatusLabel(s: EquipmentStatus): string { return ['Operational', 'Under Maintenance', 'Out of Service', 'Decommissioned'][s]; }
+  getStatusLabel(s: EquipmentStatus): string {
+    const keys = ['asset.status.operational', 'asset.status.underMaintenance', 'asset.status.outOfService', 'asset.status.decommissioned'];
+    return this.translation.translate(keys[s] ?? keys[0]);
+  }
   getStatusClass(s: EquipmentStatus): string { return ['bg-success', 'bg-warning text-dark', 'bg-danger', 'bg-secondary'][s]; }
 }

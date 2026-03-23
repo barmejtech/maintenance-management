@@ -9,7 +9,7 @@ export type Language = 'en' | 'ar';
   providedIn: 'root'
 })
 export class TranslationService {
-  private translations: Record<string, any> = {};
+  private translationsData = signal<Record<string, any>>({});
   private currentLang = signal<Language>('en');
   private loadedLangs = new Set<string>();
 
@@ -46,7 +46,8 @@ export class TranslationService {
 
   translate(key: string): string {
     const lang = this.currentLang();
-    const trans = this.translations[lang];
+    const all = this.translationsData();
+    const trans = all[lang];
     if (!trans) return key;
     return this.getNestedValue(trans, key) ?? key;
   }
@@ -63,11 +64,11 @@ export class TranslationService {
 
   private loadTranslations(lang: Language): Observable<any> {
     if (this.loadedLangs.has(lang)) {
-      return of(this.translations[lang]);
+      return of(this.translationsData()[lang]);
     }
     return this.http.get<any>(`/i18n/${lang}.json`).pipe(
       tap(data => {
-        this.translations[lang] = data;
+        this.translationsData.update(curr => ({ ...curr, [lang]: data }));
         this.loadedLangs.add(lang);
       }),
       catchError(() => {
