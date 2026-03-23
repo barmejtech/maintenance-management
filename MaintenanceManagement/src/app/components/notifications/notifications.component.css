@@ -44,6 +44,7 @@
   border-bottom: 1px solid #f0f0f0;
 }
 .notif-header h3 { font-size: 1rem; font-weight: 700; color: #333; margin: 0; }
+.notif-period { font-size: 0.7rem; color: #aaa; display: block; margin-top: 2px; }
 .btn-text {
   background: none;
   border: none;

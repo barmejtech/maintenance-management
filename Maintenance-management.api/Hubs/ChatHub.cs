@@ -74,9 +74,61 @@ public class ChatHub : Hub
         };
 
         var saved = await _chatRepo.AddAsync(entity);
-
         var dto = MapToDto(saved);
         await Clients.Group("global-chat").SendAsync("ReceiveMessage", dto);
+    }
+
+    /// <summary>
+    /// Sends a private text message to a specific user and persists it to DB.
+    /// Both the sender and recipient receive the message.
+    /// </summary>
+    public async Task SendPrivateMessage(string receiverId, string message)
+    {
+        var userId = Context.UserIdentifier ?? "unknown";
+        var userName = Context.User?.Identity?.Name ?? "Unknown";
+
+        var entity = new ChatMessage
+        {
+            SenderId = userId,
+            SenderName = userName,
+            ReceiverId = receiverId,
+            Content = message,
+            MessageType = MessageType.Text
+        };
+
+        var saved = await _chatRepo.AddAsync(entity);
+        var dto = MapToDto(saved);
+
+        // Send to recipient and back to sender
+        await Clients.User(receiverId).SendAsync("ReceiveMessage", dto);
+        await Clients.Caller.SendAsync("ReceiveMessage", dto);
+    }
+
+    /// <summary>
+    /// Sends a private file/photo message to a specific user and persists it to DB.
+    /// </summary>
+    public async Task SendPrivateFileMessage(string receiverId, string fileUrl, string fileName, string contentType, bool isPhoto)
+    {
+        var userId = Context.UserIdentifier ?? "unknown";
+        var userName = Context.User?.Identity?.Name ?? "Unknown";
+
+        var entity = new ChatMessage
+        {
+            SenderId = userId,
+            SenderName = userName,
+            ReceiverId = receiverId,
+            Content = fileName,
+            MessageType = isPhoto ? MessageType.Photo : MessageType.File,
+            FileUrl = fileUrl,
+            FileName = fileName,
+            ContentType = contentType
+        };
+
+        var saved = await _chatRepo.AddAsync(entity);
+        var dto = MapToDto(saved);
+
+        await Clients.User(receiverId).SendAsync("ReceiveMessage", dto);
+        await Clients.Caller.SendAsync("ReceiveMessage", dto);
     }
 
     /// <summary>
@@ -99,7 +151,6 @@ public class ChatHub : Hub
         };
 
         var saved = await _chatRepo.AddAsync(entity);
-
         var dto = MapToDto(saved);
         await Clients.Group("global-chat").SendAsync("ReceiveMessage", dto);
     }
@@ -109,6 +160,7 @@ public class ChatHub : Hub
         id = m.Id,
         senderId = m.SenderId,
         senderName = m.SenderName,
+        receiverId = m.ReceiverId,
         content = m.Content,
         messageType = (int)m.MessageType,
         fileUrl = m.FileUrl,

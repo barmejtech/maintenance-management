@@ -9,7 +9,10 @@
   @if (isOpen()) {
     <div class="notif-panel" role="dialog" aria-label="Notifications">
       <div class="notif-header">
-        <h3>Notifications</h3>
+        <div>
+          <h3>Notifications</h3>
+          <span class="notif-period">Last 5 days</span>
+        </div>
         <div class="notif-actions">
           @if (notifService.unreadCount() > 0) {
             <button class="btn-text" (click)="markAllRead()">Mark all read</button>
@@ -21,7 +24,7 @@
         @if (isLoading()) {
           <div class="notif-empty">Loading...</div>
         } @else if (notifService.notifications().length === 0) {
-          <div class="notif-empty">No notifications</div>
+          <div class="notif-empty">No notifications in the last 5 days</div>
         } @else {
           @for (n of notifService.notifications(); track n.id) {
             <div class="notif-item" [class.unread]="!n.isRead" [class]="'type-' + getTypeName(n.type)">

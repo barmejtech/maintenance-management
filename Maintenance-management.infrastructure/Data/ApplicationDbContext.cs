@@ -21,6 +21,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Availability> Availabilities => Set<Availability>();
     public DbSet<Document> Documents => Set<Document>();
     public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
+    public DbSet<AppNotification> AppNotifications => Set<AppNotification>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -170,10 +171,22 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.HasKey(m => m.Id);
             e.Property(m => m.SenderId).IsRequired().HasMaxLength(450);
             e.Property(m => m.SenderName).IsRequired().HasMaxLength(200);
+            e.Property(m => m.ReceiverId).HasMaxLength(450);
             e.Property(m => m.Content).HasMaxLength(4000);
             e.Property(m => m.FileUrl).HasMaxLength(1000);
             e.Property(m => m.FileName).HasMaxLength(500);
             e.Property(m => m.ContentType).HasMaxLength(100);
+        });
+
+        builder.Entity<AppNotification>(e =>
+        {
+            e.HasKey(n => n.Id);
+            e.Property(n => n.UserId).IsRequired().HasMaxLength(450);
+            e.Property(n => n.Title).IsRequired().HasMaxLength(200);
+            e.Property(n => n.Message).IsRequired().HasMaxLength(1000);
+            e.Property(n => n.RelatedEntityId).HasMaxLength(450);
+            e.Property(n => n.RelatedEntityType).HasMaxLength(100);
+            e.HasIndex(n => new { n.UserId, n.IsDeleted });
         });
     }
 }

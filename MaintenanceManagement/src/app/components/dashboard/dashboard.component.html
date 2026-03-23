@@ -19,14 +19,6 @@
     <a routerLink="/tasks" routerLinkActive="active" class="nav-item">
       <span>✅</span> Work Orders
     </a>
-    @if (isManagerOrAdmin()) {
-      <a routerLink="/technicians" routerLinkActive="active" class="nav-item">
-        <span>👷</span> Technicians
-      </a>
-      <a routerLink="/groups" routerLinkActive="active" class="nav-item">
-        <span>👥</span> Groups
-      </a>
-    }
     <a routerLink="/equipment" routerLinkActive="active" class="nav-item">
       <span>🔩</span> Equipment
     </a>
@@ -36,11 +28,6 @@
     <a routerLink="/reports" routerLinkActive="active" class="nav-item">
       <span>📄</span> Reports
     </a>
-    @if (isManagerOrAdmin()) {
-      <a routerLink="/invoices" routerLinkActive="active" class="nav-item">
-        <span>💰</span> Invoices
-      </a>
-    }
     <a routerLink="/availability" routerLinkActive="active" class="nav-item">
       <span>📅</span> Availability
     </a>
@@ -50,11 +37,24 @@
     <a routerLink="/chat" routerLinkActive="active" class="nav-item">
       <span>💬</span> Team Chat
     </a>
-    <div class="sidebar-divider"></div>
+    @if (isManagerOrAdmin()) {
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section-label">Management</div>
+      <a routerLink="/technicians" routerLinkActive="active" class="nav-item">
+        <span>👷</span> Technicians
+      </a>
+      <a routerLink="/groups" routerLinkActive="active" class="nav-item">
+        <span>👥</span> Groups
+      </a>
+      <a routerLink="/invoices" routerLinkActive="active" class="nav-item">
+        <span>💰</span> Invoices
+      </a>
+    }
     @if (isAdmin()) {
+      <div class="sidebar-divider"></div>
       <div class="sidebar-section-label">Admin</div>
       <a routerLink="/technicians" routerLinkActive="active" class="nav-item admin-item">
-        <span>⚙️</span> Manage Technicians
+        <span>⚙️</span> Manage Users
       </a>
     }
   </nav>

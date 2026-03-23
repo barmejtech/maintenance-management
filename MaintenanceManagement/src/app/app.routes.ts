@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard } from './guards/auth.guard';
+import { authGuard, guestGuard, adminGuard, managerGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -21,7 +21,7 @@ export const routes: Routes = [
   {
     path: 'technicians',
     loadComponent: () => import('./components/technicians/technicians.component').then(m => m.TechniciansComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, managerGuard]
   },
   {
     path: 'tasks',
@@ -31,7 +31,7 @@ export const routes: Routes = [
   {
     path: 'groups',
     loadComponent: () => import('./components/groups/groups.component').then(m => m.GroupsComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, managerGuard]
   },
   {
     path: 'equipment',
@@ -51,7 +51,7 @@ export const routes: Routes = [
   {
     path: 'invoices',
     loadComponent: () => import('./components/invoices/invoices.component').then(m => m.InvoicesComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, managerGuard]
   },
   {
     path: 'availability',

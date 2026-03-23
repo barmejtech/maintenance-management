@@ -4,9 +4,12 @@
 .users-list { max-height: 100%; }
 .messages-area { flex: 1; min-height: 0; height: 0; flex-grow: 1; }
 .user-row:hover { background: #f8f9fa; }
+.active-conversation { background: #e7f0ff; border-left: 3px solid #0d6efd; }
 .status-dot { width: 10px; height: 10px; display: inline-block; }
 .message-bubble { max-width: 70%; }
 .bubble-own { background: #0d6efd; color: #fff; }
 .bubble-other { background: #f0f2f5; color: #212529; }
+.bubble-private { border: 1px solid rgba(255, 193, 7, 0.5); }
+.bubble-own.bubble-private { background: #5c35a8; }
 .sender-name { color: rgba(255,255,255,0.75); }
 .bubble-other .sender-name { color: #6c757d; }

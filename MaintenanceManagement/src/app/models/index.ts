@@ -312,6 +312,7 @@ export interface ChatMessage {
   id: string;
   senderId: string;
   senderName: string;
+  receiverId?: string;
   content?: string;
   messageType: MessageType;
   fileUrl?: string;
@@ -327,6 +328,7 @@ export interface SendMessageRequest {
   fileUrl?: string;
   fileName?: string;
   contentType?: string;
+  receiverId?: string;
 }
 
 export interface ChatUser {

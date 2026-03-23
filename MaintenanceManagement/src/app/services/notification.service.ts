@@ -12,8 +12,14 @@ export class NotificationService {
   private hubConnection: signalR.HubConnection | null = null;
 
   private notificationsSignal = signal<AppNotification[]>([]);
-  readonly notifications = computed(() => this.notificationsSignal());
-  readonly unreadCount = computed(() => this.notificationsSignal().filter(n => !n.isRead).length);
+  readonly notifications = computed(() => {
+    const cutoff = Date.now() - 5 * 24 * 60 * 60 * 1000;
+    return this.notificationsSignal().filter(n => new Date(n.createdAt).getTime() >= cutoff);
+  });
+  readonly unreadCount = computed(() => {
+    const cutoff = Date.now() - 5 * 24 * 60 * 60 * 1000;
+    return this.notificationsSignal().filter(n => !n.isRead && new Date(n.createdAt).getTime() >= cutoff).length;
+  });
 
   constructor(private http: HttpClient) {}
 
@@ -40,6 +46,11 @@ export class NotificationService {
     return this.http.get<AppNotification[]>(this.base).pipe(
       tap(data => this.notificationsSignal.set(data))
     );
+  }
+
+  /** Returns only the last 5 days of notifications - same as notifications computed, kept for backward compatibility */
+  get recentNotifications(): AppNotification[] {
+    return this.notifications();
   }
 
   markAsRead(id: string): Observable<void> {
