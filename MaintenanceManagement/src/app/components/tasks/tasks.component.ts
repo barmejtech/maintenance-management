@@ -8,6 +8,9 @@ import { EquipmentService } from '../../services/equipment.service';
 import { GroupService } from '../../services/group.service';
 import { TaskOrder, TaskStatus, TaskPriority, MaintenanceType, Technician, Equipment, TechnicianGroup, CreateTaskOrderRequest } from '../../models';
 
+const GPS_TIMEOUT_MS = 10_000;
+const GPS_MAX_AGE_MS = 60_000;
+
 @Component({
   selector: 'app-tasks',
   standalone: true,
@@ -25,6 +28,7 @@ export class TasksComponent implements OnInit {
   showModal = signal(false);
   isEditing = signal(false);
   isSaving = signal(false);
+  gpsStatus = signal<'idle' | 'capturing' | 'success' | 'denied' | 'unavailable'>('idle');
   TaskStatus = TaskStatus;
   TaskPriority = TaskPriority;
   MaintenanceType = MaintenanceType;
@@ -66,6 +70,7 @@ export class TasksComponent implements OnInit {
   openAdd() {
     this.isEditing.set(false);
     this.editingId = '';
+    this.gpsStatus.set('idle');
     this.form = { title: '', description: '', status: TaskStatus.Pending, priority: TaskPriority.Medium, maintenanceType: MaintenanceType.Preventive };
     this.showModal.set(true);
   }
@@ -73,6 +78,7 @@ export class TasksComponent implements OnInit {
   openEdit(task: TaskOrder) {
     this.isEditing.set(true);
     this.editingId = task.id;
+    this.gpsStatus.set('idle');
     this.form = {
       title: task.title, description: task.description, status: task.status,
       priority: task.priority, maintenanceType: task.maintenanceType,
@@ -87,6 +93,26 @@ export class TasksComponent implements OnInit {
   }
 
   closeModal() { this.showModal.set(false); }
+
+  /** Capture browser GPS and push it to the assigned technician's location record. */
+  private captureAndSendGps(technicianId: string): void {
+    if (!navigator.geolocation) {
+      this.gpsStatus.set('unavailable');
+      return;
+    }
+    this.gpsStatus.set('capturing');
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        this.techService.updateLocation(technicianId, pos.coords.latitude, pos.coords.longitude)
+          .subscribe({
+            next: () => this.gpsStatus.set('success'),
+            error: () => this.gpsStatus.set('unavailable')
+          });
+      },
+      () => this.gpsStatus.set('denied'),
+      { timeout: GPS_TIMEOUT_MS, maximumAge: GPS_MAX_AGE_MS }
+    );
+  }
 
   save() {
     this.isSaving.set(true);
@@ -103,7 +129,15 @@ export class TasksComponent implements OnInit {
       ? this.service.update(this.editingId, dto)
       : this.service.create(dto);
     obs.subscribe({
-      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
+      next: () => {
+        this.isSaving.set(false);
+        this.showModal.set(false);
+        this.load();
+        // Capture GPS when a technician is dispatched (task set to InProgress)
+        if (dto.status === TaskStatus.InProgress && dto.technicianId) {
+          this.captureAndSendGps(dto.technicianId);
+        }
+      },
       error: () => this.isSaving.set(false)
     });
   }
@@ -111,6 +145,15 @@ export class TasksComponent implements OnInit {
   delete(id: string) {
     if (!confirm('Delete this work order?')) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
+  }
+
+  getTechnicianLocation(technicianId?: string): Technician | undefined {
+    if (!technicianId) return undefined;
+    return this.technicians().find(t => t.id === technicianId);
+  }
+
+  isInProgressWithTechnician(): boolean {
+    return +this.form.status === TaskStatus.InProgress && !!this.form.technicianId;
   }
 
   getPriorityLabel(p: TaskPriority): string { return ['Low', 'Medium', 'High', 'Critical'][p]; }

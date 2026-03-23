@@ -56,6 +56,15 @@
               @if (task.dueDate) {
                 <span><i class="bi bi-calendar-event me-1"></i>Due: {{ task.dueDate | date:'mediumDate' }}</span>
               }
+              @if (task.status === TaskStatus.InProgress && task.technicianId) {
+                @let tech = getTechnicianLocation(task.technicianId);
+                @if (tech && tech.latitude != null && tech.longitude != null) {
+                  <span class="text-success">
+                    <i class="bi bi-geo-alt-fill me-1"></i>
+                    {{ tech.latitude | number:'1.4-4' }}, {{ tech.longitude | number:'1.4-4' }}
+                  </span>
+                }
+              }
             </div>
           </div>
           <div class="card-footer bg-transparent d-flex justify-content-end gap-2 py-2">
@@ -108,6 +117,9 @@
                 <option [value]="TaskStatus.Cancelled">Cancelled</option>
                 <option [value]="TaskStatus.OnHold">On Hold</option>
               </select>
+              @if (isInProgressWithTechnician()) {
+                <div class="form-text text-info"><i class="bi bi-geo-alt me-1"></i>GPS will be captured on save.</div>
+              }
             </div>
             <div class="col-md-4">
               <label class="form-label fw-semibold">Priority</label>
@@ -169,6 +181,18 @@
           </div>
         </div>
         <div class="modal-footer">
+          @if (gpsStatus() === 'capturing') {
+            <span class="text-muted small me-auto"><span class="spinner-border spinner-border-sm me-1"></span>Capturing GPS location…</span>
+          }
+          @if (gpsStatus() === 'success') {
+            <span class="text-success small me-auto"><i class="bi bi-geo-alt-fill me-1"></i>Technician location updated.</span>
+          }
+          @if (gpsStatus() === 'denied') {
+            <span class="text-warning small me-auto"><i class="bi bi-exclamation-triangle me-1"></i>Location access denied.</span>
+          }
+          @if (gpsStatus() === 'unavailable') {
+            <span class="text-secondary small me-auto"><i class="bi bi-geo-alt me-1"></i>GPS not available.</span>
+          }
           <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
           <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.title">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
