@@ -173,6 +173,30 @@ public class TaskOrderService : ITaskOrderService
         return true;
     }
 
+    public async Task<TaskOrderDto?> SubmitInterventionProofAsync(Guid id, SubmitInterventionProofDto dto)
+    {
+        var task = await _repo.GetByIdAsync(id);
+        if (task is null || task.IsDeleted) return null;
+
+        if (dto.ArrivalLatitude.HasValue && dto.ArrivalLongitude.HasValue)
+        {
+            task.ArrivalLatitude = dto.ArrivalLatitude;
+            task.ArrivalLongitude = dto.ArrivalLongitude;
+            task.ArrivalTime = DateTime.UtcNow;
+            task.IsGpsValidated = true;
+        }
+
+        if (!string.IsNullOrEmpty(dto.ProofPhotoUrl))
+            task.ProofPhotoUrl = dto.ProofPhotoUrl;
+
+        if (!string.IsNullOrEmpty(dto.CustomerSignatureUrl))
+            task.CustomerSignatureUrl = dto.CustomerSignatureUrl;
+
+        task.UpdatedAt = DateTime.UtcNow;
+        await _repo.UpdateAsync(task);
+        return MapToDto(task);
+    }
+
     private static TaskOrderDto MapToDto(TaskOrder t) => new()
     {
         Id = t.Id,
@@ -194,6 +218,12 @@ public class TaskOrderService : ITaskOrderService
         GroupName = t.Group?.Name,
         EquipmentId = t.EquipmentId,
         EquipmentName = t.Equipment?.Name,
-        CreatedAt = t.CreatedAt
+        CreatedAt = t.CreatedAt,
+        ArrivalLatitude = t.ArrivalLatitude,
+        ArrivalLongitude = t.ArrivalLongitude,
+        ArrivalTime = t.ArrivalTime,
+        ProofPhotoUrl = t.ProofPhotoUrl,
+        CustomerSignatureUrl = t.CustomerSignatureUrl,
+        IsGpsValidated = t.IsGpsValidated
     };
 }

@@ -1,0 +1,69 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">📊 Technician Performance</h2>
+      <p class="text-muted mb-0">Track performance scores, success rates, and satisfaction metrics</p>
+    </div>
+    <button class="btn btn-primary" (click)="recalculateAll()">
+      🔄 Recalculate All
+    </button>
+  </div>
+
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab() === 'all'" (click)="switchTab('all')">All Technicians</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab() === 'top'" (click)="switchTab('top')">Top Performers</button>
+    </li>
+  </ul>
+
+  <div class="row g-4">
+    @for (score of scores(); track score.id) {
+      <div class="col-md-6 col-xl-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0 fw-bold">{{ score.technicianName || 'Technician' }}</h6>
+            <button class="btn btn-sm btn-outline-primary"
+              [disabled]="isRecalculating() === score.technicianId"
+              (click)="recalculate(score.technicianId)">
+              {{ isRecalculating() === score.technicianId ? '...' : '🔄' }}
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <div class="text-muted small">Success Rate</div>
+                <div [class]="getScoreClass(score.successRate)">{{ score.successRate | number:'1.1-1' }}%</div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted small">On-Time Rate</div>
+                <div [class]="getScoreClass(score.onTimeRate)">{{ score.onTimeRate | number:'1.1-1' }}%</div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted small">Avg Intervention</div>
+                <div class="fw-semibold">{{ score.averageInterventionTimeMinutes | number:'1.0-0' }} min</div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted small">Satisfaction</div>
+                <div class="text-warning">{{ getSatisfactionStars(score.customerSatisfactionScore) }}</div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between text-muted small">
+              <span>✅ {{ score.totalTasksCompleted }} completed</span>
+              <span>⏰ {{ score.totalTasksDelayed }} delayed</span>
+            </div>
+          </div>
+          <div class="card-footer text-muted small">
+            Last updated: {{ score.lastCalculatedAt | date:'short' }}
+          </div>
+        </div>
+      </div>
+    }
+    @if (scores().length === 0) {
+      <div class="col-12 text-center text-muted py-5">
+        <p>No performance data yet. Click "Recalculate All" to generate scores.</p>
+      </div>
+    }
+  </div>
+</div>

@@ -12,8 +12,13 @@ namespace Maintenance_management.api.Controllers;
 public class TaskOrdersController : ControllerBase
 {
     private readonly ITaskOrderService _service;
+    private readonly ITechnicianPerformanceService _performanceService;
 
-    public TaskOrdersController(ITaskOrderService service) => _service = service;
+    public TaskOrdersController(ITaskOrderService service, ITechnicianPerformanceService performanceService)
+    {
+        _service = service;
+        _performanceService = performanceService;
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -63,5 +68,20 @@ public class TaskOrdersController : ControllerBase
     {
         var result = await _service.DeleteAsync(id);
         return result ? NoContent() : NotFound();
+    }
+
+    [HttpGet("{id:guid}/smart-dispatch")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> SmartDispatch(Guid id)
+    {
+        var result = await _performanceService.GetBestTechnicianForTaskAsync(id);
+        return result is null ? NotFound(new { message = "No available technicians found." }) : Ok(result);
+    }
+
+    [HttpPatch("{id:guid}/intervention-proof")]
+    public async Task<IActionResult> SubmitInterventionProof(Guid id, [FromBody] SubmitInterventionProofDto dto)
+    {
+        var result = await _service.SubmitInterventionProofAsync(id, dto);
+        return result is null ? NotFound() : Ok(result);
     }
 }

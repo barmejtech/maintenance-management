@@ -111,6 +111,7 @@ builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IAvailabilit
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IDocumentRepository, Maintenance_management.infrastructure.Repositories.DocumentRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IChatMessageRepository, Maintenance_management.infrastructure.Repositories.ChatMessageRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.INotificationRepository, Maintenance_management.infrastructure.Repositories.NotificationRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITechnicianPerformanceScoreRepository, Maintenance_management.infrastructure.Repositories.TechnicianPerformanceScoreRepository>();
 
 // Application services
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAuthService, Maintenance_management.infrastructure.Services.AuthService>();
@@ -124,6 +125,7 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IHVACSe
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IReportService, Maintenance_management.application.Services.ReportService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IInvoiceService, Maintenance_management.application.Services.InvoiceService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAvailabilityService, Maintenance_management.application.Services.AvailabilityService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITechnicianPerformanceService, Maintenance_management.application.Services.TechnicianPerformanceService>();
 
 // Notification service (SignalR-based)
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.INotificationService, Maintenance_management.api.Services.HubNotificationService>();

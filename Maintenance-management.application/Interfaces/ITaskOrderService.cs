@@ -14,4 +14,5 @@ public interface ITaskOrderService
     Task<TaskOrderDto> CreateAsync(CreateTaskOrderDto dto, string createdByUserId);
     Task<TaskOrderDto?> UpdateAsync(Guid id, UpdateTaskOrderDto dto);
     Task<bool> DeleteAsync(Guid id);
+    Task<TaskOrderDto?> SubmitInterventionProofAsync(Guid id, SubmitInterventionProofDto dto);
 }
