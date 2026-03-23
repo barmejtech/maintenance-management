@@ -337,3 +337,46 @@ export interface ChatUser {
   email: string;
   isOnline: boolean;
 }
+
+// Predictive Maintenance models
+export interface EquipmentHealthPrediction {
+  id: string;
+  equipmentId: string;
+  equipmentName: string;
+  predictedFailureDate: string;
+  failureProbability: number;
+  recommendation: string;
+  totalInterventions: number;
+  averageDaysBetweenFailures: number;
+  averageDaysBetweenMaintenance: number;
+  lastAnalyzedAt?: string;
+  createdAt: string;
+}
+
+// Digital Twin models
+export interface EquipmentDigitalTwin {
+  id: string;
+  equipmentId: string;
+  equipmentName: string;
+  equipmentLocation: string;
+  currentStatus: EquipmentStatus;
+  wearPercentage: number;
+  performanceScore: number;
+  temperatureCelsius?: number;
+  usageHours?: number;
+  lastKnownIssue?: string;
+  lastSyncedAt?: string;
+  simulationNotes?: string;
+  createdAt: string;
+}
+
+export interface UpsertDigitalTwinRequest {
+  equipmentId: string;
+  currentStatus: EquipmentStatus;
+  wearPercentage: number;
+  performanceScore: number;
+  temperatureCelsius?: number;
+  usageHours?: number;
+  lastKnownIssue?: string;
+  simulationNotes?: string;
+}

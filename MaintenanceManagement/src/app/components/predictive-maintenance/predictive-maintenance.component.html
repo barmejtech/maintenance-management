@@ -1,0 +1,157 @@
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-cpu text-warning me-2"></i>Predictive Maintenance Engine</h4>
+    <div class="d-flex gap-2">
+      <button class="btn btn-warning btn-sm" (click)="runAllPredictions()">
+        <i class="bi bi-lightning-charge me-1"></i>Analyze All
+      </button>
+      <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Dashboard
+      </a>
+    </div>
+  </div>
+
+  <!-- Info card -->
+  <div class="alert alert-info d-flex align-items-start mb-3" role="alert">
+    <i class="bi bi-info-circle-fill me-2 mt-1 flex-shrink-0"></i>
+    <div>
+      <strong>AI-Powered Predictions</strong> — The engine analyzes failure history, intervention frequency,
+      time between maintenance checks, and equipment status to predict the next likely failure date
+      and generate recommendations.
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab() === 'all'" (click)="switchTab('all')">
+        <i class="bi bi-list-ul me-1"></i>All Predictions
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab() === 'highRisk'" (click)="switchTab('highRisk')">
+        <i class="bi bi-exclamation-triangle me-1"></i>High Risk (≥50%)
+      </button>
+    </li>
+  </ul>
+
+  <!-- Predictions table -->
+  @if (predictions().length > 0) {
+    <div class="card shadow-sm mb-4">
+      <div class="card-header fw-semibold bg-light">
+        <i class="bi bi-graph-up-arrow me-1 text-warning"></i>Predictions
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-hover table-striped mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Equipment</th>
+              <th>Risk Level</th>
+              <th>Failure Probability</th>
+              <th>Predicted Failure</th>
+              <th>Interventions</th>
+              <th>Avg. Days Between Failures</th>
+              <th>Recommendation</th>
+              <th>Last Analyzed</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of predictions(); track p.id) {
+              <tr>
+                <td class="fw-medium">{{ p.equipmentName }}</td>
+                <td>
+                  <span class="badge" [class]="getRiskClass(p.failureProbability)">
+                    {{ getRiskLabel(p.failureProbability) }}
+                  </span>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="progress flex-grow-1" style="height:8px; min-width:80px;">
+                      <div class="progress-bar"
+                           [class]="getRiskClass(p.failureProbability)"
+                           [style.width]="formatPercent(p.failureProbability)">
+                      </div>
+                    </div>
+                    <span class="small fw-semibold">{{ formatPercent(p.failureProbability) }}</span>
+                  </div>
+                </td>
+                <td>{{ p.predictedFailureDate | date:'mediumDate' }}</td>
+                <td>{{ p.totalInterventions }}</td>
+                <td>{{ p.averageDaysBetweenFailures > 0 ? (p.averageDaysBetweenFailures | number:'1.0-1') + ' days' : '—' }}</td>
+                <td class="small text-muted" style="max-width:250px;">{{ p.recommendation }}</td>
+                <td class="text-muted small">{{ p.lastAnalyzedAt ? (p.lastAnalyzedAt | date:'short') : '—' }}</td>
+                <td class="text-end">
+                  <button class="btn btn-outline-warning btn-sm"
+                          (click)="runPrediction(p.equipmentId)"
+                          [disabled]="isRunning() === p.equipmentId">
+                    @if (isRunning() === p.equipmentId) {
+                      <span class="spinner-border spinner-border-sm me-1"></span>
+                    } @else {
+                      <i class="bi bi-arrow-clockwise me-1"></i>
+                    }
+                    Re-analyze
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  } @else {
+    <div class="alert alert-secondary">
+      <i class="bi bi-info-circle me-2"></i>No predictions yet. Click <strong>Analyze All</strong> to run the engine for all equipment.
+    </div>
+  }
+
+  <!-- Equipment without predictions -->
+  @if (equipment().length > 0) {
+    <div class="card shadow-sm">
+      <div class="card-header fw-semibold bg-light">
+        <i class="bi bi-tools me-1 text-primary"></i>Equipment — Run Individual Analysis
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Equipment</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Last Maintenance</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (eq of equipment(); track eq.id) {
+              <tr>
+                <td class="fw-medium">{{ eq.name }}</td>
+                <td>{{ eq.location }}</td>
+                <td>
+                  @switch (eq.status) {
+                    @case (0) { <span class="badge bg-success">Operational</span> }
+                    @case (1) { <span class="badge bg-warning text-dark">Under Maintenance</span> }
+                    @case (2) { <span class="badge bg-danger">Out of Service</span> }
+                    @default { <span class="badge bg-secondary">Decommissioned</span> }
+                  }
+                </td>
+                <td>{{ eq.lastMaintenanceDate ? (eq.lastMaintenanceDate | date:'mediumDate') : '—' }}</td>
+                <td class="text-end">
+                  <button class="btn btn-outline-warning btn-sm"
+                          (click)="runPrediction(eq.id)"
+                          [disabled]="isRunning() === eq.id">
+                    @if (isRunning() === eq.id) {
+                      <span class="spinner-border spinner-border-sm me-1"></span>Running...
+                    } @else {
+                      <i class="bi bi-lightning-charge me-1"></i>Analyze
+                    }
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>

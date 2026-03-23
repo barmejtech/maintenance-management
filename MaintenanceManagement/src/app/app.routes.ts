@@ -77,6 +77,16 @@ export const routes: Routes = [
     loadComponent: () => import('./components/notifications/notifications.component').then(m => m.NotificationsComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'predictive-maintenance',
+    loadComponent: () => import('./components/predictive-maintenance/predictive-maintenance.component').then(m => m.PredictiveMaintenanceComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'equipment-digital-twin',
+    loadComponent: () => import('./components/equipment-digital-twin/equipment-digital-twin.component').then(m => m.EquipmentDigitalTwinComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/dashboard' }
 ];
 
