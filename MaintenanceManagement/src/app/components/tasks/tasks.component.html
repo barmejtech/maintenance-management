@@ -2,6 +2,9 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="mb-0 fw-bold"><i class="bi bi-clipboard-check-fill text-primary me-2"></i>{{ 'tasks.title' | translate }}</h4>
     <div class="d-flex gap-2">
+      <button class="btn btn-outline-success btn-sm" (click)="exportToCsv()" title="{{ 'tasks.exportCsv' | translate }}">
+        <i class="bi bi-download me-1"></i>{{ 'tasks.exportCsv' | translate }}
+      </button>
       <button class="btn btn-primary btn-sm" (click)="openAdd()">
         <i class="bi bi-plus-circle me-1"></i>{{ 'tasks.newButton' | translate }}
       </button>
@@ -11,7 +14,7 @@
     </div>
   </div>
 
-  <div class="d-flex gap-2 mb-3 flex-wrap">
+  <div class="d-flex gap-2 mb-2 flex-wrap">
     <button class="btn btn-sm" [class.btn-primary]="filterStatus() === null" [class.btn-outline-secondary]="filterStatus() !== null"
             (click)="filterStatus.set(null)">{{ 'tasks.filterAll' | translate }}</button>
     <button class="btn btn-sm" [class.btn-warning]="filterStatus() === 0" [class.btn-outline-secondary]="filterStatus() !== 0"
@@ -20,6 +23,18 @@
             (click)="filterStatus.set(1)">{{ 'tasks.filterInProgress' | translate }}</button>
     <button class="btn btn-sm" [class.btn-success]="filterStatus() === 2" [class.btn-outline-secondary]="filterStatus() !== 2"
             (click)="filterStatus.set(2)">{{ 'tasks.filterCompleted' | translate }}</button>
+  </div>
+
+  <div class="d-flex gap-2 mb-3 flex-wrap align-items-center">
+    <small class="text-muted me-1"><i class="bi bi-clock-history me-1"></i>{{ 'tasks.sla.filter' | translate }}:</small>
+    <button class="btn btn-sm" [class.btn-secondary]="filterSla() === 'all'" [class.btn-outline-secondary]="filterSla() !== 'all'"
+            (click)="filterSla.set('all')">{{ 'tasks.filterAll' | translate }}</button>
+    <button class="btn btn-sm" [class.btn-danger]="filterSla() === 'overdue'" [class.btn-outline-danger]="filterSla() !== 'overdue'"
+            (click)="filterSla.set('overdue')"><i class="bi bi-exclamation-triangle-fill me-1"></i>{{ 'tasks.sla.overdue' | translate }}</button>
+    <button class="btn btn-sm" [class.btn-warning]="filterSla() === 'due-soon'" [class.btn-outline-warning]="filterSla() !== 'due-soon'"
+            (click)="filterSla.set('due-soon')"><i class="bi bi-clock-fill me-1"></i>{{ 'tasks.sla.dueSoon' | translate }}</button>
+    <button class="btn btn-sm" [class.btn-success]="filterSla() === 'on-time'" [class.btn-outline-success]="filterSla() !== 'on-time'"
+            (click)="filterSla.set('on-time')"><i class="bi bi-check-circle-fill me-1"></i>{{ 'tasks.sla.onTime' | translate }}</button>
   </div>
 
   @if (isLoading()) {
@@ -40,6 +55,14 @@
               <div class="d-flex gap-1 flex-wrap">
                 <span class="badge" [class]="getPriorityClass(task.priority)">{{ getPriorityLabel(task.priority) }}</span>
                 <span class="badge" [class]="getStatusClass(task.status)">{{ getStatusLabel(task.status) }}</span>
+                @if (getSlaStatus(task)) {
+                  <span class="badge sla-badge" [class]="getSlaClass(task)">
+                    <i class="bi me-1"
+                       [class.bi-exclamation-triangle-fill]="getSlaStatus(task) === 'overdue'"
+                       [class.bi-clock-fill]="getSlaStatus(task) === 'due-soon'"
+                       [class.bi-check-circle-fill]="getSlaStatus(task) === 'on-time'"></i>{{ getSlaLabel(task) }}
+                  </span>
+                }
               </div>
             </div>
             <p class="card-text text-muted small mb-2">{{ task.description }}</p>

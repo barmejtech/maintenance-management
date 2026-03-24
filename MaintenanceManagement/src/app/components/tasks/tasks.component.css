@@ -35,3 +35,25 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+
+/* ===== SLA BADGES ===== */
+.sla-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.sla-overdue {
+  background: #dc2626;
+  color: #fff;
+}
+
+.sla-due-soon {
+  background: #d97706;
+  color: #fff;
+}
+
+.sla-on-time {
+  background: #059669;
+  color: #fff;
+}

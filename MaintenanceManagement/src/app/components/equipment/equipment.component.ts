@@ -135,4 +135,46 @@ export class EquipmentComponent implements OnInit {
     return this.translation.translate(keys[s] ?? keys[0]);
   }
   getStatusClass(s: EquipmentStatus): string { return ['bg-success', 'bg-warning text-dark', 'bg-danger', 'bg-secondary'][s]; }
+
+  // ===== CSV EXPORT =====
+  exportToCsv(): void {
+    const headers = [
+      this.translation.translate('asset.csv.id'),
+      this.translation.translate('asset.csv.name'),
+      this.translation.translate('asset.csv.serialNumber'),
+      this.translation.translate('asset.csv.model'),
+      this.translation.translate('asset.csv.manufacturer'),
+      this.translation.translate('asset.csv.location'),
+      this.translation.translate('asset.csv.status'),
+      this.translation.translate('asset.csv.installationDate'),
+      this.translation.translate('asset.csv.lastMaintenance'),
+      this.translation.translate('asset.csv.nextMaintenance')
+    ];
+
+    const rows = this.equipment().map(e => [
+      e.id,
+      `"${(e.name ?? '').replace(/"/g, '""')}"`,
+      `"${(e.serialNumber ?? '').replace(/"/g, '""')}"`,
+      `"${(e.model ?? '').replace(/"/g, '""')}"`,
+      `"${(e.manufacturer ?? '').replace(/"/g, '""')}"`,
+      `"${(e.location ?? '').replace(/"/g, '""')}"`,
+      this.getStatusLabel(e.status),
+      e.installationDate ? new Date(e.installationDate).toLocaleDateString() : '',
+      e.lastMaintenanceDate ? new Date(e.lastMaintenanceDate).toLocaleDateString() : '',
+      e.nextMaintenanceDate ? new Date(e.nextMaintenanceDate).toLocaleDateString() : ''
+    ]);
+
+    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    this.downloadCsv(csv, 'equipment.csv');
+  }
+
+  private downloadCsv(content: string, filename: string): void {
+    const blob = new Blob(['\uFEFF' + content], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
 }

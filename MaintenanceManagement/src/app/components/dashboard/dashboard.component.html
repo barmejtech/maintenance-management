@@ -13,6 +13,9 @@
       <button class="btn-lang" (click)="translation.toggleLanguage()" title="Switch Language">
         <i class="bi bi-globe2"></i> {{ 'lang.toggle' | translate }}
       </button>
+      <button class="btn-theme" (click)="theme.toggleTheme()" [title]="'theme.toggle' | translate">
+        <i class="bi" [class.bi-moon-fill]="!theme.isDark" [class.bi-sun-fill]="theme.isDark"></i>
+      </button>
       <button (click)="auth.logout()" class="btn-logout">{{ 'dashboard.header.signOut' | translate }}</button>
     </div>
   </header>

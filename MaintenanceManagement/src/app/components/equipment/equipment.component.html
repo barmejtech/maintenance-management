@@ -2,6 +2,9 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="mb-0 fw-bold"><i class="bi bi-tools text-primary me-2"></i>{{ 'asset.title' | translate }}</h4>
     <div class="d-flex gap-2">
+      <button class="btn btn-outline-success btn-sm" (click)="exportToCsv()" title="{{ 'asset.exportCsv' | translate }}">
+        <i class="bi bi-download me-1"></i>{{ 'asset.exportCsv' | translate }}
+      </button>
       <button class="btn btn-primary btn-sm" (click)="openAdd()">
         <i class="bi bi-plus-circle me-1"></i>{{ 'asset.addButton' | translate }}
       </button>

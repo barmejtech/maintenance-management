@@ -82,10 +82,22 @@
       "badge": "How It Works",
       "heading": "Get up and running in minutes",
       "subheading": "Simple, intuitive workflow designed for real maintenance teams",
-      "step1": { "title": "Register your team", "description": "Create accounts for managers, technicians and admins in seconds." },
-      "step2": { "title": "Create work orders", "description": "Log maintenance tasks with priority, equipment, and due dates." },
-      "step3": { "title": "Assign technicians", "description": "Auto-notify the right technician instantly via real-time push." },
-      "step4": { "title": "Track & analyze", "description": "Monitor progress and generate reports to improve operations." }
+      "step1": {
+        "title": "Register your team",
+        "description": "Create accounts for managers, technicians and admins in seconds."
+      },
+      "step2": {
+        "title": "Create work orders",
+        "description": "Log maintenance tasks with priority, equipment, and due dates."
+      },
+      "step3": {
+        "title": "Assign technicians",
+        "description": "Auto-notify the right technician instantly via real-time push."
+      },
+      "step4": {
+        "title": "Track & analyze",
+        "description": "Monitor progress and generate reports to improve operations."
+      }
     },
     "testimonials": {
       "badge": "Testimonials",
@@ -238,6 +250,25 @@
       "corrective": "Corrective",
       "inspection": "Inspection",
       "emergency": "Emergency"
+    },
+    "exportCsv": "Export CSV",
+    "sla": {
+      "filter": "SLA",
+      "overdue": "Overdue",
+      "dueSoon": "Due Soon",
+      "onTime": "On Time"
+    },
+    "csv": {
+      "id": "ID",
+      "title": "Title",
+      "status": "Status",
+      "priority": "Priority",
+      "maintenanceType": "Maintenance Type",
+      "technician": "Technician",
+      "equipment": "Equipment",
+      "dueDate": "Due Date",
+      "scheduledDate": "Scheduled Date",
+      "createdAt": "Created At"
     }
   },
   "groups": {
@@ -466,7 +497,20 @@
     "saving": "Saving...",
     "create": "Create",
     "update": "Update",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "exportCsv": "Export CSV",
+    "csv": {
+      "id": "ID",
+      "name": "Name",
+      "serialNumber": "Serial Number",
+      "model": "Model",
+      "manufacturer": "Manufacturer",
+      "location": "Location",
+      "status": "Status",
+      "installationDate": "Installation Date",
+      "lastMaintenance": "Last Maintenance",
+      "nextMaintenance": "Next Maintenance"
+    }
   },
   "settings": {
     "title": "Settings",
@@ -497,5 +541,10 @@
   "lang": {
     "toggle": "AR",
     "current": "EN"
+  },
+  "theme": {
+    "toggle": "Toggle dark/light mode",
+    "dark": "Dark Mode",
+    "light": "Light Mode"
   }
 }

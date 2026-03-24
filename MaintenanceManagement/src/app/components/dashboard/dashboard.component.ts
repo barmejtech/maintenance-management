@@ -10,6 +10,7 @@ import { InvoiceService } from '../../services/invoice.service';
 import { ReportService } from '../../services/report.service';
 import { NotificationsComponent } from '../notifications/notifications.component';
 import { TranslationService } from '../../services/translate.service';
+import { ThemeService } from '../../services/theme.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TaskStatus, EquipmentStatus, TechnicianStatus, TaskPriority, InvoiceStatus, TaskOrder } from '../../models';
 import {
@@ -75,6 +76,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public auth: AuthService,
     public translation: TranslationService,
+    public theme: ThemeService,
     private taskService: TaskOrderService,
     private techService: TechnicianService,
     private eqService: EquipmentService,
