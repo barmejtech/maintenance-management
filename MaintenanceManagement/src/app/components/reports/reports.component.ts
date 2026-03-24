@@ -7,6 +7,7 @@ import { TaskOrderService } from '../../services/task-order.service';
 import { MaintenanceReport, CreateReportRequest, TaskOrder } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
+import { PdfService } from '../../services/pdf.service';
 
 @Component({
   selector: 'app-reports',
@@ -37,7 +38,8 @@ export class ReportsComponent implements OnInit {
   constructor(
     private service: ReportService,
     private taskService: TaskOrderService,
-    private translation: TranslationService
+    private translation: TranslationService,
+    private pdf: PdfService
   ) {}
 
   ngOnInit() {
@@ -92,5 +94,9 @@ export class ReportsComponent implements OnInit {
   delete(id: string) {
     if (!confirm(this.translation.translate('reports.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
+  }
+
+  generatePdf(report: MaintenanceReport): void {
+    this.pdf.generateReportPdf(report);
   }
 }

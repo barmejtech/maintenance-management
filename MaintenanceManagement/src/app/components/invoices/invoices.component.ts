@@ -6,6 +6,7 @@ import { InvoiceService } from '../../services/invoice.service';
 import { Invoice, InvoiceStatus } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
+import { PdfService } from '../../services/pdf.service';
 
 @Component({
   selector: 'app-invoices',
@@ -35,7 +36,7 @@ export class InvoicesComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: InvoiceService, private translation: TranslationService) {}
+  constructor(private service: InvoiceService, private translation: TranslationService, private pdf: PdfService) {}
 
   ngOnInit() {
     this.load();
@@ -104,4 +105,8 @@ export class InvoicesComponent implements OnInit {
     return this.translation.translate(keys[s] ?? keys[0]);
   }
   getStatusClass(s: InvoiceStatus): string { return ['bg-secondary', 'bg-primary', 'bg-success', 'bg-danger', 'bg-dark'][s]; }
+
+  generatePdf(inv: Invoice): void {
+    this.pdf.generateInvoicePdf(inv);
+  }
 }

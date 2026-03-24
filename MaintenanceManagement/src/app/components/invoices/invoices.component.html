@@ -40,6 +40,9 @@
                 <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(inv)" [title]="'buttons.edit' | translate">
                   <i class="bi bi-pencil"></i>
                 </button>
+                <button class="btn btn-sm btn-outline-success me-1" (click)="generatePdf(inv)" [title]="'buttons.generatePdf' | translate">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </button>
                 <button class="btn btn-sm btn-outline-danger" (click)="delete(inv.id)" [title]="'buttons.delete' | translate">
                   <i class="bi bi-trash"></i>
                 </button>

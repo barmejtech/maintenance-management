@@ -20,6 +20,9 @@
               <h5 class="card-title mb-0">{{ report.title }}</h5>
               <div class="d-flex align-items-center gap-2">
                 <small class="text-muted">{{ report.reportDate | date:'mediumDate' }}</small>
+                <button class="btn btn-sm btn-outline-success" (click)="generatePdf(report)" [title]="'buttons.generatePdf' | translate">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </button>
                 <button class="btn btn-sm btn-outline-primary" (click)="openEdit(report)" [title]="'buttons.edit' | translate">
                   <i class="bi bi-pencil"></i>
                 </button>
