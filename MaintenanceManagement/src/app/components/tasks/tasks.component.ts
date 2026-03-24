@@ -6,6 +6,7 @@ import { TaskOrderService } from '../../services/task-order.service';
 import { TechnicianService } from '../../services/technician.service';
 import { EquipmentService } from '../../services/equipment.service';
 import { GroupService } from '../../services/group.service';
+import { CsvExportService } from '../../services/csv-export.service';
 import { TaskOrder, TaskStatus, TaskPriority, MaintenanceType, Technician, Equipment, TechnicianGroup, CreateTaskOrderRequest } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
@@ -60,7 +61,8 @@ export class TasksComponent implements OnInit {
     private techService: TechnicianService,
     private eqService: EquipmentService,
     private groupService: GroupService,
-    private translation: TranslationService
+    private translation: TranslationService,
+    private csvExport: CsvExportService
   ) {}
 
   ngOnInit() {
@@ -233,17 +235,6 @@ export class TasksComponent implements OnInit {
       new Date(t.createdAt).toLocaleDateString()
     ]);
 
-    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-    this.downloadCsv(csv, 'task-orders.csv');
-  }
-
-  private downloadCsv(content: string, filename: string): void {
-    const blob = new Blob(['\uFEFF' + content], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    link.click();
-    URL.revokeObjectURL(url);
+    this.csvExport.download(headers, rows, 'task-orders.csv');
   }
 }

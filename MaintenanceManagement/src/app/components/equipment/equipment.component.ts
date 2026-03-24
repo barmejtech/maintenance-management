@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { EquipmentService } from '../../services/equipment.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { TranslationService } from '../../services/translate.service';
+import { CsvExportService } from '../../services/csv-export.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { Equipment, EquipmentStatus } from '../../models';
 
@@ -40,7 +41,7 @@ export class EquipmentComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: EquipmentService, private fileService: FileUploadService, private translation: TranslationService) {}
+  constructor(private service: EquipmentService, private fileService: FileUploadService, private translation: TranslationService, private csvExport: CsvExportService) {}
 
   ngOnInit() {
     this.load();
@@ -164,17 +165,6 @@ export class EquipmentComponent implements OnInit {
       e.nextMaintenanceDate ? new Date(e.nextMaintenanceDate).toLocaleDateString() : ''
     ]);
 
-    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-    this.downloadCsv(csv, 'equipment.csv');
-  }
-
-  private downloadCsv(content: string, filename: string): void {
-    const blob = new Blob(['\uFEFF' + content], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    link.click();
-    URL.revokeObjectURL(url);
+    this.csvExport.download(headers, rows, 'equipment.csv');
   }
 }
