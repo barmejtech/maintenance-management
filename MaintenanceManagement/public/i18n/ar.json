@@ -580,5 +580,104 @@
     "toggle": "تبديل الوضع الداكن/الفاتح",
     "dark": "الوضع الداكن",
     "light": "الوضع الفاتح"
+  },
+  "predictiveMaintenance": {
+    "title": "محرك الصيانة التنبؤية",
+    "analyzeAll": "تحليل الكل",
+    "backToDashboard": "لوحة التحكم",
+    "infoTitle": "تنبؤات مدعومة بالذكاء الاصطناعي",
+    "infoBody": "يقوم المحرك بتحليل سجل الأعطال وتكرار التدخلات والوقت بين فحوصات الصيانة وحالة المعدات للتنبؤ بتاريخ العطل التالي المتوقع وتوليد التوصيات.",
+    "tabs": {
+      "all": "جميع التنبؤات",
+      "highRisk": "مخاطر عالية (≥50%)"
+    },
+    "predictions": {
+      "title": "التنبؤات",
+      "equipment": "المعدة",
+      "riskLevel": "مستوى المخاطر",
+      "failureProbability": "احتمالية العطل",
+      "predictedFailure": "العطل المتوقع",
+      "interventions": "التدخلات",
+      "avgDaysBetweenFailures": "متوسط الأيام بين الأعطال",
+      "recommendation": "التوصية",
+      "lastAnalyzed": "آخر تحليل",
+      "actions": "الإجراءات",
+      "reAnalyze": "إعادة التحليل",
+      "running": "جارٍ..."
+    },
+    "equipmentTable": {
+      "title": "المعدات — تشغيل التحليل الفردي",
+      "equipment": "المعدة",
+      "location": "الموقع",
+      "status": "الحالة",
+      "lastMaintenance": "آخر صيانة",
+      "action": "الإجراء",
+      "analyze": "تحليل",
+      "running": "جارٍ..."
+    },
+    "empty": "لا توجد تنبؤات بعد. انقر على تحليل الكل لتشغيل المحرك لجميع المعدات.",
+    "risk": {
+      "critical": "حرج",
+      "high": "عالٍ",
+      "moderate": "متوسط",
+      "low": "منخفض"
+    },
+    "days": "أيام",
+    "loading": "جارٍ تحميل التنبؤات..."
+  },
+  "digitalTwin": {
+    "title": "التوأم الرقمي للمعدات",
+    "syncAll": "مزامنة الكل",
+    "addTwin": "إضافة توأم",
+    "backToDashboard": "لوحة التحكم",
+    "infoTitle": "التوأم الرقمي",
+    "infoBody": "نسخة افتراضية من كل أصل معدات مادية تعكس حالته الفعلية ومستوى التآكل والأداء ودرجة الحرارة وساعات الاستخدام وسجل الصيانة للمحاكاة والتحليل.",
+    "card": {
+      "wearLevel": "مستوى التآكل",
+      "performance": "الأداء",
+      "temperature": "درجة الحرارة",
+      "usageHours": "ساعات الاستخدام",
+      "synced": "تمت المزامنة",
+      "edit": "تعديل",
+      "sync": "مزامنة"
+    },
+    "equipmentTable": {
+      "title": "المعدات — مزامنة فردية",
+      "equipment": "المعدة",
+      "location": "الموقع",
+      "digitalTwin": "التوأم الرقمي",
+      "action": "الإجراء",
+      "active": "نشط",
+      "notCreated": "غير منشأ",
+      "sync": "مزامنة"
+    },
+    "empty": "لا توجد توائم رقمية بعد. انقر على مزامنة الكل لإنشاء توائم تلقائياً من المعدات الموجودة، أو إضافة توأم للإنشاء يدوياً.",
+    "modal": {
+      "addTitle": "إضافة توأم رقمي",
+      "editTitle": "تعديل التوأم الرقمي",
+      "equipment": "المعدة",
+      "selectEquipment": "اختر المعدة...",
+      "currentStatus": "الحالة الحالية",
+      "wearPercentage": "نسبة التآكل (%)",
+      "performanceScore": "درجة الأداء (%)",
+      "temperature": "درجة الحرارة (°م)",
+      "usageHours": "ساعات الاستخدام",
+      "lastKnownIssue": "آخر مشكلة معروفة",
+      "lastKnownIssuePlaceholder": "اختياري — وصف آخر مشكلة معروفة",
+      "simulationNotes": "ملاحظات المحاكاة",
+      "simulationNotesPlaceholder": "ملاحظات المحاكاة الاختيارية...",
+      "optional": "اختياري",
+      "cancel": "إلغاء",
+      "saveChanges": "حفظ التغييرات",
+      "create": "إنشاء",
+      "saving": "جارٍ الحفظ..."
+    },
+    "status": {
+      "operational": "يعمل",
+      "underMaintenance": "تحت الصيانة",
+      "outOfService": "خارج الخدمة",
+      "decommissioned": "موقف"
+    },
+    "loading": "جارٍ تحميل التوائم الرقمية..."
   }
 }

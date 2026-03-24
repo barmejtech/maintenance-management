@@ -5,11 +5,13 @@ import { RouterLink } from '@angular/router';
 import { EquipmentDigitalTwinService } from '../../services/equipment-digital-twin.service';
 import { EquipmentService } from '../../services/equipment.service';
 import { EquipmentDigitalTwin, Equipment, EquipmentStatus, UpsertDigitalTwinRequest } from '../../models';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translate.service';
 
 @Component({
   selector: 'app-equipment-digital-twin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
   templateUrl: './equipment-digital-twin.component.html',
   styleUrls: ['./equipment-digital-twin.component.css']
 })
@@ -20,6 +22,7 @@ export class EquipmentDigitalTwinComponent implements OnInit {
   isEditing = signal(false);
   isSaving = signal(false);
   isSyncing = signal<string | null>(null);
+  isLoading = signal(true);
   EquipmentStatus = EquipmentStatus;
 
   form: UpsertDigitalTwinRequest = {
@@ -35,7 +38,8 @@ export class EquipmentDigitalTwinComponent implements OnInit {
 
   constructor(
     private service: EquipmentDigitalTwinService,
-    private equipmentService: EquipmentService
+    private equipmentService: EquipmentService,
+    private translation: TranslationService
   ) {}
 
   ngOnInit() {
@@ -44,7 +48,11 @@ export class EquipmentDigitalTwinComponent implements OnInit {
   }
 
   load() {
-    this.service.getAll().subscribe({ next: d => this.twins.set(d), error: () => {} });
+    this.isLoading.set(true);
+    this.service.getAll().subscribe({
+      next: d => { this.twins.set(d); this.isLoading.set(false); },
+      error: () => this.isLoading.set(false)
+    });
   }
 
   openAdd() {
@@ -127,7 +135,10 @@ export class EquipmentDigitalTwinComponent implements OnInit {
     return 'text-danger';
   }
 
-  getStatusLabel(s: EquipmentStatus): string { return ['Operational', 'Under Maintenance', 'Out of Service', 'Decommissioned'][s]; }
+  getStatusLabel(s: EquipmentStatus): string {
+    const keys = ['operational', 'underMaintenance', 'outOfService', 'decommissioned'];
+    return this.translation.translate(`digitalTwin.status.${keys[s]}`);
+  }
   getStatusClass(s: EquipmentStatus): string { return ['bg-success', 'bg-warning text-dark', 'bg-danger', 'bg-secondary'][s]; }
 
   getEquipmentName(id: string): string {
