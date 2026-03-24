@@ -1,0 +1,50 @@
+.equipment-item {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.equipment-item:hover { background: rgba(var(--bs-primary-rgb), 0.06); }
+.equipment-item.active { background: rgba(var(--bs-primary-rgb), 0.12); border-left: 3px solid var(--bs-primary); }
+
+.eq-avatar-lg {
+  width: 56px;
+  height: 56px;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.equipment-list-scroll {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Timeline */
+.timeline { position: relative; }
+.timeline-item { position: relative; padding-bottom: 1.5rem; display: flex; }
+.timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  z-index: 1;
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px currentColor;
+  flex-shrink: 0;
+}
+.dot-success { background: #198754; color: #198754; }
+.dot-info    { background: #0dcaf0; color: #0dcaf0; }
+.dot-warning { background: #ffc107; color: #ffc107; }
+.dot-danger  { background: #dc3545; color: #dc3545; }
+.dot-secondary { background: #6c757d; color: #6c757d; }
+
+.timeline-connector {
+  position: absolute;
+  left: 7px;
+  top: 22px;
+  width: 2px;
+  bottom: 0;
+  background: #dee2e6;
+}
+.timeline-connector.last { display: none; }
+.timeline-content { flex: 1; }

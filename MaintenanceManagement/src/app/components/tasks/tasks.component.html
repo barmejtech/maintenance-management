@@ -164,12 +164,27 @@
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">{{ 'tasks.technician' | translate }}</label>
-              <select class="form-select" [(ngModel)]="form.technicianId">
-                <option value="">{{ 'tasks.noneOption' | translate }}</option>
-                @for (t of technicians(); track t.id) {
-                  <option [value]="t.id">{{ t.fullName }}</option>
+              <div class="input-group">
+                <select class="form-select" [(ngModel)]="form.technicianId">
+                  <option value="">{{ 'tasks.noneOption' | translate }}</option>
+                  @for (t of technicians(); track t.id) {
+                    <option [value]="t.id">{{ t.fullName }}</option>
+                  }
+                </select>
+                @if (isEditing()) {
+                  <button class="btn btn-outline-info btn-sm" type="button" (click)="smartDispatch()" [disabled]="isDispatching()" title="{{ 'tasks.smartDispatch' | translate }}">
+                    @if (isDispatching()) { <span class="spinner-border spinner-border-sm"></span> }
+                    @else { 🤖 }
+                  </button>
                 }
-              </select>
+              </div>
+              @if (dispatchResult(); as dr) {
+                <div class="alert alert-info mt-2 py-2 px-3 small">
+                  <strong>🤖 {{ 'tasks.smartDispatchResult' | translate }}:</strong> {{ dr.technicianName }}
+                  ({{ 'tasks.smartDispatchScore' | translate }}: {{ dr.overallScore | number:'1.0-0' }})
+                  — {{ dr.assignmentReason }}
+                </div>
+              }
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">{{ 'tasks.group' | translate }}</label>

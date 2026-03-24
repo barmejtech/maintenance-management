@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PerformanceService } from '../../services/performance.service';
@@ -17,7 +17,43 @@ export class PerformanceComponent implements OnInit {
   technicians = signal<Technician[]>([]);
   activeTab = signal<'all' | 'top'>('all');
   isRecalculating = signal<string | null>(null);
+  isRecalculatingAll = signal(false);
   topCount = 10;
+
+  // KPI aggregates
+  avgRepairTime = computed(() => {
+    const s = this.scores().filter(x => x.averageInterventionTimeMinutes != null);
+    if (!s.length) return 0;
+    return s.reduce((acc, x) => acc + (x.averageInterventionTimeMinutes ?? 0), 0) / s.length;
+  });
+
+  firstTimeFixRate = computed(() => {
+    const s = this.scores();
+    if (!s.length) return 0;
+    return s.reduce((acc, x) => acc + x.successRate, 0) / s.length;
+  });
+
+  totalCompletedTasks = computed(() =>
+    this.scores().reduce((acc, x) => acc + x.totalTasksCompleted, 0)
+  );
+
+  avgCustomerRating = computed(() => {
+    const s = this.scores();
+    if (!s.length) return 0;
+    return s.reduce((acc, x) => acc + x.customerSatisfactionScore, 0) / s.length;
+  });
+
+  avgOnTimeRate = computed(() => {
+    const s = this.scores();
+    if (!s.length) return 0;
+    return s.reduce((acc, x) => acc + x.onTimeRate, 0) / s.length;
+  });
+
+  topPerformer = computed(() => {
+    const s = this.scores();
+    if (!s.length) return null;
+    return s.reduce((best, x) => x.successRate > best.successRate ? x : best, s[0]);
+  });
 
   constructor(
     private performanceService: PerformanceService,
@@ -65,11 +101,12 @@ export class PerformanceComponent implements OnInit {
   recalculateAll() {
     const techs = this.technicians();
     if (!techs.length) return;
+    this.isRecalculatingAll.set(true);
     let pending = techs.length;
     techs.forEach(t => {
       this.performanceService.recalculate(t.id).subscribe({
-        next: () => { pending--; if (pending === 0) this.loadAll(); },
-        error: () => { pending--; if (pending === 0) this.loadAll(); }
+        next: () => { pending--; if (pending === 0) { this.isRecalculatingAll.set(false); this.loadAll(); } },
+        error: () => { pending--; if (pending === 0) { this.isRecalculatingAll.set(false); this.loadAll(); } }
       });
     });
   }
@@ -80,8 +117,18 @@ export class PerformanceComponent implements OnInit {
     return 'text-danger fw-bold';
   }
 
+  getScoreBgClass(value: number): string {
+    if (value >= 80) return 'bg-success';
+    if (value >= 60) return 'bg-warning';
+    return 'bg-danger';
+  }
+
   getSatisfactionStars(score: number): string {
     const full = Math.floor(score);
     return '★'.repeat(full) + '☆'.repeat(5 - full);
+  }
+
+  getBarWidth(value: number, max: number = 100): string {
+    return `${Math.min(100, (value / max) * 100).toFixed(1)}%`;
   }
 }

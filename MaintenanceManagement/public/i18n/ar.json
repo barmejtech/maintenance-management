@@ -269,7 +269,10 @@
       "dueDate": "تاريخ الاستحقاق",
       "scheduledDate": "التاريخ المجدول",
       "createdAt": "تاريخ الإنشاء"
-    }
+    },
+    "smartDispatch": "التوزيع الذكي بالذكاء الاصطناعي",
+    "smartDispatchResult": "الفني المقترح",
+    "smartDispatchScore": "النتيجة"
   },
   "groups": {
     "title": "مجموعات الفنيين",
@@ -392,7 +395,10 @@
       "admin": "المسؤول",
       "manageUsers": "إدارة المستخدمين",
       "spareParts": "قطع الغيار",
-      "maintenanceSchedules": "جداول الصيانة"
+      "maintenanceSchedules": "جداول الصيانة",
+      "performance": "تحليلات الأداء",
+      "equipmentTimeline": "الجدول الزمني للمعدات",
+      "mobileWorkflow": "سير العمل المتنقل"
     },
     "hero": {
       "fullAccess": "صلاحية كاملة",
@@ -808,5 +814,47 @@
       "update": "تحديث",
       "saving": "جارٍ الحفظ..."
     }
+  },
+  "performance": {
+    "title": "تحليلات أداء الفنيين",
+    "subtitle": "مؤشرات الأداء والدرجات والرؤى",
+    "recalculateAll": "إعادة حساب الكل",
+    "kpi": {
+      "avgRepairTime": "متوسط وقت الإصلاح",
+      "firstTimeFixRate": "معدل الإصلاح من المرة الأولى",
+      "totalCompleted": "إجمالي المهام المكتملة",
+      "avgRating": "متوسط تقييم العملاء",
+      "onTimeRate": "معدل الإنجاز في الوقت المحدد",
+      "topPerformer": "الفني المتميز"
+    }
+  },
+  "equipmentTimeline": {
+    "title": "الجدول الزمني للصيانة",
+    "subtitle": "السجل الكامل لأنشطة الصيانة لكل معدة",
+    "searchPlaceholder": "بحث عن معدة...",
+    "noEquipment": "لا توجد معدات.",
+    "selectEquipment": "اختر معدة لعرض سجل الصيانة.",
+    "loading": "جاري تحميل السجل...",
+    "noHistory": "لا يوجد سجل صيانة لهذه المعدة."
+  },
+  "mobileWorkflow": {
+    "title": "سير العمل المتنقل للفنيين",
+    "subtitle": "تسجيل موقع GPS · رفع الصور · التوقيع الرقمي · التقارير دون اتصال · الملاحظات الصوتية",
+    "myTasks": "مهامي",
+    "offlineReports": "التقارير دون اتصال",
+    "checkIn": "تسجيل الحضور الآن",
+    "checkInSuccess": "تم تسجيل الحضور",
+    "gettingGps": "جاري تحديد الموقع...",
+    "photoUpload": "رفع الصور",
+    "voiceNotes": "الملاحظات الصوتية",
+    "workNotes": "ملاحظات العمل",
+    "signature": "توقيع العميل الرقمي",
+    "submitProof": "إرسال إثبات العمل",
+    "saveOffline": "حفظ دون اتصال",
+    "syncAll": "مزامنة جميع المعلقة",
+    "synced": "تمت المزامنة",
+    "pendingSync": "في انتظار المزامنة",
+    "noTasks": "لا توجد مهام نشطة معينة لك.",
+    "noOffline": "لا توجد تقارير محفوظة دون اتصال."
   }
 }

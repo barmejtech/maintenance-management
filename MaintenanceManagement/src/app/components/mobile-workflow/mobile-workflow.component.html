@@ -1,0 +1,289 @@
+<div class="container-fluid py-4">
+  <!-- Header -->
+  <div class="mb-4">
+    <h2 class="mb-1">📱 Technician Mobile Workflow</h2>
+    <p class="text-muted mb-0">GPS check-in · Photo upload · Digital signature · Offline reports · Voice notes</p>
+  </div>
+
+  <!-- Tab Navigation -->
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab() === 'tasks'" (click)="activeTab.set('tasks')">
+        📋 My Tasks
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link position-relative" [class.active]="activeTab() === 'offline'" (click)="activeTab.set('offline')">
+        💾 Offline Reports
+        @if (pendingOfflineCount() > 0) {
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ pendingOfflineCount() }}
+          </span>
+        }
+      </button>
+    </li>
+  </ul>
+
+  <!-- Tasks Tab -->
+  @if (activeTab() === 'tasks') {
+    @if (isLoading()) {
+      <div class="text-center text-muted py-5">
+        <span class="spinner-border spinner-border-sm me-1"></span> Loading tasks...
+      </div>
+    } @else if (!selectedTask()) {
+      <!-- Task List -->
+      <div class="row g-3">
+        @for (task of myTasks(); track task.id) {
+          <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm task-select-card" (click)="selectTask(task)">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="fw-bold mb-0">{{ task.title }}</h6>
+                  <span class="badge" [class]="getStatusClass(task.status)">{{ getStatusLabel(task.status) }}</span>
+                </div>
+                <p class="small text-muted mb-2">{{ task.description }}</p>
+                <div class="small text-muted">
+                  @if (task.technicianName) { <div>👷 {{ task.technicianName }}</div> }
+                  @if (task.equipmentName) { <div>🔩 {{ task.equipmentName }}</div> }
+                  @if (task.dueDate) { <div>📅 Due: {{ task.dueDate | date:'mediumDate' }}</div> }
+                </div>
+              </div>
+              <div class="card-footer bg-transparent text-end py-2">
+                <button class="btn btn-sm btn-primary">Open Workflow →</button>
+              </div>
+            </div>
+          </div>
+        }
+        @if (myTasks().length === 0) {
+          <div class="col-12 text-center text-muted py-5">
+            <div class="fs-1 mb-2">✅</div>
+            <p>No active tasks assigned to you.</p>
+          </div>
+        }
+      </div>
+    } @else {
+      <!-- Workflow Panel -->
+      <div class="row g-4">
+        <!-- Task Info -->
+        <div class="col-12">
+          <div class="card border-primary border-2 shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+              <div>
+                <h5 class="mb-0 fw-bold">{{ selectedTask()!.title }}</h5>
+                <div class="small text-muted">{{ selectedTask()!.description }}</div>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary" (click)="selectedTask.set(null)">← Back</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- GPS Check-In -->
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">📍 GPS Check-In</div>
+            <div class="card-body">
+              <p class="small text-muted">Record your arrival location to validate task commencement.</p>
+              <button class="btn btn-outline-primary w-100 mb-3" (click)="checkIn()"
+                      [disabled]="gpsStatus() === 'capturing' || gpsStatus() === 'success'">
+                @if (gpsStatus() === 'capturing') {
+                  <span class="spinner-border spinner-border-sm me-1"></span> Getting GPS...
+                } @else if (gpsStatus() === 'success') {
+                  ✅ Checked In
+                } @else {
+                  📍 Check In Now
+                }
+              </button>
+              @if (gpsStatus() === 'success' && gpsCoords()) {
+                <div class="alert alert-success py-2 mb-0">
+                  <strong>Location Captured:</strong><br>
+                  Lat: {{ gpsCoords()!.lat | number:'1.5-5' }}<br>
+                  Lng: {{ gpsCoords()!.lng | number:'1.5-5' }}
+                </div>
+              }
+              @if (gpsStatus() === 'denied') {
+                <div class="alert alert-warning py-2 mb-0">Location access denied. Please enable GPS in your browser.</div>
+              }
+              @if (gpsStatus() === 'unavailable') {
+                <div class="alert alert-secondary py-2 mb-0">GPS not available on this device.</div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo Upload -->
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">📷 Photo Upload</div>
+            <div class="card-body">
+              <p class="small text-muted">Upload before/after maintenance photos as proof.</p>
+              <label class="btn btn-outline-info w-100 mb-3" [class.disabled]="isUploadingPhoto()" for="photo-upload-input">
+                @if (isUploadingPhoto()) {
+                  <span class="spinner-border spinner-border-sm me-1"></span> Uploading...
+                } @else {
+                  📷 Select Photos
+                }
+                <input id="photo-upload-input" type="file" accept="image/*" multiple hidden (change)="onPhotoSelected($event)"
+                       aria-label="Upload maintenance photos" />
+              </label>
+              @if (uploadedPhotos().length > 0) {
+                <div class="d-flex flex-wrap gap-2">
+                  @for (photo of uploadedPhotos(); track photo; let i = $index) {
+                    <div class="photo-thumb position-relative">
+                      <img [src]="photo" class="rounded" style="width:64px;height:64px;object-fit:cover;" alt="Photo" />
+                      <button class="btn-remove" (click)="removePhoto(i)">×</button>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Voice Notes -->
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">🎙️ Voice Notes</div>
+            <div class="card-body">
+              <p class="small text-muted">Record a voice note describing the maintenance work.</p>
+              <div class="d-flex gap-2 mb-3">
+                @if (!isRecording()) {
+                  <button class="btn btn-outline-danger flex-fill" (click)="startRecording()">
+                    🎙️ Start Recording
+                  </button>
+                } @else {
+                  <button class="btn btn-danger flex-fill" (click)="stopRecording()">
+                    <span class="recording-dot"></span> Stop Recording
+                  </button>
+                }
+                @if (voiceNoteUrl()) {
+                  <button class="btn btn-outline-secondary" (click)="clearVoiceNote()" title="Clear">🗑️</button>
+                }
+              </div>
+              @if (isRecording()) {
+                <div class="alert alert-danger py-2 mb-2">
+                  <span class="recording-dot me-1"></span> Recording in progress...
+                </div>
+              }
+              @if (voiceNoteUrl()) {
+                <audio [src]="voiceNoteUrl()" controls class="w-100"></audio>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Work Notes -->
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">📝 Work Notes</div>
+            <div class="card-body">
+              <p class="small text-muted">Add any notes or observations about the work performed.</p>
+              <textarea class="form-control" rows="5" [(ngModel)]="workNotes"
+                        placeholder="Describe the maintenance work, observations, issues found..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Digital Signature -->
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <span class="fw-bold">✍️ Customer Digital Signature</span>
+              @if (signatureDataUrl()) {
+                <button class="btn btn-sm btn-outline-secondary" (click)="clearSignature()">Clear</button>
+              }
+            </div>
+            <div class="card-body">
+              <p class="small text-muted mb-2">Have the customer sign below to confirm work completion.</p>
+              <div class="signature-wrapper">
+                <canvas #signatureCanvas
+                        class="signature-canvas"
+                        (mousedown)="onCanvasMouseDown($event)"
+                        (mousemove)="onCanvasMouseMove($event)"
+                        (mouseup)="stopDrawing()"
+                        (mouseleave)="stopDrawing()"
+                        (touchstart)="onCanvasTouchStart($event)"
+                        (touchmove)="onCanvasTouchMove($event)"
+                        (touchend)="stopDrawing()">
+                </canvas>
+              </div>
+              @if (!signatureDataUrl()) {
+                <small class="text-muted">Draw signature above with mouse or touch</small>
+              } @else {
+                <small class="text-success">✅ Signature captured</small>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="col-12">
+          <div class="d-flex gap-3 flex-wrap">
+            <button class="btn btn-success btn-lg flex-fill" (click)="submitProof()" [disabled]="isSubmitting()">
+              @if (isSubmitting()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+              ✅ Submit Proof of Work
+            </button>
+            <button class="btn btn-outline-secondary btn-lg" (click)="saveOffline()">
+              💾 Save Offline
+            </button>
+          </div>
+          <small class="text-muted mt-2 d-block">Submitting will send GPS location, photos, and signature to the system. If offline, save locally and sync later.</small>
+        </div>
+      </div>
+    }
+  }
+
+  <!-- Offline Reports Tab -->
+  @if (activeTab() === 'offline') {
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="mb-0">Offline Reports ({{ offlineReports().length }})</h5>
+      <button class="btn btn-primary" (click)="syncOfflineReports()" [disabled]="isSyncing()">
+        @if (isSyncing()) { <span class="spinner-border spinner-border-sm me-1"></span> Syncing... }
+        @else { 🔄 Sync All Pending }
+      </button>
+    </div>
+
+    @if (offlineReports().length === 0) {
+      <div class="text-center text-muted py-5">
+        <div class="fs-1 mb-2">💾</div>
+        <p>No offline reports saved.</p>
+      </div>
+    } @else {
+      <div class="d-flex flex-column gap-3">
+        @for (report of offlineReports(); track report.id) {
+          <div class="card shadow-sm" [class.border-success]="report.synced" [class.border-warning]="!report.synced">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="fw-bold mb-0">{{ report.taskTitle }}</h6>
+                  <small class="text-muted">{{ report.createdAt | date:'medium' }}</small>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  @if (report.synced) {
+                    <span class="badge bg-success">✅ Synced</span>
+                  } @else {
+                    <span class="badge bg-warning text-dark">⏳ Pending Sync</span>
+                  }
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteOfflineReport(report.id)">🗑️</button>
+                </div>
+              </div>
+              @if (report.notes) {
+                <p class="mt-2 mb-0 small text-muted">{{ report.notes }}</p>
+              }
+              <div class="d-flex gap-3 small text-muted mt-2">
+                @if (report.gpsLat) {
+                  <span>📍 GPS: {{ report.gpsLat | number:'1.4-4' }}, {{ report.gpsLng | number:'1.4-4' }}</span>
+                }
+                @if (report.photos.length > 0) {
+                  <span>📷 {{ report.photos.length }} photo(s)</span>
+                }
+                @if (report.voiceNoteUrl) {
+                  <span>🎙️ Voice note</span>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

@@ -39,6 +39,10 @@ public class TaskOrdersController : ControllerBase
     public async Task<IActionResult> GetByGroup(Guid groupId)
         => Ok(await _service.GetByGroupIdAsync(groupId));
 
+    [HttpGet("equipment/{equipmentId:guid}")]
+    public async Task<IActionResult> GetByEquipment(Guid equipmentId)
+        => Ok(await _service.GetByEquipmentIdAsync(equipmentId));
+
     [HttpGet("status/{status}")]
     public async Task<IActionResult> GetByStatus(domain.Enums.TaskStatus status)
         => Ok(await _service.GetByStatusAsync(status));
