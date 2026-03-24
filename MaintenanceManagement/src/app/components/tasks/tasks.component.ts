@@ -6,12 +6,16 @@ import { TaskOrderService } from '../../services/task-order.service';
 import { TechnicianService } from '../../services/technician.service';
 import { EquipmentService } from '../../services/equipment.service';
 import { GroupService } from '../../services/group.service';
+import { CsvExportService } from '../../services/csv-export.service';
 import { TaskOrder, TaskStatus, TaskPriority, MaintenanceType, Technician, Equipment, TechnicianGroup, CreateTaskOrderRequest } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 
 const GPS_TIMEOUT_MS = 10_000;
 const GPS_MAX_AGE_MS = 60_000;
+const SLA_WARNING_HOURS = 24;
+
+export type SlaStatus = 'overdue' | 'due-soon' | 'on-time' | null;
 
 @Component({
   selector: 'app-tasks',
@@ -27,6 +31,7 @@ export class TasksComponent implements OnInit {
   groups = signal<TechnicianGroup[]>([]);
   isLoading = signal(true);
   filterStatus = signal<number | null>(null);
+  filterSla = signal<SlaStatus | 'all'>('all');
   showModal = signal(false);
   isEditing = signal(false);
   isSaving = signal(false);
@@ -43,8 +48,12 @@ export class TasksComponent implements OnInit {
   private editingId = '';
 
   filteredTasks = () => {
+    let result = this.tasks();
     const s = this.filterStatus();
-    return s === null ? this.tasks() : this.tasks().filter(t => t.status === s);
+    if (s !== null) result = result.filter(t => t.status === s);
+    const sla = this.filterSla();
+    if (sla !== 'all') result = result.filter(t => this.getSlaStatus(t) === sla);
+    return result;
   };
 
   constructor(
@@ -52,7 +61,8 @@ export class TasksComponent implements OnInit {
     private techService: TechnicianService,
     private eqService: EquipmentService,
     private groupService: GroupService,
-    private translation: TranslationService
+    private translation: TranslationService,
+    private csvExport: CsvExportService
   ) {}
 
   ngOnInit() {
@@ -169,4 +179,62 @@ export class TasksComponent implements OnInit {
     return this.translation.translate(keys[s] ?? keys[0]);
   }
   getStatusClass(s: TaskStatus): string { return ['bg-warning text-dark', 'bg-info text-dark', 'bg-success', 'bg-danger', 'bg-secondary'][s]; }
+
+  // ===== SLA TRACKING =====
+  getSlaStatus(task: TaskOrder): SlaStatus {
+    if (!task.dueDate) return null;
+    if (task.status === TaskStatus.Completed || task.status === TaskStatus.Cancelled) return null;
+    const due = new Date(task.dueDate).getTime();
+    const now = Date.now();
+    if (now > due) return 'overdue';
+    if (due - now <= SLA_WARNING_HOURS * 60 * 60 * 1000) return 'due-soon';
+    return 'on-time';
+  }
+
+  getSlaLabel(task: TaskOrder): string {
+    const status = this.getSlaStatus(task);
+    if (status === 'overdue') return this.translation.translate('tasks.sla.overdue');
+    if (status === 'due-soon') return this.translation.translate('tasks.sla.dueSoon');
+    if (status === 'on-time') return this.translation.translate('tasks.sla.onTime');
+    return '';
+  }
+
+  getSlaClass(task: TaskOrder): string {
+    const status = this.getSlaStatus(task);
+    if (status === 'overdue') return 'sla-overdue';
+    if (status === 'due-soon') return 'sla-due-soon';
+    if (status === 'on-time') return 'sla-on-time';
+    return '';
+  }
+
+  // ===== CSV EXPORT =====
+  exportToCsv(): void {
+    const headers = [
+      this.translation.translate('tasks.csv.id'),
+      this.translation.translate('tasks.csv.title'),
+      this.translation.translate('tasks.csv.status'),
+      this.translation.translate('tasks.csv.priority'),
+      this.translation.translate('tasks.csv.maintenanceType'),
+      this.translation.translate('tasks.csv.technician'),
+      this.translation.translate('tasks.csv.equipment'),
+      this.translation.translate('tasks.csv.dueDate'),
+      this.translation.translate('tasks.csv.scheduledDate'),
+      this.translation.translate('tasks.csv.createdAt')
+    ];
+
+    const rows = this.filteredTasks().map(t => [
+      t.id,
+      `"${(t.title ?? '').replace(/"/g, '""')}"`,
+      this.getStatusLabel(t.status),
+      this.getPriorityLabel(t.priority),
+      t.maintenanceType,
+      `"${(t.technicianName ?? '').replace(/"/g, '""')}"`,
+      `"${(t.equipmentName ?? '').replace(/"/g, '""')}"`,
+      t.dueDate ? new Date(t.dueDate).toLocaleDateString() : '',
+      t.scheduledDate ? new Date(t.scheduledDate).toLocaleDateString() : '',
+      new Date(t.createdAt).toLocaleDateString()
+    ]);
+
+    this.csvExport.download(headers, rows, 'task-orders.csv');
+  }
 }

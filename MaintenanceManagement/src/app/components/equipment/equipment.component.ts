@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { EquipmentService } from '../../services/equipment.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { TranslationService } from '../../services/translate.service';
+import { CsvExportService } from '../../services/csv-export.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { Equipment, EquipmentStatus } from '../../models';
 
@@ -40,7 +41,7 @@ export class EquipmentComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: EquipmentService, private fileService: FileUploadService, private translation: TranslationService) {}
+  constructor(private service: EquipmentService, private fileService: FileUploadService, private translation: TranslationService, private csvExport: CsvExportService) {}
 
   ngOnInit() {
     this.load();
@@ -135,4 +136,35 @@ export class EquipmentComponent implements OnInit {
     return this.translation.translate(keys[s] ?? keys[0]);
   }
   getStatusClass(s: EquipmentStatus): string { return ['bg-success', 'bg-warning text-dark', 'bg-danger', 'bg-secondary'][s]; }
+
+  // ===== CSV EXPORT =====
+  exportToCsv(): void {
+    const headers = [
+      this.translation.translate('asset.csv.id'),
+      this.translation.translate('asset.csv.name'),
+      this.translation.translate('asset.csv.serialNumber'),
+      this.translation.translate('asset.csv.model'),
+      this.translation.translate('asset.csv.manufacturer'),
+      this.translation.translate('asset.csv.location'),
+      this.translation.translate('asset.csv.status'),
+      this.translation.translate('asset.csv.installationDate'),
+      this.translation.translate('asset.csv.lastMaintenance'),
+      this.translation.translate('asset.csv.nextMaintenance')
+    ];
+
+    const rows = this.equipment().map(e => [
+      e.id,
+      `"${(e.name ?? '').replace(/"/g, '""')}"`,
+      `"${(e.serialNumber ?? '').replace(/"/g, '""')}"`,
+      `"${(e.model ?? '').replace(/"/g, '""')}"`,
+      `"${(e.manufacturer ?? '').replace(/"/g, '""')}"`,
+      `"${(e.location ?? '').replace(/"/g, '""')}"`,
+      this.getStatusLabel(e.status),
+      e.installationDate ? new Date(e.installationDate).toLocaleDateString() : '',
+      e.lastMaintenanceDate ? new Date(e.lastMaintenanceDate).toLocaleDateString() : '',
+      e.nextMaintenanceDate ? new Date(e.nextMaintenanceDate).toLocaleDateString() : ''
+    ]);
+
+    this.csvExport.download(headers, rows, 'equipment.csv');
+  }
 }
