@@ -1,9 +1,10 @@
 .dashboard {
+  --header-height: 64px;
   display: grid;
   grid-template-areas:
     "header header"
     "sidebar main";
-  grid-template-rows: 64px 1fr;
+  grid-template-rows: var(--header-height) 1fr;
   grid-template-columns: 240px 1fr;
   min-height: 100vh;
   background: var(--color-bg, #f0f2f8);
@@ -145,6 +146,48 @@
   transform: rotate(20deg);
 }
 
+.btn-hamburger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: background 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-hamburger:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+/* ===== SIDEBAR COLLAPSED (desktop) ===== */
+.dashboard.sidebar-collapsed {
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "main";
+}
+
+.dashboard.sidebar-collapsed .sidebar {
+  display: none;
+}
+
+/* ===== SIDEBAR OVERLAY (mobile) ===== */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: var(--header-height, 64px) 0 0 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 39;
+}
+
 /* ===== SIDEBAR ===== */
 .sidebar {
   grid-area: sidebar;
@@ -153,8 +196,8 @@
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.06);
   overflow-y: auto;
   position: sticky;
-  top: 64px;
-  height: calc(100vh - 64px);
+  top: var(--header-height, 64px);
+  height: calc(100vh - var(--header-height, 64px));
   transition: background 0.2s ease;
 }
 
@@ -623,9 +666,26 @@
   .dashboard {
     grid-template-areas: "header" "main";
     grid-template-columns: 1fr;
-    grid-template-rows: 64px 1fr;
+    grid-template-rows: var(--header-height, 64px) 1fr;
   }
-  .sidebar { display: none; }
+  .sidebar {
+    display: none;
+    position: fixed;
+    top: var(--header-height, 64px);
+    left: 0;
+    width: 240px;
+    height: calc(100vh - var(--header-height, 64px));
+    z-index: 40;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+  }
+  /* Show sidebar as overlay when toggled open on mobile */
+  .dashboard:not(.sidebar-collapsed) .sidebar {
+    display: block;
+  }
+  /* Show backdrop overlay on mobile when sidebar is open */
+  .sidebar-overlay.active {
+    display: block;
+  }
   .charts-grid, .charts-grid--two { grid-template-columns: 1fr; }
   .chart-card--wide { grid-column: span 1; }
   .dashboard-hero { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
