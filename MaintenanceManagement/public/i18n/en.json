@@ -546,5 +546,104 @@
     "toggle": "Toggle dark/light mode",
     "dark": "Dark Mode",
     "light": "Light Mode"
+  },
+  "predictiveMaintenance": {
+    "title": "Predictive Maintenance Engine",
+    "analyzeAll": "Analyze All",
+    "backToDashboard": "Dashboard",
+    "infoTitle": "AI-Powered Predictions",
+    "infoBody": "The engine analyzes failure history, intervention frequency, time between maintenance checks, and equipment status to predict the next likely failure date and generate recommendations.",
+    "tabs": {
+      "all": "All Predictions",
+      "highRisk": "High Risk (≥50%)"
+    },
+    "predictions": {
+      "title": "Predictions",
+      "equipment": "Equipment",
+      "riskLevel": "Risk Level",
+      "failureProbability": "Failure Probability",
+      "predictedFailure": "Predicted Failure",
+      "interventions": "Interventions",
+      "avgDaysBetweenFailures": "Avg. Days Between Failures",
+      "recommendation": "Recommendation",
+      "lastAnalyzed": "Last Analyzed",
+      "actions": "Actions",
+      "reAnalyze": "Re-analyze",
+      "running": "Running..."
+    },
+    "equipmentTable": {
+      "title": "Equipment — Run Individual Analysis",
+      "equipment": "Equipment",
+      "location": "Location",
+      "status": "Status",
+      "lastMaintenance": "Last Maintenance",
+      "action": "Action",
+      "analyze": "Analyze",
+      "running": "Running..."
+    },
+    "empty": "No predictions yet. Click Analyze All to run the engine for all equipment.",
+    "risk": {
+      "critical": "Critical",
+      "high": "High",
+      "moderate": "Moderate",
+      "low": "Low"
+    },
+    "days": "days",
+    "loading": "Loading predictions..."
+  },
+  "digitalTwin": {
+    "title": "Equipment Digital Twin",
+    "syncAll": "Sync All",
+    "addTwin": "Add Twin",
+    "backToDashboard": "Dashboard",
+    "infoTitle": "Digital Twin",
+    "infoBody": "A virtual replica of each physical equipment asset that mirrors its real-time status, wear level, performance, temperature, usage hours, and maintenance history for simulation and analysis.",
+    "card": {
+      "wearLevel": "Wear Level",
+      "performance": "Performance",
+      "temperature": "Temperature",
+      "usageHours": "Usage Hours",
+      "synced": "Synced",
+      "edit": "Edit",
+      "sync": "Sync"
+    },
+    "equipmentTable": {
+      "title": "Equipment — Sync Individual",
+      "equipment": "Equipment",
+      "location": "Location",
+      "digitalTwin": "Digital Twin",
+      "action": "Action",
+      "active": "Active",
+      "notCreated": "Not created",
+      "sync": "Sync"
+    },
+    "empty": "No digital twins yet. Click Sync All to auto-generate twins from existing equipment, or Add Twin to create one manually.",
+    "modal": {
+      "addTitle": "Add Digital Twin",
+      "editTitle": "Edit Digital Twin",
+      "equipment": "Equipment",
+      "selectEquipment": "Select equipment...",
+      "currentStatus": "Current Status",
+      "wearPercentage": "Wear Percentage (%)",
+      "performanceScore": "Performance Score (%)",
+      "temperature": "Temperature (°C)",
+      "usageHours": "Usage Hours",
+      "lastKnownIssue": "Last Known Issue",
+      "lastKnownIssuePlaceholder": "Optional — describe the last known issue",
+      "simulationNotes": "Simulation Notes",
+      "simulationNotesPlaceholder": "Optional simulation notes...",
+      "optional": "Optional",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "create": "Create",
+      "saving": "Saving..."
+    },
+    "status": {
+      "operational": "Operational",
+      "underMaintenance": "Under Maintenance",
+      "outOfService": "Out of Service",
+      "decommissioned": "Decommissioned"
+    },
+    "loading": "Loading digital twins..."
   }
 }

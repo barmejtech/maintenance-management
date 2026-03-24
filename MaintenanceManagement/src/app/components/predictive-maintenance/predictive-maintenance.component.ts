@@ -4,11 +4,13 @@ import { RouterLink } from '@angular/router';
 import { PredictiveMaintenanceService } from '../../services/predictive-maintenance.service';
 import { EquipmentService } from '../../services/equipment.service';
 import { EquipmentHealthPrediction, Equipment } from '../../models';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translate.service';
 
 @Component({
   selector: 'app-predictive-maintenance',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   templateUrl: './predictive-maintenance.component.html',
   styleUrls: ['./predictive-maintenance.component.css']
 })
@@ -16,11 +18,13 @@ export class PredictiveMaintenanceComponent implements OnInit {
   predictions = signal<EquipmentHealthPrediction[]>([]);
   equipment = signal<Equipment[]>([]);
   isRunning = signal<string | null>(null);
+  isLoading = signal(true);
   activeTab = signal<'all' | 'highRisk'>('all');
 
   constructor(
     private service: PredictiveMaintenanceService,
-    private equipmentService: EquipmentService
+    private equipmentService: EquipmentService,
+    private translation: TranslationService
   ) {}
 
   ngOnInit() {
@@ -29,11 +33,19 @@ export class PredictiveMaintenanceComponent implements OnInit {
   }
 
   load() {
-    this.service.getAll().subscribe({ next: d => this.predictions.set(d), error: () => {} });
+    this.isLoading.set(true);
+    this.service.getAll().subscribe({
+      next: d => { this.predictions.set(d); this.isLoading.set(false); },
+      error: () => this.isLoading.set(false)
+    });
   }
 
   loadHighRisk() {
-    this.service.getHighRisk(0.5).subscribe({ next: d => this.predictions.set(d), error: () => {} });
+    this.isLoading.set(true);
+    this.service.getHighRisk(0.5).subscribe({
+      next: d => { this.predictions.set(d); this.isLoading.set(false); },
+      error: () => this.isLoading.set(false)
+    });
   }
 
   switchTab(tab: 'all' | 'highRisk') {
@@ -85,10 +97,10 @@ export class PredictiveMaintenanceComponent implements OnInit {
   }
 
   getRiskLabel(prob: number): string {
-    if (prob >= 0.75) return 'Critical';
-    if (prob >= 0.50) return 'High';
-    if (prob >= 0.30) return 'Moderate';
-    return 'Low';
+    if (prob >= 0.75) return this.translation.translate('predictiveMaintenance.risk.critical');
+    if (prob >= 0.50) return this.translation.translate('predictiveMaintenance.risk.high');
+    if (prob >= 0.30) return this.translation.translate('predictiveMaintenance.risk.moderate');
+    return this.translation.translate('predictiveMaintenance.risk.low');
   }
 
   formatPercent(prob: number): string {
