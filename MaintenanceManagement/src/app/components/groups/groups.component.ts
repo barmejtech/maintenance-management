@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { GroupService } from '../../services/group.service';
 import { TechnicianGroup } from '../../models';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translate.service';
 
 @Component({
   selector: 'app-groups',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.css']
 })
@@ -21,7 +23,7 @@ export class GroupsComponent implements OnInit {
   form = { name: '', description: '' };
   private editingId = '';
 
-  constructor(private service: GroupService) {}
+  constructor(private service: GroupService, private translation: TranslationService) {}
 
   ngOnInit() {
     this.load();
@@ -59,7 +61,7 @@ export class GroupsComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm('Delete this group?')) return;
+    if (!confirm(this.translation.translate('groups.title') + '?')) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
   }
 }

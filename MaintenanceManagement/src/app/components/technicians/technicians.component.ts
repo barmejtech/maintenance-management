@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TechnicianService } from '../../services/technician.service';
 import { Technician, TechnicianStatus, CreateTechnicianRequest, UpdateTechnicianRequest } from '../../models';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translate.service';
 
 @Component({
   selector: 'app-technicians',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
   templateUrl: './technicians.component.html',
   styleUrls: ['./technicians.component.css']
 })
@@ -27,7 +29,7 @@ export class TechniciansComponent implements OnInit {
   } = { firstName: '', lastName: '', email: '', phone: '', specialization: '', password: '', status: TechnicianStatus.Available };
   private editingId = '';
 
-  constructor(private service: TechnicianService) {}
+  constructor(private service: TechnicianService, private translation: TranslationService) {}
 
   ngOnInit() {
     this.load();
@@ -75,12 +77,13 @@ export class TechniciansComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm('Delete this technician?')) return;
+    if (!confirm(this.translation.translate('technicians.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
   }
 
   getStatusLabel(status: TechnicianStatus): string {
-    return ['Available', 'Busy', 'On Leave', 'Inactive'][status];
+    const keys = ['technicians.statuses.available', 'technicians.statuses.busy', 'technicians.statuses.onLeave', 'technicians.statuses.inactive'];
+    return this.translation.translate(keys[status] ?? keys[0]);
   }
 
   getStatusClass(status: TechnicianStatus): string {

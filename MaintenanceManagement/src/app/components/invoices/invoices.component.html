@@ -1,12 +1,12 @@
 <div class="container-fluid py-3">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0 fw-bold"><i class="bi bi-receipt-cutoff text-primary me-2"></i>Invoices</h4>
+    <h4 class="mb-0 fw-bold"><i class="bi bi-receipt-cutoff text-primary me-2"></i>{{ 'invoices.title' | translate }}</h4>
     <div class="d-flex gap-2">
       <button class="btn btn-primary btn-sm" (click)="openAdd()">
-        <i class="bi bi-plus-circle me-1"></i>New Invoice
+        <i class="bi bi-plus-circle me-1"></i>{{ 'invoices.newButton' | translate }}
       </button>
       <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left me-1"></i>Dashboard
+        <i class="bi bi-arrow-left me-1"></i>{{ 'invoices.backToDashboard' | translate }}
       </a>
     </div>
   </div>
@@ -16,13 +16,13 @@
       <table class="table table-hover table-striped mb-0">
         <thead class="table-light">
           <tr>
-            <th>Invoice #</th>
-            <th>Client</th>
-            <th>Issue Date</th>
-            <th>Due Date</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th class="text-end">Actions</th>
+            <th>{{ 'invoices.table.invoiceNum' | translate }}</th>
+            <th>{{ 'invoices.table.client' | translate }}</th>
+            <th>{{ 'invoices.table.issueDate' | translate }}</th>
+            <th>{{ 'invoices.table.dueDate' | translate }}</th>
+            <th>{{ 'invoices.table.total' | translate }}</th>
+            <th>{{ 'invoices.table.status' | translate }}</th>
+            <th class="text-end">{{ 'invoices.table.actions' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -37,10 +37,10 @@
                 <span class="badge" [class]="getStatusClass(inv.status)">{{ getStatusLabel(inv.status) }}</span>
               </td>
               <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(inv)" title="Edit">
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(inv)" [title]="'buttons.edit' | translate">
                   <i class="bi bi-pencil"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="delete(inv.id)" title="Delete">
+                <button class="btn btn-sm btn-outline-danger" (click)="delete(inv.id)" [title]="'buttons.delete' | translate">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
@@ -49,7 +49,7 @@
           @if (invoices().length === 0) {
             <tr>
               <td colspan="7" class="text-center text-muted py-4">
-                <i class="bi bi-receipt fs-4 d-block mb-1"></i>No invoices found.
+                <i class="bi bi-receipt fs-4 d-block mb-1"></i>{{ 'invoices.empty' | translate }}
               </td>
             </tr>
           }
@@ -65,66 +65,66 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">
-            <i class="bi bi-receipt me-2"></i>{{ isEditing() ? 'Edit Invoice' : 'New Invoice' }}
+            <i class="bi bi-receipt me-2"></i>{{ isEditing() ? ('invoices.editTitle' | translate) : ('invoices.newTitle' | translate) }}
           </h5>
           <button type="button" class="btn-close" (click)="closeModal()"></button>
         </div>
         <div class="modal-body">
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Invoice Number *</label>
-              <input class="form-control" [(ngModel)]="form.invoiceNumber" placeholder="INV-2024-001" />
+              <label class="form-label fw-semibold">{{ 'invoices.form.invoiceNumber' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.invoiceNumber" [placeholder]="'invoices.form.invoiceNumberPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Status</label>
+              <label class="form-label fw-semibold">{{ 'invoices.form.status' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.status">
-                <option [value]="InvoiceStatus.Draft">Draft</option>
-                <option [value]="InvoiceStatus.Sent">Sent</option>
-                <option [value]="InvoiceStatus.Paid">Paid</option>
-                <option [value]="InvoiceStatus.Overdue">Overdue</option>
-                <option [value]="InvoiceStatus.Cancelled">Cancelled</option>
+                <option [value]="InvoiceStatus.Draft">{{ 'invoices.statuses.draft' | translate }}</option>
+                <option [value]="InvoiceStatus.Sent">{{ 'invoices.statuses.sent' | translate }}</option>
+                <option [value]="InvoiceStatus.Paid">{{ 'invoices.statuses.paid' | translate }}</option>
+                <option [value]="InvoiceStatus.Overdue">{{ 'invoices.statuses.overdue' | translate }}</option>
+                <option [value]="InvoiceStatus.Cancelled">{{ 'invoices.statuses.cancelled' | translate }}</option>
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Client Name *</label>
-              <input class="form-control" [(ngModel)]="form.clientName" placeholder="Client name" />
+              <label class="form-label fw-semibold">{{ 'invoices.form.clientName' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.clientName" [placeholder]="'invoices.form.clientNamePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Client Email</label>
-              <input type="email" class="form-control" [(ngModel)]="form.clientEmail" placeholder="client@example.com" />
+              <label class="form-label fw-semibold">{{ 'invoices.form.clientEmail' | translate }}</label>
+              <input type="email" class="form-control" [(ngModel)]="form.clientEmail" [placeholder]="'invoices.form.clientEmailPlaceholder' | translate" />
             </div>
             <div class="col-12">
-              <label class="form-label fw-semibold">Client Address</label>
-              <input class="form-control" [(ngModel)]="form.clientAddress" placeholder="Address" />
+              <label class="form-label fw-semibold">{{ 'invoices.form.clientAddress' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.clientAddress" [placeholder]="'invoices.form.clientAddressPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Issue Date</label>
+              <label class="form-label fw-semibold">{{ 'invoices.form.issueDate' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.issueDate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Due Date</label>
+              <label class="form-label fw-semibold">{{ 'invoices.form.dueDate' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.dueDate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Sub Total ($)</label>
+              <label class="form-label fw-semibold">{{ 'invoices.form.subTotal' | translate }}</label>
               <input type="number" class="form-control" [(ngModel)]="form.subTotal" min="0" step="0.01" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Tax Rate (%)</label>
+              <label class="form-label fw-semibold">{{ 'invoices.form.taxRate' | translate }}</label>
               <input type="number" class="form-control" [(ngModel)]="form.taxRate" min="0" max="100" step="0.01" />
             </div>
             <div class="col-12">
-              <label class="form-label fw-semibold">Notes</label>
-              <textarea class="form-control" rows="3" [(ngModel)]="form.notes" placeholder="Optional notes..."></textarea>
+              <label class="form-label fw-semibold">{{ 'invoices.form.notes' | translate }}</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="form.notes" [placeholder]="'invoices.form.notesPlaceholder' | translate"></textarea>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'invoices.cancel' | translate }}</button>
           <button type="button" class="btn btn-primary" (click)="save()"
                   [disabled]="isSaving() || !form.invoiceNumber || !form.clientName">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
-            {{ isEditing() ? 'Update' : 'Create' }}
+            {{ isEditing() ? ('invoices.update' | translate) : ('invoices.create' | translate) }}
           </button>
         </div>
       </div>

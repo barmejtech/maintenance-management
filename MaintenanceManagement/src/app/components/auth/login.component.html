@@ -1,35 +1,38 @@
 <div class="auth-container">
+  <button class="btn-lang-toggle" (click)="translation.toggleLanguage()" title="Switch Language">
+    <i class="bi bi-globe2"></i> {{ 'lang.toggle' | translate }}
+  </button>
   <div class="auth-card">
     <div class="auth-header">
       <div class="auth-logo">🔧</div>
       <h1>MaintenancePro</h1>
-      <h2>Sign In to your account</h2>
+      <h2>{{ 'login.signIn' | translate }}</h2>
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="email">Email address</label>
-        <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
+        <label for="email">{{ 'login.emailLabel' | translate }}</label>
+        <input id="email" type="email" formControlName="email" [placeholder]="'login.emailPlaceholder' | translate" />
         @if (form.get('email')?.invalid && form.get('email')?.touched) {
-          <span class="error">Valid email is required</span>
+          <span class="error">{{ 'login.emailRequired' | translate }}</span>
         }
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" formControlName="password" placeholder="Enter your password" />
+        <label for="password">{{ 'login.passwordLabel' | translate }}</label>
+        <input id="password" type="password" formControlName="password" [placeholder]="'login.passwordPlaceholder' | translate" />
         @if (form.get('password')?.invalid && form.get('password')?.touched) {
-          <span class="error">Password is required</span>
+          <span class="error">{{ 'login.passwordRequired' | translate }}</span>
         }
       </div>
       @if (errorMessage()) {
         <div class="alert-error">{{ errorMessage() }}</div>
       }
       <button type="submit" [disabled]="form.invalid || isLoading()" class="btn-primary">
-        {{ isLoading() ? 'Signing in...' : 'Sign In' }}
+        {{ isLoading() ? ('login.signingIn' | translate) : ('login.submit' | translate) }}
       </button>
     </form>
     <p class="auth-footer">
-      Don't have an account? <a routerLink="/register">Create one</a>
+      {{ 'login.noAccount' | translate }} <a routerLink="/register">{{ 'login.createOne' | translate }}</a>
     </p>
   </div>
-  <a routerLink="/home" class="auth-home-link">← Back to Home</a>
+  <a routerLink="/home" class="auth-home-link">{{ 'login.backToHome' | translate }}</a>
 </div>

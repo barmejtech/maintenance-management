@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { InvoiceService } from '../../services/invoice.service';
 import { Invoice, InvoiceStatus } from '../../models';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translate.service';
 
 @Component({
   selector: 'app-invoices',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
   templateUrl: './invoices.component.html',
   styleUrls: ['./invoices.component.css']
 })
@@ -33,7 +35,7 @@ export class InvoicesComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: InvoiceService) {}
+  constructor(private service: InvoiceService, private translation: TranslationService) {}
 
   ngOnInit() {
     this.load();
@@ -93,10 +95,13 @@ export class InvoicesComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm('Delete this invoice?')) return;
+    if (!confirm(this.translation.translate('invoices.title') + '?')) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
   }
 
-  getStatusLabel(s: InvoiceStatus): string { return ['Draft', 'Sent', 'Paid', 'Overdue', 'Cancelled'][s]; }
+  getStatusLabel(s: InvoiceStatus): string {
+    const keys = ['invoices.statuses.draft', 'invoices.statuses.sent', 'invoices.statuses.paid', 'invoices.statuses.overdue', 'invoices.statuses.cancelled'];
+    return this.translation.translate(keys[s] ?? keys[0]);
+  }
   getStatusClass(s: InvoiceStatus): string { return ['bg-secondary', 'bg-primary', 'bg-success', 'bg-danger', 'bg-dark'][s]; }
 }
