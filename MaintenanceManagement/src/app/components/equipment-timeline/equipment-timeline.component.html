@@ -1,7 +1,7 @@
 <div class="container-fluid py-4">
   <div class="mb-4">
-    <h2 class="mb-1">🕐 Maintenance Timeline</h2>
-    <p class="text-muted mb-0">Complete history of maintenance activities per equipment</p>
+    <h2 class="mb-1">🕐 {{ 'equipmentTimeline.title' | translate }}</h2>
+    <p class="text-muted mb-0">{{ 'equipmentTimeline.subtitle' | translate }}</p>
   </div>
 
   <div class="row g-4">
@@ -9,16 +9,16 @@
     <div class="col-md-4 col-lg-3">
       <div class="card shadow-sm h-100">
         <div class="card-header">
-          <h6 class="mb-2 fw-bold">Equipment</h6>
+          <h6 class="mb-2 fw-bold">{{ 'equipmentTimeline.equipmentPanel' | translate }}</h6>
           <input class="form-control form-control-sm"
-                 placeholder="Search equipment..."
+                 [placeholder]="'equipmentTimeline.searchPlaceholder' | translate"
                  [value]="searchTerm()"
                  (input)="searchTerm.set($any($event.target).value)" />
         </div>
         <div class="card-body p-0 equipment-list-scroll">
           @if (isLoadingEquipment()) {
             <div class="text-center text-muted py-4">
-              <span class="spinner-border spinner-border-sm me-1"></span> Loading...
+              <span class="spinner-border spinner-border-sm me-1"></span> {{ 'equipmentTimeline.loading' | translate }}
             </div>
           } @else {
             @for (eq of filteredEquipment(); track eq.id) {
@@ -33,7 +33,7 @@
               </div>
             }
             @if (filteredEquipment().length === 0) {
-              <div class="text-center text-muted py-4">No equipment found.</div>
+              <div class="text-center text-muted py-4">{{ 'equipmentTimeline.noEquipment' | translate }}</div>
             }
           }
         </div>
@@ -46,7 +46,7 @@
         <div class="card shadow-sm">
           <div class="card-body text-center text-muted py-5">
             <div class="fs-1 mb-2">🔩</div>
-            <p>Select an equipment from the list to view its maintenance timeline.</p>
+            <p>{{ 'equipmentTimeline.selectEquipment' | translate }}</p>
           </div>
         </div>
       } @else {
@@ -69,11 +69,11 @@
                 </div>
                 <div class="col-auto text-end">
                   @if (eq.lastMaintenanceDate) {
-                    <div class="small text-muted">Last Maintenance</div>
+                    <div class="small text-muted">{{ 'equipmentTimeline.lastMaintenance' | translate }}</div>
                     <div class="fw-semibold">{{ eq.lastMaintenanceDate | date:'mediumDate' }}</div>
                   }
                   @if (eq.nextMaintenanceDate) {
-                    <div class="small text-muted mt-1">Next Due</div>
+                    <div class="small text-muted mt-1">{{ 'equipmentTimeline.nextDue' | translate }}</div>
                     <div class="fw-semibold text-warning">{{ eq.nextMaintenanceDate | date:'mediumDate' }}</div>
                   }
                 </div>
@@ -88,25 +88,25 @@
             <div class="col">
               <div class="card border-0 shadow-sm text-center py-2">
                 <div class="fw-bold fs-4">{{ timelineStats().total }}</div>
-                <div class="small text-muted">Total</div>
+                <div class="small text-muted">{{ 'equipmentTimeline.stats.total' | translate }}</div>
               </div>
             </div>
             <div class="col">
               <div class="card border-0 shadow-sm text-center py-2">
                 <div class="fw-bold fs-4 text-success">{{ timelineStats().completed }}</div>
-                <div class="small text-muted">Completed</div>
+                <div class="small text-muted">{{ 'equipmentTimeline.stats.completed' | translate }}</div>
               </div>
             </div>
             <div class="col">
               <div class="card border-0 shadow-sm text-center py-2">
                 <div class="fw-bold fs-4 text-info">{{ timelineStats().inProgress }}</div>
-                <div class="small text-muted">In Progress</div>
+                <div class="small text-muted">{{ 'equipmentTimeline.stats.inProgress' | translate }}</div>
               </div>
             </div>
             <div class="col">
               <div class="card border-0 shadow-sm text-center py-2">
                 <div class="fw-bold fs-4 text-warning">{{ timelineStats().pending }}</div>
-                <div class="small text-muted">Pending</div>
+                <div class="small text-muted">{{ 'equipmentTimeline.stats.pending' | translate }}</div>
               </div>
             </div>
           </div>
@@ -115,13 +115,13 @@
         <!-- Timeline -->
         @if (isLoadingTimeline()) {
           <div class="text-center text-muted py-4">
-            <span class="spinner-border spinner-border-sm me-1"></span> Loading timeline...
+            <span class="spinner-border spinner-border-sm me-1"></span> {{ 'equipmentTimeline.loadingTimeline' | translate }}
           </div>
         } @else if (timeline().length === 0) {
           <div class="card shadow-sm">
             <div class="card-body text-center text-muted py-5">
               <div class="fs-1 mb-2">📋</div>
-              <p>No maintenance history found for this equipment.</p>
+              <p>{{ 'equipmentTimeline.noHistory' | translate }}</p>
             </div>
           </div>
         } @else {
@@ -158,13 +158,13 @@
                         <span>👷 {{ task.technicianName }}</span>
                       }
                       @if (task.scheduledDate) {
-                        <span>📅 Scheduled: {{ task.scheduledDate | date:'mediumDate' }}</span>
+                        <span>📅 {{ 'equipmentTimeline.scheduled' | translate }}: {{ task.scheduledDate | date:'mediumDate' }}</span>
                       }
                       @if (task.completedDate) {
-                        <span class="text-success">✅ Completed: {{ task.completedDate | date:'mediumDate' }}</span>
+                        <span class="text-success">✅ {{ 'equipmentTimeline.completedDate' | translate }}: {{ task.completedDate | date:'mediumDate' }}</span>
                       }
                       @if (task.dueDate) {
-                        <span>⏰ Due: {{ task.dueDate | date:'mediumDate' }}</span>
+                        <span>⏰ {{ 'equipmentTimeline.due' | translate }}: {{ task.dueDate | date:'mediumDate' }}</span>
                       }
                     </div>
                     @if (task.notes) {
@@ -175,19 +175,19 @@
                     @if (task.proofPhotoUrl || task.isGpsValidated) {
                       <div class="d-flex gap-3 mt-2 small">
                         @if (task.isGpsValidated) {
-                          <span class="text-success">📍 GPS Validated</span>
+                          <span class="text-success">📍 {{ 'equipmentTimeline.gpsValidated' | translate }}</span>
                         }
                         @if (task.proofPhotoUrl) {
-                          <span class="text-info">📷 Photo Attached</span>
+                          <span class="text-info">📷 {{ 'equipmentTimeline.photoAttached' | translate }}</span>
                         }
                         @if (task.customerSignatureUrl) {
-                          <span class="text-primary">✍️ Signed</span>
+                          <span class="text-primary">✍️ {{ 'equipmentTimeline.signed' | translate }}</span>
                         }
                       </div>
                     }
                   </div>
                   <div class="card-footer text-muted small bg-transparent">
-                    Created: {{ task.createdAt | date:'medium' }}
+                    {{ 'equipmentTimeline.created' | translate }}: {{ task.createdAt | date:'medium' }}
                   </div>
                 </div>
               </div>

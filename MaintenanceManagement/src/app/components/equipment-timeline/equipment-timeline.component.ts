@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { EquipmentService } from '../../services/equipment.service';
 import { TaskOrderService } from '../../services/task-order.service';
 import { Equipment, TaskOrder, TaskStatus, TaskPriority, MaintenanceType, EquipmentStatus } from '../../models';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translate.service';
 
 @Component({
   selector: 'app-equipment-timeline',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './equipment-timeline.component.html',
   styleUrls: ['./equipment-timeline.component.css']
 })
@@ -52,7 +54,8 @@ export class EquipmentTimelineComponent implements OnInit {
 
   constructor(
     private equipmentService: EquipmentService,
-    private taskService: TaskOrderService
+    private taskService: TaskOrderService,
+    public translation: TranslationService
   ) {}
 
   ngOnInit() {

@@ -783,25 +783,88 @@
   },
   "performance": {
     "title": "Technician Performance Analytics",
-    "subtitle": "KPIs, scores, and performance insights",
+    "subtitle": "KPIs, scores, and technician performance insights",
     "recalculateAll": "Recalculate All",
+    "recalculating": "Recalculating...",
     "kpi": {
       "avgRepairTime": "Avg Repair Time",
       "firstTimeFixRate": "First-Time Fix Rate",
       "totalCompleted": "Total Tasks Completed",
       "avgRating": "Avg Customer Rating",
+      "onTimeRate": "On-Time Completion Rate",
+      "topPerformer": "Top Performer",
+      "min": "min",
+      "acrossTechnicians": "across {{count}} technicians"
+    },
+    "tabs": {
+      "all": "All Technicians",
+      "top": "Top Performers"
+    },
+    "card": {
+      "tasksCompleted": "tasks completed",
+      "successRate": "First-Time Fix Rate",
       "onTimeRate": "On-Time Rate",
-      "topPerformer": "Top Performer"
-    }
+      "avgRepairTime": "Avg Repair Time",
+      "customerRating": "Customer Rating",
+      "completed": "Completed",
+      "delayed": "Delayed",
+      "successRateLabel": "Success Rate",
+      "tasks": "tasks"
+    },
+    "noData": "No performance data yet. Click \"Recalculate All\" to generate scores.",
+    "noDataYet": "No data yet.",
+    "lastUpdated": "Last updated"
   },
   "equipmentTimeline": {
-    "title": "Equipment Maintenance Timeline",
+    "title": "Maintenance Timeline",
     "subtitle": "Complete history of maintenance activities per equipment",
+    "equipmentPanel": "Equipment",
     "searchPlaceholder": "Search equipment...",
+    "loading": "Loading...",
     "noEquipment": "No equipment found.",
-    "selectEquipment": "Select an equipment to view its maintenance timeline.",
-    "loading": "Loading timeline...",
-    "noHistory": "No maintenance history found for this equipment."
+    "selectEquipment": "Select an equipment from the list to view its maintenance timeline.",
+    "loadingTimeline": "Loading timeline...",
+    "noHistory": "No maintenance history found for this equipment.",
+    "stats": {
+      "total": "Total",
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "pending": "Pending"
+    },
+    "lastMaintenance": "Last Maintenance",
+    "nextDue": "Next Due",
+    "scheduled": "Scheduled",
+    "completedDate": "Completed",
+    "due": "Due",
+    "created": "Created",
+    "gpsValidated": "GPS Validated",
+    "photoAttached": "Photo Attached",
+    "signed": "Signed",
+    "statuses": {
+      "pending": "Pending",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "onHold": "On Hold"
+    },
+    "priorities": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "maintenanceTypes": {
+      "preventive": "Preventive",
+      "corrective": "Corrective",
+      "inspection": "Inspection",
+      "emergency": "Emergency"
+    },
+    "equipmentStatuses": {
+      "operational": "Operational",
+      "underMaintenance": "Under Maintenance",
+      "outOfService": "Out of Service",
+      "decommissioned": "Decommissioned"
+    }
   },
   "mobileWorkflow": {
     "title": "Technician Mobile Workflow",
