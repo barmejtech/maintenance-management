@@ -146,7 +146,7 @@ export class TasksComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm(this.translation.translate('tasks.title') + '?')) return;
+    if (!confirm(this.translation.translate('tasks.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
   }
 

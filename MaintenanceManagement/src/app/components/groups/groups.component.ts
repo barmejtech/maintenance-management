@@ -61,7 +61,7 @@ export class GroupsComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm(this.translation.translate('groups.title') + '?')) return;
+    if (!confirm(this.translation.translate('groups.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
   }
 }

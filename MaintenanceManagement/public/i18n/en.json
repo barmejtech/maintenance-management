@@ -214,6 +214,7 @@
     "cancel": "Cancel",
     "update": "Update",
     "create": "Create",
+    "deleteConfirm": "Delete this work order?",
     "gpsCapturing": "Capturing GPS location…",
     "gpsSuccess": "Technician location updated.",
     "gpsDenied": "Location access denied.",
@@ -253,7 +254,8 @@
     "descriptionPlaceholder": "Description",
     "cancel": "Cancel",
     "update": "Update",
-    "create": "Create"
+    "create": "Create",
+    "deleteConfirm": "Delete this group?"
   },
   "invoices": {
     "title": "Invoices",
@@ -291,8 +293,8 @@
     "cancel": "Cancel",
     "update": "Update",
     "create": "Create",
+    "deleteConfirm": "Delete this invoice?",
     "statuses": {
-      "draft": "Draft",
       "sent": "Sent",
       "paid": "Paid",
       "overdue": "Overdue",
@@ -328,7 +330,8 @@
     },
     "cancel": "Cancel",
     "update": "Update",
-    "create": "Create"
+    "create": "Create",
+    "deleteConfirm": "Delete this report?"
   },
   "dashboard": {
     "title": "Dashboard",

@@ -214,6 +214,7 @@
     "cancel": "إلغاء",
     "update": "تحديث",
     "create": "إنشاء",
+    "deleteConfirm": "هل تريد حذف أمر العمل هذا؟",
     "gpsCapturing": "جارٍ التقاط موقع GPS…",
     "gpsSuccess": "تم تحديث موقع الفني.",
     "gpsDenied": "تم رفض الوصول إلى الموقع.",
@@ -253,7 +254,8 @@
     "descriptionPlaceholder": "الوصف",
     "cancel": "إلغاء",
     "update": "تحديث",
-    "create": "إنشاء"
+    "create": "إنشاء",
+    "deleteConfirm": "هل تريد حذف هذه المجموعة؟"
   },
   "invoices": {
     "title": "الفواتير",
@@ -291,6 +293,7 @@
     "cancel": "إلغاء",
     "update": "تحديث",
     "create": "إنشاء",
+    "deleteConfirm": "هل تريد حذف هذه الفاتورة؟",
     "statuses": {
       "draft": "مسودة",
       "sent": "مُرسلة",
@@ -328,7 +331,8 @@
     },
     "cancel": "إلغاء",
     "update": "تحديث",
-    "create": "إنشاء"
+    "create": "إنشاء",
+    "deleteConfirm": "هل تريد حذف هذا التقرير؟"
   },
   "dashboard": {
     "title": "لوحة التحكم",

@@ -95,7 +95,7 @@ export class InvoicesComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm(this.translation.translate('invoices.title') + '?')) return;
+    if (!confirm(this.translation.translate('invoices.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
   }
 

@@ -90,7 +90,7 @@ export class ReportsComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm(this.translation.translate('reports.title') + '?')) return;
+    if (!confirm(this.translation.translate('reports.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
   }
 }
