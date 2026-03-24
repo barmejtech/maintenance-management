@@ -1,46 +1,49 @@
 <div class="auth-container">
+  <button class="btn-lang-toggle" (click)="translation.toggleLanguage()" title="Switch Language">
+    <i class="bi bi-globe2"></i> {{ 'lang.toggle' | translate }}
+  </button>
   <div class="auth-card">
     <div class="auth-header">
       <div class="auth-logo">🔧</div>
       <h1>MaintenancePro</h1>
-      <h2>Create your account</h2>
+      <h2>{{ 'register.title' | translate }}</h2>
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-row">
         <div class="form-group">
-          <label>First Name</label>
-          <input type="text" formControlName="firstName" placeholder="First name" />
+          <label>{{ 'register.firstName' | translate }}</label>
+          <input type="text" formControlName="firstName" [placeholder]="'register.firstNamePlaceholder' | translate" />
         </div>
         <div class="form-group">
-          <label>Last Name</label>
-          <input type="text" formControlName="lastName" placeholder="Last name" />
+          <label>{{ 'register.lastName' | translate }}</label>
+          <input type="text" formControlName="lastName" [placeholder]="'register.lastNamePlaceholder' | translate" />
         </div>
       </div>
       <div class="form-group">
-        <label>Email address</label>
-        <input type="email" formControlName="email" placeholder="you@example.com" />
+        <label>{{ 'register.emailLabel' | translate }}</label>
+        <input type="email" formControlName="email" [placeholder]="'register.emailPlaceholder' | translate" />
       </div>
       <div class="form-group">
-        <label>Password</label>
-        <input type="password" formControlName="password" placeholder="Min 6 characters" />
+        <label>{{ 'register.passwordLabel' | translate }}</label>
+        <input type="password" formControlName="password" [placeholder]="'register.passwordPlaceholder' | translate" />
       </div>
       <div class="form-group">
-        <label>Confirm Password</label>
-        <input type="password" formControlName="confirmPassword" placeholder="Repeat password" />
+        <label>{{ 'register.confirmPasswordLabel' | translate }}</label>
+        <input type="password" formControlName="confirmPassword" [placeholder]="'register.confirmPasswordPlaceholder' | translate" />
         @if (form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched) {
-          <span class="error">Passwords do not match</span>
+          <span class="error">{{ 'register.passwordMismatch' | translate }}</span>
         }
       </div>
       @if (errorMessage()) {
         <div class="alert-error">{{ errorMessage() }}</div>
       }
       <button type="submit" [disabled]="form.invalid || isLoading()" class="btn-primary">
-        {{ isLoading() ? 'Creating account...' : 'Create Account' }}
+        {{ isLoading() ? ('register.creating' | translate) : ('register.submit' | translate) }}
       </button>
     </form>
     <p class="auth-footer">
-      Already have an account? <a routerLink="/login">Sign In</a>
+      {{ 'register.haveAccount' | translate }} <a routerLink="/login">{{ 'register.signIn' | translate }}</a>
     </p>
   </div>
-  <a routerLink="/home" class="auth-home-link">← Back to Home</a>
+  <a routerLink="/home" class="auth-home-link">{{ 'register.backToHome' | translate }}</a>
 </div>

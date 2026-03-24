@@ -3,6 +3,8 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Va
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { TranslationService } from '../../services/translate.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const password = control.get('password');
@@ -14,7 +16,7 @@ const passwordMatchValidator: ValidatorFn = (control: AbstractControl): Validati
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslatePipe],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -23,7 +25,12 @@ export class RegisterComponent {
   errorMessage = signal('');
   form: ReturnType<FormBuilder['group']>;
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router,
+    public translation: TranslationService
+  ) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -48,7 +55,7 @@ export class RegisterComponent {
     }).subscribe({
       next: () => this.router.navigate(['/dashboard']),
       error: (err) => {
-        this.errorMessage.set(err.error?.message ?? 'Registration failed.');
+        this.errorMessage.set(err.error?.message ?? this.translation.translate('register.failed'));
         this.isLoading.set(false);
       }
     });

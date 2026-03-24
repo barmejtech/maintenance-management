@@ -1,19 +1,19 @@
 <div class="container-fluid py-3">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0 fw-bold"><i class="bi bi-person-gear text-primary me-2"></i>Technicians</h4>
+    <h4 class="mb-0 fw-bold"><i class="bi bi-person-gear text-primary me-2"></i>{{ 'technicians.title' | translate }}</h4>
     <div class="d-flex gap-2">
       <button class="btn btn-primary btn-sm" (click)="openAdd()">
-        <i class="bi bi-person-plus-fill me-1"></i>Add Technician
+        <i class="bi bi-person-plus-fill me-1"></i>{{ 'technicians.addButton' | translate }}
       </button>
       <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left me-1"></i>Dashboard
+        <i class="bi bi-arrow-left me-1"></i>{{ 'technicians.backToDashboard' | translate }}
       </a>
     </div>
   </div>
 
   @if (isLoading()) {
     <div class="text-center text-muted py-4">
-      <span class="spinner-border spinner-border-sm me-2"></span>Loading technicians...
+      <span class="spinner-border spinner-border-sm me-2"></span>{{ 'technicians.loading' | translate }}
     </div>
   } @else {
     <div class="row g-3">
@@ -40,10 +40,10 @@
               }
             </div>
             <div class="card-footer bg-transparent d-flex justify-content-end gap-2 py-2">
-              <button class="btn btn-sm btn-outline-primary" (click)="openEdit(tech)" title="Edit">
+              <button class="btn btn-sm btn-outline-primary" (click)="openEdit(tech)" [title]="'buttons.edit' | translate">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button class="btn btn-sm btn-outline-danger" (click)="delete(tech.id)" title="Delete">
+              <button class="btn btn-sm btn-outline-danger" (click)="delete(tech.id)" [title]="'buttons.delete' | translate">
                 <i class="bi bi-trash"></i>
               </button>
             </div>
@@ -54,7 +54,7 @@
         <div class="col-12">
           <div class="card shadow-sm">
             <div class="card-body text-center text-muted py-5">
-              <i class="bi bi-person-x fs-3 d-block mb-2"></i>No technicians found.
+              <i class="bi bi-person-x fs-3 d-block mb-2"></i>{{ 'technicians.empty' | translate }}
             </div>
           </div>
         </div>
@@ -69,55 +69,55 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">
-            <i class="bi bi-person-gear me-2"></i>{{ isEditing() ? 'Edit Technician' : 'Add Technician' }}
+            <i class="bi bi-person-gear me-2"></i>{{ isEditing() ? ('technicians.editTitle' | translate) : ('technicians.addTitle' | translate) }}
           </h5>
           <button type="button" class="btn-close" (click)="closeModal()"></button>
         </div>
         <div class="modal-body">
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label fw-semibold">First Name *</label>
-              <input class="form-control" [(ngModel)]="form.firstName" placeholder="First name" />
+              <label class="form-label fw-semibold">{{ 'technicians.firstName' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.firstName" [placeholder]="'technicians.firstNamePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Last Name *</label>
-              <input class="form-control" [(ngModel)]="form.lastName" placeholder="Last name" />
+              <label class="form-label fw-semibold">{{ 'technicians.lastName' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.lastName" [placeholder]="'technicians.lastNamePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Email *</label>
-              <input type="email" class="form-control" [(ngModel)]="form.email" placeholder="Email" [disabled]="isEditing()" />
+              <label class="form-label fw-semibold">{{ 'technicians.email' | translate }}</label>
+              <input type="email" class="form-control" [(ngModel)]="form.email" [placeholder]="'technicians.emailPlaceholder' | translate" [disabled]="isEditing()" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Phone</label>
-              <input class="form-control" [(ngModel)]="form.phone" placeholder="Phone" />
+              <label class="form-label fw-semibold">{{ 'technicians.phone' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.phone" [placeholder]="'technicians.phonePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Specialization</label>
-              <input class="form-control" [(ngModel)]="form.specialization" placeholder="Specialization" />
+              <label class="form-label fw-semibold">{{ 'technicians.specialization' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.specialization" [placeholder]="'technicians.specializationPlaceholder' | translate" />
             </div>
             @if (isEditing()) {
               <div class="col-md-6">
-                <label class="form-label fw-semibold">Status</label>
+                <label class="form-label fw-semibold">{{ 'technicians.status' | translate }}</label>
                 <select class="form-select" [(ngModel)]="form.status">
-                  <option [value]="TechnicianStatus.Available">Available</option>
-                  <option [value]="TechnicianStatus.Busy">Busy</option>
-                  <option [value]="TechnicianStatus.OnLeave">On Leave</option>
-                  <option [value]="TechnicianStatus.Inactive">Inactive</option>
+                  <option [value]="TechnicianStatus.Available">{{ 'technicians.statuses.available' | translate }}</option>
+                  <option [value]="TechnicianStatus.Busy">{{ 'technicians.statuses.busy' | translate }}</option>
+                  <option [value]="TechnicianStatus.OnLeave">{{ 'technicians.statuses.onLeave' | translate }}</option>
+                  <option [value]="TechnicianStatus.Inactive">{{ 'technicians.statuses.inactive' | translate }}</option>
                 </select>
               </div>
             } @else {
               <div class="col-md-6">
-                <label class="form-label fw-semibold">Password *</label>
-                <input type="password" class="form-control" [(ngModel)]="form.password" placeholder="Password" />
+                <label class="form-label fw-semibold">{{ 'technicians.password' | translate }}</label>
+                <input type="password" class="form-control" [(ngModel)]="form.password" [placeholder]="'technicians.passwordPlaceholder' | translate" />
               </div>
             }
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'technicians.cancel' | translate }}</button>
           <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.firstName || !form.lastName">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
-            {{ isEditing() ? 'Update' : 'Create' }}
+            {{ isEditing() ? ('technicians.update' | translate) : ('technicians.create' | translate) }}
           </button>
         </div>
       </div>

@@ -7,6 +7,8 @@ import { TechnicianService } from '../../services/technician.service';
 import { EquipmentService } from '../../services/equipment.service';
 import { GroupService } from '../../services/group.service';
 import { TaskOrder, TaskStatus, TaskPriority, MaintenanceType, Technician, Equipment, TechnicianGroup, CreateTaskOrderRequest } from '../../models';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translate.service';
 
 const GPS_TIMEOUT_MS = 10_000;
 const GPS_MAX_AGE_MS = 60_000;
@@ -14,7 +16,7 @@ const GPS_MAX_AGE_MS = 60_000;
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css']
 })
@@ -49,7 +51,8 @@ export class TasksComponent implements OnInit {
     private service: TaskOrderService,
     private techService: TechnicianService,
     private eqService: EquipmentService,
-    private groupService: GroupService
+    private groupService: GroupService,
+    private translation: TranslationService
   ) {}
 
   ngOnInit() {
@@ -143,7 +146,7 @@ export class TasksComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm('Delete this work order?')) return;
+    if (!confirm(this.translation.translate('tasks.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
   }
 
@@ -156,8 +159,14 @@ export class TasksComponent implements OnInit {
     return +this.form.status === TaskStatus.InProgress && !!this.form.technicianId;
   }
 
-  getPriorityLabel(p: TaskPriority): string { return ['Low', 'Medium', 'High', 'Critical'][p]; }
+  getPriorityLabel(p: TaskPriority): string {
+    const keys = ['tasks.priorities.low', 'tasks.priorities.medium', 'tasks.priorities.high', 'tasks.priorities.critical'];
+    return this.translation.translate(keys[p] ?? keys[0]);
+  }
   getPriorityClass(p: TaskPriority): string { return ['bg-secondary', 'bg-info text-dark', 'bg-warning text-dark', 'bg-danger'][p]; }
-  getStatusLabel(s: TaskStatus): string { return ['Pending', 'In Progress', 'Completed', 'Cancelled', 'On Hold'][s]; }
+  getStatusLabel(s: TaskStatus): string {
+    const keys = ['tasks.statuses.pending', 'tasks.statuses.inProgress', 'tasks.statuses.completed', 'tasks.statuses.cancelled', 'tasks.statuses.onHold'];
+    return this.translation.translate(keys[s] ?? keys[0]);
+  }
   getStatusClass(s: TaskStatus): string { return ['bg-warning text-dark', 'bg-info text-dark', 'bg-success', 'bg-danger', 'bg-secondary'][s]; }
 }

@@ -5,11 +5,13 @@ import { RouterLink } from '@angular/router';
 import { ReportService } from '../../services/report.service';
 import { TaskOrderService } from '../../services/task-order.service';
 import { MaintenanceReport, CreateReportRequest, TaskOrder } from '../../models';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translate.service';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.css']
 })
@@ -32,7 +34,11 @@ export class ReportsComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: ReportService, private taskService: TaskOrderService) {}
+  constructor(
+    private service: ReportService,
+    private taskService: TaskOrderService,
+    private translation: TranslationService
+  ) {}
 
   ngOnInit() {
     this.load();
@@ -84,7 +90,7 @@ export class ReportsComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm('Delete this report?')) return;
+    if (!confirm(this.translation.translate('reports.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
   }
 }

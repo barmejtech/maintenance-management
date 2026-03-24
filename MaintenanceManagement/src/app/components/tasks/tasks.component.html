@@ -1,30 +1,30 @@
 <div class="container-fluid py-3">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0 fw-bold"><i class="bi bi-clipboard-check-fill text-primary me-2"></i>Work Orders</h4>
+    <h4 class="mb-0 fw-bold"><i class="bi bi-clipboard-check-fill text-primary me-2"></i>{{ 'tasks.title' | translate }}</h4>
     <div class="d-flex gap-2">
       <button class="btn btn-primary btn-sm" (click)="openAdd()">
-        <i class="bi bi-plus-circle me-1"></i>New Work Order
+        <i class="bi bi-plus-circle me-1"></i>{{ 'tasks.newButton' | translate }}
       </button>
       <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left me-1"></i>Dashboard
+        <i class="bi bi-arrow-left me-1"></i>{{ 'tasks.backToDashboard' | translate }}
       </a>
     </div>
   </div>
 
   <div class="d-flex gap-2 mb-3 flex-wrap">
     <button class="btn btn-sm" [class.btn-primary]="filterStatus() === null" [class.btn-outline-secondary]="filterStatus() !== null"
-            (click)="filterStatus.set(null)">All</button>
+            (click)="filterStatus.set(null)">{{ 'tasks.filterAll' | translate }}</button>
     <button class="btn btn-sm" [class.btn-warning]="filterStatus() === 0" [class.btn-outline-secondary]="filterStatus() !== 0"
-            (click)="filterStatus.set(0)">Pending</button>
+            (click)="filterStatus.set(0)">{{ 'tasks.filterPending' | translate }}</button>
     <button class="btn btn-sm" [class.btn-info]="filterStatus() === 1" [class.btn-outline-secondary]="filterStatus() !== 1"
-            (click)="filterStatus.set(1)">In Progress</button>
+            (click)="filterStatus.set(1)">{{ 'tasks.filterInProgress' | translate }}</button>
     <button class="btn btn-sm" [class.btn-success]="filterStatus() === 2" [class.btn-outline-secondary]="filterStatus() !== 2"
-            (click)="filterStatus.set(2)">Completed</button>
+            (click)="filterStatus.set(2)">{{ 'tasks.filterCompleted' | translate }}</button>
   </div>
 
   @if (isLoading()) {
     <div class="text-center text-muted py-4">
-      <span class="spinner-border spinner-border-sm me-2"></span>Loading work orders...
+      <span class="spinner-border spinner-border-sm me-2"></span>{{ 'tasks.loading' | translate }}
     </div>
   } @else {
     <div class="d-flex flex-column gap-3">
@@ -54,7 +54,7 @@
                 <span><i class="bi bi-tools me-1"></i>{{ task.equipmentName }}</span>
               }
               @if (task.dueDate) {
-                <span><i class="bi bi-calendar-event me-1"></i>Due: {{ task.dueDate | date:'mediumDate' }}</span>
+                <span><i class="bi bi-calendar-event me-1"></i>{{ 'tasks.due' | translate }} {{ task.dueDate | date:'mediumDate' }}</span>
               }
               @if (task.status === TaskStatus.InProgress && task.technicianId) {
                 @let tech = getTechnicianLocation(task.technicianId);
@@ -68,10 +68,10 @@
             </div>
           </div>
           <div class="card-footer bg-transparent d-flex justify-content-end gap-2 py-2">
-            <button class="btn btn-sm btn-outline-primary" (click)="openEdit(task)" title="Edit">
+            <button class="btn btn-sm btn-outline-primary" (click)="openEdit(task)" [title]="'buttons.edit' | translate">
               <i class="bi bi-pencil"></i>
             </button>
-            <button class="btn btn-sm btn-outline-danger" (click)="delete(task.id)" title="Delete">
+            <button class="btn btn-sm btn-outline-danger" (click)="delete(task.id)" [title]="'buttons.delete' | translate">
               <i class="bi bi-trash"></i>
             </button>
           </div>
@@ -80,7 +80,7 @@
       @empty {
         <div class="card shadow-sm">
           <div class="card-body text-center text-muted py-5">
-            <i class="bi bi-clipboard-x fs-3 d-block mb-2"></i>No work orders found.
+            <i class="bi bi-clipboard-x fs-3 d-block mb-2"></i>{{ 'tasks.empty' | translate }}
           </div>
         </div>
       }
@@ -94,109 +94,109 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">
-            <i class="bi bi-clipboard-plus me-2"></i>{{ isEditing() ? 'Edit Work Order' : 'New Work Order' }}
+            <i class="bi bi-clipboard-plus me-2"></i>{{ isEditing() ? ('tasks.editTitle' | translate) : ('tasks.newTitle' | translate) }}
           </h5>
           <button type="button" class="btn-close" (click)="closeModal()"></button>
         </div>
         <div class="modal-body">
           <div class="row g-3">
             <div class="col-12">
-              <label class="form-label fw-semibold">Title *</label>
-              <input class="form-control" [(ngModel)]="form.title" placeholder="Work order title" />
+              <label class="form-label fw-semibold">{{ 'tasks.titleLabel' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.title" [placeholder]="'tasks.titlePlaceholder' | translate" />
             </div>
             <div class="col-12">
-              <label class="form-label fw-semibold">Description</label>
-              <textarea class="form-control" rows="2" [(ngModel)]="form.description" placeholder="Description"></textarea>
+              <label class="form-label fw-semibold">{{ 'tasks.description' | translate }}</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="form.description" [placeholder]="'tasks.descriptionPlaceholder' | translate"></textarea>
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">Status</label>
+              <label class="form-label fw-semibold">{{ 'tasks.status' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.status">
-                <option [value]="TaskStatus.Pending">Pending</option>
-                <option [value]="TaskStatus.InProgress">In Progress</option>
-                <option [value]="TaskStatus.Completed">Completed</option>
-                <option [value]="TaskStatus.Cancelled">Cancelled</option>
-                <option [value]="TaskStatus.OnHold">On Hold</option>
+                <option [value]="TaskStatus.Pending">{{ 'tasks.statuses.pending' | translate }}</option>
+                <option [value]="TaskStatus.InProgress">{{ 'tasks.statuses.inProgress' | translate }}</option>
+                <option [value]="TaskStatus.Completed">{{ 'tasks.statuses.completed' | translate }}</option>
+                <option [value]="TaskStatus.Cancelled">{{ 'tasks.statuses.cancelled' | translate }}</option>
+                <option [value]="TaskStatus.OnHold">{{ 'tasks.statuses.onHold' | translate }}</option>
               </select>
               @if (isInProgressWithTechnician()) {
-                <div class="form-text text-info"><i class="bi bi-geo-alt me-1"></i>GPS will be captured on save.</div>
+                <div class="form-text text-info"><i class="bi bi-geo-alt me-1"></i>{{ 'tasks.gpsCaptureNote' | translate }}</div>
               }
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">Priority</label>
+              <label class="form-label fw-semibold">{{ 'tasks.priority' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.priority">
-                <option [value]="TaskPriority.Low">Low</option>
-                <option [value]="TaskPriority.Medium">Medium</option>
-                <option [value]="TaskPriority.High">High</option>
-                <option [value]="TaskPriority.Critical">Critical</option>
+                <option [value]="TaskPriority.Low">{{ 'tasks.priorities.low' | translate }}</option>
+                <option [value]="TaskPriority.Medium">{{ 'tasks.priorities.medium' | translate }}</option>
+                <option [value]="TaskPriority.High">{{ 'tasks.priorities.high' | translate }}</option>
+                <option [value]="TaskPriority.Critical">{{ 'tasks.priorities.critical' | translate }}</option>
               </select>
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">Maintenance Type</label>
+              <label class="form-label fw-semibold">{{ 'tasks.maintenanceType' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.maintenanceType">
-                <option [value]="MaintenanceType.Preventive">Preventive</option>
-                <option [value]="MaintenanceType.Corrective">Corrective</option>
-                <option [value]="MaintenanceType.Inspection">Inspection</option>
-                <option [value]="MaintenanceType.Emergency">Emergency</option>
+                <option [value]="MaintenanceType.Preventive">{{ 'tasks.maintenanceTypes.preventive' | translate }}</option>
+                <option [value]="MaintenanceType.Corrective">{{ 'tasks.maintenanceTypes.corrective' | translate }}</option>
+                <option [value]="MaintenanceType.Inspection">{{ 'tasks.maintenanceTypes.inspection' | translate }}</option>
+                <option [value]="MaintenanceType.Emergency">{{ 'tasks.maintenanceTypes.emergency' | translate }}</option>
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Technician</label>
+              <label class="form-label fw-semibold">{{ 'tasks.technician' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.technicianId">
-                <option value="">— None —</option>
+                <option value="">{{ 'tasks.noneOption' | translate }}</option>
                 @for (t of technicians(); track t.id) {
                   <option [value]="t.id">{{ t.fullName }}</option>
                 }
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Group</label>
+              <label class="form-label fw-semibold">{{ 'tasks.group' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.groupId">
-                <option value="">— None —</option>
+                <option value="">{{ 'tasks.noneOption' | translate }}</option>
                 @for (g of groups(); track g.id) {
                   <option [value]="g.id">{{ g.name }}</option>
                 }
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Equipment</label>
+              <label class="form-label fw-semibold">{{ 'tasks.equipment' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.equipmentId">
-                <option value="">— None —</option>
+                <option value="">{{ 'tasks.noneOption' | translate }}</option>
                 @for (e of equipmentList(); track e.id) {
                   <option [value]="e.id">{{ e.name }}</option>
                 }
               </select>
             </div>
             <div class="col-md-3">
-              <label class="form-label fw-semibold">Scheduled Date</label>
+              <label class="form-label fw-semibold">{{ 'tasks.scheduledDate' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.scheduledDate" />
             </div>
             <div class="col-md-3">
-              <label class="form-label fw-semibold">Due Date</label>
+              <label class="form-label fw-semibold">{{ 'tasks.dueDate' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.dueDate" />
             </div>
             <div class="col-12">
-              <label class="form-label fw-semibold">Notes</label>
-              <textarea class="form-control" rows="2" [(ngModel)]="form.notes" placeholder="Notes"></textarea>
+              <label class="form-label fw-semibold">{{ 'tasks.notes' | translate }}</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="form.notes" [placeholder]="'tasks.notesPlaceholder' | translate"></textarea>
             </div>
           </div>
         </div>
         <div class="modal-footer">
           @if (gpsStatus() === 'capturing') {
-            <span class="text-muted small me-auto"><span class="spinner-border spinner-border-sm me-1"></span>Capturing GPS location…</span>
+            <span class="text-muted small me-auto"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'tasks.gpsCapturing' | translate }}</span>
           }
           @if (gpsStatus() === 'success') {
-            <span class="text-success small me-auto"><i class="bi bi-geo-alt-fill me-1"></i>Technician location updated.</span>
+            <span class="text-success small me-auto"><i class="bi bi-geo-alt-fill me-1"></i>{{ 'tasks.gpsSuccess' | translate }}</span>
           }
           @if (gpsStatus() === 'denied') {
-            <span class="text-warning small me-auto"><i class="bi bi-exclamation-triangle me-1"></i>Location access denied.</span>
+            <span class="text-warning small me-auto"><i class="bi bi-exclamation-triangle me-1"></i>{{ 'tasks.gpsDenied' | translate }}</span>
           }
           @if (gpsStatus() === 'unavailable') {
-            <span class="text-secondary small me-auto"><i class="bi bi-geo-alt me-1"></i>GPS not available.</span>
+            <span class="text-secondary small me-auto"><i class="bi bi-geo-alt me-1"></i>{{ 'tasks.gpsUnavailable' | translate }}</span>
           }
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'tasks.cancel' | translate }}</button>
           <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.title">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
-            {{ isEditing() ? 'Update' : 'Create' }}
+            {{ isEditing() ? ('tasks.update' | translate) : ('tasks.create' | translate) }}
           </button>
         </div>
       </div>
