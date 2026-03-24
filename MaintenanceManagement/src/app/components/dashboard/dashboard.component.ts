@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, AfterViewInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -43,6 +43,24 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   // Technician chart refs
   @ViewChild('myTaskChart') myTaskChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('myPriorityChart') myPriorityChartRef!: ElementRef<HTMLCanvasElement>;
+
+  // Sidebar visibility: open by default on desktop, closed on mobile
+  sidebarOpen = signal(typeof window !== 'undefined' ? window.innerWidth > 768 : true);
+
+  toggleSidebar(): void {
+    this.sidebarOpen.update(v => !v);
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    const isDesktop = window.innerWidth > 768;
+    // Auto-open on desktop, auto-close on mobile when crossing the breakpoint
+    if (isDesktop && !this.sidebarOpen()) {
+      this.sidebarOpen.set(true);
+    } else if (!isDesktop && this.sidebarOpen()) {
+      this.sidebarOpen.set(false);
+    }
+  }
 
   // Period filter: 'today' | '7d' | '30d' | 'all'
   selectedPeriod = signal<'today' | '7d' | '30d' | 'all'>('all');

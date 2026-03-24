@@ -1,6 +1,9 @@
-<div class="dashboard" [ngClass]="{'role-admin': isAdmin(), 'role-manager': isManagerOrAdmin() && !isAdmin(), 'role-tech': isTechnicianRole()}">
+<div class="dashboard" [ngClass]="{'role-admin': isAdmin(), 'role-manager': isManagerOrAdmin() && !isAdmin(), 'role-tech': isTechnicianRole(), 'sidebar-collapsed': !sidebarOpen()}">
   <header class="dash-header">
     <div class="dash-title">
+      <button class="btn-hamburger" (click)="toggleSidebar()" [title]="'dashboard.header.toggleSidebar' | translate" [attr.aria-expanded]="sidebarOpen()" aria-label="Toggle navigation">
+        <i class="bi bi-list"></i>
+      </button>
       <span class="logo">🔧</span>
       <h1>{{ 'dashboard.header.title' | translate }}</h1>
     </div>
@@ -19,6 +22,8 @@
       <button (click)="auth.logout()" class="btn-logout">{{ 'dashboard.header.signOut' | translate }}</button>
     </div>
   </header>
+
+  <div class="sidebar-overlay" [class.active]="sidebarOpen()" (click)="toggleSidebar()"></div>
 
   <nav class="sidebar">
     <a routerLink="/home" routerLinkActive="active" class="nav-item">

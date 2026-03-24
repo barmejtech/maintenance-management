@@ -373,7 +373,8 @@
     "welcome": "مرحبًا، {{name}}!",
     "header": {
       "title": "إدارة الصيانة",
-      "signOut": "تسجيل الخروج"
+      "signOut": "تسجيل الخروج",
+      "toggleSidebar": "تبديل الشريط الجانبي"
     },
     "sidebar": {
       "home": "الرئيسية",
