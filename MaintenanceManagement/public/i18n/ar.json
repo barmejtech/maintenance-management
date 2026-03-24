@@ -533,7 +533,8 @@
     "submit": "إرسال",
     "cancel": "إلغاء",
     "edit": "تعديل",
-    "delete": "حذف"
+    "delete": "حذف",
+    "generatePdf": "إنشاء PDF"
   },
   "messages": {
     "success": "تمت العملية بنجاح",

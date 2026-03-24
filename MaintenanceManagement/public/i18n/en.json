@@ -532,7 +532,8 @@
     "submit": "Submit",
     "cancel": "Cancel",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "generatePdf": "Generate PDF"
   },
   "messages": {
     "success": "Operation completed successfully",
