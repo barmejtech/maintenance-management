@@ -45,6 +45,12 @@ public class TaskOrderService : ITaskOrderService
         return tasks.Where(t => !t.IsDeleted).Select(MapToDto);
     }
 
+    public async Task<IEnumerable<TaskOrderDto>> GetByEquipmentIdAsync(Guid equipmentId)
+    {
+        var tasks = await _repo.GetByEquipmentIdAsync(equipmentId);
+        return tasks.Where(t => !t.IsDeleted).Select(MapToDto);
+    }
+
     public async Task<IEnumerable<TaskOrderDto>> GetByStatusAsync(domain.Enums.TaskStatus status)
     {
         var tasks = await _repo.GetByStatusAsync(status);

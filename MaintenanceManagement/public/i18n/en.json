@@ -269,7 +269,10 @@
       "dueDate": "Due Date",
       "scheduledDate": "Scheduled Date",
       "createdAt": "Created At"
-    }
+    },
+    "smartDispatch": "AI Smart Dispatch",
+    "smartDispatchResult": "Suggested Technician",
+    "smartDispatchScore": "Score"
   },
   "groups": {
     "title": "Technician Groups",
@@ -391,7 +394,10 @@
       "admin": "Admin",
       "manageUsers": "Manage Users",
       "spareParts": "Spare Parts",
-      "maintenanceSchedules": "Maintenance Schedules"
+      "maintenanceSchedules": "Maintenance Schedules",
+      "performance": "Performance Analytics",
+      "equipmentTimeline": "Equipment Timeline",
+      "mobileWorkflow": "Mobile Workflow"
     },
     "hero": {
       "fullAccess": "Full Access",
@@ -774,5 +780,47 @@
       "update": "Update",
       "saving": "Saving..."
     }
+  },
+  "performance": {
+    "title": "Technician Performance Analytics",
+    "subtitle": "KPIs, scores, and performance insights",
+    "recalculateAll": "Recalculate All",
+    "kpi": {
+      "avgRepairTime": "Avg Repair Time",
+      "firstTimeFixRate": "First-Time Fix Rate",
+      "totalCompleted": "Total Tasks Completed",
+      "avgRating": "Avg Customer Rating",
+      "onTimeRate": "On-Time Rate",
+      "topPerformer": "Top Performer"
+    }
+  },
+  "equipmentTimeline": {
+    "title": "Equipment Maintenance Timeline",
+    "subtitle": "Complete history of maintenance activities per equipment",
+    "searchPlaceholder": "Search equipment...",
+    "noEquipment": "No equipment found.",
+    "selectEquipment": "Select an equipment to view its maintenance timeline.",
+    "loading": "Loading timeline...",
+    "noHistory": "No maintenance history found for this equipment."
+  },
+  "mobileWorkflow": {
+    "title": "Technician Mobile Workflow",
+    "subtitle": "GPS check-in · Photo upload · Digital signature · Offline reports · Voice notes",
+    "myTasks": "My Tasks",
+    "offlineReports": "Offline Reports",
+    "checkIn": "Check In Now",
+    "checkInSuccess": "Checked In",
+    "gettingGps": "Getting GPS...",
+    "photoUpload": "Photo Upload",
+    "voiceNotes": "Voice Notes",
+    "workNotes": "Work Notes",
+    "signature": "Customer Digital Signature",
+    "submitProof": "Submit Proof of Work",
+    "saveOffline": "Save Offline",
+    "syncAll": "Sync All Pending",
+    "synced": "Synced",
+    "pendingSync": "Pending Sync",
+    "noTasks": "No active tasks assigned to you.",
+    "noOffline": "No offline reports saved."
   }
 }

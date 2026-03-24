@@ -9,6 +9,7 @@ public interface ITaskOrderService
     Task<TaskOrderDto?> GetByIdAsync(Guid id);
     Task<IEnumerable<TaskOrderDto>> GetByTechnicianIdAsync(Guid technicianId);
     Task<IEnumerable<TaskOrderDto>> GetByGroupIdAsync(Guid groupId);
+    Task<IEnumerable<TaskOrderDto>> GetByEquipmentIdAsync(Guid equipmentId);
     Task<IEnumerable<TaskOrderDto>> GetByStatusAsync(domain.Enums.TaskStatus status);
     Task<IEnumerable<TaskOrderDto>> GetScheduledBetweenAsync(DateTime from, DateTime to);
     Task<TaskOrderDto> CreateAsync(CreateTaskOrderDto dto, string createdByUserId);

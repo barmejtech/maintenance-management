@@ -7,7 +7,8 @@ import { TechnicianService } from '../../services/technician.service';
 import { EquipmentService } from '../../services/equipment.service';
 import { GroupService } from '../../services/group.service';
 import { CsvExportService } from '../../services/csv-export.service';
-import { TaskOrder, TaskStatus, TaskPriority, MaintenanceType, Technician, Equipment, TechnicianGroup, CreateTaskOrderRequest } from '../../models';
+import { PerformanceService } from '../../services/performance.service';
+import { TaskOrder, TaskStatus, TaskPriority, MaintenanceType, Technician, Equipment, TechnicianGroup, CreateTaskOrderRequest, SmartDispatchResult } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 
@@ -35,6 +36,8 @@ export class TasksComponent implements OnInit {
   showModal = signal(false);
   isEditing = signal(false);
   isSaving = signal(false);
+  isDispatching = signal(false);
+  dispatchResult = signal<SmartDispatchResult | null>(null);
   gpsStatus = signal<'idle' | 'capturing' | 'success' | 'denied' | 'unavailable'>('idle');
   TaskStatus = TaskStatus;
   TaskPriority = TaskPriority;
@@ -62,7 +65,8 @@ export class TasksComponent implements OnInit {
     private eqService: EquipmentService,
     private groupService: GroupService,
     private translation: TranslationService,
-    private csvExport: CsvExportService
+    private csvExport: CsvExportService,
+    private performanceService: PerformanceService
   ) {}
 
   ngOnInit() {
@@ -84,6 +88,7 @@ export class TasksComponent implements OnInit {
     this.isEditing.set(false);
     this.editingId = '';
     this.gpsStatus.set('idle');
+    this.dispatchResult.set(null);
     this.form = { title: '', description: '', status: TaskStatus.Pending, priority: TaskPriority.Medium, maintenanceType: MaintenanceType.Preventive };
     this.showModal.set(true);
   }
@@ -92,6 +97,7 @@ export class TasksComponent implements OnInit {
     this.isEditing.set(true);
     this.editingId = task.id;
     this.gpsStatus.set('idle');
+    this.dispatchResult.set(null);
     this.form = {
       title: task.title, description: task.description, status: task.status,
       priority: task.priority, maintenanceType: task.maintenanceType,
@@ -106,6 +112,21 @@ export class TasksComponent implements OnInit {
   }
 
   closeModal() { this.showModal.set(false); }
+
+  /** Use AI Smart Dispatch to auto-assign the best available technician for the editing task. */
+  smartDispatch() {
+    if (!this.editingId) return;
+    this.isDispatching.set(true);
+    this.dispatchResult.set(null);
+    this.performanceService.getSmartDispatch(this.editingId).subscribe({
+      next: (result) => {
+        this.isDispatching.set(false);
+        this.dispatchResult.set(result);
+        this.form.technicianId = result.technicianId;
+      },
+      error: () => this.isDispatching.set(false)
+    });
+  }
 
   /** Capture browser GPS and push it to the assigned technician's location record. */
   private captureAndSendGps(technicianId: string): void {

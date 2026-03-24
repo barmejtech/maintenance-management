@@ -102,6 +102,16 @@ export const routes: Routes = [
     loadComponent: () => import('./components/maintenance-schedules/maintenance-schedules.component').then(m => m.MaintenanceSchedulesComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'equipment-timeline',
+    loadComponent: () => import('./components/equipment-timeline/equipment-timeline.component').then(m => m.EquipmentTimelineComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'mobile-workflow',
+    loadComponent: () => import('./components/mobile-workflow/mobile-workflow.component').then(m => m.MobileWorkflowComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/dashboard' }
 ];
 

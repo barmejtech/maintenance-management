@@ -13,6 +13,7 @@ export class TaskOrderService {
   getById(id: string): Observable<TaskOrder> { return this.http.get<TaskOrder>(`${this.base}/${id}`); }
   getByTechnician(id: string): Observable<TaskOrder[]> { return this.http.get<TaskOrder[]>(`${this.base}/technician/${id}`); }
   getByGroup(id: string): Observable<TaskOrder[]> { return this.http.get<TaskOrder[]>(`${this.base}/group/${id}`); }
+  getByEquipment(id: string): Observable<TaskOrder[]> { return this.http.get<TaskOrder[]>(`${this.base}/equipment/${id}`); }
   getCalendar(from: string, to: string): Observable<TaskOrder[]> {
     const params = new HttpParams().set('from', from).set('to', to);
     return this.http.get<TaskOrder[]>(`${this.base}/calendar`, { params });
@@ -20,4 +21,7 @@ export class TaskOrderService {
   create(dto: CreateTaskOrderRequest): Observable<TaskOrder> { return this.http.post<TaskOrder>(this.base, dto); }
   update(id: string, dto: CreateTaskOrderRequest): Observable<TaskOrder> { return this.http.put<TaskOrder>(`${this.base}/${id}`, dto); }
   delete(id: string): Observable<void> { return this.http.delete<void>(`${this.base}/${id}`); }
+  submitInterventionProof(id: string, dto: { arrivalLatitude?: number; arrivalLongitude?: number; proofPhotoUrl?: string; customerSignatureUrl?: string }): Observable<TaskOrder> {
+    return this.http.patch<TaskOrder>(`${this.base}/${id}/intervention-proof`, dto);
+  }
 }
