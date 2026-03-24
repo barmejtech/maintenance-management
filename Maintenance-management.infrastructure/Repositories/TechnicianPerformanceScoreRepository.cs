@@ -14,6 +14,12 @@ public class TechnicianPerformanceScoreRepository : Repository<TechnicianPerform
             .Include(s => s.Technician)
             .FirstOrDefaultAsync(s => s.TechnicianId == technicianId && !s.IsDeleted);
 
+    public override async Task<IEnumerable<TechnicianPerformanceScore>> GetAllAsync()
+        => await _dbSet
+            .Include(s => s.Technician)
+            .Where(s => !s.IsDeleted)
+            .ToListAsync();
+
     public async Task<IEnumerable<TechnicianPerformanceScore>> GetTopPerformersAsync(int count)
         => await _dbSet
             .Include(s => s.Technician)

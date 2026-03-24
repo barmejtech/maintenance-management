@@ -16,10 +16,12 @@ public class TechnicianPerformanceController : ControllerBase
         => _service = service;
 
     [HttpGet]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> GetAll()
         => Ok(await _service.GetAllAsync());
 
     [HttpGet("technician/{technicianId:guid}")]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> GetByTechnicianId(Guid technicianId)
     {
         var result = await _service.GetByTechnicianIdAsync(technicianId);
@@ -27,6 +29,7 @@ public class TechnicianPerformanceController : ControllerBase
     }
 
     [HttpGet("top")]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> GetTopPerformers([FromQuery] int count = 10)
         => Ok(await _service.GetTopPerformersAsync(count));
 
