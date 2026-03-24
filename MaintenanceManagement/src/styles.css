@@ -50,6 +50,12 @@
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.55);
 }
 
+/* Override Bootstrap's body defaults for dark mode */
+[data-theme="dark"] body {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
 [data-theme="dark"] .card {
   background: var(--color-surface);
   border-color: var(--color-border);
