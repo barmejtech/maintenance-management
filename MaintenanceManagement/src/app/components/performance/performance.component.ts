@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { PerformanceService } from '../../services/performance.service';
 import { TechnicianService } from '../../services/technician.service';
 import { TechnicianPerformanceScore, Technician } from '../../models';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translate.service';
 
 @Component({
   selector: 'app-performance',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './performance.component.html',
   styleUrls: ['./performance.component.css']
 })
@@ -57,7 +59,8 @@ export class PerformanceComponent implements OnInit {
 
   constructor(
     private performanceService: PerformanceService,
-    private technicianService: TechnicianService
+    private technicianService: TechnicianService,
+    public translation: TranslationService
   ) {}
 
   ngOnInit() {

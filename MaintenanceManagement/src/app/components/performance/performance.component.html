@@ -2,14 +2,14 @@
   <!-- Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h2 class="mb-1">📊 Technician Performance Analytics</h2>
-      <p class="text-muted mb-0">KPIs, scores, and technician performance insights</p>
+      <h2 class="mb-1">📊 {{ 'performance.title' | translate }}</h2>
+      <p class="text-muted mb-0">{{ 'performance.subtitle' | translate }}</p>
     </div>
     <button class="btn btn-primary" (click)="recalculateAll()" [disabled]="isRecalculatingAll()">
       @if (isRecalculatingAll()) {
-        <span class="spinner-border spinner-border-sm me-1"></span> Recalculating...
+        <span class="spinner-border spinner-border-sm me-1"></span> {{ 'performance.recalculating' | translate }}
       } @else {
-        🔄 Recalculate All
+        🔄 {{ 'performance.recalculateAll' | translate }}
       }
     </button>
   </div>
@@ -20,8 +20,8 @@
       <div class="card kpi-card border-0 shadow-sm h-100">
         <div class="card-body text-center">
           <div class="kpi-icon text-primary">⏱️</div>
-          <div class="kpi-value">{{ avgRepairTime() | number:'1.0-0' }} <small class="fs-6">min</small></div>
-          <div class="kpi-label text-muted">Avg Repair Time</div>
+          <div class="kpi-value">{{ avgRepairTime() | number:'1.0-0' }} <small class="fs-6">{{ 'performance.kpi.min' | translate }}</small></div>
+          <div class="kpi-label text-muted">{{ 'performance.kpi.avgRepairTime' | translate }}</div>
           <div class="mt-2">
             <div class="progress" style="height:6px">
               <div class="progress-bar bg-primary" [style.width]="getBarWidth(avgRepairTime(), 240)"></div>
@@ -35,7 +35,7 @@
         <div class="card-body text-center">
           <div class="kpi-icon text-success">✅</div>
           <div class="kpi-value" [class]="getScoreClass(firstTimeFixRate())">{{ firstTimeFixRate() | number:'1.1-1' }}%</div>
-          <div class="kpi-label text-muted">First-Time Fix Rate</div>
+          <div class="kpi-label text-muted">{{ 'performance.kpi.firstTimeFixRate' | translate }}</div>
           <div class="mt-2">
             <div class="progress" style="height:6px">
               <div class="progress-bar" [class]="getScoreBgClass(firstTimeFixRate())" [style.width]="getBarWidth(firstTimeFixRate())"></div>
@@ -49,7 +49,7 @@
         <div class="card-body text-center">
           <div class="kpi-icon text-info">🔧</div>
           <div class="kpi-value text-info">{{ totalCompletedTasks() }}</div>
-          <div class="kpi-label text-muted">Total Tasks Completed</div>
+          <div class="kpi-label text-muted">{{ 'performance.kpi.totalCompleted' | translate }}</div>
           <div class="mt-2 text-muted small">across {{ scores().length }} technicians</div>
         </div>
       </div>
@@ -59,7 +59,7 @@
         <div class="card-body text-center">
           <div class="kpi-icon text-warning">⭐</div>
           <div class="kpi-value text-warning">{{ avgCustomerRating() | number:'1.1-1' }}/5</div>
-          <div class="kpi-label text-muted">Avg Customer Rating</div>
+          <div class="kpi-label text-muted">{{ 'performance.kpi.avgRating' | translate }}</div>
           <div class="mt-1 text-warning fs-5">{{ getSatisfactionStars(avgCustomerRating()) }}</div>
         </div>
       </div>
@@ -71,7 +71,7 @@
     <div class="col-md-6">
       <div class="card border-0 shadow-sm">
         <div class="card-body">
-          <h6 class="card-title text-muted mb-3">⏰ On-Time Completion Rate</h6>
+          <h6 class="card-title text-muted mb-3">⏰ {{ 'performance.kpi.onTimeRate' | translate }}</h6>
           <div class="d-flex align-items-center gap-3">
             <div class="flex-grow-1">
               <div class="progress" style="height: 20px; border-radius: 10px;">
@@ -89,20 +89,20 @@
     <div class="col-md-6">
       <div class="card border-0 shadow-sm">
         <div class="card-body">
-          <h6 class="card-title text-muted mb-3">🏆 Top Performer</h6>
+          <h6 class="card-title text-muted mb-3">🏆 {{ 'performance.kpi.topPerformer' | translate }}</h6>
           @if (topPerformer(); as top) {
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <div class="fw-bold">{{ top.technicianName }}</div>
-                <div class="small text-muted">Success Rate: <span class="text-success fw-bold">{{ top.successRate | number:'1.1-1' }}%</span></div>
+                <div class="small text-muted">{{ 'performance.card.successRateLabel' | translate }}: <span class="text-success fw-bold">{{ top.successRate | number:'1.1-1' }}%</span></div>
               </div>
               <div class="text-end">
                 <div class="text-warning fs-5">{{ getSatisfactionStars(top.customerSatisfactionScore) }}</div>
-                <div class="small text-muted">{{ top.totalTasksCompleted }} tasks</div>
+                <div class="small text-muted">{{ top.totalTasksCompleted }} {{ 'performance.card.tasks' | translate }}</div>
               </div>
             </div>
           } @else {
-            <p class="text-muted mb-0">No data yet.</p>
+            <p class="text-muted mb-0">{{ 'performance.noDataYet' | translate }}</p>
           }
         </div>
       </div>
@@ -112,10 +112,10 @@
   <!-- Tabs -->
   <ul class="nav nav-tabs mb-4">
     <li class="nav-item">
-      <button class="nav-link" [class.active]="activeTab() === 'all'" (click)="switchTab('all')">All Technicians</button>
+      <button class="nav-link" [class.active]="activeTab() === 'all'" (click)="switchTab('all')">{{ 'performance.tabs.all' | translate }}</button>
     </li>
     <li class="nav-item">
-      <button class="nav-link" [class.active]="activeTab() === 'top'" (click)="switchTab('top')">Top Performers</button>
+      <button class="nav-link" [class.active]="activeTab() === 'top'" (click)="switchTab('top')">{{ 'performance.tabs.top' | translate }}</button>
     </li>
   </ul>
 
@@ -127,7 +127,7 @@
           <div class="card-header d-flex justify-content-between align-items-center">
             <div>
               <h6 class="mb-0 fw-bold">{{ score.technicianName || 'Technician' }}</h6>
-              <small class="text-muted">{{ score.totalTasksCompleted }} tasks completed</small>
+              <small class="text-muted">{{ score.totalTasksCompleted }} {{ 'performance.card.tasksCompleted' | translate }}</small>
             </div>
             <button class="btn btn-sm btn-outline-primary"
               [disabled]="isRecalculating() === score.technicianId"
@@ -139,7 +139,7 @@
             <!-- Success Rate Bar -->
             <div class="mb-3">
               <div class="d-flex justify-content-between mb-1">
-                <small class="text-muted">First-Time Fix Rate</small>
+                <small class="text-muted">{{ 'performance.card.successRate' | translate }}</small>
                 <small [class]="getScoreClass(score.successRate)">{{ score.successRate | number:'1.1-1' }}%</small>
               </div>
               <div class="progress" style="height:8px">
@@ -149,7 +149,7 @@
             <!-- On-Time Rate Bar -->
             <div class="mb-3">
               <div class="d-flex justify-content-between mb-1">
-                <small class="text-muted">On-Time Rate</small>
+                <small class="text-muted">{{ 'performance.card.onTimeRate' | translate }}</small>
                 <small [class]="getScoreClass(score.onTimeRate)">{{ score.onTimeRate | number:'1.1-1' }}%</small>
               </div>
               <div class="progress" style="height:8px">
@@ -160,39 +160,39 @@
             <div class="row g-2">
               <div class="col-6">
                 <div class="p-2 bg-light rounded text-center">
-                  <div class="text-muted small">Avg Repair Time</div>
-                  <div class="fw-semibold">{{ score.averageInterventionTimeMinutes | number:'1.0-0' }} min</div>
+                  <div class="text-muted small">{{ 'performance.card.avgRepairTime' | translate }}</div>
+                  <div class="fw-semibold">{{ score.averageInterventionTimeMinutes | number:'1.0-0' }} {{ 'performance.kpi.min' | translate }}</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="p-2 bg-light rounded text-center">
-                  <div class="text-muted small">Customer Rating</div>
+                  <div class="text-muted small">{{ 'performance.card.customerRating' | translate }}</div>
                   <div class="text-warning">{{ getSatisfactionStars(score.customerSatisfactionScore) }}</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="p-2 bg-light rounded text-center">
-                  <div class="text-muted small">Completed</div>
+                  <div class="text-muted small">{{ 'performance.card.completed' | translate }}</div>
                   <div class="fw-semibold text-success">{{ score.totalTasksCompleted }}</div>
                 </div>
               </div>
               <div class="col-6">
                 <div class="p-2 bg-light rounded text-center">
-                  <div class="text-muted small">Delayed</div>
+                  <div class="text-muted small">{{ 'performance.card.delayed' | translate }}</div>
                   <div class="fw-semibold text-danger">{{ score.totalTasksDelayed }}</div>
                 </div>
               </div>
             </div>
           </div>
           <div class="card-footer text-muted small">
-            Last updated: {{ score.lastCalculatedAt | date:'short' }}
+            {{ 'performance.lastUpdated' | translate }}: {{ score.lastCalculatedAt | date:'short' }}
           </div>
         </div>
       </div>
     }
     @if (scores().length === 0) {
       <div class="col-12 text-center text-muted py-5">
-        <p>No performance data yet. Click "Recalculate All" to generate scores.</p>
+        <p>{{ 'performance.noData' | translate }}</p>
       </div>
     }
   </div>

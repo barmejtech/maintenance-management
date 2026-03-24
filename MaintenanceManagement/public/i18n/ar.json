@@ -819,23 +819,86 @@
     "title": "تحليلات أداء الفنيين",
     "subtitle": "مؤشرات الأداء والدرجات والرؤى",
     "recalculateAll": "إعادة حساب الكل",
+    "recalculating": "جارٍ إعادة الحساب...",
     "kpi": {
       "avgRepairTime": "متوسط وقت الإصلاح",
       "firstTimeFixRate": "معدل الإصلاح من المرة الأولى",
       "totalCompleted": "إجمالي المهام المكتملة",
       "avgRating": "متوسط تقييم العملاء",
       "onTimeRate": "معدل الإنجاز في الوقت المحدد",
-      "topPerformer": "الفني المتميز"
-    }
+      "topPerformer": "الفني المتميز",
+      "min": "دقيقة",
+      "acrossTechnicians": "عبر {{count}} فني"
+    },
+    "tabs": {
+      "all": "جميع الفنيين",
+      "top": "أفضل الأداء"
+    },
+    "card": {
+      "tasksCompleted": "مهمة مكتملة",
+      "successRate": "معدل الإصلاح من المرة الأولى",
+      "onTimeRate": "معدل الإنجاز في الوقت",
+      "avgRepairTime": "متوسط وقت الإصلاح",
+      "customerRating": "تقييم العميل",
+      "completed": "مكتملة",
+      "delayed": "متأخرة",
+      "successRateLabel": "معدل النجاح",
+      "tasks": "مهام"
+    },
+    "noData": "لا توجد بيانات أداء بعد. انقر على \"إعادة حساب الكل\" لإنشاء الدرجات.",
+    "noDataYet": "لا توجد بيانات بعد.",
+    "lastUpdated": "آخر تحديث"
   },
   "equipmentTimeline": {
     "title": "الجدول الزمني للصيانة",
     "subtitle": "السجل الكامل لأنشطة الصيانة لكل معدة",
+    "equipmentPanel": "المعدات",
     "searchPlaceholder": "بحث عن معدة...",
+    "loading": "جارٍ التحميل...",
     "noEquipment": "لا توجد معدات.",
-    "selectEquipment": "اختر معدة لعرض سجل الصيانة.",
-    "loading": "جاري تحميل السجل...",
-    "noHistory": "لا يوجد سجل صيانة لهذه المعدة."
+    "selectEquipment": "اختر معدة من القائمة لعرض سجل الصيانة.",
+    "loadingTimeline": "جارٍ تحميل السجل...",
+    "noHistory": "لا يوجد سجل صيانة لهذه المعدة.",
+    "stats": {
+      "total": "الإجمالي",
+      "completed": "مكتملة",
+      "inProgress": "قيد التنفيذ",
+      "pending": "معلقة"
+    },
+    "lastMaintenance": "آخر صيانة",
+    "nextDue": "الصيانة القادمة",
+    "scheduled": "مجدولة",
+    "completedDate": "مكتملة",
+    "due": "موعد الاستحقاق",
+    "created": "تاريخ الإنشاء",
+    "gpsValidated": "تم التحقق من GPS",
+    "photoAttached": "صورة مرفقة",
+    "signed": "موقعة",
+    "statuses": {
+      "pending": "معلق",
+      "inProgress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "cancelled": "ملغي",
+      "onHold": "في الانتظار"
+    },
+    "priorities": {
+      "low": "منخفض",
+      "medium": "متوسط",
+      "high": "مرتفع",
+      "critical": "حرج"
+    },
+    "maintenanceTypes": {
+      "preventive": "وقائية",
+      "corrective": "تصحيحية",
+      "inspection": "فحص",
+      "emergency": "طارئة"
+    },
+    "equipmentStatuses": {
+      "operational": "تشغيلية",
+      "underMaintenance": "تحت الصيانة",
+      "outOfService": "خارج الخدمة",
+      "decommissioned": "متوقفة"
+    }
   },
   "mobileWorkflow": {
     "title": "سير العمل المتنقل للفنيين",
