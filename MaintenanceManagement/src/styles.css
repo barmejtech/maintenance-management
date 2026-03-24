@@ -81,6 +81,18 @@
   box-shadow: 0 0 0 0.2rem rgba(96,165,250,0.2);
 }
 
+.modal-backdrop-custom .modal-content {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.modal-backdrop-custom .modal-header,
+.modal-backdrop-custom .modal-footer {
+  border-color: var(--color-border);
+}
+
 [data-theme="dark"] .modal-content {
   background: #1e293b;
   color: #e2e8f0;
