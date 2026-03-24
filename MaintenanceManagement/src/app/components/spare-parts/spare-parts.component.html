@@ -1,0 +1,143 @@
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-boxes text-primary me-2"></i>{{ 'spareParts.title' | translate }}</h4>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary btn-sm" (click)="openAdd()">
+        <i class="bi bi-plus-lg me-1"></i>{{ 'spareParts.addButton' | translate }}
+      </button>
+      <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>{{ 'spareParts.backToDashboard' | translate }}
+      </a>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="text-center text-muted py-4">
+      <span class="spinner-border spinner-border-sm me-2"></span>{{ 'spareParts.loading' | translate }}
+    </div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-hover align-middle shadow-sm rounded overflow-hidden">
+        <thead class="table-primary">
+          <tr>
+            <th>{{ 'spareParts.table.name' | translate }}</th>
+            <th>{{ 'spareParts.table.partNumber' | translate }}</th>
+            <th>{{ 'spareParts.table.unit' | translate }}</th>
+            <th>{{ 'spareParts.table.stock' | translate }}</th>
+            <th>{{ 'spareParts.table.minStock' | translate }}</th>
+            <th>{{ 'spareParts.table.unitPrice' | translate }}</th>
+            <th>{{ 'spareParts.table.supplier' | translate }}</th>
+            <th>{{ 'spareParts.table.status' | translate }}</th>
+            <th>{{ 'spareParts.table.actions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (part of parts(); track part.id) {
+            <tr>
+              <td class="fw-semibold">{{ part.name }}</td>
+              <td><code>{{ part.partNumber }}</code></td>
+              <td>{{ part.unit }}</td>
+              <td>{{ part.quantityInStock }}</td>
+              <td>{{ part.minimumStockLevel }}</td>
+              <td>{{ part.unitPrice | number:'1.2-2' }}</td>
+              <td>{{ part.supplier || '—' }}</td>
+              <td>
+                @if (part.isLowStock) {
+                  <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i>{{ 'spareParts.lowStock' | translate }}</span>
+                } @else {
+                  <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>{{ 'spareParts.inStock' | translate }}</span>
+                }
+              </td>
+              <td>
+                <div class="d-flex gap-1">
+                  <button class="btn btn-sm btn-outline-primary" (click)="openEdit(part)" [title]="'buttons.edit' | translate">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="delete(part.id)" [title]="'buttons.delete' | translate">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+          @empty {
+            <tr>
+              <td colspan="9" class="text-center text-muted py-5">
+                <i class="bi bi-inbox fs-3 d-block mb-2"></i>{{ 'spareParts.empty' | translate }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+@if (showModal()) {
+  <div class="modal-backdrop-custom" (click)="closeModal()">
+    <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-boxes me-2"></i>{{ isEditing() ? ('spareParts.form.editTitle' | translate) : ('spareParts.form.addTitle' | translate) }}
+          </h5>
+          <button type="button" class="btn-close-custom" (click)="closeModal()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'spareParts.form.name' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.name" [placeholder]="'spareParts.form.namePlaceholder' | translate" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'spareParts.form.partNumber' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.partNumber" [placeholder]="'spareParts.form.partNumberPlaceholder' | translate" />
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">{{ 'spareParts.form.description' | translate }}</label>
+              <textarea class="form-control" [(ngModel)]="form.description" rows="2" [placeholder]="'spareParts.form.descriptionPlaceholder' | translate"></textarea>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">{{ 'spareParts.form.unit' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.unit" [placeholder]="'spareParts.form.unitPlaceholder' | translate" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">{{ 'spareParts.form.quantityInStock' | translate }}</label>
+              <input type="number" class="form-control" [(ngModel)]="form.quantityInStock" min="0" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">{{ 'spareParts.form.minimumStockLevel' | translate }}</label>
+              <input type="number" class="form-control" [(ngModel)]="form.minimumStockLevel" min="0" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">{{ 'spareParts.form.unitPrice' | translate }}</label>
+              <input type="number" class="form-control" [(ngModel)]="form.unitPrice" min="0" step="0.01" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">{{ 'spareParts.form.supplier' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.supplier" [placeholder]="'spareParts.form.supplierPlaceholder' | translate" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">{{ 'spareParts.form.storageLocation' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.storageLocation" [placeholder]="'spareParts.form.storageLocationPlaceholder' | translate" />
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">{{ 'spareParts.form.notes' | translate }}</label>
+              <textarea class="form-control" [(ngModel)]="form.notes" rows="2" [placeholder]="'spareParts.form.notesPlaceholder' | translate"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button class="btn btn-secondary" (click)="closeModal()">{{ 'spareParts.form.cancel' | translate }}</button>
+          <button class="btn btn-primary" (click)="save()" [disabled]="isSaving()">
+            @if (isSaving()) {
+              <span class="spinner-border spinner-border-sm me-1"></span>{{ 'spareParts.form.saving' | translate }}
+            } @else {
+              {{ isEditing() ? ('spareParts.form.update' | translate) : ('spareParts.form.create' | translate) }}
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -420,3 +420,127 @@ export interface SubmitInterventionProofRequest {
   proofPhotoUrl?: string;
   customerSignatureUrl?: string;
 }
+
+// Spare Part models
+export interface SparePart {
+  id: string;
+  name: string;
+  partNumber: string;
+  description: string;
+  unit: string;
+  quantityInStock: number;
+  minimumStockLevel: number;
+  unitPrice: number;
+  supplier?: string;
+  storageLocation?: string;
+  notes?: string;
+  isLowStock: boolean;
+  createdAt: string;
+}
+
+export interface CreateSparePartRequest {
+  name: string;
+  partNumber: string;
+  description: string;
+  unit: string;
+  quantityInStock: number;
+  minimumStockLevel: number;
+  unitPrice: number;
+  supplier?: string;
+  storageLocation?: string;
+  notes?: string;
+}
+
+export interface UpdateSparePartRequest {
+  name: string;
+  partNumber: string;
+  description: string;
+  unit: string;
+  quantityInStock: number;
+  minimumStockLevel: number;
+  unitPrice: number;
+  supplier?: string;
+  storageLocation?: string;
+  notes?: string;
+}
+
+export interface SparePartUsage {
+  id: string;
+  sparePartId: string;
+  sparePartName: string;
+  taskOrderId?: string;
+  taskOrderTitle?: string;
+  quantityUsed: number;
+  notes?: string;
+  usedAt: string;
+  usedByUserId: string;
+  createdAt: string;
+}
+
+export interface CreateSparePartUsageRequest {
+  sparePartId: string;
+  taskOrderId?: string;
+  quantityUsed: number;
+  notes?: string;
+}
+
+// Maintenance Schedule models
+export enum ScheduleFrequency {
+  Daily = 0,
+  Weekly = 1,
+  BiWeekly = 2,
+  Monthly = 3,
+  Quarterly = 4,
+  SemiAnnual = 5,
+  Annual = 6
+}
+
+export interface MaintenanceSchedule {
+  id: string;
+  name: string;
+  description: string;
+  maintenanceType: MaintenanceType;
+  frequency: ScheduleFrequency;
+  frequencyValue: number;
+  lastExecutedAt?: string;
+  nextDueAt?: string;
+  isActive: boolean;
+  notes?: string;
+  createdByUserId: string;
+  equipmentId?: string;
+  equipmentName?: string;
+  assignedTechnicianId?: string;
+  assignedTechnicianName?: string;
+  assignedGroupId?: string;
+  assignedGroupName?: string;
+  createdAt: string;
+}
+
+export interface CreateMaintenanceScheduleRequest {
+  name: string;
+  description: string;
+  maintenanceType: MaintenanceType;
+  frequency: ScheduleFrequency;
+  frequencyValue: number;
+  nextDueAt?: string;
+  isActive: boolean;
+  notes?: string;
+  equipmentId?: string;
+  assignedTechnicianId?: string;
+  assignedGroupId?: string;
+}
+
+export interface UpdateMaintenanceScheduleRequest {
+  name: string;
+  description: string;
+  maintenanceType: MaintenanceType;
+  frequency: ScheduleFrequency;
+  frequencyValue: number;
+  lastExecutedAt?: string;
+  nextDueAt?: string;
+  isActive: boolean;
+  notes?: string;
+  equipmentId?: string;
+  assignedTechnicianId?: string;
+  assignedGroupId?: string;
+}

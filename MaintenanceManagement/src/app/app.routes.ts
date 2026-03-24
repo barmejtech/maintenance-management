@@ -92,6 +92,16 @@ export const routes: Routes = [
     loadComponent: () => import('./components/performance/performance.component').then(m => m.PerformanceComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'spare-parts',
+    loadComponent: () => import('./components/spare-parts/spare-parts.component').then(m => m.SparePartsComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'maintenance-schedules',
+    loadComponent: () => import('./components/maintenance-schedules/maintenance-schedules.component').then(m => m.MaintenanceSchedulesComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/dashboard' }
 ];
 

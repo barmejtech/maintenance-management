@@ -25,6 +25,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<EquipmentHealthPrediction> EquipmentHealthPredictions => Set<EquipmentHealthPrediction>();
     public DbSet<EquipmentDigitalTwin> EquipmentDigitalTwins => Set<EquipmentDigitalTwin>();
     public DbSet<TechnicianPerformanceScore> TechnicianPerformanceScores => Set<TechnicianPerformanceScore>();
+    public DbSet<SparePart> SpareParts => Set<SparePart>();
+    public DbSet<SparePartUsage> SparePartUsages => Set<SparePartUsage>();
+    public DbSet<MaintenanceSchedule> MaintenanceSchedules => Set<MaintenanceSchedule>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -223,6 +226,55 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .HasForeignKey(s => s.TechnicianId)
                 .OnDelete(DeleteBehavior.Cascade);
             e.HasIndex(s => s.TechnicianId).IsUnique();
+        });
+
+        builder.Entity<SparePart>(e =>
+        {
+            e.HasKey(p => p.Id);
+            e.Property(p => p.Name).IsRequired().HasMaxLength(200);
+            e.Property(p => p.PartNumber).HasMaxLength(100);
+            e.Property(p => p.Description).HasMaxLength(1000);
+            e.Property(p => p.Unit).HasMaxLength(50);
+            e.Property(p => p.UnitPrice).HasColumnType("decimal(18,2)");
+            e.Property(p => p.Supplier).HasMaxLength(200);
+            e.Property(p => p.StorageLocation).HasMaxLength(200);
+            e.Property(p => p.Notes).HasMaxLength(1000);
+        });
+
+        builder.Entity<SparePartUsage>(e =>
+        {
+            e.HasKey(u => u.Id);
+            e.Property(u => u.UsedByUserId).IsRequired().HasMaxLength(450);
+            e.Property(u => u.Notes).HasMaxLength(500);
+            e.HasOne(u => u.SparePart)
+                .WithMany(p => p.Usages)
+                .HasForeignKey(u => u.SparePartId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(u => u.TaskOrder)
+                .WithMany()
+                .HasForeignKey(u => u.TaskOrderId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        builder.Entity<MaintenanceSchedule>(e =>
+        {
+            e.HasKey(s => s.Id);
+            e.Property(s => s.Name).IsRequired().HasMaxLength(200);
+            e.Property(s => s.Description).HasMaxLength(1000);
+            e.Property(s => s.Notes).HasMaxLength(1000);
+            e.Property(s => s.CreatedByUserId).IsRequired().HasMaxLength(450);
+            e.HasOne(s => s.Equipment)
+                .WithMany()
+                .HasForeignKey(s => s.EquipmentId)
+                .OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(s => s.AssignedTechnician)
+                .WithMany()
+                .HasForeignKey(s => s.AssignedTechnicianId)
+                .OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(s => s.AssignedGroup)
+                .WithMany()
+                .HasForeignKey(s => s.AssignedGroupId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
     }
 }
