@@ -22,9 +22,9 @@ export class PerformanceComponent implements OnInit {
 
   // KPI aggregates
   avgRepairTime = computed(() => {
-    const s = this.scores();
+    const s = this.scores().filter(x => x.averageInterventionTimeMinutes != null);
     if (!s.length) return 0;
-    return s.reduce((acc, x) => acc + x.averageInterventionTimeMinutes, 0) / s.length;
+    return s.reduce((acc, x) => acc + (x.averageInterventionTimeMinutes ?? 0), 0) / s.length;
   });
 
   firstTimeFixRate = computed(() => {

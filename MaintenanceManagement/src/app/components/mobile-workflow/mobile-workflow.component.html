@@ -116,13 +116,14 @@
             <div class="card-header fw-bold">📷 Photo Upload</div>
             <div class="card-body">
               <p class="small text-muted">Upload before/after maintenance photos as proof.</p>
-              <label class="btn btn-outline-info w-100 mb-3" [class.disabled]="isUploadingPhoto()">
+              <label class="btn btn-outline-info w-100 mb-3" [class.disabled]="isUploadingPhoto()" for="photo-upload-input">
                 @if (isUploadingPhoto()) {
                   <span class="spinner-border spinner-border-sm me-1"></span> Uploading...
                 } @else {
                   📷 Select Photos
                 }
-                <input type="file" accept="image/*" multiple hidden (change)="onPhotoSelected($event)" />
+                <input id="photo-upload-input" type="file" accept="image/*" multiple hidden (change)="onPhotoSelected($event)"
+                       aria-label="Upload maintenance photos" />
               </label>
               @if (uploadedPhotos().length > 0) {
                 <div class="d-flex flex-wrap gap-2">

@@ -5,6 +5,18 @@
 .equipment-item:hover { background: rgba(var(--bs-primary-rgb), 0.06); }
 .equipment-item.active { background: rgba(var(--bs-primary-rgb), 0.12); border-left: 3px solid var(--bs-primary); }
 
+.eq-avatar-lg {
+  width: 56px;
+  height: 56px;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.equipment-list-scroll {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
 /* Timeline */
 .timeline { position: relative; }
 .timeline-item { position: relative; padding-bottom: 1.5rem; display: flex; }

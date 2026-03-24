@@ -266,8 +266,11 @@ export class MobileWorkflowComponent implements OnInit, OnDestroy, AfterViewInit
   saveOffline() {
     const task = this.selectedTask();
     if (!task) return;
+    const id = typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     const report: OfflineReport = {
-      id: crypto.randomUUID(),
+      id,
       taskId: task.id,
       taskTitle: task.title,
       notes: this.workNotes,

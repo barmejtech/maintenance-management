@@ -15,7 +15,7 @@
                  [value]="searchTerm()"
                  (input)="searchTerm.set($any($event.target).value)" />
         </div>
-        <div class="card-body p-0" style="max-height: 70vh; overflow-y: auto;">
+        <div class="card-body p-0 equipment-list-scroll">
           @if (isLoadingEquipment()) {
             <div class="text-center text-muted py-4">
               <span class="spinner-border spinner-border-sm me-1"></span> Loading...
@@ -56,7 +56,7 @@
             <div class="card-body">
               <div class="row align-items-center">
                 <div class="col-auto">
-                  <div class="equipment-avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:56px;height:56px;font-size:1.5rem;">
+                  <div class="equipment-avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center eq-avatar-lg">
                     🔩
                   </div>
                 </div>
