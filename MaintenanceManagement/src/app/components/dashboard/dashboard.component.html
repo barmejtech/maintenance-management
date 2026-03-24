@@ -56,6 +56,12 @@
     <a routerLink="/equipment-digital-twin" routerLinkActive="active" class="nav-item">
       <span>🏭</span> {{ 'dashboard.sidebar.digitalTwin' | translate }}
     </a>
+    <a routerLink="/spare-parts" routerLinkActive="active" class="nav-item">
+      <span>🔧</span> {{ 'dashboard.sidebar.spareParts' | translate }}
+    </a>
+    <a routerLink="/maintenance-schedules" routerLinkActive="active" class="nav-item">
+      <span>📋</span> {{ 'dashboard.sidebar.maintenanceSchedules' | translate }}
+    </a>
     @if (isManagerOrAdmin()) {
       <div class="sidebar-divider"></div>
       <div class="sidebar-section-label">{{ 'dashboard.sidebar.management' | translate }}</div>

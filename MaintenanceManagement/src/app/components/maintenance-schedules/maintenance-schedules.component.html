@@ -1,0 +1,213 @@
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-calendar-check text-primary me-2"></i>{{ 'maintenanceSchedules.title' | translate }}</h4>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary btn-sm" (click)="openAdd()">
+        <i class="bi bi-plus-lg me-1"></i>{{ 'maintenanceSchedules.addButton' | translate }}
+      </button>
+      <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>{{ 'maintenanceSchedules.backToDashboard' | translate }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <ul class="nav nav-pills mb-3">
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab() === 'all'" (click)="setTab('all')">
+        {{ 'maintenanceSchedules.tabs.all' | translate }}
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab() === 'active'" (click)="setTab('active')">
+        {{ 'maintenanceSchedules.tabs.active' | translate }}
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab() === 'overdue'" (click)="setTab('overdue')">
+        {{ 'maintenanceSchedules.tabs.overdue' | translate }}
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab() === 'soon'" (click)="setTab('soon')">
+        {{ 'maintenanceSchedules.tabs.dueSoon' | translate }}
+      </button>
+    </li>
+  </ul>
+
+  @if (isLoading()) {
+    <div class="text-center text-muted py-4">
+      <span class="spinner-border spinner-border-sm me-2"></span>{{ 'maintenanceSchedules.loading' | translate }}
+    </div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-hover align-middle shadow-sm rounded overflow-hidden">
+        <thead class="table-primary">
+          <tr>
+            <th>{{ 'maintenanceSchedules.table.name' | translate }}</th>
+            <th>{{ 'maintenanceSchedules.table.type' | translate }}</th>
+            <th>{{ 'maintenanceSchedules.table.frequency' | translate }}</th>
+            <th>{{ 'maintenanceSchedules.table.equipment' | translate }}</th>
+            <th>{{ 'maintenanceSchedules.table.assignedTo' | translate }}</th>
+            <th>{{ 'maintenanceSchedules.table.nextDue' | translate }}</th>
+            <th>{{ 'maintenanceSchedules.table.status' | translate }}</th>
+            <th>{{ 'maintenanceSchedules.table.actions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (s of schedules(); track s.id) {
+            <tr>
+              <td class="fw-semibold">{{ s.name }}</td>
+              <td>{{ getTypeLabel(s.maintenanceType) }}</td>
+              <td>{{ getFrequencyLabel(s.frequency) }} × {{ s.frequencyValue }}</td>
+              <td>{{ s.equipmentName || '—' }}</td>
+              <td>{{ s.assignedTechnicianName || s.assignedGroupName || '—' }}</td>
+              <td>
+                @if (s.nextDueAt) {
+                  <span [class.text-danger]="isOverdue(s)" [class.fw-bold]="isOverdue(s)">
+                    {{ s.nextDueAt | date:'mediumDate' }}
+                  </span>
+                } @else {
+                  <span class="text-muted">—</span>
+                }
+              </td>
+              <td>
+                @if (s.isActive) {
+                  <span class="badge bg-success">{{ 'maintenanceSchedules.active' | translate }}</span>
+                } @else {
+                  <span class="badge bg-secondary">{{ 'maintenanceSchedules.inactive' | translate }}</span>
+                }
+              </td>
+              <td>
+                <div class="d-flex gap-1">
+                  <button class="btn btn-sm btn-outline-primary" (click)="openEdit(s)" [title]="'buttons.edit' | translate">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="delete(s.id)" [title]="'buttons.delete' | translate">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+          @empty {
+            <tr>
+              <td colspan="8" class="text-center text-muted py-5">
+                <i class="bi bi-calendar-x fs-3 d-block mb-2"></i>{{ 'maintenanceSchedules.empty' | translate }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+@if (showModal()) {
+  <div class="modal-backdrop-custom" (click)="closeModal()">
+    <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-calendar-check me-2"></i>{{ isEditing() ? ('maintenanceSchedules.form.editTitle' | translate) : ('maintenanceSchedules.form.addTitle' | translate) }}
+          </h5>
+          <button type="button" class="btn-close-custom" (click)="closeModal()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label fw-semibold">{{ 'maintenanceSchedules.form.name' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.name" [placeholder]="'maintenanceSchedules.form.namePlaceholder' | translate" />
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">{{ 'maintenanceSchedules.form.description' | translate }}</label>
+              <textarea class="form-control" [(ngModel)]="form.description" rows="2" [placeholder]="'maintenanceSchedules.form.descriptionPlaceholder' | translate"></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'maintenanceSchedules.form.maintenanceType' | translate }}</label>
+              <select class="form-select" [(ngModel)]="form.maintenanceType">
+                <option [value]="MaintenanceType.Preventive">{{ 'maintenanceSchedules.type.preventive' | translate }}</option>
+                <option [value]="MaintenanceType.Corrective">{{ 'maintenanceSchedules.type.corrective' | translate }}</option>
+                <option [value]="MaintenanceType.Inspection">{{ 'maintenanceSchedules.type.inspection' | translate }}</option>
+                <option [value]="MaintenanceType.Emergency">{{ 'maintenanceSchedules.type.emergency' | translate }}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">{{ 'maintenanceSchedules.form.frequency' | translate }}</label>
+              <select class="form-select" [(ngModel)]="form.frequency">
+                <option [value]="ScheduleFrequency.Daily">{{ 'maintenanceSchedules.frequency.daily' | translate }}</option>
+                <option [value]="ScheduleFrequency.Weekly">{{ 'maintenanceSchedules.frequency.weekly' | translate }}</option>
+                <option [value]="ScheduleFrequency.BiWeekly">{{ 'maintenanceSchedules.frequency.biWeekly' | translate }}</option>
+                <option [value]="ScheduleFrequency.Monthly">{{ 'maintenanceSchedules.frequency.monthly' | translate }}</option>
+                <option [value]="ScheduleFrequency.Quarterly">{{ 'maintenanceSchedules.frequency.quarterly' | translate }}</option>
+                <option [value]="ScheduleFrequency.SemiAnnual">{{ 'maintenanceSchedules.frequency.semiAnnual' | translate }}</option>
+                <option [value]="ScheduleFrequency.Annual">{{ 'maintenanceSchedules.frequency.annual' | translate }}</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label fw-semibold">{{ 'maintenanceSchedules.form.frequencyValue' | translate }}</label>
+              <input type="number" class="form-control" [(ngModel)]="form.frequencyValue" min="1" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'maintenanceSchedules.form.nextDueAt' | translate }}</label>
+              <input type="date" class="form-control" [(ngModel)]="form.nextDueAt" />
+            </div>
+            @if (isEditing()) {
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ 'maintenanceSchedules.form.lastExecutedAt' | translate }}</label>
+                <input type="date" class="form-control" [(ngModel)]="form.lastExecutedAt" />
+              </div>
+            }
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'maintenanceSchedules.form.equipment' | translate }}</label>
+              <select class="form-select" [(ngModel)]="form.equipmentId">
+                <option value="">{{ 'maintenanceSchedules.form.selectEquipment' | translate }}</option>
+                @for (eq of equipment(); track eq.id) {
+                  <option [value]="eq.id">{{ eq.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'maintenanceSchedules.form.assignedTechnician' | translate }}</label>
+              <select class="form-select" [(ngModel)]="form.assignedTechnicianId">
+                <option value="">{{ 'maintenanceSchedules.form.selectTechnician' | translate }}</option>
+                @for (t of technicians(); track t.id) {
+                  <option [value]="t.id">{{ t.fullName }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'maintenanceSchedules.form.assignedGroup' | translate }}</label>
+              <select class="form-select" [(ngModel)]="form.assignedGroupId">
+                <option value="">{{ 'maintenanceSchedules.form.selectGroup' | translate }}</option>
+                @for (g of groups(); track g.id) {
+                  <option [value]="g.id">{{ g.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-6 d-flex align-items-center gap-2 mt-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="form.isActive" id="isActiveCheck" />
+                <label class="form-check-label fw-semibold" for="isActiveCheck">{{ 'maintenanceSchedules.form.isActive' | translate }}</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">{{ 'maintenanceSchedules.form.notes' | translate }}</label>
+              <textarea class="form-control" [(ngModel)]="form.notes" rows="2" [placeholder]="'maintenanceSchedules.form.notesPlaceholder' | translate"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button class="btn btn-secondary" (click)="closeModal()">{{ 'maintenanceSchedules.form.cancel' | translate }}</button>
+          <button class="btn btn-primary" (click)="save()" [disabled]="isSaving()">
+            @if (isSaving()) {
+              <span class="spinner-border spinner-border-sm me-1"></span>{{ 'maintenanceSchedules.form.saving' | translate }}
+            } @else {
+              {{ isEditing() ? ('maintenanceSchedules.form.update' | translate) : ('maintenanceSchedules.form.create' | translate) }}
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
