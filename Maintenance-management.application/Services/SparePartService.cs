@@ -45,7 +45,11 @@ public class SparePartService : ISparePartService
             UnitPrice = dto.UnitPrice,
             Supplier = dto.Supplier,
             StorageLocation = dto.StorageLocation,
-            Notes = dto.Notes
+            Notes = dto.Notes,
+            Photo1Url = dto.Photo1Url,
+            Photo2Url = dto.Photo2Url,
+            Photo3Url = dto.Photo3Url,
+            Photo4Url = dto.Photo4Url
         };
 
         var created = await _repo.AddAsync(part);
@@ -67,6 +71,10 @@ public class SparePartService : ISparePartService
         part.Supplier = dto.Supplier;
         part.StorageLocation = dto.StorageLocation;
         part.Notes = dto.Notes;
+        part.Photo1Url = dto.Photo1Url;
+        part.Photo2Url = dto.Photo2Url;
+        part.Photo3Url = dto.Photo3Url;
+        part.Photo4Url = dto.Photo4Url;
         part.UpdatedAt = DateTime.UtcNow;
 
         await _repo.UpdateAsync(part);
@@ -149,6 +157,10 @@ public class SparePartService : ISparePartService
         Supplier = p.Supplier,
         StorageLocation = p.StorageLocation,
         Notes = p.Notes,
+        Photo1Url = p.Photo1Url,
+        Photo2Url = p.Photo2Url,
+        Photo3Url = p.Photo3Url,
+        Photo4Url = p.Photo4Url,
         CreatedAt = p.CreatedAt
     };
 

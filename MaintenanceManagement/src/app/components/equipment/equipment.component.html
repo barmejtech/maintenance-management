@@ -13,66 +13,94 @@
       </a>
     </div>
   </div>
-  <div class="card shadow-sm">
+  <div class="card shadow-sm border-0">
     <div class="card-body p-0">
-      <table class="table table-hover table-striped mb-0">
-        <thead class="table-light">
-          <tr>
-            <th>{{ 'asset.table.name' | translate }}</th>
-            <th>{{ 'asset.table.serialNo' | translate }}</th>
-            <th>{{ 'asset.table.manufacturer' | translate }}</th>
-            <th>{{ 'asset.table.location' | translate }}</th>
-            <th>{{ 'asset.table.status' | translate }}</th>
-            <th>{{ 'asset.table.nextMaintenance' | translate }}</th>
-            <th>{{ 'asset.table.photos' | translate }}</th>
-            <th class="text-end">{{ 'asset.table.actions' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (eq of equipment(); track eq.id) {
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-dark">
             <tr>
-              <td class="fw-medium">{{ eq.name }}</td>
-              <td>{{ eq.serialNumber }}</td>
-              <td>{{ eq.manufacturer }}</td>
-              <td>{{ eq.location }}</td>
-              <td><span class="badge" [class]="getStatusClass(eq.status)">{{ getStatusLabel(eq.status) }}</span></td>
-              <td>{{ eq.nextMaintenanceDate ? (eq.nextMaintenanceDate | date:'mediumDate') : '—' }}</td>
-              <td>
-                <div class="d-flex gap-1 align-items-center">
-                  @if (eq.beforeMaintenancePhotoUrl) {
-                    <a [href]="eq.beforeMaintenancePhotoUrl" target="_blank" title="Before photo">
-                      <img [src]="eq.beforeMaintenancePhotoUrl" alt="Before" class="photo-thumb" />
-                    </a>
-                  }
-                  @if (eq.afterMaintenancePhotoUrl) {
-                    <a [href]="eq.afterMaintenancePhotoUrl" target="_blank" title="After photo">
-                      <img [src]="eq.afterMaintenancePhotoUrl" alt="After" class="photo-thumb" />
-                    </a>
-                  }
-                  @if (!eq.beforeMaintenancePhotoUrl && !eq.afterMaintenancePhotoUrl) {
-                    <span class="text-muted small">—</span>
-                  }
-                </div>
-              </td>
-              <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(eq)" [title]="'buttons.edit' | translate">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="delete(eq.id)" [title]="'buttons.delete' | translate">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
+              <th><i class="bi bi-wrench me-1"></i>{{ 'asset.table.name' | translate }}</th>
+              <th><i class="bi bi-upc-scan me-1"></i>{{ 'asset.table.serialNo' | translate }}</th>
+              <th><i class="bi bi-building me-1"></i>{{ 'asset.table.manufacturer' | translate }}</th>
+              <th><i class="bi bi-geo-alt me-1"></i>{{ 'asset.table.location' | translate }}</th>
+              <th><i class="bi bi-activity me-1"></i>{{ 'asset.table.status' | translate }}</th>
+              <th><i class="bi bi-calendar-check me-1"></i>{{ 'asset.table.nextMaintenance' | translate }}</th>
+              <th><i class="bi bi-images me-1"></i>{{ 'asset.table.photos' | translate }}</th>
+              <th class="text-end">{{ 'asset.table.actions' | translate }}</th>
             </tr>
-          }
-          @if (equipment().length === 0) {
-            <tr>
-              <td colspan="8" class="text-center text-muted py-4">
-                <i class="bi bi-tools fs-4 d-block mb-1"></i>{{ 'asset.empty' | translate }}
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (eq of equipment(); track eq.id) {
+              <tr class="align-middle">
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="equipment-icon bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-cpu"></i>
+                    </span>
+                    <span class="fw-semibold">{{ eq.name }}</span>
+                  </div>
+                </td>
+                <td><code class="text-secondary">{{ eq.serialNumber }}</code></td>
+                <td>{{ eq.manufacturer }}</td>
+                <td><i class="bi bi-pin-map text-muted me-1"></i>{{ eq.location }}</td>
+                <td><span class="badge rounded-pill" [class]="getStatusClass(eq.status)">{{ getStatusLabel(eq.status) }}</span></td>
+                <td>
+                  @if (eq.nextMaintenanceDate) {
+                    <span class="text-nowrap"><i class="bi bi-calendar3 me-1 text-info"></i>{{ eq.nextMaintenanceDate | date:'mediumDate' }}</span>
+                  } @else {
+                    <span class="text-muted">—</span>
+                  }
+                </td>
+                <td>
+                  <div class="d-flex gap-1 flex-wrap">
+                    @if (eq.beforeMaintenancePhotoUrl) {
+                      <a [href]="eq.beforeMaintenancePhotoUrl" target="_blank" title="{{ 'asset.form.photoBefore' | translate }}">
+                        <img [src]="eq.beforeMaintenancePhotoUrl" alt="Photo 1" class="photo-thumb" />
+                      </a>
+                    }
+                    @if (eq.afterMaintenancePhotoUrl) {
+                      <a [href]="eq.afterMaintenancePhotoUrl" target="_blank" title="{{ 'asset.form.photoAfter' | translate }}">
+                        <img [src]="eq.afterMaintenancePhotoUrl" alt="Photo 2" class="photo-thumb" />
+                      </a>
+                    }
+                    @if (eq.photo3Url) {
+                      <a [href]="eq.photo3Url" target="_blank" title="{{ 'asset.form.photo3' | translate }}">
+                        <img [src]="eq.photo3Url" alt="Photo 3" class="photo-thumb" />
+                      </a>
+                    }
+                    @if (eq.photo4Url) {
+                      <a [href]="eq.photo4Url" target="_blank" title="{{ 'asset.form.photo4' | translate }}">
+                        <img [src]="eq.photo4Url" alt="Photo 4" class="photo-thumb" />
+                      </a>
+                    }
+                    @if (!eq.beforeMaintenancePhotoUrl && !eq.afterMaintenancePhotoUrl && !eq.photo3Url && !eq.photo4Url) {
+                      <span class="text-muted small">—</span>
+                    }
+                  </div>
+                </td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(eq)" [title]="'buttons.edit' | translate">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="delete(eq.id)" [title]="'buttons.delete' | translate">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </td>
+              </tr>
+            }
+            @if (equipment().length === 0) {
+              <tr>
+                <td colspan="8" class="text-center py-5">
+                  <div class="text-muted">
+                    <i class="bi bi-tools fs-2 d-block mb-2 text-secondary"></i>
+                    <span class="fw-medium">{{ 'asset.empty' | translate }}</span>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
@@ -90,27 +118,27 @@
         <div class="modal-body">
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label fw-semibold">{{ 'asset.form.name' | translate }} *</label>
+              <label class="form-label fw-semibold"><i class="bi bi-wrench me-1 text-primary"></i>{{ 'asset.form.name' | translate }} *</label>
               <input class="form-control" [(ngModel)]="form.name" [placeholder]="'asset.form.namePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">{{ 'asset.form.serialNumber' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-upc-scan me-1 text-secondary"></i>{{ 'asset.form.serialNumber' | translate }}</label>
               <input class="form-control" [(ngModel)]="form.serialNumber" [placeholder]="'asset.form.serialPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">{{ 'asset.form.model' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-box me-1 text-secondary"></i>{{ 'asset.form.model' | translate }}</label>
               <input class="form-control" [(ngModel)]="form.model" [placeholder]="'asset.form.modelPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">{{ 'asset.form.manufacturer' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-building me-1 text-secondary"></i>{{ 'asset.form.manufacturer' | translate }}</label>
               <input class="form-control" [(ngModel)]="form.manufacturer" [placeholder]="'asset.form.manufacturerPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">{{ 'asset.form.location' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-geo-alt me-1 text-secondary"></i>{{ 'asset.form.location' | translate }}</label>
               <input class="form-control" [(ngModel)]="form.location" [placeholder]="'asset.form.locationPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">{{ 'asset.form.status' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-activity me-1 text-secondary"></i>{{ 'asset.form.status' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.status">
                 <option [value]="EquipmentStatus.Operational">{{ 'asset.status.operational' | translate }}</option>
                 <option [value]="EquipmentStatus.UnderMaintenance">{{ 'asset.status.underMaintenance' | translate }}</option>
@@ -119,58 +147,94 @@
               </select>
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">{{ 'asset.form.installationDate' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-plus me-1 text-secondary"></i>{{ 'asset.form.installationDate' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.installationDate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">{{ 'asset.form.lastMaintenance' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-check me-1 text-secondary"></i>{{ 'asset.form.lastMaintenance' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.lastMaintenanceDate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">{{ 'asset.form.nextMaintenance' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-event me-1 text-secondary"></i>{{ 'asset.form.nextMaintenance' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.nextMaintenanceDate" />
             </div>
             <div class="col-12">
-              <label class="form-label fw-semibold">{{ 'asset.form.notes' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-sticky me-1 text-secondary"></i>{{ 'asset.form.notes' | translate }}</label>
               <textarea class="form-control" rows="2" [(ngModel)]="form.notes" [placeholder]="'asset.form.notesPlaceholder' | translate"></textarea>
             </div>
 
-            <!-- Before Maintenance Photo -->
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">
-                <i class="bi bi-camera me-1"></i>{{ 'asset.form.photoBefore' | translate }}
-              </label>
-              <input type="file" class="form-control" accept="image/*" (change)="uploadBeforePhoto($event)" />
-              @if (isUploadingBefore()) {
-                <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'asset.form.uploading' | translate }}</div>
-              }
-              @if (form.beforeMaintenancePhotoUrl) {
-                <div class="mt-2">
-                  <img [src]="form.beforeMaintenancePhotoUrl" alt="Before photo preview" class="photo-preview" />
-                </div>
-              }
-            </div>
+            <!-- Photos Section -->
+            <div class="col-12">
+              <div class="border-top pt-3 mt-1">
+                <p class="fw-semibold mb-2 text-primary"><i class="bi bi-images me-1"></i>{{ 'asset.form.photosSection' | translate }}</p>
+                <div class="row g-3">
+                  <!-- Photo 1: Before Maintenance -->
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold"><i class="bi bi-camera me-1 text-primary"></i>{{ 'asset.form.photoBefore' | translate }}</label>
+                    <input type="file" class="form-control" accept="image/*" (change)="uploadBeforePhoto($event)" />
+                    @if (isUploadingBefore()) {
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'asset.form.uploading' | translate }}</div>
+                    }
+                    @if (form.beforeMaintenancePhotoUrl) {
+                      <div class="mt-2 position-relative photo-preview-wrap">
+                        <img [src]="form.beforeMaintenancePhotoUrl" alt="Photo 1 preview" class="photo-preview" />
+                        <span class="badge bg-primary photo-badge">1</span>
+                      </div>
+                    }
+                  </div>
 
-            <!-- After Maintenance Photo -->
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">
-                <i class="bi bi-camera-fill me-1"></i>{{ 'asset.form.photoAfter' | translate }}
-              </label>
-              <input type="file" class="form-control" accept="image/*" (change)="uploadAfterPhoto($event)" />
-              @if (isUploadingAfter()) {
-                <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'asset.form.uploading' | translate }}</div>
-              }
-              @if (form.afterMaintenancePhotoUrl) {
-                <div class="mt-2">
-                  <img [src]="form.afterMaintenancePhotoUrl" alt="After photo preview" class="photo-preview" />
+                  <!-- Photo 2: After Maintenance -->
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold"><i class="bi bi-camera-fill me-1 text-success"></i>{{ 'asset.form.photoAfter' | translate }}</label>
+                    <input type="file" class="form-control" accept="image/*" (change)="uploadAfterPhoto($event)" />
+                    @if (isUploadingAfter()) {
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'asset.form.uploading' | translate }}</div>
+                    }
+                    @if (form.afterMaintenancePhotoUrl) {
+                      <div class="mt-2 position-relative photo-preview-wrap">
+                        <img [src]="form.afterMaintenancePhotoUrl" alt="Photo 2 preview" class="photo-preview" />
+                        <span class="badge bg-success photo-badge">2</span>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Photo 3 -->
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold"><i class="bi bi-image me-1 text-warning"></i>{{ 'asset.form.photo3' | translate }}</label>
+                    <input type="file" class="form-control" accept="image/*" (change)="uploadPhoto3($event)" />
+                    @if (isUploadingPhoto3()) {
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'asset.form.uploading' | translate }}</div>
+                    }
+                    @if (form.photo3Url) {
+                      <div class="mt-2 position-relative photo-preview-wrap">
+                        <img [src]="form.photo3Url" alt="Photo 3 preview" class="photo-preview" />
+                        <span class="badge bg-warning text-dark photo-badge">3</span>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Photo 4 -->
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold"><i class="bi bi-image-fill me-1 text-info"></i>{{ 'asset.form.photo4' | translate }}</label>
+                    <input type="file" class="form-control" accept="image/*" (change)="uploadPhoto4($event)" />
+                    @if (isUploadingPhoto4()) {
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'asset.form.uploading' | translate }}</div>
+                    }
+                    @if (form.photo4Url) {
+                      <div class="mt-2 position-relative photo-preview-wrap">
+                        <img [src]="form.photo4Url" alt="Photo 4 preview" class="photo-preview" />
+                        <span class="badge bg-info text-dark photo-badge">4</span>
+                      </div>
+                    }
+                  </div>
                 </div>
-              }
+              </div>
             </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'asset.cancel' | translate }}</button>
-          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.name || isUploadingBefore() || isUploadingAfter()">
+          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.name || isUploadingBefore() || isUploadingAfter() || isUploadingPhoto3() || isUploadingPhoto4()">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
             {{ isEditing() ? ('asset.update' | translate) : ('asset.create' | translate) }}
           </button>

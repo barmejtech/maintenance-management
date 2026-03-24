@@ -17,6 +17,8 @@ public class EquipmentDto
     public string? Notes { get; set; }
     public string? BeforeMaintenancePhotoUrl { get; set; }
     public string? AfterMaintenancePhotoUrl { get; set; }
+    public string? Photo3Url { get; set; }
+    public string? Photo4Url { get; set; }
     public DateTime CreatedAt { get; set; }
 }
 
@@ -32,6 +34,8 @@ public class CreateEquipmentDto
     public string? Notes { get; set; }
     public string? BeforeMaintenancePhotoUrl { get; set; }
     public string? AfterMaintenancePhotoUrl { get; set; }
+    public string? Photo3Url { get; set; }
+    public string? Photo4Url { get; set; }
 }
 
 public class UpdateEquipmentDto
@@ -48,4 +52,6 @@ public class UpdateEquipmentDto
     public string? Notes { get; set; }
     public string? BeforeMaintenancePhotoUrl { get; set; }
     public string? AfterMaintenancePhotoUrl { get; set; }
+    public string? Photo3Url { get; set; }
+    public string? Photo4Url { get; set; }
 }

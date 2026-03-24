@@ -61,6 +61,7 @@ export interface UpdateTechnicianRequest {
   phone: string;
   specialization: string;
   status: TechnicianStatus;
+  profilePhotoUrl?: string;
 }
 
 export enum TechnicianStatus {
@@ -169,6 +170,8 @@ export interface Equipment {
   notes?: string;
   beforeMaintenancePhotoUrl?: string;
   afterMaintenancePhotoUrl?: string;
+  photo3Url?: string;
+  photo4Url?: string;
   createdAt: string;
 }
 
@@ -434,6 +437,10 @@ export interface SparePart {
   supplier?: string;
   storageLocation?: string;
   notes?: string;
+  photo1Url?: string;
+  photo2Url?: string;
+  photo3Url?: string;
+  photo4Url?: string;
   isLowStock: boolean;
   createdAt: string;
 }
@@ -449,6 +456,10 @@ export interface CreateSparePartRequest {
   supplier?: string;
   storageLocation?: string;
   notes?: string;
+  photo1Url?: string;
+  photo2Url?: string;
+  photo3Url?: string;
+  photo4Url?: string;
 }
 
 export interface UpdateSparePartRequest {
@@ -462,6 +473,10 @@ export interface UpdateSparePartRequest {
   supplier?: string;
   storageLocation?: string;
   notes?: string;
+  photo1Url?: string;
+  photo2Url?: string;
+  photo3Url?: string;
+  photo4Url?: string;
 }
 
 export interface SparePartUsage {

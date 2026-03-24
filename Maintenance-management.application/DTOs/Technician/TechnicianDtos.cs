@@ -37,6 +37,7 @@ public class UpdateTechnicianDto
     public string Phone { get; set; } = string.Empty;
     public string Specialization { get; set; } = string.Empty;
     public TechnicianStatus Status { get; set; }
+    public string? ProfilePhotoUrl { get; set; }
 }
 
 public class UpdateLocationDto
