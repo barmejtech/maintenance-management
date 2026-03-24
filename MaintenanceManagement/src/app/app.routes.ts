@@ -90,7 +90,7 @@ export const routes: Routes = [
   {
     path: 'performance',
     loadComponent: () => import('./components/performance/performance.component').then(m => m.PerformanceComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, managerGuard]
   },
   {
     path: 'spare-parts',

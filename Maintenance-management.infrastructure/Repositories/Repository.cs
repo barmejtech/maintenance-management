@@ -20,7 +20,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
     public async Task<T?> GetByIdAsync(Guid id)
         => await _dbSet.FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
 
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public virtual async Task<IEnumerable<T>> GetAllAsync()
         => await _dbSet.Where(e => !e.IsDeleted).ToListAsync();
 
     public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)

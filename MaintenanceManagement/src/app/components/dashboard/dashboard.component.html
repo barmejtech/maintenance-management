@@ -62,9 +62,6 @@
     <a routerLink="/maintenance-schedules" routerLinkActive="active" class="nav-item">
       <span>📋</span> {{ 'dashboard.sidebar.maintenanceSchedules' | translate }}
     </a>
-    <a routerLink="/performance" routerLinkActive="active" class="nav-item">
-      <span>📊</span> {{ 'dashboard.sidebar.performance' | translate }}
-    </a>
     <a routerLink="/equipment-timeline" routerLinkActive="active" class="nav-item">
       <span>🕐</span> {{ 'dashboard.sidebar.equipmentTimeline' | translate }}
     </a>
@@ -74,6 +71,9 @@
     @if (isManagerOrAdmin()) {
       <div class="sidebar-divider"></div>
       <div class="sidebar-section-label">{{ 'dashboard.sidebar.management' | translate }}</div>
+      <a routerLink="/performance" routerLinkActive="active" class="nav-item">
+        <span>📊</span> {{ 'dashboard.sidebar.performance' | translate }}
+      </a>
       <a routerLink="/technicians" routerLinkActive="active" class="nav-item">
         <span>👷</span> {{ 'dashboard.sidebar.technicians' | translate }}
       </a>
