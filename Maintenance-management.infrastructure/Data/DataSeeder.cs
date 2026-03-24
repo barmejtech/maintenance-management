@@ -805,6 +805,177 @@ public static class DataSeeder
         }
 
         await context.SaveChangesAsync();
+
+        // ── SpareParts ────────────────────────────────────────────────────────────
+        var part1Id = new Guid("00000000-0000-0000-0021-000000000021");
+        var part2Id = new Guid("00000000-0000-0000-0022-000000000022");
+        var part3Id = new Guid("00000000-0000-0000-0023-000000000023");
+
+        if (!await context.SpareParts.AnyAsync(p => p.Id == part1Id))
+        {
+            context.SpareParts.Add(new SparePart
+            {
+                Id = part1Id,
+                Name = "HVAC Air Filter",
+                PartNumber = "AF-MERV11-16",
+                Description = "MERV-11 rated 16x20x1 air filter for HVAC systems",
+                Unit = "pcs",
+                QuantityInStock = 24,
+                MinimumStockLevel = 10,
+                UnitPrice = 18.50m,
+                Supplier = "FilterPro Supplies",
+                StorageLocation = "Warehouse A - Shelf 3",
+                Notes = "Replace every 3 months",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.SpareParts.AnyAsync(p => p.Id == part2Id))
+        {
+            context.SpareParts.Add(new SparePart
+            {
+                Id = part2Id,
+                Name = "Refrigerant R-410A",
+                PartNumber = "REF-R410A-25LB",
+                Description = "25-lb cylinder of R-410A refrigerant",
+                Unit = "cylinder",
+                QuantityInStock = 4,
+                MinimumStockLevel = 5,
+                UnitPrice = 145.00m,
+                Supplier = "CoolTech Refrigerants",
+                StorageLocation = "Warehouse B - Refrigerant Bay",
+                Notes = "Low stock — reorder immediately",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.SpareParts.AnyAsync(p => p.Id == part3Id))
+        {
+            context.SpareParts.Add(new SparePart
+            {
+                Id = part3Id,
+                Name = "Pump Seal Kit",
+                PartNumber = "PSK-CH800-STD",
+                Description = "Standard pump seal kit for Trane CH-800 chiller",
+                Unit = "kit",
+                QuantityInStock = 2,
+                MinimumStockLevel = 2,
+                UnitPrice = 89.00m,
+                Supplier = "Trane Parts Direct",
+                StorageLocation = "Warehouse A - Shelf 7",
+                Notes = "Compatible with Chiller Unit #2",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── SparePartUsages ───────────────────────────────────────────────────────
+        var usage1Id = new Guid("00000000-0000-0000-0024-000000000024");
+        var usage2Id = new Guid("00000000-0000-0000-0025-000000000025");
+
+        if (!await context.SparePartUsages.AnyAsync(u => u.Id == usage1Id)
+            && await context.SpareParts.AnyAsync(p => p.Id == part1Id))
+        {
+            context.SparePartUsages.Add(new SparePartUsage
+            {
+                Id = usage1Id,
+                SparePartId = part1Id,
+                TaskOrderId = task1Id,
+                QuantityUsed = 3,
+                Notes = "Replaced filters in Building A AHU units",
+                UsedAt = DateTime.UtcNow.AddDays(-7),
+                UsedByUserId = adminUserId,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.SparePartUsages.AnyAsync(u => u.Id == usage2Id)
+            && await context.SpareParts.AnyAsync(p => p.Id == part2Id))
+        {
+            context.SparePartUsages.Add(new SparePartUsage
+            {
+                Id = usage2Id,
+                SparePartId = part2Id,
+                TaskOrderId = task1Id,
+                QuantityUsed = 1,
+                Notes = "Topped up refrigerant in Central AC System A",
+                UsedAt = DateTime.UtcNow.AddDays(-7),
+                UsedByUserId = adminUserId,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── MaintenanceSchedules ──────────────────────────────────────────────────
+        var sched1Id = new Guid("00000000-0000-0000-0026-000000000026");
+        var sched2Id = new Guid("00000000-0000-0000-0027-000000000027");
+        var sched3Id = new Guid("00000000-0000-0000-0028-000000000028");
+
+        if (!await context.MaintenanceSchedules.AnyAsync(s => s.Id == sched1Id))
+        {
+            context.MaintenanceSchedules.Add(new MaintenanceSchedule
+            {
+                Id = sched1Id,
+                Name = "Quarterly HVAC Filter Replacement",
+                Description = "Replace all HVAC air filters and inspect belt tension every quarter",
+                MaintenanceType = MaintenanceType.Preventive,
+                Frequency = ScheduleFrequency.Quarterly,
+                FrequencyValue = 1,
+                LastExecutedAt = DateTime.UtcNow.AddDays(-7),
+                NextDueAt = DateTime.UtcNow.AddDays(83),
+                IsActive = true,
+                Notes = "Use MERV-11 filters only",
+                CreatedByUserId = adminUserId,
+                EquipmentId = eq1Id,
+                AssignedTechnicianId = tech1Id,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.MaintenanceSchedules.AnyAsync(s => s.Id == sched2Id))
+        {
+            context.MaintenanceSchedules.Add(new MaintenanceSchedule
+            {
+                Id = sched2Id,
+                Name = "Annual Chiller Overhaul",
+                Description = "Complete preventive maintenance including oil change, seal inspection, and vibration analysis",
+                MaintenanceType = MaintenanceType.Preventive,
+                Frequency = ScheduleFrequency.Annual,
+                FrequencyValue = 1,
+                LastExecutedAt = DateTime.UtcNow.AddMonths(-11),
+                NextDueAt = DateTime.UtcNow.AddDays(30),
+                IsActive = true,
+                Notes = "Coordinate with Trane service team",
+                CreatedByUserId = adminUserId,
+                EquipmentId = eq2Id,
+                AssignedGroupId = group1Id,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.MaintenanceSchedules.AnyAsync(s => s.Id == sched3Id))
+        {
+            context.MaintenanceSchedules.Add(new MaintenanceSchedule
+            {
+                Id = sched3Id,
+                Name = "Monthly HVAC System Inspection",
+                Description = "Visual inspection of all HVAC components and performance verification",
+                MaintenanceType = MaintenanceType.Inspection,
+                Frequency = ScheduleFrequency.Monthly,
+                FrequencyValue = 1,
+                LastExecutedAt = DateTime.UtcNow.AddDays(-35),
+                NextDueAt = DateTime.UtcNow.AddDays(-5),
+                IsActive = true,
+                Notes = "Overdue — schedule immediately",
+                CreatedByUserId = adminUserId,
+                AssignedTechnicianId = tech1Id,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
         logger.LogInformation("Domain entity seeding complete.");
     }
 }

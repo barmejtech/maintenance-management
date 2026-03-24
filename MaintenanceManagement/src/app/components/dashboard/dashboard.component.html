@@ -100,6 +100,23 @@
         }
       </div>
 
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-period">
+          <span class="filter-label">{{ 'dashboard.filter.period' | translate }}:</span>
+          <div class="period-pills">
+            <button class="period-pill" [class.active]="selectedPeriod() === 'today'" (click)="setPeriod('today')">{{ 'dashboard.filter.today' | translate }}</button>
+            <button class="period-pill" [class.active]="selectedPeriod() === '7d'" (click)="setPeriod('7d')">{{ 'dashboard.filter.last7days' | translate }}</button>
+            <button class="period-pill" [class.active]="selectedPeriod() === '30d'" (click)="setPeriod('30d')">{{ 'dashboard.filter.last30days' | translate }}</button>
+            <button class="period-pill" [class.active]="selectedPeriod() === 'all'" (click)="setPeriod('all')">{{ 'dashboard.filter.allTime' | translate }}</button>
+          </div>
+        </div>
+        <div class="refresh-status" [class.refreshing]="isRefreshing()">
+          <span class="refresh-dot"></span>
+          <span class="refresh-text">{{ 'dashboard.filter.liveData' | translate }} &nbsp;·&nbsp; {{ 'dashboard.filter.updated' | translate }} {{ getLastRefreshedLabel() }}</span>
+        </div>
+      </div>
+
       <!-- Stats Grid -->
       <div class="stats-grid">
         <div class="stat-card stat-card--tasks">
@@ -145,6 +162,26 @@
           <div class="stat-info">
             <div class="stat-value">{{ reportCount() }}</div>
             <div class="stat-label">{{ 'dashboard.stats.reports' | translate }}</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card--spareparts">
+          <div class="stat-icon-box">🔧</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ sparePartsCount() }}</div>
+            <div class="stat-label">{{ 'dashboard.stats.spareParts' | translate }}</div>
+            @if (lowStockCount() > 0) {
+              <div class="stat-badge stat-badge--danger">⚠ {{ lowStockCount() }} {{ 'dashboard.stats.lowStock' | translate }}</div>
+            }
+          </div>
+        </div>
+        <div class="stat-card stat-card--schedules">
+          <div class="stat-icon-box">📋</div>
+          <div class="stat-info">
+            <div class="stat-value">{{ activeSchedulesCount() }}</div>
+            <div class="stat-label">{{ 'dashboard.stats.activeSchedules' | translate }}</div>
+            @if (overdueSchedulesCount() > 0) {
+              <div class="stat-badge stat-badge--danger">⚠ {{ overdueSchedulesCount() }} {{ 'dashboard.stats.overdue' | translate }}</div>
+            }
           </div>
         </div>
       </div>

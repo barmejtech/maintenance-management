@@ -8,6 +8,8 @@ import { EquipmentService } from '../../services/equipment.service';
 import { NotificationService } from '../../services/notification.service';
 import { InvoiceService } from '../../services/invoice.service';
 import { ReportService } from '../../services/report.service';
+import { SparePartService } from '../../services/spare-part.service';
+import { MaintenanceScheduleService } from '../../services/maintenance-schedule.service';
 import { NotificationsComponent } from '../notifications/notifications.component';
 import { TranslationService } from '../../services/translate.service';
 import { ThemeService } from '../../services/theme.service';
@@ -42,6 +44,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('myTaskChart') myTaskChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('myPriorityChart') myPriorityChartRef!: ElementRef<HTMLCanvasElement>;
 
+  // Period filter: 'today' | '7d' | '30d' | 'all'
+  selectedPeriod = signal<'today' | '7d' | '30d' | 'all'>('all');
+  lastRefreshed = signal<Date>(new Date());
+  isRefreshing = signal(false);
+
   // Shared signals
   taskCount = signal(0);
   equipmentCount = signal(0);
@@ -51,6 +58,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   invoiceCount = signal(0);
   pendingInvoices = signal(0);
   reportCount = signal(0);
+  sparePartsCount = signal(0);
+  lowStockCount = signal(0);
+  activeSchedulesCount = signal(0);
+  overdueSchedulesCount = signal(0);
   // Technician signals
   myTaskCount = signal(0);
   myPendingCount = signal(0);
@@ -73,6 +84,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   trendLabels: string[] = [];
   private trendCounts: number[] = [];
 
+  // Raw task list for period-filtering
+  private allTasks: TaskOrder[] = [];
+
   constructor(
     public auth: AuthService,
     public translation: TranslationService,
@@ -82,7 +96,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private eqService: EquipmentService,
     private notifService: NotificationService,
     private invoiceService: InvoiceService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private sparePartService: SparePartService,
+    private scheduleService: MaintenanceScheduleService
   ) {}
 
   ngOnInit() {
@@ -105,25 +121,54 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.myPriorityChart?.destroy();
   }
 
+  setPeriod(period: 'today' | '7d' | '30d' | 'all') {
+    this.selectedPeriod.set(period);
+    this.applyTaskFilter();
+  }
+
+  private filterTasksByPeriod(tasks: TaskOrder[]): TaskOrder[] {
+    const period = this.selectedPeriod();
+    if (period === 'all') return tasks;
+    const now = new Date();
+    const cutoff = new Date(now);
+    if (period === 'today') {
+      cutoff.setHours(0, 0, 0, 0);
+    } else if (period === '7d') {
+      cutoff.setDate(now.getDate() - 7);
+    } else if (period === '30d') {
+      cutoff.setDate(now.getDate() - 30);
+    }
+    return tasks.filter(t => new Date(t.createdAt) >= cutoff);
+  }
+
+  private applyTaskFilter() {
+    const filtered = this.filterTasksByPeriod(this.allTasks);
+    const active = filtered.filter(x => x.status < 2);
+    this.taskCount.set(active.length);
+    this.taskStats = {
+      pending: filtered.filter(t => t.status === TaskStatus.Pending).length,
+      inProgress: filtered.filter(t => t.status === TaskStatus.InProgress).length,
+      completed: filtered.filter(t => t.status === TaskStatus.Completed).length,
+      cancelled: filtered.filter(t => t.status === TaskStatus.Cancelled).length,
+      onHold: filtered.filter(t => t.status === TaskStatus.OnHold).length
+    };
+    this.trendCounts = this.buildTrendCounts(filtered);
+    this.updateTaskChart();
+    this.updateTrendChart();
+    if (this.isTechnicianRole()) {
+      this.computeMyTaskStats(filtered);
+    }
+  }
+
   private loadData() {
+    this.isRefreshing.set(true);
     this.taskService.getAll().subscribe({
       next: tasks => {
-        const active = tasks.filter(x => x.status < 2);
-        this.taskCount.set(active.length);
-        this.taskStats = {
-          pending: tasks.filter(t => t.status === TaskStatus.Pending).length,
-          inProgress: tasks.filter(t => t.status === TaskStatus.InProgress).length,
-          completed: tasks.filter(t => t.status === TaskStatus.Completed).length,
-          cancelled: tasks.filter(t => t.status === TaskStatus.Cancelled).length,
-          onHold: tasks.filter(t => t.status === TaskStatus.OnHold).length
-        };
-        this.trendCounts = this.buildTrendCounts(tasks);
-        this.updateTaskChart();
-        this.updateTrendChart();
-        if (this.isTechnicianRole()) {
-          this.computeMyTaskStats(tasks);
-        }
-      }, error: () => {}
+        this.allTasks = tasks;
+        this.applyTaskFilter();
+        this.isRefreshing.set(false);
+        this.lastRefreshed.set(new Date());
+      }, error: () => { this.isRefreshing.set(false); }
     });
 
     if (this.isManagerOrAdmin()) {
@@ -150,6 +195,21 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.reportService.getAll().subscribe({
         next: reports => this.reportCount.set(reports.length),
         error: () => {}
+      });
+      this.sparePartService.getAll().subscribe({
+        next: parts => {
+          this.sparePartsCount.set(parts.length);
+          this.lowStockCount.set(parts.filter(p => p.isLowStock).length);
+        }, error: () => {}
+      });
+      this.scheduleService.getAll().subscribe({
+        next: schedules => {
+          const now = new Date();
+          this.activeSchedulesCount.set(schedules.filter(s => s.isActive).length);
+          this.overdueSchedulesCount.set(
+            schedules.filter(s => s.isActive && s.nextDueAt && new Date(s.nextDueAt) < now).length
+          );
+        }, error: () => {}
       });
     }
 
@@ -385,6 +445,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   isAdmin(): boolean { return this.auth.isAdmin(); }
   isManagerOrAdmin(): boolean { return this.auth.isManager(); }
   isTechnicianRole(): boolean { return !this.auth.isManager() && this.auth.isAuthenticated(); }
+
+  getLastRefreshedLabel(): string {
+    const d = this.lastRefreshed();
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
 
   getRoleName(): string {
     if (this.auth.isAdmin()) return this.translation.translate('dashboard.roles.administrator');
