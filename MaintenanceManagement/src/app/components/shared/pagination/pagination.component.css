@@ -1,0 +1,6 @@
+.pagination .page-link {
+  border-radius: 6px;
+  margin: 0 2px;
+  min-width: 34px;
+  text-align: center;
+}

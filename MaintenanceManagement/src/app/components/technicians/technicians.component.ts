@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -7,11 +7,12 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { Technician, TechnicianStatus, CreateTechnicianRequest, UpdateTechnicianRequest } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
+import { PaginationComponent } from '../shared/pagination/pagination.component';
 
 @Component({
   selector: 'app-technicians',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, PaginationComponent],
   templateUrl: './technicians.component.html',
   styleUrls: ['./technicians.component.css']
 })
@@ -23,6 +24,14 @@ export class TechniciansComponent implements OnInit {
   isSaving = signal(false);
   isUploadingPhoto = signal(false);
   TechnicianStatus = TechnicianStatus;
+
+  currentPage = signal(1);
+  readonly pageSize = 10;
+
+  paginatedTechnicians = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return this.technicians().slice(start, start + this.pageSize);
+  });
 
   form: {
     firstName: string; lastName: string; email: string;
@@ -48,7 +57,7 @@ export class TechniciansComponent implements OnInit {
   load() {
     this.isLoading.set(true);
     this.service.getAll().subscribe({
-      next: (data) => { this.technicians.set(data); this.isLoading.set(false); },
+      next: (data) => { this.technicians.set(data); this.currentPage.set(1); this.isLoading.set(false); },
       error: () => this.isLoading.set(false)
     });
   }
@@ -133,6 +142,10 @@ export class TechniciansComponent implements OnInit {
 
   getInitials(tech: Technician): string {
     return `${tech.firstName[0] ?? ''}${tech.lastName[0] ?? ''}`.toUpperCase();
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage.set(page);
   }
 
   getPhotoUrl(url: string | undefined): string {
