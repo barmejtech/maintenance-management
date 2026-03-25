@@ -96,7 +96,7 @@ public class AuthService : IAuthService
     private async Task<AuthResponseDto> GenerateAuthResponseAsync(ApplicationUser user)
     {
         var roles = await _userManager.GetRolesAsync(user);
-        var accessToken = _jwtService.GenerateAccessToken(user.Id, user.Email!, roles);
+        var accessToken = _jwtService.GenerateAccessToken(user.Id, user.Email!, $"{user.FirstName} {user.LastName}", roles);
         var refreshToken = _jwtService.GenerateRefreshToken();
 
         var refreshTokenExpiryDays = int.Parse(

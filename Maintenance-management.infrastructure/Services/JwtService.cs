@@ -14,7 +14,7 @@ public class JwtService : IJwtService
 
     public JwtService(IConfiguration config) => _config = config;
 
-    public string GenerateAccessToken(string userId, string email, IList<string> roles)
+    public string GenerateAccessToken(string userId, string email, string fullName, IList<string> roles)
     {
         var jwtSettings = _config.GetSection("JwtSettings");
         var secretKey = jwtSettings["SecretKey"]!;
@@ -29,6 +29,7 @@ public class JwtService : IJwtService
         {
             new(ClaimTypes.NameIdentifier, userId),
             new(ClaimTypes.Email, email),
+            new(ClaimTypes.Name, fullName),
             new(JwtRegisteredClaimNames.Sub, userId),
             new(JwtRegisteredClaimNames.Email, email),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
