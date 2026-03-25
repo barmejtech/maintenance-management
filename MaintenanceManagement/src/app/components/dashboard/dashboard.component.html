@@ -3,7 +3,7 @@
   @if (isManagerOrAdmin()) {
   <div class="dashboard-hero">
     <div class="hero-content">
-      <div class="hero-icon">📊</div>
+      <div class="hero-icon"><i class="bi bi-bar-chart-line"></i></div>
       <div>
         <h2 class="hero-title">{{ getDashboardTitle() }}</h2>
         <p class="hero-subtitle">{{ getDashboardSubtitle() }}</p>
@@ -11,12 +11,12 @@
     </div>
     @if (isAdmin()) {
     <div class="hero-badge hero-badge--admin">
-      <span class="badge-icon">🔑</span>
+      <span class="badge-icon"><i class="bi bi-key-fill"></i></span>
       <span>{{ 'dashboard.hero.fullAccess' | translate }}</span>
     </div>
     } @else {
     <div class="hero-badge hero-badge--manager">
-      <span class="badge-icon">🛠️</span>
+      <span class="badge-icon"><i class="bi bi-tools"></i></span>
       <span>{{ 'dashboard.hero.managementView' | translate }}</span>
     </div>
     }
@@ -26,7 +26,7 @@
   <div class="filter-bar">
     <div class="filter-period">
       <span class="filter-label">
-        <i class="filter-icon">📅</i>
+        <i class="bi bi-calendar3 filter-icon"></i>
         {{ 'dashboard.filter.period' | translate }}:
       </span>
       <div class="period-pills">
@@ -51,7 +51,7 @@
     <div class="refresh-status" [class.refreshing]="isRefreshing()">
       <div class="refresh-dot"></div>
       <span class="refresh-text">
-        <i class="refresh-icon">🔄</i>
+        <i class="bi bi-arrow-repeat refresh-icon"></i>
         {{ 'dashboard.filter.liveData' | translate }}
         <span class="refresh-separator">·</span>
         {{ 'dashboard.filter.updated' | translate }}
@@ -64,13 +64,13 @@
   <div class="stats-grid">
     <div class="stat-card stat-card--tasks" (click)="navigateTo('tasks')">
       <div class="stat-icon-box">
-        <i class="stat-icon">✅</i>
+        <i class="bi bi-clipboard2-check stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ taskCount() }}</div>
         <div class="stat-label">{{ 'dashboard.stats.activeWorkOrders' | translate }}</div>
         <div class="stat-trend stat-trend--up">
-          <span class="trend-icon">📈</span>
+          <i class="bi bi-graph-up-arrow trend-icon"></i>
           <span class="trend-value">+12%</span>
         </div>
       </div>
@@ -78,13 +78,13 @@
 
     <div class="stat-card stat-card--technicians" (click)="navigateTo('technicians')">
       <div class="stat-icon-box">
-        <i class="stat-icon">👷</i>
+        <i class="bi bi-person-gear stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ technicianCount() }}</div>
         <div class="stat-label">{{ 'dashboard.stats.technicians' | translate }}</div>
         <div class="stat-trend stat-trend--up">
-          <span class="trend-icon">👥</span>
+          <i class="bi bi-people-fill trend-icon"></i>
           <span class="trend-value">Active: {{ getActiveTechnicians() }}</span>
         </div>
       </div>
@@ -93,7 +93,7 @@
     @if (isAdmin()) {
     <div class="stat-card stat-card--managers" (click)="navigateTo('managers')">
       <div class="stat-icon-box">
-        <i class="stat-icon">👔</i>
+        <i class="bi bi-person-badge-fill stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ managerCount() }}</div>
@@ -104,7 +104,7 @@
 
     <div class="stat-card stat-card--equipment" (click)="navigateTo('equipment')">
       <div class="stat-icon-box">
-        <i class="stat-icon">🔩</i>
+        <i class="bi bi-gear-fill stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ equipmentCount() }}</div>
@@ -114,14 +114,14 @@
 
     <div class="stat-card stat-card--maintenance" (click)="navigateTo('maintenance')">
       <div class="stat-icon-box">
-        <i class="stat-icon">⚠️</i>
+        <i class="bi bi-exclamation-triangle-fill stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ dueMaintenance() }}</div>
         <div class="stat-label">{{ 'dashboard.stats.dueMaintenance' | translate }}</div>
         @if (dueMaintenance() > 0) {
         <div class="stat-badge stat-badge--danger">
-          <i class="badge-icon">⚠️</i>
+          <i class="bi bi-exclamation-triangle-fill badge-icon"></i>
           {{ 'dashboard.stats.urgent' | translate }}
         </div>
         }
@@ -130,14 +130,14 @@
 
     <div class="stat-card stat-card--invoices" (click)="navigateTo('invoices')">
       <div class="stat-icon-box">
-        <i class="stat-icon">💰</i>
+        <i class="bi bi-cash-stack stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ invoiceCount() }}</div>
         <div class="stat-label">{{ 'dashboard.stats.totalInvoices' | translate }}</div>
         @if (pendingInvoices() > 0) {
         <div class="stat-badge">
-          <i class="badge-icon">⏳</i>
+          <i class="bi bi-hourglass-split badge-icon"></i>
           {{ pendingInvoices() }} {{ 'dashboard.stats.pending' | translate }}
         </div>
         }
@@ -146,7 +146,7 @@
 
     <div class="stat-card stat-card--reports" (click)="navigateTo('reports')">
       <div class="stat-icon-box">
-        <i class="stat-icon">📄</i>
+        <i class="bi bi-file-text-fill stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ reportCount() }}</div>
@@ -156,14 +156,14 @@
 
     <div class="stat-card stat-card--spareparts" (click)="navigateTo('spareparts')">
       <div class="stat-icon-box">
-        <i class="stat-icon">🔧</i>
+        <i class="bi bi-wrench-adjustable stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ sparePartsCount() }}</div>
         <div class="stat-label">{{ 'dashboard.stats.spareParts' | translate }}</div>
         @if (lowStockCount() > 0) {
         <div class="stat-badge stat-badge--danger">
-          <i class="badge-icon">⚠️</i>
+          <i class="bi bi-exclamation-triangle-fill badge-icon"></i>
           {{ lowStockCount() }} {{ 'dashboard.stats.lowStock' | translate }}
         </div>
         }
@@ -172,14 +172,14 @@
 
     <div class="stat-card stat-card--schedules" (click)="navigateTo('schedules')">
       <div class="stat-icon-box">
-        <i class="stat-icon">📋</i>
+        <i class="bi bi-clipboard-fill stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ activeSchedulesCount() }}</div>
         <div class="stat-label">{{ 'dashboard.stats.activeSchedules' | translate }}</div>
         @if (overdueSchedulesCount() > 0) {
         <div class="stat-badge stat-badge--danger">
-          <i class="badge-icon">⚠️</i>
+          <i class="bi bi-exclamation-triangle-fill badge-icon"></i>
           {{ overdueSchedulesCount() }} {{ 'dashboard.stats.overdue' | translate }}
         </div>
         }
@@ -190,12 +190,12 @@
   <!-- Charts Grid -->
   <div class="section-header">
     <h3 class="section-title">
-      <i class="section-icon">📈</i>
+      <i class="bi bi-graph-up-arrow section-icon"></i>
       {{ 'dashboard.charts.analytics' | translate }}
     </h3>
     <div class="section-actions">
       <button class="chart-action-btn" (click)="refreshCharts()">
-        <i class="action-icon">🔄</i>
+        <i class="bi bi-arrow-repeat action-icon"></i>
         {{ 'dashboard.charts.refresh' | translate }}
       </button>
     </div>
@@ -206,7 +206,7 @@
     <div class="chart-card chart-card--animate">
       <div class="chart-header chart-header--blue">
         <div class="header-content">
-          <i class="chart-header-icon">📊</i>
+          <i class="bi bi-bar-chart-line chart-header-icon"></i>
           <h3>{{ 'dashboard.charts.workOrdersByStatus' | translate }}</h3>
         </div>
         <div class="chart-header-stats">
@@ -224,7 +224,7 @@
     <div class="chart-card chart-card--animate">
       <div class="chart-header chart-header--amber">
         <div class="header-content">
-          <i class="chart-header-icon">🔩</i>
+          <i class="bi bi-gear-fill chart-header-icon"></i>
           <h3>{{ 'dashboard.charts.equipmentStatus' | translate }}</h3>
         </div>
         <div class="chart-header-stats">
@@ -242,7 +242,7 @@
     <div class="chart-card chart-card--animate">
       <div class="chart-header chart-header--green">
         <div class="header-content">
-          <i class="chart-header-icon">👷</i>
+          <i class="bi bi-person-gear chart-header-icon"></i>
           <h3>{{ 'dashboard.charts.technicianAvailability' | translate }}</h3>
         </div>
         <div class="chart-header-stats">
@@ -260,7 +260,7 @@
     <div class="chart-card chart-card--animate">
       <div class="chart-header chart-header--cyan">
         <div class="header-content">
-          <i class="chart-header-icon">🎯</i>
+          <i class="bi bi-bullseye chart-header-icon"></i>
           <h3>{{ 'dashboard.charts.completionRate' | translate }}</h3>
         </div>
         <div class="chart-header-stats">
@@ -284,7 +284,7 @@
     <div class="chart-card chart-card--wide chart-card--animate">
       <div class="chart-header chart-header--purple">
         <div class="header-content">
-          <i class="chart-header-icon">📈</i>
+          <i class="bi bi-graph-up-arrow chart-header-icon"></i>
           <h3>{{ 'dashboard.charts.sevenDayTrend' | translate }}</h3>
         </div>
         <div class="chart-header-stats">
@@ -303,41 +303,41 @@
   <div class="quick-actions">
     <div class="section-header">
       <h3 class="section-title">
-        <i class="section-icon">⚡</i>
+        <i class="bi bi-lightning-fill section-icon"></i>
         {{ 'dashboard.quickActions.title' | translate }}
       </h3>
     </div>
     <div class="actions-grid">
       <a routerLink="/tasks" class="action-btn action-btn--blue">
-        <i class="action-icon">➕</i>
+        <i class="bi bi-plus-circle-fill action-icon"></i>
         <span>{{ 'dashboard.quickActions.newWorkOrder' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
       <a routerLink="/technicians" class="action-btn action-btn--green">
-        <i class="action-icon">👷</i>
+        <i class="bi bi-person-gear action-icon"></i>
         <span>{{ 'dashboard.quickActions.manageTechnicians' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
       <a routerLink="/reports" class="action-btn action-btn--cyan">
-        <i class="action-icon">📄</i>
+        <i class="bi bi-file-text-fill action-icon"></i>
         <span>{{ 'dashboard.quickActions.createReport' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
       <a routerLink="/invoices" class="action-btn action-btn--purple">
-        <i class="action-icon">💰</i>
+        <i class="bi bi-cash-stack action-icon"></i>
         <span>{{ 'dashboard.quickActions.newInvoice' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
       <a routerLink="/chat" class="action-btn action-btn--default">
-        <i class="action-icon">💬</i>
+        <i class="bi bi-chat-dots-fill action-icon"></i>
         <span>{{ 'dashboard.quickActions.teamChat' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
       @if (isAdmin()) {
       <a routerLink="/groups" class="action-btn action-btn--admin">
-        <i class="action-icon">⚙️</i>
+        <i class="bi bi-gear-wide-connected action-icon"></i>
         <span>{{ 'dashboard.quickActions.manageGroups' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
       }
     </div>
@@ -348,14 +348,14 @@
   @if (isTechnicianRole()) {
   <div class="dashboard-hero">
     <div class="hero-content">
-      <div class="hero-icon">🔧</div>
+      <div class="hero-icon"><i class="bi bi-wrench-adjustable"></i></div>
       <div>
         <h2 class="hero-title">{{ getDashboardTitle() }}</h2>
         <p class="hero-subtitle">{{ getDashboardSubtitle() }}</p>
       </div>
     </div>
     <div class="hero-badge hero-badge--tech">
-      <span class="badge-icon">🔧</span>
+      <span class="badge-icon"><i class="bi bi-wrench-adjustable"></i></span>
       <span>{{ 'dashboard.hero.technicianView' | translate }}</span>
     </div>
   </div>
@@ -364,7 +364,7 @@
   <div class="stats-grid">
     <div class="stat-card stat-card--tasks" (click)="navigateTo('my-tasks')">
       <div class="stat-icon-box">
-        <i class="stat-icon">📋</i>
+        <i class="bi bi-clipboard-fill stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ myTaskCount() }}</div>
@@ -374,7 +374,7 @@
 
     <div class="stat-card stat-card--pending" (click)="navigateTo('pending-tasks')">
       <div class="stat-icon-box">
-        <i class="stat-icon">⏳</i>
+        <i class="bi bi-hourglass-split stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ myPendingCount() }}</div>
@@ -384,7 +384,7 @@
 
     <div class="stat-card stat-card--inprogress" (click)="navigateTo('inprogress-tasks')">
       <div class="stat-icon-box">
-        <i class="stat-icon">🔄</i>
+        <i class="bi bi-arrow-repeat stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ myInProgressCount() }}</div>
@@ -394,7 +394,7 @@
 
     <div class="stat-card stat-card--completed" (click)="navigateTo('completed-tasks')">
       <div class="stat-icon-box">
-        <i class="stat-icon">✅</i>
+        <i class="bi bi-check2-circle stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ myCompletedCount() }}</div>
@@ -404,7 +404,7 @@
 
     <div class="stat-card stat-card--equipment" (click)="navigateTo('equipment')">
       <div class="stat-icon-box">
-        <i class="stat-icon">🔩</i>
+        <i class="bi bi-gear-fill stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ equipmentCount() }}</div>
@@ -414,7 +414,7 @@
 
     <div class="stat-card stat-card--maintenance" (click)="navigateTo('maintenance')">
       <div class="stat-icon-box">
-        <i class="stat-icon">⚠️</i>
+        <i class="bi bi-exclamation-triangle-fill stat-icon"></i>
       </div>
       <div class="stat-info">
         <div class="stat-value">{{ dueMaintenance() }}</div>
@@ -426,7 +426,7 @@
   <!-- Charts -->
   <div class="section-header">
     <h3 class="section-title">
-      <i class="section-icon">📊</i>
+      <i class="bi bi-bar-chart-line section-icon"></i>
       {{ 'dashboard.charts.myPerformance' | translate }}
     </h3>
   </div>
@@ -435,7 +435,7 @@
     <div class="chart-card chart-card--animate">
       <div class="chart-header chart-header--blue">
         <div class="header-content">
-          <i class="chart-header-icon">📊</i>
+          <i class="bi bi-bar-chart-line chart-header-icon"></i>
           <h3>{{ 'dashboard.charts.myTasksByStatus' | translate }}</h3>
         </div>
         <div class="chart-header-stats">
@@ -452,7 +452,7 @@
     <div class="chart-card chart-card--animate">
       <div class="chart-header chart-header--red">
         <div class="header-content">
-          <i class="chart-header-icon">🚦</i>
+          <i class="bi bi-flag-fill chart-header-icon"></i>
           <h3>{{ 'dashboard.charts.myTasksByPriority' | translate }}</h3>
         </div>
         <div class="chart-header-stats">
@@ -469,7 +469,7 @@
     <div class="chart-card chart-card--animate">
       <div class="chart-header chart-header--purple">
         <div class="header-content">
-          <i class="chart-header-icon">📅</i>
+          <i class="bi bi-calendar3 chart-header-icon"></i>
           <h3>{{ 'dashboard.charts.weeklyActivity' | translate }}</h3>
         </div>
         <div class="chart-header-stats">
@@ -488,40 +488,40 @@
   <div class="quick-actions">
     <div class="section-header">
       <h3 class="section-title">
-        <i class="section-icon">⚡</i>
+        <i class="bi bi-lightning-fill section-icon"></i>
         {{ 'dashboard.quickActions.title' | translate }}
       </h3>
     </div>
     <div class="actions-grid">
       <a routerLink="/tasks" class="action-btn action-btn--blue">
-        <i class="action-icon">✅</i>
+        <i class="bi bi-check2-circle action-icon"></i>
         <span>{{ 'dashboard.quickActions.myWorkOrders' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
       <a routerLink="/reports" class="action-btn action-btn--cyan">
-        <i class="action-icon">📄</i>
+        <i class="bi bi-file-text-fill action-icon"></i>
         <span>{{ 'dashboard.quickActions.createReport' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
       <a routerLink="/equipment" class="action-btn action-btn--amber">
-        <i class="action-icon">🔩</i>
+        <i class="bi bi-gear-fill action-icon"></i>
         <span>{{ 'dashboard.quickActions.viewEquipment' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
       <a routerLink="/availability" class="action-btn action-btn--green">
-        <i class="action-icon">📅</i>
+        <i class="bi bi-calendar3 action-icon"></i>
         <span>{{ 'dashboard.quickActions.myAvailability' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
       <a routerLink="/chat" class="action-btn action-btn--default">
-        <i class="action-icon">💬</i>
+        <i class="bi bi-chat-dots-fill action-icon"></i>
         <span>{{ 'dashboard.quickActions.teamChat' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
       <a routerLink="/calendar" class="action-btn action-btn--default">
-        <i class="action-icon">🗓️</i>
+        <i class="bi bi-calendar-week-fill action-icon"></i>
         <span>{{ 'dashboard.quickActions.schedule' | translate }}</span>
-        <i class="action-arrow">→</i>
+        <i class="bi bi-arrow-right action-arrow"></i>
       </a>
     </div>
   </div>
