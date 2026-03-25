@@ -22,9 +22,9 @@
           <div class="d-flex align-items-center gap-2 px-3 py-2 border-bottom user-row"
                [class.active-conversation]="!selectedRecipient"
                (click)="selectUser(null)" style="cursor:pointer">
-            <span class="status-dot rounded-circle flex-shrink-0 bg-primary"></span>
+            <div class="user-avatar bg-primary text-white">🌐</div>
             <div class="flex-grow-1 overflow-hidden">
-              <div class="text-truncate fw-medium small">🌐 Public Channel</div>
+              <div class="text-truncate fw-medium small">Public Channel</div>
               <div class="text-muted" style="font-size:0.7rem">All users</div>
             </div>
           </div>
@@ -33,13 +33,20 @@
               <div class="d-flex align-items-center gap-2 px-3 py-2 border-bottom user-row"
                    [class.active-conversation]="selectedRecipient?.id === user.id"
                    (click)="selectUser(user)" style="cursor:pointer">
-                <span class="status-dot rounded-circle flex-shrink-0"
-                      [class.bg-success]="user.isOnline"
-                      [class.bg-secondary]="!user.isOnline">
-                </span>
+                <div class="user-avatar text-white position-relative"
+                     [style.background]="getAvatarColor(user.fullName)">
+                  {{ getInitials(user.fullName) }}
+                  <span class="position-absolute bottom-0 end-0 status-dot rounded-circle border border-white"
+                        style="width:9px;height:9px"
+                        [class.bg-success]="user.isOnline"
+                        [class.bg-secondary]="!user.isOnline">
+                  </span>
+                </div>
                 <div class="flex-grow-1 overflow-hidden">
                   <div class="text-truncate fw-medium small">{{ user.fullName }}</div>
-                  <div class="text-muted" style="font-size:0.7rem">{{ user.isOnline ? 'Online' : 'Offline' }}</div>
+                  <div [class.text-success]="user.isOnline" [class.text-muted]="!user.isOnline" style="font-size:0.7rem">
+                    {{ user.isOnline ? 'Online' : 'Offline' }}
+                  </div>
                 </div>
                 <i class="bi bi-lock-fill text-muted" style="font-size:0.65rem" title="Private message"></i>
               </div>
@@ -81,30 +88,36 @@
             </div>
           }
           @for (msg of chatService.visibleMessages(); track msg.id) {
-            <div class="d-flex mb-2" [class.justify-content-end]="msg.isOwn">
-              <div class="message-bubble rounded-3 p-2 px-3"
+            <div class="message-row" [class.own]="msg.isOwn">
+              @if (!msg.isOwn) {
+                <div class="message-avatar text-white"
+                     [style.background]="getAvatarColor(msg.senderName)">
+                  {{ getInitials(msg.senderName) }}
+                </div>
+              }
+              <div class="message-bubble"
                    [class.bubble-own]="msg.isOwn"
                    [class.bubble-other]="!msg.isOwn"
                    [class.bubble-private]="!!msg.receiverId">
                 @if (!msg.isOwn) {
-                  <div class="sender-name fw-semibold mb-1" style="font-size:0.75rem">
-                    <i class="bi bi-person-circle me-1"></i>{{ msg.senderName }}
+                  <div class="sender-name">
+                    {{ msg.senderName }}
                     @if (msg.receiverId) {
-                      <span class="ms-1 text-warning" title="Private message"><i class="bi bi-lock-fill"></i></span>
+                      <i class="bi bi-lock-fill ms-1 text-warning" title="Private message"></i>
                     }
                   </div>
                 }
                 @if (msg.messageType === MessageType.Text) {
-                  <div class="msg-text" style="font-size:0.9rem;word-break:break-word">{{ msg.content }}</div>
+                  <div class="msg-text" style="font-size:0.9rem">{{ msg.content }}</div>
                 } @else if (msg.messageType === MessageType.Photo) {
-                  <img [src]="getFileUrl(msg.fileUrl)" [alt]="msg.fileName" class="rounded img-fluid" style="max-width:200px;max-height:200px" />
+                  <img [src]="getFileUrl(msg.fileUrl)" [alt]="msg.fileName" class="msg-image" />
                 } @else {
                   <a [href]="getFileUrl(msg.fileUrl)" target="_blank" class="d-flex align-items-center gap-1 text-decoration-none"
                      [class.text-light]="msg.isOwn" [class.text-primary]="!msg.isOwn">
                     <i class="bi bi-paperclip"></i>{{ msg.fileName }}
                   </a>
                 }
-                <div class="text-end mt-1" style="font-size:0.7rem"
+                <div class="text-end mt-1 msg-time"
                      [class.text-light]="msg.isOwn" [class.text-muted]="!msg.isOwn">
                   {{ msg.sentAt | date:'shortTime' }}
                   @if (msg.isOwn && msg.receiverId) {
@@ -139,11 +152,11 @@
                 <i class="bi bi-paperclip"></i>
               }
             </button>
-            <input type="text" class="form-control" [(ngModel)]="newMessage"
+            <input type="text" class="form-control chat-input" [(ngModel)]="newMessage"
                    (keydown.enter)="sendMessage()"
                    [placeholder]="selectedRecipient ? 'Message ' + selectedRecipient.fullName + '...' : 'Message everyone...'"
                    [disabled]="!chatService.isConnected()" />
-            <button class="btn btn-primary" type="button"
+            <button class="btn btn-primary send-btn" type="button"
                     (click)="sendMessage()"
                     [disabled]="!newMessage.trim() || !chatService.isConnected()">
               <i class="bi bi-send-fill"></i>

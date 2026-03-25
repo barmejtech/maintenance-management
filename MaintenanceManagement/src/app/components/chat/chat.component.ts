@@ -107,6 +107,26 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     return !!contentType?.startsWith('image/');
   }
 
+  getInitials(name: string): string {
+    if (!name) return '?';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  }
+
+  getAvatarColor(name: string): string {
+    const colors = [
+      '#4e79a7', '#f28e2b', '#e15759', '#76b7b2',
+      '#59a14f', '#edc948', '#b07aa1', '#ff9da7',
+      '#9c755f', '#bab0ac'
+    ];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+  }
+
   getFileUrl(fileUrl?: string): string {
     if (!fileUrl) return '';
     if (fileUrl.startsWith('http')) return fileUrl;

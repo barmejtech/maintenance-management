@@ -4,7 +4,7 @@ namespace Maintenance_management.application.Interfaces;
 
 public interface IJwtService
 {
-    string GenerateAccessToken(string userId, string email, IList<string> roles);
+    string GenerateAccessToken(string userId, string email, string fullName, IList<string> roles);
     string GenerateRefreshToken();
     string? GetUserIdFromExpiredToken(string token);
 }
