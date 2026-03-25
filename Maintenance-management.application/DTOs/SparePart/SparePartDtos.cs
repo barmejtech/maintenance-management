@@ -13,6 +13,10 @@ public class SparePartDto
     public string? Supplier { get; set; }
     public string? StorageLocation { get; set; }
     public string? Notes { get; set; }
+    public string? Photo1Url { get; set; }
+    public string? Photo2Url { get; set; }
+    public string? Photo3Url { get; set; }
+    public string? Photo4Url { get; set; }
     public bool IsLowStock => QuantityInStock <= MinimumStockLevel;
     public DateTime CreatedAt { get; set; }
 }
@@ -29,6 +33,10 @@ public class CreateSparePartDto
     public string? Supplier { get; set; }
     public string? StorageLocation { get; set; }
     public string? Notes { get; set; }
+    public string? Photo1Url { get; set; }
+    public string? Photo2Url { get; set; }
+    public string? Photo3Url { get; set; }
+    public string? Photo4Url { get; set; }
 }
 
 public class UpdateSparePartDto
@@ -43,6 +51,10 @@ public class UpdateSparePartDto
     public string? Supplier { get; set; }
     public string? StorageLocation { get; set; }
     public string? Notes { get; set; }
+    public string? Photo1Url { get; set; }
+    public string? Photo2Url { get; set; }
+    public string? Photo3Url { get; set; }
+    public string? Photo4Url { get; set; }
 }
 
 public class SparePartUsageDto

@@ -16,6 +16,8 @@ public class Equipment : BaseEntity
     public string? Notes { get; set; }
     public string? BeforeMaintenancePhotoUrl { get; set; }
     public string? AfterMaintenancePhotoUrl { get; set; }
+    public string? Photo3Url { get; set; }
+    public string? Photo4Url { get; set; }
 
     public ICollection<TaskOrder> Tasks { get; set; } = new List<TaskOrder>();
     public ICollection<Document> Documents { get; set; } = new List<Document>();

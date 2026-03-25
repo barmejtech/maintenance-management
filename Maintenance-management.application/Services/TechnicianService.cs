@@ -68,6 +68,7 @@ public class TechnicianService : ITechnicianService
         tech.Phone = dto.Phone;
         tech.Specialization = dto.Specialization;
         tech.Status = dto.Status;
+        tech.ProfilePhotoUrl = dto.ProfilePhotoUrl ?? tech.ProfilePhotoUrl;
         tech.UpdatedAt = DateTime.UtcNow;
 
         await _repo.UpdateAsync(tech);

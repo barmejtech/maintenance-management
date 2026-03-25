@@ -12,39 +12,47 @@
   </div>
 
   @if (isLoading()) {
-    <div class="text-center text-muted py-4">
-      <span class="spinner-border spinner-border-sm me-2"></span>{{ 'technicians.loading' | translate }}
+    <div class="text-center text-muted py-5">
+      <span class="spinner-border text-primary me-2"></span>{{ 'technicians.loading' | translate }}
     </div>
   } @else {
     <div class="row g-3">
       @for (tech of technicians(); track tech.id) {
         <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body">
+          <div class="card h-100 shadow-sm border-0 tech-card">
+            <div class="card-body pb-2">
               <div class="d-flex align-items-center gap-3 mb-3">
-                <div class="tech-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold text-white bg-primary flex-shrink-0">
-                  {{ tech.firstName[0] }}{{ tech.lastName[0] }}
-                </div>
+                @if (tech.profilePhotoUrl) {
+                  <img [src]="tech.profilePhotoUrl" alt="{{ tech.fullName }}" class="tech-avatar-photo rounded-circle flex-shrink-0" />
+                } @else {
+                  <div class="tech-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold text-white bg-primary flex-shrink-0">
+                    {{ getInitials(tech) }}
+                  </div>
+                }
                 <div class="overflow-hidden">
                   <h6 class="mb-0 fw-bold text-truncate">{{ tech.fullName }}</h6>
-                  <small class="text-muted">{{ tech.specialization }}</small>
+                  <small class="text-muted"><i class="bi bi-briefcase me-1"></i>{{ tech.specialization }}</small>
                 </div>
               </div>
-              <p class="small mb-1"><i class="bi bi-envelope me-1 text-muted"></i>{{ tech.email }}</p>
-              <p class="small mb-2"><i class="bi bi-telephone me-1 text-muted"></i>{{ tech.phone }}</p>
-              <span class="badge" [class]="getStatusClass(tech.status)">{{ getStatusLabel(tech.status) }}</span>
+              <div class="d-flex flex-column gap-1 mb-2">
+                <p class="small mb-0"><i class="bi bi-envelope me-1 text-muted"></i>{{ tech.email }}</p>
+                <p class="small mb-0"><i class="bi bi-telephone me-1 text-muted"></i>{{ tech.phone }}</p>
+              </div>
+              <span class="badge rounded-pill" [class]="getStatusClass(tech.status)">
+                <i class="bi bi-circle-fill me-1" style="font-size:0.5rem;vertical-align:middle;"></i>{{ getStatusLabel(tech.status) }}
+              </span>
               @if (tech.latitude && tech.longitude) {
                 <p class="small text-muted mt-2 mb-0">
-                  <i class="bi bi-geo-alt me-1"></i>{{ tech.latitude.toFixed(4) }}, {{ tech.longitude.toFixed(4) }}
+                  <i class="bi bi-geo-alt-fill me-1 text-danger"></i>{{ tech.latitude.toFixed(4) }}, {{ tech.longitude.toFixed(4) }}
                 </p>
               }
             </div>
-            <div class="card-footer bg-transparent d-flex justify-content-end gap-2 py-2">
+            <div class="card-footer bg-transparent border-top d-flex justify-content-end gap-2 py-2">
               <button class="btn btn-sm btn-outline-primary" (click)="openEdit(tech)" [title]="'buttons.edit' | translate">
-                <i class="bi bi-pencil"></i>
+                <i class="bi bi-pencil-square me-1"></i>{{ 'buttons.edit' | translate }}
               </button>
               <button class="btn btn-sm btn-outline-danger" (click)="delete(tech.id)" [title]="'buttons.delete' | translate">
-                <i class="bi bi-trash"></i>
+                <i class="bi bi-trash3"></i>
               </button>
             </div>
           </div>
@@ -52,9 +60,10 @@
       }
       @empty {
         <div class="col-12">
-          <div class="card shadow-sm">
-            <div class="card-body text-center text-muted py-5">
-              <i class="bi bi-person-x fs-3 d-block mb-2"></i>{{ 'technicians.empty' | translate }}
+          <div class="card shadow-sm border-0">
+            <div class="card-body text-center py-5">
+              <i class="bi bi-person-x fs-2 d-block mb-2 text-secondary"></i>
+              <span class="text-muted fw-medium">{{ 'technicians.empty' | translate }}</span>
             </div>
           </div>
         </div>
@@ -76,28 +85,28 @@
         <div class="modal-body">
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label fw-semibold">{{ 'technicians.firstName' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-person me-1 text-primary"></i>{{ 'technicians.firstName' | translate }}</label>
               <input class="form-control" [(ngModel)]="form.firstName" [placeholder]="'technicians.firstNamePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">{{ 'technicians.lastName' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-person me-1 text-secondary"></i>{{ 'technicians.lastName' | translate }}</label>
               <input class="form-control" [(ngModel)]="form.lastName" [placeholder]="'technicians.lastNamePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">{{ 'technicians.email' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-envelope me-1 text-secondary"></i>{{ 'technicians.email' | translate }}</label>
               <input type="email" class="form-control" [(ngModel)]="form.email" [placeholder]="'technicians.emailPlaceholder' | translate" [disabled]="isEditing()" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">{{ 'technicians.phone' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-telephone me-1 text-secondary"></i>{{ 'technicians.phone' | translate }}</label>
               <input class="form-control" [(ngModel)]="form.phone" [placeholder]="'technicians.phonePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">{{ 'technicians.specialization' | translate }}</label>
+              <label class="form-label fw-semibold"><i class="bi bi-briefcase me-1 text-secondary"></i>{{ 'technicians.specialization' | translate }}</label>
               <input class="form-control" [(ngModel)]="form.specialization" [placeholder]="'technicians.specializationPlaceholder' | translate" />
             </div>
             @if (isEditing()) {
               <div class="col-md-6">
-                <label class="form-label fw-semibold">{{ 'technicians.status' | translate }}</label>
+                <label class="form-label fw-semibold"><i class="bi bi-activity me-1 text-secondary"></i>{{ 'technicians.status' | translate }}</label>
                 <select class="form-select" [(ngModel)]="form.status">
                   <option [value]="TechnicianStatus.Available">{{ 'technicians.statuses.available' | translate }}</option>
                   <option [value]="TechnicianStatus.Busy">{{ 'technicians.statuses.busy' | translate }}</option>
@@ -107,15 +116,31 @@
               </div>
             } @else {
               <div class="col-md-6">
-                <label class="form-label fw-semibold">{{ 'technicians.password' | translate }}</label>
+                <label class="form-label fw-semibold"><i class="bi bi-lock me-1 text-secondary"></i>{{ 'technicians.password' | translate }}</label>
                 <input type="password" class="form-control" [(ngModel)]="form.password" [placeholder]="'technicians.passwordPlaceholder' | translate" />
               </div>
             }
+
+            <!-- Profile Photo -->
+            <div class="col-12">
+              <div class="border-top pt-3 mt-1">
+                <label class="form-label fw-semibold"><i class="bi bi-person-circle me-1 text-primary"></i>{{ 'technicians.profilePhoto' | translate }}</label>
+                <input type="file" class="form-control" accept="image/*" (change)="uploadProfilePhoto($event)" />
+                @if (isUploadingPhoto()) {
+                  <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'technicians.uploading' | translate }}</div>
+                }
+                @if (form.profilePhotoUrl) {
+                  <div class="mt-2">
+                    <img [src]="form.profilePhotoUrl" alt="Profile photo preview" class="profile-photo-preview rounded-circle" />
+                  </div>
+                }
+              </div>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'technicians.cancel' | translate }}</button>
-          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.firstName || !form.lastName">
+          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.firstName || !form.lastName || isUploadingPhoto()">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
             {{ isEditing() ? ('technicians.update' | translate) : ('technicians.create' | translate) }}
           </button>

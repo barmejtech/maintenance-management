@@ -12,6 +12,10 @@ public class SparePart : BaseEntity
     public string? Supplier { get; set; }
     public string? StorageLocation { get; set; }
     public string? Notes { get; set; }
+    public string? Photo1Url { get; set; }
+    public string? Photo2Url { get; set; }
+    public string? Photo3Url { get; set; }
+    public string? Photo4Url { get; set; }
 
     public ICollection<SparePartUsage> Usages { get; set; } = new List<SparePartUsage>();
 }

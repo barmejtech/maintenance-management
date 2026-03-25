@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { SparePartService } from '../../services/spare-part.service';
+import { FileUploadService } from '../../services/file-upload.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 import { SparePart, CreateSparePartRequest, UpdateSparePartRequest } from '../../models';
@@ -20,19 +21,29 @@ export class SparePartsComponent implements OnInit {
   showModal = signal(false);
   isEditing = signal(false);
   isSaving = signal(false);
+  isUploadingPhoto1 = signal(false);
+  isUploadingPhoto2 = signal(false);
+  isUploadingPhoto3 = signal(false);
+  isUploadingPhoto4 = signal(false);
 
   form: {
     name: string; partNumber: string; description: string; unit: string;
     quantityInStock: number; minimumStockLevel: number; unitPrice: number;
     supplier: string; storageLocation: string; notes: string;
+    photo1Url: string; photo2Url: string; photo3Url: string; photo4Url: string;
   } = {
     name: '', partNumber: '', description: '', unit: 'pcs',
     quantityInStock: 0, minimumStockLevel: 0, unitPrice: 0,
-    supplier: '', storageLocation: '', notes: ''
+    supplier: '', storageLocation: '', notes: '',
+    photo1Url: '', photo2Url: '', photo3Url: '', photo4Url: ''
   };
   private editingId = '';
 
-  constructor(private service: SparePartService, private translation: TranslationService) {}
+  constructor(
+    private service: SparePartService,
+    private fileService: FileUploadService,
+    private translation: TranslationService
+  ) {}
 
   ngOnInit() { this.load(); }
 
@@ -47,7 +58,7 @@ export class SparePartsComponent implements OnInit {
   openAdd() {
     this.isEditing.set(false);
     this.editingId = '';
-    this.form = { name: '', partNumber: '', description: '', unit: 'pcs', quantityInStock: 0, minimumStockLevel: 0, unitPrice: 0, supplier: '', storageLocation: '', notes: '' };
+    this.form = { name: '', partNumber: '', description: '', unit: 'pcs', quantityInStock: 0, minimumStockLevel: 0, unitPrice: 0, supplier: '', storageLocation: '', notes: '', photo1Url: '', photo2Url: '', photo3Url: '', photo4Url: '' };
     this.showModal.set(true);
   }
 
@@ -58,24 +69,51 @@ export class SparePartsComponent implements OnInit {
       name: part.name, partNumber: part.partNumber, description: part.description,
       unit: part.unit, quantityInStock: part.quantityInStock, minimumStockLevel: part.minimumStockLevel,
       unitPrice: part.unitPrice, supplier: part.supplier ?? '', storageLocation: part.storageLocation ?? '',
-      notes: part.notes ?? ''
+      notes: part.notes ?? '',
+      photo1Url: part.photo1Url ?? '', photo2Url: part.photo2Url ?? '',
+      photo3Url: part.photo3Url ?? '', photo4Url: part.photo4Url ?? ''
     };
     this.showModal.set(true);
   }
 
   closeModal() { this.showModal.set(false); }
 
+  uploadPhoto(slot: 1 | 2 | 3 | 4, event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    const uploading = [this.isUploadingPhoto1, this.isUploadingPhoto2, this.isUploadingPhoto3, this.isUploadingPhoto4][slot - 1];
+    uploading.set(true);
+    this.fileService.uploadPhoto(Array.from(input.files)).subscribe({
+      next: (results) => {
+        if (results.length > 0) {
+          const url = this.fileService.getPhotoUrl(results[0].url);
+          if (slot === 1) this.form.photo1Url = url;
+          else if (slot === 2) this.form.photo2Url = url;
+          else if (slot === 3) this.form.photo3Url = url;
+          else this.form.photo4Url = url;
+        }
+        uploading.set(false);
+      },
+      error: () => uploading.set(false)
+    });
+  }
+
   save() {
     this.isSaving.set(true);
+    const dto = {
+      ...this.form,
+      photo1Url: this.form.photo1Url || undefined,
+      photo2Url: this.form.photo2Url || undefined,
+      photo3Url: this.form.photo3Url || undefined,
+      photo4Url: this.form.photo4Url || undefined
+    };
     if (this.isEditing()) {
-      const dto: UpdateSparePartRequest = { ...this.form };
-      this.service.update(this.editingId, dto).subscribe({
+      this.service.update(this.editingId, dto as UpdateSparePartRequest).subscribe({
         next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
         error: () => this.isSaving.set(false)
       });
     } else {
-      const dto: CreateSparePartRequest = { ...this.form };
-      this.service.create(dto).subscribe({
+      this.service.create(dto as CreateSparePartRequest).subscribe({
         next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
         error: () => this.isSaving.set(false)
       });
@@ -85,5 +123,9 @@ export class SparePartsComponent implements OnInit {
   delete(id: string) {
     if (!confirm(this.translation.translate('spareParts.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => this.load() });
+  }
+
+  isUploading(): boolean {
+    return this.isUploadingPhoto1() || this.isUploadingPhoto2() || this.isUploadingPhoto3() || this.isUploadingPhoto4();
   }
 }

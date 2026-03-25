@@ -23,6 +23,8 @@ export class EquipmentComponent implements OnInit {
   isSaving = signal(false);
   isUploadingBefore = signal(false);
   isUploadingAfter = signal(false);
+  isUploadingPhoto3 = signal(false);
+  isUploadingPhoto4 = signal(false);
   EquipmentStatus = EquipmentStatus;
 
   form = {
@@ -37,7 +39,9 @@ export class EquipmentComponent implements OnInit {
     status: EquipmentStatus.Operational,
     notes: '',
     beforeMaintenancePhotoUrl: '',
-    afterMaintenancePhotoUrl: ''
+    afterMaintenancePhotoUrl: '',
+    photo3Url: '',
+    photo4Url: ''
   };
   private editingId = '';
 
@@ -54,7 +58,7 @@ export class EquipmentComponent implements OnInit {
   openAdd() {
     this.isEditing.set(false);
     this.editingId = '';
-    this.form = { name: '', serialNumber: '', model: '', manufacturer: '', location: '', installationDate: '', lastMaintenanceDate: '', nextMaintenanceDate: '', status: EquipmentStatus.Operational, notes: '', beforeMaintenancePhotoUrl: '', afterMaintenancePhotoUrl: '' };
+    this.form = { name: '', serialNumber: '', model: '', manufacturer: '', location: '', installationDate: '', lastMaintenanceDate: '', nextMaintenanceDate: '', status: EquipmentStatus.Operational, notes: '', beforeMaintenancePhotoUrl: '', afterMaintenancePhotoUrl: '', photo3Url: '', photo4Url: '' };
     this.showModal.set(true);
   }
 
@@ -73,7 +77,9 @@ export class EquipmentComponent implements OnInit {
       status: eq.status,
       notes: eq.notes ?? '',
       beforeMaintenancePhotoUrl: eq.beforeMaintenancePhotoUrl ?? '',
-      afterMaintenancePhotoUrl: eq.afterMaintenancePhotoUrl ?? ''
+      afterMaintenancePhotoUrl: eq.afterMaintenancePhotoUrl ?? '',
+      photo3Url: eq.photo3Url ?? '',
+      photo4Url: eq.photo4Url ?? ''
     };
     this.showModal.set(true);
   }
@@ -106,6 +112,32 @@ export class EquipmentComponent implements OnInit {
     });
   }
 
+  uploadPhoto3(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    this.isUploadingPhoto3.set(true);
+    this.fileService.uploadPhoto(Array.from(input.files)).subscribe({
+      next: (results) => {
+        if (results.length > 0) this.form.photo3Url = this.fileService.getPhotoUrl(results[0].url);
+        this.isUploadingPhoto3.set(false);
+      },
+      error: () => this.isUploadingPhoto3.set(false)
+    });
+  }
+
+  uploadPhoto4(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+    this.isUploadingPhoto4.set(true);
+    this.fileService.uploadPhoto(Array.from(input.files)).subscribe({
+      next: (results) => {
+        if (results.length > 0) this.form.photo4Url = this.fileService.getPhotoUrl(results[0].url);
+        this.isUploadingPhoto4.set(false);
+      },
+      error: () => this.isUploadingPhoto4.set(false)
+    });
+  }
+
   save() {
     this.isSaving.set(true);
     const dto = {
@@ -115,7 +147,9 @@ export class EquipmentComponent implements OnInit {
       nextMaintenanceDate: this.form.nextMaintenanceDate || null,
       status: Number(this.form.status),
       beforeMaintenancePhotoUrl: this.form.beforeMaintenancePhotoUrl || null,
-      afterMaintenancePhotoUrl: this.form.afterMaintenancePhotoUrl || null
+      afterMaintenancePhotoUrl: this.form.afterMaintenancePhotoUrl || null,
+      photo3Url: this.form.photo3Url || null,
+      photo4Url: this.form.photo4Url || null
     };
     const obs = this.isEditing()
       ? this.service.update(this.editingId, dto)
