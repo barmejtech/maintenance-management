@@ -17,7 +17,8 @@ import { TaskStatus, EquipmentStatus, TechnicianStatus, TaskPriority, InvoiceSta
 import {
   Chart, ArcElement, DoughnutController, BarController, BarElement,
   CategoryScale, LinearScale, Tooltip, Legend,
-  LineController, LineElement, PointElement, Filler
+  LineController, LineElement, PointElement, Filler,
+  PieController, RadarController, RadialLinearScale, PolarAreaController
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
@@ -26,7 +27,8 @@ Chart.register(
   ArcElement, DoughnutController, BarController, BarElement,
   CategoryScale, LinearScale, Tooltip, Legend,
   LineController, LineElement, PointElement, Filler,
-  ChartDataLabels
+  ChartDataLabels,
+  PieController, RadarController, RadialLinearScale, PolarAreaController
 );
 
 @Component({
@@ -47,6 +49,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('myTaskChart') myTaskChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('myPriorityChart') myPriorityChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('weeklyActivityChart') weeklyActivityChartRef!: ElementRef<HTMLCanvasElement>;
+  // Admin / Manager advanced chart refs
+  @ViewChild('invoicePieChart') invoicePieChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('systemRadarChart') systemRadarChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('priorityPolarChart') priorityPolarChartRef!: ElementRef<HTMLCanvasElement>;
+  // Technician advanced chart refs
+  @ViewChild('myRadarChart') myRadarChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('myPriorityPolarChart') myPriorityPolarChartRef!: ElementRef<HTMLCanvasElement>;
 
   // Current technician's entity ID
   private currentTechnicianId = signal<string | null>(null);
@@ -81,6 +90,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   myInProgressCount = signal(0);
   myCompletedCount = signal(0);
   myCompletionRate = signal(0);
+  // Invoice breakdown signals for Pie chart
+  invoiceDraftCount = signal(0);
+  invoiceSentCount = signal(0);
+  invoicePaidCount = signal(0);
+  invoiceOverdueCount = signal(0);
+  invoiceCancelledCount = signal(0);
 
   private taskChart: Chart | null = null;
   private equipmentChart: Chart | null = null;
@@ -90,6 +105,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private myTaskChart: Chart | null = null;
   private myPriorityChart: Chart | null = null;
   private weeklyActivityChart: Chart | null = null;
+  private invoicePieChart: Chart | null = null;
+  private systemRadarChart: Chart | null = null;
+  private priorityPolarChart: Chart | null = null;
+  private myRadarChart: Chart | null = null;
+  private myPriorityPolarChart: Chart | null = null;
   private refreshInterval: ReturnType<typeof setInterval> | null = null;
 
   private taskStats = { pending: 0, inProgress: 0, completed: 0, cancelled: 0, onHold: 0 };
@@ -97,6 +117,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private technicianStats = { available: 0, busy: 0, onLeave: 0, inactive: 0 };
   private myTaskStats = { pending: 0, inProgress: 0, completed: 0, cancelled: 0, onHold: 0 };
   private myPriorityStats = { low: 0, medium: 0, high: 0, critical: 0 };
+  private taskPriorityStats = { low: 0, medium: 0, high: 0, critical: 0 };
   private weeklyActivity: number[] = [];
   trendLabels: string[] = [];
   private trendCounts: number[] = [];
@@ -156,6 +177,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.myTaskChart?.destroy();
     this.myPriorityChart?.destroy();
     this.weeklyActivityChart?.destroy();
+    this.invoicePieChart?.destroy();
+    this.systemRadarChart?.destroy();
+    this.priorityPolarChart?.destroy();
+    this.myRadarChart?.destroy();
+    this.myPriorityPolarChart?.destroy();
   }
 
   // Navigation method
@@ -236,6 +262,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       onHold: filtered.filter(t => t.status === TaskStatus.OnHold).length
     };
     
+    this.taskPriorityStats = {
+      low: filtered.filter(t => t.priority === TaskPriority.Low).length,
+      medium: filtered.filter(t => t.priority === TaskPriority.Medium).length,
+      high: filtered.filter(t => t.priority === TaskPriority.High).length,
+      critical: filtered.filter(t => t.priority === TaskPriority.Critical).length
+    };
+    
     const completedCount = this.taskStats.completed;
     const totalNonCancelled = filtered.filter(t => t.status !== TaskStatus.Cancelled).length;
     const completionRate = totalNonCancelled > 0 ? (completedCount / totalNonCancelled) * 100 : 0;
@@ -259,6 +292,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateTaskChart();
     this.updateTrendChart();
     this.updatePerformanceChart();
+    this.updatePriorityPolarChart();
+    this.updateSystemRadarChart();
     
     if (this.isTechnicianRole()) {
       this.computeMyTaskStats(filtered);
@@ -297,6 +332,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             inactive: techs.filter(t => t.status === TechnicianStatus.Inactive).length
           };
           this.updateTechnicianChart();
+          this.updateSystemRadarChart();
         },
         error: () => {}
       });
@@ -307,6 +343,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           this.pendingInvoices.set(
             invoices.filter(i => i.status === InvoiceStatus.Sent || i.status === InvoiceStatus.Overdue).length
           );
+          this.invoiceDraftCount.set(invoices.filter(i => i.status === InvoiceStatus.Draft).length);
+          this.invoiceSentCount.set(invoices.filter(i => i.status === InvoiceStatus.Sent).length);
+          this.invoicePaidCount.set(invoices.filter(i => i.status === InvoiceStatus.Paid).length);
+          this.invoiceOverdueCount.set(invoices.filter(i => i.status === InvoiceStatus.Overdue).length);
+          this.invoiceCancelledCount.set(invoices.filter(i => i.status === InvoiceStatus.Cancelled).length);
+          this.updateInvoicePieChart();
+          this.updateSystemRadarChart();
         },
         error: () => {}
       });
@@ -354,6 +397,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           decommissioned: eqs.filter(e => e.status === EquipmentStatus.Decommissioned).length
         };
         this.updateEquipmentChart();
+        this.updateSystemRadarChart();
       },
       error: () => {}
     });
@@ -393,6 +437,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateMyTaskChart();
     this.updateMyPriorityChart();
     this.updateWeeklyActivityChart();
+    this.updateMyRadarChart();
+    this.updateMyPriorityPolarChart();
   }
 
   private buildTrendLabels(): string[] {
@@ -446,6 +492,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         font: { size: 11, weight: '500' as const },
         boxWidth: 10
       } 
+    };
+
+    // Simpler legend for chart types that require numeric or standard font weights
+    const legendSimple = {
+      position: 'bottom' as const,
+      labels: {
+        padding: 16,
+        usePointStyle: true,
+        font: { size: 11 },
+        boxWidth: 10
+      }
     };
 
     // Task Status Doughnut Chart
@@ -776,6 +833,209 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     }
+
+    // Invoice Status Pie Chart
+    if (this.invoicePieChartRef) {
+      this.invoicePieChart = new Chart(this.invoicePieChartRef.nativeElement, {
+        type: 'pie',
+        data: {
+          labels: ['Draft', 'Sent', 'Paid', 'Overdue', 'Cancelled'],
+          datasets: [{
+            data: [0, 0, 0, 0, 0],
+            backgroundColor: ['#94a3b8', '#3b82f6', '#10b981', '#ef4444', '#6b7280'],
+            borderWidth: 2,
+            borderColor: '#ffffff',
+            hoverOffset: 12
+          }]
+        },
+        options: {
+          ...baseOpts,
+          plugins: {
+            legend: { ...legendSimple },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const label = context.label || '';
+                  const value = context.raw as number;
+                  const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+                  const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return `${label}: ${value} (${percentage}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // System Health Radar Chart
+    if (this.systemRadarChartRef) {
+      this.systemRadarChart = new Chart(this.systemRadarChartRef.nativeElement, {
+        type: 'radar',
+        data: {
+          labels: ['Task Completion', 'Tech Availability', 'Equipment Health', 'Schedule Adherence', 'Invoice Payment'],
+          datasets: [{
+            label: 'Current',
+            data: [0, 0, 0, 0, 0],
+            backgroundColor: 'rgba(99,102,241,0.2)',
+            borderColor: '#6366f1',
+            pointBackgroundColor: '#6366f1',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 5,
+            borderWidth: 2
+          }, {
+            label: 'Target',
+            data: [80, 80, 80, 80, 80],
+            backgroundColor: 'rgba(16,185,129,0.08)',
+            borderColor: 'rgba(16,185,129,0.4)',
+            pointBackgroundColor: 'rgba(16,185,129,0.6)',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 1,
+            pointRadius: 3,
+            borderWidth: 1,
+            borderDash: [5, 5]
+          }]
+        },
+        options: {
+          ...baseOpts,
+          scales: {
+            r: {
+              min: 0,
+              max: 100,
+              ticks: { stepSize: 20, font: { size: 10 }, backdropColor: 'transparent' },
+              grid: { color: 'rgba(0,0,0,0.08)' },
+              angleLines: { color: 'rgba(0,0,0,0.08)' },
+              pointLabels: { font: { size: 10, weight: 'bold' as const } }
+            }
+          },
+          plugins: {
+            legend: { ...legendSimple },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${context.dataset.label}: ${context.raw}%`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Task Priority Polar Area Chart
+    if (this.priorityPolarChartRef) {
+      this.priorityPolarChart = new Chart(this.priorityPolarChartRef.nativeElement, {
+        type: 'polarArea',
+        data: {
+          labels: ['Low', 'Medium', 'High', 'Critical'],
+          datasets: [{
+            data: [0, 0, 0, 0],
+            backgroundColor: [
+              'rgba(16,185,129,0.75)',
+              'rgba(59,130,246,0.75)',
+              'rgba(245,158,11,0.75)',
+              'rgba(239,68,68,0.75)'
+            ],
+            borderColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          ...baseOpts,
+          scales: {
+            r: {
+              ticks: { stepSize: 1, font: { size: 10 }, backdropColor: 'transparent' },
+              grid: { color: 'rgba(0,0,0,0.08)' }
+            }
+          },
+          plugins: {
+            legend: { ...legendSimple },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${context.label}: ${context.raw} tasks`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Technician My Performance Radar Chart
+    if (this.myRadarChartRef) {
+      this.myRadarChart = new Chart(this.myRadarChartRef.nativeElement, {
+        type: 'radar',
+        data: {
+          labels: ['Pending', 'In Progress', 'Completed', 'On Hold', 'Cancelled'],
+          datasets: [{
+            label: 'My Tasks',
+            data: [0, 0, 0, 0, 0],
+            backgroundColor: 'rgba(59,130,246,0.2)',
+            borderColor: '#3b82f6',
+            pointBackgroundColor: '#3b82f6',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 5,
+            borderWidth: 2
+          }]
+        },
+        options: {
+          ...baseOpts,
+          scales: {
+            r: {
+              ticks: { stepSize: 1, font: { size: 10 }, backdropColor: 'transparent' },
+              grid: { color: 'rgba(0,0,0,0.08)' },
+              angleLines: { color: 'rgba(0,0,0,0.08)' },
+              pointLabels: { font: { size: 10, weight: 'bold' as const } }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${context.label}: ${context.raw} tasks`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Technician My Priority Polar Area Chart
+    if (this.myPriorityPolarChartRef) {
+      this.myPriorityPolarChart = new Chart(this.myPriorityPolarChartRef.nativeElement, {
+        type: 'polarArea',
+        data: {
+          labels: ['Low', 'Medium', 'High', 'Critical'],
+          datasets: [{
+            data: [0, 0, 0, 0],
+            backgroundColor: [
+              'rgba(16,185,129,0.75)',
+              'rgba(59,130,246,0.75)',
+              'rgba(245,158,11,0.75)',
+              'rgba(239,68,68,0.75)'
+            ],
+            borderColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          ...baseOpts,
+          scales: {
+            r: {
+              ticks: { stepSize: 1, font: { size: 10 }, backdropColor: 'transparent' },
+              grid: { color: 'rgba(0,0,0,0.08)' }
+            }
+          },
+          plugins: {
+            legend: { ...legendSimple },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${context.label}: ${context.raw} tasks`
+              }
+            }
+          }
+        }
+      });
+    }
   }
 
   private updateTaskChart() {
@@ -830,6 +1090,56 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.weeklyActivityChart) return;
     this.weeklyActivityChart.data.datasets[0].data = this.weeklyActivity;
     this.weeklyActivityChart.update();
+  }
+
+  private updateInvoicePieChart() {
+    if (!this.invoicePieChart) return;
+    this.invoicePieChart.data.datasets[0].data = [
+      this.invoiceDraftCount(),
+      this.invoiceSentCount(),
+      this.invoicePaidCount(),
+      this.invoiceOverdueCount(),
+      this.invoiceCancelledCount()
+    ];
+    this.invoicePieChart.update();
+  }
+
+  private updateSystemRadarChart() {
+    if (!this.systemRadarChart) return;
+    const techAvail = this.technicianCount() > 0
+      ? Math.round((this.technicianStats.available / this.technicianCount()) * 100) : 0;
+    const eqHealth = this.equipmentCount() > 0
+      ? Math.round((this.equipmentStats.operational / this.equipmentCount()) * 100) : 0;
+    const activeSchedules = this.activeSchedulesCount();
+    const schedAdh = activeSchedules > 0
+      ? Math.round(((activeSchedules - this.overdueSchedulesCount()) / activeSchedules) * 100) : 100;
+    const invPayment = this.invoiceCount() > 0
+      ? Math.round((this.invoicePaidCount() / this.invoiceCount()) * 100) : 0;
+    this.systemRadarChart.data.datasets[0].data = [
+      this.completionRate(), techAvail, eqHealth, schedAdh, invPayment
+    ];
+    this.systemRadarChart.update();
+  }
+
+  private updatePriorityPolarChart() {
+    if (!this.priorityPolarChart) return;
+    const { low, medium, high, critical } = this.taskPriorityStats;
+    this.priorityPolarChart.data.datasets[0].data = [low, medium, high, critical];
+    this.priorityPolarChart.update();
+  }
+
+  private updateMyRadarChart() {
+    if (!this.myRadarChart) return;
+    const { pending, inProgress, completed, onHold, cancelled } = this.myTaskStats;
+    this.myRadarChart.data.datasets[0].data = [pending, inProgress, completed, onHold, cancelled];
+    this.myRadarChart.update();
+  }
+
+  private updateMyPriorityPolarChart() {
+    if (!this.myPriorityPolarChart) return;
+    const { low, medium, high, critical } = this.myPriorityStats;
+    this.myPriorityPolarChart.data.datasets[0].data = [low, medium, high, critical];
+    this.myPriorityPolarChart.update();
   }
 
   // Role check methods
