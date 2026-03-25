@@ -299,6 +299,70 @@
     </div>
   </div>
 
+  <!-- Advanced Analytics Section -->
+  <div class="section-header">
+    <h3 class="section-title">
+      <i class="bi bi-stars section-icon"></i>
+      {{ 'dashboard.charts.advancedAnalytics' | translate }}
+    </h3>
+  </div>
+
+  <div class="charts-grid">
+    <!-- Invoice Status Pie Chart -->
+    <div class="chart-card chart-card--animate">
+      <div class="chart-header chart-header--teal">
+        <div class="header-content">
+          <i class="bi bi-pie-chart-fill chart-header-icon"></i>
+          <h3>{{ 'dashboard.charts.invoiceStatus' | translate }}</h3>
+        </div>
+        <div class="chart-header-stats">
+          <span class="stat-pill">Total: {{ invoiceCount() }}</span>
+        </div>
+      </div>
+      <div class="chart-body">
+        <div class="chart-wrapper chart-wrapper--pie">
+          <canvas #invoicePieChart></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Health Radar Chart -->
+    <div class="chart-card chart-card--animate">
+      <div class="chart-header chart-header--indigo">
+        <div class="header-content">
+          <i class="bi bi-radar chart-header-icon"></i>
+          <h3>{{ 'dashboard.charts.systemHealthRadar' | translate }}</h3>
+        </div>
+        <div class="chart-header-stats">
+          <span class="stat-pill">% Health</span>
+        </div>
+      </div>
+      <div class="chart-body">
+        <div class="chart-wrapper chart-wrapper--radar">
+          <canvas #systemRadarChart></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Priority Polar Area Chart -->
+    <div class="chart-card chart-card--animate">
+      <div class="chart-header chart-header--rose">
+        <div class="header-content">
+          <i class="bi bi-bullseye chart-header-icon"></i>
+          <h3>{{ 'dashboard.charts.taskPriorityPolar' | translate }}</h3>
+        </div>
+        <div class="chart-header-stats">
+          <span class="stat-pill">By Priority</span>
+        </div>
+      </div>
+      <div class="chart-body">
+        <div class="chart-wrapper chart-wrapper--polar">
+          <canvas #priorityPolarChart></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Quick Actions -->
   <div class="quick-actions">
     <div class="section-header">
@@ -479,6 +543,52 @@
       <div class="chart-body">
         <div class="chart-wrapper chart-wrapper--bar">
           <canvas #weeklyActivityChart></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Advanced Performance Charts -->
+  <div class="section-header">
+    <h3 class="section-title">
+      <i class="bi bi-stars section-icon"></i>
+      {{ 'dashboard.charts.advancedAnalytics' | translate }}
+    </h3>
+  </div>
+
+  <div class="charts-grid charts-grid--two">
+    <!-- My Performance Radar Chart -->
+    <div class="chart-card chart-card--animate">
+      <div class="chart-header chart-header--indigo">
+        <div class="header-content">
+          <i class="bi bi-radar chart-header-icon"></i>
+          <h3>{{ 'dashboard.charts.myPerformanceRadar' | translate }}</h3>
+        </div>
+        <div class="chart-header-stats">
+          <span class="stat-pill">Task Breakdown</span>
+        </div>
+      </div>
+      <div class="chart-body">
+        <div class="chart-wrapper chart-wrapper--radar">
+          <canvas #myRadarChart></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Priority Polar Area Chart -->
+    <div class="chart-card chart-card--animate">
+      <div class="chart-header chart-header--rose">
+        <div class="header-content">
+          <i class="bi bi-bullseye chart-header-icon"></i>
+          <h3>{{ 'dashboard.charts.myPriorityPolar' | translate }}</h3>
+        </div>
+        <div class="chart-header-stats">
+          <span class="stat-pill">By Priority</span>
+        </div>
+      </div>
+      <div class="chart-body">
+        <div class="chart-wrapper chart-wrapper--polar">
+          <canvas #myPriorityPolarChart></canvas>
         </div>
       </div>
     </div>

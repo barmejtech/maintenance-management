@@ -441,7 +441,8 @@
       "lowStock": "مخزون منخفض",
       "activeSchedules": "الجداول النشطة",
       "overdue": "متأخر",
-      "managers": "المدراء"
+      "managers": "المدراء",
+      "urgent": "عاجل"
     },
     "charts": {
       "workOrdersByStatus": "أوامر العمل حسب الحالة",
@@ -449,7 +450,18 @@
       "technicianAvailability": "توافر الفنيين",
       "sevenDayTrend": "اتجاه إنشاء المهام (7 أيام)",
       "myTasksByStatus": "مهامي حسب الحالة",
-      "myTasksByPriority": "مهامي حسب الأولوية"
+      "myTasksByPriority": "مهامي حسب الأولوية",
+      "analytics": "التحليلات",
+      "refresh": "تحديث",
+      "completionRate": "معدل الإنجاز",
+      "myPerformance": "أدائي",
+      "weeklyActivity": "النشاط الأسبوعي",
+      "advancedAnalytics": "التحليلات المتقدمة",
+      "invoiceStatus": "حالة الفواتير",
+      "systemHealthRadar": "نظرة عامة على صحة النظام",
+      "taskPriorityPolar": "توزيع أولوية المهام",
+      "myPerformanceRadar": "مقاييس أدائي",
+      "myPriorityPolar": "نظرة عامة على أولوياتي"
     },
     "quickActions": {
       "title": "إجراءات سريعة",

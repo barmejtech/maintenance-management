@@ -441,7 +441,8 @@
       "lowStock": "low stock",
       "activeSchedules": "Active Schedules",
       "overdue": "overdue",
-      "managers": "Managers"
+      "managers": "Managers",
+      "urgent": "Urgent"
     },
     "charts": {
       "workOrdersByStatus": "Work Orders by Status",
@@ -449,7 +450,18 @@
       "technicianAvailability": "Technician Availability",
       "sevenDayTrend": "7-Day Task Creation Trend",
       "myTasksByStatus": "My Tasks by Status",
-      "myTasksByPriority": "My Tasks by Priority"
+      "myTasksByPriority": "My Tasks by Priority",
+      "analytics": "Analytics",
+      "refresh": "Refresh",
+      "completionRate": "Completion Rate",
+      "myPerformance": "My Performance",
+      "weeklyActivity": "Weekly Activity",
+      "advancedAnalytics": "Advanced Analytics",
+      "invoiceStatus": "Invoice Status",
+      "systemHealthRadar": "System Health Overview",
+      "taskPriorityPolar": "Task Priority Distribution",
+      "myPerformanceRadar": "My Performance Metrics",
+      "myPriorityPolar": "My Priority Overview"
     },
     "quickActions": {
       "title": "Quick Actions",
