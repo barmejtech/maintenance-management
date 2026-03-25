@@ -35,6 +35,10 @@ public class FilesController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>Returns the web root path, falling back to a "wwwroot" sub-folder of the content root when WebRootPath is null.</summary>
+    private string GetWebRootPath() =>
+        _env.WebRootPath ?? Path.Combine(_env.ContentRootPath ?? AppContext.BaseDirectory, "wwwroot");
+
     /// <summary>Upload one or more files. Returns the relative URL for each saved file.</summary>
     [HttpPost("upload")]
     [RequestSizeLimit(50 * 1024 * 1024)]
@@ -43,7 +47,7 @@ public class FilesController : ControllerBase
         if (files is null || files.Count == 0)
             return BadRequest(new { message = "No files provided." });
 
-        var uploadFolder = Path.Combine(_env.WebRootPath, "Files");
+        var uploadFolder = Path.Combine(GetWebRootPath(), "Files");
         Directory.CreateDirectory(uploadFolder);
 
         var results = new List<object>();
@@ -92,7 +96,7 @@ public class FilesController : ControllerBase
         if (files is null || files.Count == 0)
             return BadRequest(new { message = "No files provided." });
 
-        var photosFolder = Path.Combine(_env.WebRootPath, "photos");
+        var photosFolder = Path.Combine(GetWebRootPath(), "photos");
         Directory.CreateDirectory(photosFolder);
 
         var results = new List<object>();
@@ -138,7 +142,7 @@ public class FilesController : ControllerBase
     public IActionResult DownloadPhoto(string fileName)
     {
         var safeFileName = Path.GetFileName(fileName);
-        var filePath = Path.Combine(_env.WebRootPath, "photos", safeFileName);
+        var filePath = Path.Combine(GetWebRootPath(), "photos", safeFileName);
 
         if (!System.IO.File.Exists(filePath))
             return NotFound(new { message = "Photo not found." });
@@ -156,7 +160,7 @@ public class FilesController : ControllerBase
     public IActionResult DeletePhoto(string fileName)
     {
         var safeFileName = Path.GetFileName(fileName);
-        var filePath = Path.Combine(_env.WebRootPath, "photos", safeFileName);
+        var filePath = Path.Combine(GetWebRootPath(), "photos", safeFileName);
 
         if (!System.IO.File.Exists(filePath))
             return NotFound(new { message = "Photo not found." });
@@ -172,7 +176,7 @@ public class FilesController : ControllerBase
     {
         // Sanitize: only allow the bare file name (no path traversal)
         var safeFileName = Path.GetFileName(fileName);
-        var filePath = Path.Combine(_env.WebRootPath, "Files", safeFileName);
+        var filePath = Path.Combine(GetWebRootPath(), "Files", safeFileName);
 
         if (!System.IO.File.Exists(filePath))
             return NotFound(new { message = "File not found." });
@@ -190,7 +194,7 @@ public class FilesController : ControllerBase
     public IActionResult Delete(string fileName)
     {
         var safeFileName = Path.GetFileName(fileName);
-        var filePath = Path.Combine(_env.WebRootPath, "Files", safeFileName);
+        var filePath = Path.Combine(GetWebRootPath(), "Files", safeFileName);
 
         if (!System.IO.File.Exists(filePath))
             return NotFound(new { message = "File not found." });
