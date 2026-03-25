@@ -1,6 +1,8 @@
+using Maintenance_management.application.DTOs.User;
 using Maintenance_management.application.Interfaces;
 using Maintenance_management.infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Maintenance_management.infrastructure.Services;
 
@@ -52,5 +54,27 @@ public class IdentityService : IIdentityService
     {
         var users = await _userManager.GetUsersInRoleAsync(role);
         return users.Select(u => u.Id);
+    }
+
+    public async Task<IEnumerable<UserDto>> GetAllUsersWithRolesAsync()
+    {
+        var users = await _userManager.Users.ToListAsync();
+        var result = new List<UserDto>();
+        foreach (var user in users)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            result.Add(new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email ?? string.Empty,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                ProfilePhotoUrl = user.ProfilePhotoUrl,
+                IsActive = user.IsActive,
+                CreatedAt = user.CreatedAt,
+                Roles = roles
+            });
+        }
+        return result;
     }
 }

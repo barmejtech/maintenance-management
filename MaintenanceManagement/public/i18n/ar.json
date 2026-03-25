@@ -1019,5 +1019,19 @@
     "deleteConfirm": "هل تريد حذف هذا المدير؟",
     "profilePhoto": "صورة الملف الشخصي",
     "uploading": "جارٍ الرفع..."
+  },
+  "users": {
+    "title": "جميع المستخدمين",
+    "registerButton": "تسجيل مستخدم",
+    "backToDashboard": "لوحة التحكم",
+    "loading": "جارٍ تحميل المستخدمين...",
+    "empty": "لا يوجد مستخدمون.",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "roles": {
+      "admin": "مسؤول",
+      "manager": "مدير",
+      "technician": "فني"
+    }
   }
 }

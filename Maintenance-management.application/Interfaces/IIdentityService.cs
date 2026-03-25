@@ -1,3 +1,5 @@
+using Maintenance_management.application.DTOs.User;
+
 namespace Maintenance_management.application.Interfaces;
 
 public interface IIdentityService
@@ -7,4 +9,5 @@ public interface IIdentityService
     Task<(bool Success, string[] Errors)> DeleteUserAsync(string userId);
     Task<string?> GetUserEmailAsync(string userId);
     Task<IEnumerable<string>> GetUserIdsByRoleAsync(string role);
+    Task<IEnumerable<UserDto>> GetAllUsersWithRolesAsync();
 }

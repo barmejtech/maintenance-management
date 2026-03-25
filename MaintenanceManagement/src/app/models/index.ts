@@ -29,6 +29,19 @@ export interface RefreshTokenRequest {
   refreshToken: string;
 }
 
+// User models (all users with roles)
+export interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  profilePhotoUrl?: string;
+  isActive: boolean;
+  createdAt: string;
+  roles: string[];
+}
+
 // Manager models
 export interface Manager {
   id: string;
