@@ -415,7 +415,8 @@
       "performance": "تحليلات الأداء",
       "equipmentTimeline": "الجدول الزمني للمعدات",
       "mobileWorkflow": "سير العمل المتنقل",
-      "registerUser": "تسجيل مستخدم"
+      "registerUser": "تسجيل مستخدم",
+      "manageManagers": "إدارة المديرين"
     },
     "hero": {
       "fullAccess": "صلاحية كاملة",
@@ -990,5 +991,33 @@
       "create": "إنشاء",
       "update": "تحديث"
     }
+  },
+  "managers": {
+    "title": "المديرون",
+    "addButton": "إضافة مدير",
+    "backToDashboard": "لوحة التحكم",
+    "loading": "جارٍ تحميل المديرين...",
+    "empty": "لا يوجد مديرون.",
+    "editTitle": "تعديل المدير",
+    "addTitle": "إضافة مدير",
+    "roleLabel": "مدير",
+    "firstName": "الاسم الأول *",
+    "firstNamePlaceholder": "الاسم الأول",
+    "lastName": "اسم العائلة *",
+    "lastNamePlaceholder": "اسم العائلة",
+    "email": "البريد الإلكتروني *",
+    "emailPlaceholder": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "phonePlaceholder": "الهاتف",
+    "department": "القسم",
+    "departmentPlaceholder": "القسم",
+    "password": "كلمة المرور *",
+    "passwordPlaceholder": "كلمة المرور",
+    "cancel": "إلغاء",
+    "update": "تحديث",
+    "create": "إنشاء",
+    "deleteConfirm": "هل تريد حذف هذا المدير؟",
+    "profilePhoto": "صورة الملف الشخصي",
+    "uploading": "جارٍ الرفع..."
   }
 }

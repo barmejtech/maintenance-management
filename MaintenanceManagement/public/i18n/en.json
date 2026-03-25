@@ -415,7 +415,8 @@
       "performance": "Performance Analytics",
       "equipmentTimeline": "Equipment Timeline",
       "mobileWorkflow": "Mobile Workflow",
-      "registerUser": "Register User"
+      "registerUser": "Register User",
+      "manageManagers": "Manage Managers"
     },
     "hero": {
       "fullAccess": "Full Access",
@@ -957,5 +958,33 @@
       "create": "Create",
       "update": "Update"
     }
+  },
+  "managers": {
+    "title": "Managers",
+    "addButton": "Add Manager",
+    "backToDashboard": "Dashboard",
+    "loading": "Loading managers...",
+    "empty": "No managers found.",
+    "editTitle": "Edit Manager",
+    "addTitle": "Add Manager",
+    "roleLabel": "Manager",
+    "firstName": "First Name *",
+    "firstNamePlaceholder": "First name",
+    "lastName": "Last Name *",
+    "lastNamePlaceholder": "Last name",
+    "email": "Email *",
+    "emailPlaceholder": "Email",
+    "phone": "Phone",
+    "phonePlaceholder": "Phone",
+    "department": "Department",
+    "departmentPlaceholder": "Department",
+    "password": "Password *",
+    "passwordPlaceholder": "Password",
+    "cancel": "Cancel",
+    "update": "Update",
+    "create": "Create",
+    "deleteConfirm": "Delete this manager?",
+    "profilePhoto": "Profile Photo",
+    "uploading": "Uploading..."
   }
 }

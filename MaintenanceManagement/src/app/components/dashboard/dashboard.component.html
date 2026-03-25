@@ -92,6 +92,9 @@
     @if (isAdmin()) {
       <div class="sidebar-divider"></div>
       <div class="sidebar-section-label">{{ 'dashboard.sidebar.admin' | translate }}</div>
+      <a routerLink="/managers" routerLinkActive="active" class="nav-item admin-item">
+        <span>👔</span> {{ 'dashboard.sidebar.manageManagers' | translate }}
+      </a>
       <a routerLink="/technicians" routerLinkActive="active" class="nav-item admin-item">
         <span>⚙️</span> {{ 'dashboard.sidebar.manageUsers' | translate }}
       </a>

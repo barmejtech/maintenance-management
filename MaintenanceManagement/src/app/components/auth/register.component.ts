@@ -23,6 +23,7 @@ const passwordMatchValidator: ValidatorFn = (control: AbstractControl): Validati
 export class RegisterComponent {
   isLoading = signal(false);
   errorMessage = signal('');
+  successMessage = signal('');
   form: ReturnType<FormBuilder['group']>;
 
   readonly roles = ['Technician', 'Manager'];
@@ -58,7 +59,10 @@ export class RegisterComponent {
       password: v.password!,
       confirmPassword: v.confirmPassword!
     }).subscribe({
-      next: () => this.router.navigate(['/technicians']),
+      next: () => {
+        const dest = v.role === 'Manager' ? '/managers' : '/technicians';
+        this.router.navigate([dest]);
+      },
       error: (err) => {
         this.errorMessage.set(err.error?.message ?? this.translation.translate('register.failed'));
         this.isLoading.set(false);

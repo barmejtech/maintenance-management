@@ -29,6 +29,37 @@ export interface RefreshTokenRequest {
   refreshToken: string;
 }
 
+// Manager models
+export interface Manager {
+  id: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  department: string;
+  profilePhotoUrl?: string;
+  createdAt: string;
+}
+
+export interface CreateManagerRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  department: string;
+  password: string;
+}
+
+export interface UpdateManagerRequest {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  department: string;
+  profilePhotoUrl?: string;
+}
+
 // Technician models
 export interface Technician {
   id: string;

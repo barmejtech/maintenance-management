@@ -34,6 +34,7 @@ public static class DependencyInjection
         .AddDefaultTokenProviders();
 
         // Repositories
+        services.AddScoped<IManagerRepository, ManagerRepository>();
         services.AddScoped<ITechnicianRepository, TechnicianRepository>();
         services.AddScoped<ITaskOrderRepository, TaskOrderRepository>();
         services.AddScoped<IGroupRepository, GroupRepository>();
@@ -55,6 +56,7 @@ public static class DependencyInjection
 
         // Application services
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IManagerService, ManagerService>();
         services.AddScoped<ITechnicianService, TechnicianService>();
         services.AddScoped<ITaskOrderService, TaskOrderService>();
         services.AddScoped<IGroupService, GroupService>();
