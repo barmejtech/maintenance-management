@@ -47,6 +47,15 @@
             <div class="stat-label">{{ 'dashboard.stats.technicians' | translate }}</div>
           </div>
         </div>
+        @if (isAdmin()) {
+          <div class="stat-card stat-card--managers">
+            <div class="stat-icon-box">👔</div>
+            <div class="stat-info">
+              <div class="stat-value">{{ managerCount() }}</div>
+              <div class="stat-label">{{ 'dashboard.stats.managers' | translate }}</div>
+            </div>
+          </div>
+        }
         <div class="stat-card stat-card--equipment">
           <div class="stat-icon-box">🔩</div>
           <div class="stat-info">

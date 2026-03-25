@@ -10,6 +10,7 @@ import { InvoiceService } from '../../services/invoice.service';
 import { ReportService } from '../../services/report.service';
 import { SparePartService } from '../../services/spare-part.service';
 import { MaintenanceScheduleService } from '../../services/maintenance-schedule.service';
+import { ManagerService } from '../../services/manager.service';
 import { TranslationService } from '../../services/translate.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TaskStatus, EquipmentStatus, TechnicianStatus, TaskPriority, InvoiceStatus, TaskOrder } from '../../models';
@@ -54,6 +55,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   dueMaintenance = signal(0);
   // Admin / Manager signals
   technicianCount = signal(0);
+  managerCount = signal(0);
   invoiceCount = signal(0);
   pendingInvoices = signal(0);
   reportCount = signal(0);
@@ -96,7 +98,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private invoiceService: InvoiceService,
     private reportService: ReportService,
     private sparePartService: SparePartService,
-    private scheduleService: MaintenanceScheduleService
+    private scheduleService: MaintenanceScheduleService,
+    private managerService: ManagerService
   ) {}
 
   ngOnInit() {
@@ -228,6 +231,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           );
         }, error: () => {}
       });
+      if (this.isAdmin()) {
+        this.managerService.getAll().subscribe({
+          next: managers => this.managerCount.set(managers.length),
+          error: () => {}
+        });
+      }
     }
 
     this.eqService.getAll().subscribe({
