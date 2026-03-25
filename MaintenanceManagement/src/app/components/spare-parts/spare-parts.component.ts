@@ -131,6 +131,8 @@ export class SparePartsComponent implements OnInit {
 
   getStockPercent(qty: number, min: number): number {
     if (min <= 0) return qty > 0 ? 100 : 0;
-    return Math.min(100, Math.round((qty / (min * 2)) * 100));
+    // Progress bar fills to 100% when stock reaches twice the minimum level
+    const targetStock = min * 2;
+    return Math.min(100, Math.round((qty / targetStock) * 100));
   }
 }

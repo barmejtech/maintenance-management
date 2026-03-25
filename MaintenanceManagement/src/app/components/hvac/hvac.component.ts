@@ -88,6 +88,7 @@ export class HVACComponent implements OnInit {
     return !!hvac.nextInspectionDate && new Date(hvac.nextInspectionDate) < new Date();
   }
 
+  // Uses 14-day window (vs 7 days for maintenance schedules) to allow more lead time for inspection bookings
   isDueSoonInspection(hvac: HVACSystem): boolean {
     if (!hvac.nextInspectionDate) return false;
     const due = new Date(hvac.nextInspectionDate);
