@@ -23,6 +23,7 @@ export type SlaStatus = 'overdue' | 'due-soon' | 'on-time' | null;
   selector: 'app-tasks',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
+  templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {

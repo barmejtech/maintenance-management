@@ -14,6 +14,7 @@ import { PdfService } from '../../services/pdf.service';
   selector: 'app-reports',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
+  templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.css']
 })
 export class ReportsComponent implements OnInit {

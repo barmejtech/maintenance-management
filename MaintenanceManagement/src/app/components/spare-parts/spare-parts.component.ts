@@ -13,6 +13,7 @@ import { SparePart, CreateSparePartRequest, UpdateSparePartRequest } from '../..
   selector: 'app-spare-parts',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
+  templateUrl: './spare-parts.component.html',
   styleUrls: ['./spare-parts.component.css']
 })
 export class SparePartsComponent implements OnInit {

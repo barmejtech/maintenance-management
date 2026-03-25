@@ -12,6 +12,7 @@ import { TranslationService } from '../../services/translate.service';
   selector: 'app-users',
   standalone: true,
   imports: [CommonModule, RouterLink, TranslatePipe, NgxPaginationModule],
+  templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {

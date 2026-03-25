@@ -12,6 +12,7 @@ import { TranslationService } from '../../services/translate.service';
   selector: 'app-groups',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
+  templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.css']
 })
 export class GroupsComponent implements OnInit {

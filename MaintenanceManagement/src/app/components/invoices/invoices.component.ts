@@ -13,6 +13,7 @@ import { PdfService } from '../../services/pdf.service';
   selector: 'app-invoices',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
+  templateUrl: './invoices.component.html',
   styleUrls: ['./invoices.component.css']
 })
 export class InvoicesComponent implements OnInit {

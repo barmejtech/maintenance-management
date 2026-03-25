@@ -13,6 +13,7 @@ import { TranslationService } from '../../services/translate.service';
   selector: 'app-technicians',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
+  templateUrl: './technicians.component.html',
   styleUrls: ['./technicians.component.css']
 })
 export class TechniciansComponent implements OnInit {

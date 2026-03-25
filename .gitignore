@@ -14,7 +14,8 @@ bld/
 [Oo]bj/
 **/bin/
 **/obj/
-
+# Static files
+wwwroot/
 # Logs
 [Ll]og/
 [Ll]ogs/

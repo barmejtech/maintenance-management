@@ -13,6 +13,7 @@ import { TranslationService } from '../../services/translate.service';
   selector: 'app-managers',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
+  templateUrl: './managers.component.html',
   styleUrls: ['./managers.component.css']
 })
 export class ManagersComponent implements OnInit {

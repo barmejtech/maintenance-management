@@ -18,6 +18,7 @@ import {
   selector: 'app-maintenance-schedules',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
+  templateUrl: './maintenance-schedules.component.html',
   styleUrls: ['./maintenance-schedules.component.css']
 })
 export class MaintenanceSchedulesComponent implements OnInit {
