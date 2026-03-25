@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, signal, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { TaskOrderService } from '../../services/task-order.service';
 import { TechnicianService } from '../../services/technician.service';
@@ -19,11 +19,14 @@ import {
   CategoryScale, LinearScale, Tooltip, Legend,
   LineController, LineElement, PointElement, Filler
 } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
+// Register all required components
 Chart.register(
   ArcElement, DoughnutController, BarController, BarElement,
   CategoryScale, LinearScale, Tooltip, Legend,
-  LineController, LineElement, PointElement, Filler
+  LineController, LineElement, PointElement, Filler,
+  ChartDataLabels
 );
 
 @Component({
@@ -39,20 +42,26 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('equipmentChart') equipmentChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('technicianChart') technicianChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('trendChart') trendChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('performanceChart') performanceChartRef!: ElementRef<HTMLCanvasElement>;
   // Technician chart refs
   @ViewChild('myTaskChart') myTaskChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('myPriorityChart') myPriorityChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('weeklyActivityChart') weeklyActivityChartRef!: ElementRef<HTMLCanvasElement>;
 
-  // Current technician's entity ID (used when the logged-in user has the Technician role)
+  // Current technician's entity ID
   private currentTechnicianId = signal<string | null>(null);
   selectedPeriod = signal<'today' | '7d' | '30d' | 'all'>('all');
   lastRefreshed = signal<Date>(new Date());
   isRefreshing = signal(false);
+  
+  // Animation state
+  animatedStats = signal<Map<string, number>>(new Map());
 
   // Shared signals
   taskCount = signal(0);
   equipmentCount = signal(0);
   dueMaintenance = signal(0);
+  
   // Admin / Manager signals
   technicianCount = signal(0);
   managerCount = signal(0);
@@ -63,18 +72,24 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   lowStockCount = signal(0);
   activeSchedulesCount = signal(0);
   overdueSchedulesCount = signal(0);
+  completionRate = signal(0);
+  avgCompletionTime = signal(0);
+  
   // Technician signals
   myTaskCount = signal(0);
   myPendingCount = signal(0);
   myInProgressCount = signal(0);
   myCompletedCount = signal(0);
+  myCompletionRate = signal(0);
 
   private taskChart: Chart | null = null;
   private equipmentChart: Chart | null = null;
   private technicianChart: Chart | null = null;
   private trendChart: Chart | null = null;
+  private performanceChart: Chart | null = null;
   private myTaskChart: Chart | null = null;
   private myPriorityChart: Chart | null = null;
+  private weeklyActivityChart: Chart | null = null;
   private refreshInterval: ReturnType<typeof setInterval> | null = null;
 
   private taskStats = { pending: 0, inProgress: 0, completed: 0, cancelled: 0, onHold: 0 };
@@ -82,6 +97,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private technicianStats = { available: 0, busy: 0, onLeave: 0, inactive: 0 };
   private myTaskStats = { pending: 0, inProgress: 0, completed: 0, cancelled: 0, onHold: 0 };
   private myPriorityStats = { low: 0, medium: 0, high: 0, critical: 0 };
+  private weeklyActivity: number[] = [];
   trendLabels: string[] = [];
   private trendCounts: number[] = [];
 
@@ -91,6 +107,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public auth: AuthService,
     public translation: TranslationService,
+    private router: Router,
     private taskService: TaskOrderService,
     private techService: TechnicianService,
     private eqService: EquipmentService,
@@ -104,6 +121,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.trendLabels = this.buildTrendLabels();
+    
     if (this.isTechnicianRole()) {
       this.techService.getMe().subscribe({
         next: tech => {
@@ -119,10 +137,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loadData();
     }
     this.refreshInterval = setInterval(() => this.loadData(), 30000);
+    this.initializeAnimatedStats();
   }
 
   ngAfterViewInit() {
-    this.initCharts();
+    setTimeout(() => {
+      this.initCharts();
+    }, 100);
   }
 
   ngOnDestroy() {
@@ -131,8 +152,54 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.equipmentChart?.destroy();
     this.technicianChart?.destroy();
     this.trendChart?.destroy();
+    this.performanceChart?.destroy();
     this.myTaskChart?.destroy();
     this.myPriorityChart?.destroy();
+    this.weeklyActivityChart?.destroy();
+  }
+
+  // Navigation method
+  navigateTo(route: string): void {
+    this.router.navigate([`/${route}`]);
+  }
+
+  // Refresh charts method
+  refreshCharts(): void {
+    this.loadData();
+    this.notifService.showSuccess('Dashboard refreshed successfully');
+  }
+
+  // Get active technicians count
+  getActiveTechnicians(): number {
+    return this.technicianStats.available + this.technicianStats.busy;
+  }
+
+  private initializeAnimatedStats() {
+    const statsMap = new Map<string, number>();
+    statsMap.set('taskCount', 0);
+    statsMap.set('technicianCount', 0);
+    statsMap.set('equipmentCount', 0);
+    statsMap.set('completionRate', 0);
+    this.animatedStats.set(statsMap);
+  }
+
+  private animateValue(key: string, start: number, end: number, duration: number = 1000) {
+    const startTime = performance.now();
+    const updateValue = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+      const currentValue = start + (end - start) * easeOutCubic;
+      
+      const currentMap = this.animatedStats();
+      currentMap.set(key, Math.floor(currentValue));
+      this.animatedStats.set(new Map(currentMap));
+      
+      if (progress < 1) {
+        requestAnimationFrame(updateValue);
+      }
+    };
+    requestAnimationFrame(updateValue);
   }
 
   setPeriod(period: 'today' | '7d' | '30d' | 'all') {
@@ -159,6 +226,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const filtered = this.filterTasksByPeriod(this.allTasks);
     const active = filtered.filter(x => x.status < 2);
     this.taskCount.set(active.length);
+    this.animateValue('taskCount', 0, active.length, 800);
+    
     this.taskStats = {
       pending: filtered.filter(t => t.status === TaskStatus.Pending).length,
       inProgress: filtered.filter(t => t.status === TaskStatus.InProgress).length,
@@ -166,9 +235,31 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       cancelled: filtered.filter(t => t.status === TaskStatus.Cancelled).length,
       onHold: filtered.filter(t => t.status === TaskStatus.OnHold).length
     };
+    
+    const completedCount = this.taskStats.completed;
+    const totalNonCancelled = filtered.filter(t => t.status !== TaskStatus.Cancelled).length;
+    const completionRate = totalNonCancelled > 0 ? (completedCount / totalNonCancelled) * 100 : 0;
+    this.completionRate.set(Math.round(completionRate));
+    this.animateValue('completionRate', 0, completionRate, 800);
+    
+    // Calculate average completion time (in days)
+    const completedTasks = filtered.filter(t => t.status === TaskStatus.Completed && t.completedDate);
+    if (completedTasks.length > 0) {
+      const avgDays = completedTasks.reduce((sum, task) => {
+        const created = new Date(task.createdAt);
+        const completed = new Date(task.completedDate!);
+        const days = (completed.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
+        return sum + days;
+      }, 0) / completedTasks.length;
+      this.avgCompletionTime.set(Math.round(avgDays * 10) / 10);
+    }
+    
     this.trendCounts = this.buildTrendCounts(filtered);
+    this.weeklyActivity = this.buildWeeklyActivity(filtered);
     this.updateTaskChart();
     this.updateTrendChart();
+    this.updatePerformanceChart();
+    
     if (this.isTechnicianRole()) {
       this.computeMyTaskStats(filtered);
     }
@@ -188,13 +279,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.applyTaskFilter();
         this.isRefreshing.set(false);
         this.lastRefreshed.set(new Date());
-      }, error: () => { this.isRefreshing.set(false); }
+      },
+      error: () => { 
+        this.isRefreshing.set(false);
+      }
     });
 
     if (this.isManagerOrAdmin()) {
       this.techService.getAll().subscribe({
         next: techs => {
           this.technicianCount.set(techs.length);
+          this.animateValue('technicianCount', 0, techs.length, 800);
           this.technicianStats = {
             available: techs.filter(t => t.status === TechnicianStatus.Available).length,
             busy: techs.filter(t => t.status === TechnicianStatus.Busy).length,
@@ -202,26 +297,33 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             inactive: techs.filter(t => t.status === TechnicianStatus.Inactive).length
           };
           this.updateTechnicianChart();
-        }, error: () => {}
+        },
+        error: () => {}
       });
+      
       this.invoiceService.getAll().subscribe({
         next: invoices => {
           this.invoiceCount.set(invoices.length);
           this.pendingInvoices.set(
             invoices.filter(i => i.status === InvoiceStatus.Sent || i.status === InvoiceStatus.Overdue).length
           );
-        }, error: () => {}
+        },
+        error: () => {}
       });
+      
       this.reportService.getAll().subscribe({
         next: reports => this.reportCount.set(reports.length),
         error: () => {}
       });
+      
       this.sparePartService.getAll().subscribe({
         next: parts => {
           this.sparePartsCount.set(parts.length);
           this.lowStockCount.set(parts.filter(p => p.isLowStock).length);
-        }, error: () => {}
+        },
+        error: () => {}
       });
+      
       this.scheduleService.getAll().subscribe({
         next: schedules => {
           const now = new Date();
@@ -229,8 +331,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           this.overdueSchedulesCount.set(
             schedules.filter(s => s.isActive && s.nextDueAt && new Date(s.nextDueAt) < now).length
           );
-        }, error: () => {}
+        },
+        error: () => {}
       });
+      
       if (this.isAdmin()) {
         this.managerService.getAll().subscribe({
           next: managers => this.managerCount.set(managers.length),
@@ -242,6 +346,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.eqService.getAll().subscribe({
       next: eqs => {
         this.equipmentCount.set(eqs.length);
+        this.animateValue('equipmentCount', 0, eqs.length, 800);
         this.equipmentStats = {
           operational: eqs.filter(e => e.status === EquipmentStatus.Operational).length,
           maintenance: eqs.filter(e => e.status === EquipmentStatus.UnderMaintenance).length,
@@ -249,17 +354,27 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           decommissioned: eqs.filter(e => e.status === EquipmentStatus.Decommissioned).length
         };
         this.updateEquipmentChart();
-      }, error: () => {}
+      },
+      error: () => {}
     });
-    this.eqService.getDueMaintenance().subscribe({ next: e => this.dueMaintenance.set(e.length), error: () => {} });
+    
+    this.eqService.getDueMaintenance().subscribe({ 
+      next: e => this.dueMaintenance.set(e.length), 
+      error: () => {} 
+    });
   }
 
   private computeMyTaskStats(tasks: TaskOrder[]) {
-    // tasks are already filtered for the current technician (via getByTechnician)
     this.myTaskCount.set(tasks.length);
     this.myPendingCount.set(tasks.filter(t => t.status === TaskStatus.Pending).length);
     this.myInProgressCount.set(tasks.filter(t => t.status === TaskStatus.InProgress).length);
     this.myCompletedCount.set(tasks.filter(t => t.status === TaskStatus.Completed).length);
+    
+    const completedCount = tasks.filter(t => t.status === TaskStatus.Completed).length;
+    const totalNonCancelled = tasks.filter(t => t.status !== TaskStatus.Cancelled).length;
+    const completionRate = totalNonCancelled > 0 ? (completedCount / totalNonCancelled) * 100 : 0;
+    this.myCompletionRate.set(Math.round(completionRate));
+    
     this.myTaskStats = {
       pending: tasks.filter(t => t.status === TaskStatus.Pending).length,
       inProgress: tasks.filter(t => t.status === TaskStatus.InProgress).length,
@@ -267,14 +382,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       cancelled: tasks.filter(t => t.status === TaskStatus.Cancelled).length,
       onHold: tasks.filter(t => t.status === TaskStatus.OnHold).length
     };
+    
     this.myPriorityStats = {
       low: tasks.filter(t => t.priority === TaskPriority.Low).length,
       medium: tasks.filter(t => t.priority === TaskPriority.Medium).length,
       high: tasks.filter(t => t.priority === TaskPriority.High).length,
       critical: tasks.filter(t => t.priority === TaskPriority.Critical).length
     };
+    
     this.updateMyTaskChart();
     this.updateMyPriorityChart();
+    this.updateWeeklyActivityChart();
   }
 
   private buildTrendLabels(): string[] {
@@ -282,7 +400,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(d.getDate() - i);
-      labels.push(d.toLocaleDateString('en-US', { weekday: 'short' }));
+      labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
     }
     return labels;
   }
@@ -300,10 +418,37 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     return counts;
   }
 
-  private initCharts() {
-    const baseOpts = { responsive: true, maintainAspectRatio: false };
-    const legendBottom = { position: 'bottom' as const, labels: { padding: 16, usePointStyle: true } };
+  private buildWeeklyActivity(tasks: TaskOrder[]): number[] {
+    const activity = new Array(7).fill(0);
+    tasks.forEach(task => {
+      const created = new Date(task.createdAt);
+      const dayOfWeek = created.getDay();
+      activity[dayOfWeek]++;
+    });
+    return activity;
+  }
 
+  private initCharts() {
+    const baseOpts = { 
+      responsive: true, 
+      maintainAspectRatio: false,
+      animation: {
+        duration: 1000,
+        easing: 'easeInOutQuart' as const
+      }
+    };
+    
+    const legendBottom = { 
+      position: 'bottom' as const, 
+      labels: { 
+        padding: 16, 
+        usePointStyle: true,
+        font: { size: 11, weight: '500' as const },
+        boxWidth: 10
+      } 
+    };
+
+    // Task Status Doughnut Chart
     if (this.taskChartRef) {
       this.taskChart = new Chart(this.taskChartRef.nativeElement, {
         type: 'doughnut',
@@ -312,12 +457,35 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           datasets: [{
             data: [0, 0, 0, 0, 0],
             backgroundColor: ['#f59e0b', '#3b82f6', '#10b981', '#ef4444', '#8b5cf6'],
-            borderWidth: 3, borderColor: '#ffffff', hoverOffset: 8
+            borderWidth: 0,
+            hoverOffset: 15,
+           
+            borderRadius: 8,
+            spacing: 2
           }]
         },
-        options: { ...baseOpts, cutout: '65%', plugins: { legend: legendBottom } }
+        options: { 
+          ...baseOpts, 
+          cutout: '70%', 
+          plugins: { 
+           
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const label = context.label || '';
+                  const value = context.raw as number;
+                  const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+                  const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return `${label}: ${value} (${percentage}%)`;
+                }
+              }
+            }
+          } 
+        }
       });
     }
+
+    // Equipment Status Doughnut Chart
     if (this.equipmentChartRef) {
       this.equipmentChart = new Chart(this.equipmentChartRef.nativeElement, {
         type: 'doughnut',
@@ -326,12 +494,35 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           datasets: [{
             data: [0, 0, 0, 0],
             backgroundColor: ['#10b981', '#f59e0b', '#ef4444', '#6b7280'],
-            borderWidth: 3, borderColor: '#ffffff', hoverOffset: 8
+            borderWidth: 0,
+            hoverOffset: 15,
+           
+            borderRadius: 8,
+            spacing: 2
           }]
         },
-        options: { ...baseOpts, cutout: '65%', plugins: { legend: legendBottom } }
+        options: { 
+          ...baseOpts, 
+          cutout: '70%', 
+          plugins: { 
+           
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const label = context.label || '';
+                  const value = context.raw as number;
+                  const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+                  const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return `${label}: ${value} (${percentage}%)`;
+                }
+              }
+            }
+          } 
+        }
       });
     }
+
+    // Technician Status Bar Chart
     if (this.technicianChartRef) {
       this.technicianChart = new Chart(this.technicianChartRef.nativeElement, {
         type: 'bar',
@@ -341,23 +532,53 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             label: 'Technicians',
             data: [0, 0, 0, 0],
             backgroundColor: [
-              'rgba(16,185,129,0.85)', 'rgba(59,130,246,0.85)',
-              'rgba(245,158,11,0.85)', 'rgba(107,114,128,0.85)'
+              'rgba(16,185,129,0.85)',
+              'rgba(59,130,246,0.85)',
+              'rgba(245,158,11,0.85)',
+              'rgba(107,114,128,0.85)'
             ],
-            borderRadius: 8, borderSkipped: false
+            borderRadius: 12,
+            barPercentage: 0.65,
+            categoryPercentage: 0.8,
+            borderSkipped: false
           }]
         },
         options: {
           ...baseOpts,
-          plugins: { legend: { display: false } },
+          plugins: { 
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const value = context.raw as number;
+                  return `Count: ${value}`;
+                }
+              }
+            }
+          },
           scales: {
-            y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } },
-            x: { grid: { display: false } }
+            y: { 
+              beginAtZero: true, 
+              ticks: { stepSize: 1, font: { size: 11 } }, 
+              grid: { color: 'rgba(0,0,0,0.05)' },
+              title: { display: true, text: 'Number of Technicians', font: { size: 11 } }
+            },
+            x: { 
+              grid: { display: false },
+              ticks: { font: { size: 11, weight: 'normal' as const } }
+            }
           }
         }
       });
     }
+
+    // Trend Line Chart
     if (this.trendChartRef) {
+      const ctx = this.trendChartRef.nativeElement.getContext('2d');
+      const gradient = ctx?.createLinearGradient(0, 0, 0, 200);
+      gradient?.addColorStop(0, 'rgba(59,130,246,0.3)');
+      gradient?.addColorStop(1, 'rgba(59,130,246,0.02)');
+      
       this.trendChart = new Chart(this.trendChartRef.nativeElement, {
         type: 'line',
         data: {
@@ -366,25 +587,70 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             label: 'Tasks Created',
             data: this.trendCounts,
             borderColor: '#3b82f6',
-            backgroundColor: 'rgba(59,130,246,0.12)',
+            backgroundColor: gradient,
             tension: 0.4,
             fill: true,
             pointBackgroundColor: '#3b82f6',
             pointBorderColor: '#ffffff',
             pointBorderWidth: 2,
-            pointRadius: 5
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            pointHoverBackgroundColor: '#1e40af',
+            borderWidth: 3
           }]
         },
         options: {
           ...baseOpts,
-          plugins: { legend: { display: false } },
+          plugins: { 
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => `Tasks: ${context.raw}`
+              }
+            }
+          },
           scales: {
-            y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } },
-            x: { grid: { display: false } }
+            y: { 
+              beginAtZero: true, 
+              ticks: { stepSize: 1, font: { size: 11 } }, 
+              grid: { color: 'rgba(0,0,0,0.05)' },
+              title: { display: true, text: 'Number of Tasks', font: { size: 11 } }
+            },
+            x: { 
+              grid: { display: false },
+              ticks: { font: { size: 11 } }
+            }
           }
         }
       });
     }
+
+    // Performance Gauge Chart
+    if (this.performanceChartRef) {
+      this.performanceChart = new Chart(this.performanceChartRef.nativeElement, {
+        type: 'doughnut',
+        data: {
+          labels: ['Completion Rate', 'Remaining'],
+          datasets: [{
+            data: [0, 100],
+            backgroundColor: ['#10b981', '#e5e7eb'],
+            borderWidth: 0,
+           
+            borderRadius: 10
+          }]
+        },
+        options: {
+          ...baseOpts,
+          cutout: '75%',
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }
+          }
+        }
+      });
+    }
+
+    // Technician Task Chart
     if (this.myTaskChartRef) {
       this.myTaskChart = new Chart(this.myTaskChartRef.nativeElement, {
         type: 'doughnut',
@@ -393,12 +659,35 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           datasets: [{
             data: [0, 0, 0, 0, 0],
             backgroundColor: ['#f59e0b', '#3b82f6', '#10b981', '#ef4444', '#8b5cf6'],
-            borderWidth: 3, borderColor: '#ffffff', hoverOffset: 8
+            borderWidth: 0,
+            hoverOffset: 15,
+         
+            borderRadius: 8,
+            spacing: 2
           }]
         },
-        options: { ...baseOpts, cutout: '65%', plugins: { legend: legendBottom } }
+        options: { 
+          ...baseOpts, 
+          cutout: '70%', 
+          plugins: { 
+           
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const label = context.label || '';
+                  const value = context.raw as number;
+                  const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+                  const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return `${label}: ${value} (${percentage}%)`;
+                }
+              }
+            }
+          } 
+        }
       });
     }
+
+    // Priority Chart
     if (this.myPriorityChartRef) {
       this.myPriorityChart = new Chart(this.myPriorityChartRef.nativeElement, {
         type: 'bar',
@@ -408,18 +697,81 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             label: 'Tasks by Priority',
             data: [0, 0, 0, 0],
             backgroundColor: [
-              'rgba(16,185,129,0.85)', 'rgba(59,130,246,0.85)',
-              'rgba(245,158,11,0.85)', 'rgba(239,68,68,0.85)'
+              'rgba(16,185,129,0.85)',
+              'rgba(59,130,246,0.85)',
+              'rgba(245,158,11,0.85)',
+              'rgba(239,68,68,0.85)'
             ],
-            borderRadius: 8, borderSkipped: false
+            borderRadius: 12,
+            barPercentage: 0.7,
+            categoryPercentage: 0.85,
+            borderSkipped: false
           }]
         },
         options: {
           ...baseOpts,
-          plugins: { legend: { display: false } },
+          plugins: { 
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const value = context.raw as number;
+                  return `Tasks: ${value}`;
+                }
+              }
+            }
+          },
           scales: {
-            y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } },
-            x: { grid: { display: false } }
+            y: { 
+              beginAtZero: true, 
+              ticks: { stepSize: 1, font: { size: 11 } }, 
+              grid: { color: 'rgba(0,0,0,0.05)' },
+              title: { display: true, text: 'Number of Tasks', font: { size: 11 } }
+            },
+            x: { 
+              grid: { display: false },
+              ticks: { font: { size: 11, weight: 'normal' as const } }
+            }
+          }
+        }
+      });
+    }
+
+    // Weekly Activity Chart
+    if (this.weeklyActivityChartRef) {
+      this.weeklyActivityChart = new Chart(this.weeklyActivityChartRef.nativeElement, {
+        type: 'bar',
+        data: {
+          labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+          datasets: [{
+            label: 'Task Activity',
+            data: [0, 0, 0, 0, 0, 0, 0],
+            backgroundColor: 'rgba(139,92,246,0.7)',
+            borderRadius: 8,
+            barPercentage: 0.6,
+            categoryPercentage: 0.8
+          }]
+        },
+        options: {
+          ...baseOpts,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => `Tasks: ${context.raw}`
+              }
+            }
+          },
+          scales: {
+            y: { 
+              beginAtZero: true, 
+              ticks: { stepSize: 1, font: { size: 11 } }, 
+              grid: { color: 'rgba(0,0,0,0.05)' }
+            },
+            x: { 
+              grid: { display: false },
+              ticks: { font: { size: 11 } }
+            }
           }
         }
       });
@@ -453,6 +805,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.trendChart.update();
   }
 
+  private updatePerformanceChart() {
+    if (!this.performanceChart) return;
+    const completionRate = this.completionRate();
+    this.performanceChart.data.datasets[0].data = [completionRate, 100 - completionRate];
+    this.performanceChart.update();
+  }
+
   private updateMyTaskChart() {
     if (!this.myTaskChart) return;
     const { pending, inProgress, completed, cancelled, onHold } = this.myTaskStats;
@@ -467,9 +826,24 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.myPriorityChart.update();
   }
 
-  isAdmin(): boolean { return this.auth.isAdmin(); }
-  isManagerOrAdmin(): boolean { return this.auth.isManager(); }
-  isTechnicianRole(): boolean { return !this.auth.isManager() && this.auth.isAuthenticated(); }
+  private updateWeeklyActivityChart() {
+    if (!this.weeklyActivityChart) return;
+    this.weeklyActivityChart.data.datasets[0].data = this.weeklyActivity;
+    this.weeklyActivityChart.update();
+  }
+
+  // Role check methods
+  isAdmin(): boolean { 
+    return this.auth.isAdmin(); 
+  }
+  
+  isManagerOrAdmin(): boolean { 
+    return this.auth.isManager() || this.auth.isAdmin(); 
+  }
+  
+  isTechnicianRole(): boolean { 
+    return !this.auth.isManager() && !this.auth.isAdmin() && this.auth.isAuthenticated(); 
+  }
 
   getLastRefreshedLabel(): string {
     const d = this.lastRefreshed();
@@ -486,5 +860,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.auth.isAdmin()) return this.translation.translate('dashboard.subtitles.admin');
     if (this.auth.isManager()) return this.translation.translate('dashboard.subtitles.manager');
     return this.translation.translate('dashboard.subtitles.technician');
+  }
+
+  getAnimatedValue(key: string): number {
+    return this.animatedStats().get(key) || 0;
   }
 }

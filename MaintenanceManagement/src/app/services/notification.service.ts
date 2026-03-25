@@ -8,6 +8,9 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
+  showSuccess(arg0: string) {
+    throw new Error('Method not implemented.');
+  }
   private readonly base = `${environment.apiUrl}/notifications`;
   private hubConnection: signalR.HubConnection | null = null;
 
