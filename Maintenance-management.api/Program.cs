@@ -132,6 +132,7 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAvaila
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITechnicianPerformanceService, Maintenance_management.application.Services.TechnicianPerformanceService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.ISparePartService, Maintenance_management.application.Services.SparePartService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IMaintenanceScheduleService, Maintenance_management.application.Services.MaintenanceScheduleService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IUserService, Maintenance_management.application.Services.UserService>();
 
 // Notification service (SignalR-based)
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.INotificationService, Maintenance_management.api.Services.HubNotificationService>();
