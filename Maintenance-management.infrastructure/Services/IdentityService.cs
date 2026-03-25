@@ -2,6 +2,7 @@ using Maintenance_management.application.DTOs.User;
 using Maintenance_management.application.Interfaces;
 using Maintenance_management.infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Maintenance_management.infrastructure.Services;
 
@@ -57,7 +58,7 @@ public class IdentityService : IIdentityService
 
     public async Task<IEnumerable<UserDto>> GetAllUsersWithRolesAsync()
     {
-        var users = _userManager.Users.ToList();
+        var users = await _userManager.Users.ToListAsync();
         var result = new List<UserDto>();
         foreach (var user in users)
         {
