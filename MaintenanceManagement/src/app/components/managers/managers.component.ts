@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { ManagerService } from '../../services/manager.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { Manager, CreateManagerRequest, UpdateManagerRequest } from '../../models';
@@ -11,12 +12,13 @@ import { TranslationService } from '../../services/translate.service';
 @Component({
   selector: 'app-managers',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
-  templateUrl: './managers.component.html',
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
   styleUrls: ['./managers.component.css']
 })
 export class ManagersComponent implements OnInit {
   managers = signal<Manager[]>([]);
+  currentPage = signal(1);
+  readonly pageSize = 12;
   isLoading = signal(true);
   showModal = signal(false);
   isEditing = signal(false);

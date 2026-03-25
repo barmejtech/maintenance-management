@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { MaintenanceScheduleService } from '../../services/maintenance-schedule.service';
 import { EquipmentService } from '../../services/equipment.service';
 import { TechnicianService } from '../../services/technician.service';
@@ -16,12 +17,13 @@ import {
 @Component({
   selector: 'app-maintenance-schedules',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
-  templateUrl: './maintenance-schedules.component.html',
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
   styleUrls: ['./maintenance-schedules.component.css']
 })
 export class MaintenanceSchedulesComponent implements OnInit {
   schedules = signal<MaintenanceSchedule[]>([]);
+  currentPage = signal(1);
+  readonly pageSize = 9;
   equipment = signal<Equipment[]>([]);
   technicians = signal<Technician[]>([]);
   groups = signal<TechnicianGroup[]>([]);
@@ -80,6 +82,7 @@ export class MaintenanceSchedulesComponent implements OnInit {
 
   setTab(tab: 'all' | 'active' | 'overdue' | 'soon') {
     this.activeTab.set(tab);
+    this.currentPage.set(1);
     this.load();
   }
 

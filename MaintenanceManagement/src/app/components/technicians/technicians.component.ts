@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { TechnicianService } from '../../services/technician.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { Technician, TechnicianStatus, CreateTechnicianRequest, UpdateTechnicianRequest } from '../../models';
@@ -11,12 +12,13 @@ import { TranslationService } from '../../services/translate.service';
 @Component({
   selector: 'app-technicians',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
-  templateUrl: './technicians.component.html',
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
   styleUrls: ['./technicians.component.css']
 })
 export class TechniciansComponent implements OnInit {
   technicians = signal<Technician[]>([]);
+  currentPage = signal(1);
+  readonly pageSize = 12;
   isLoading = signal(true);
   showModal = signal(false);
   isEditing = signal(false);

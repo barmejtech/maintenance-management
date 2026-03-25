@@ -41,7 +41,7 @@
     </div>
   } @else {
     <div class="row g-3">
-      @for (s of schedules(); track s.id) {
+      @for (s of schedules() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track s.id) {
         <div class="col-12 col-md-6 col-xl-4">
           <div class="card h-100 shadow-sm border-0 schedule-card"
             [class.overdue-card]="isOverdue(s)"
@@ -139,6 +139,9 @@
           </div>
         </div>
       }
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <pagination-controls [autoHide]="true" (pageChange)="currentPage.set($event)" previousLabel="" nextLabel=""></pagination-controls>
     </div>
   }
 </div>

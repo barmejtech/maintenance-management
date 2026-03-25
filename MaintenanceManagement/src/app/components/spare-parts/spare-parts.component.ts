@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { SparePartService } from '../../services/spare-part.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
@@ -11,12 +12,13 @@ import { SparePart, CreateSparePartRequest, UpdateSparePartRequest } from '../..
 @Component({
   selector: 'app-spare-parts',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
-  templateUrl: './spare-parts.component.html',
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
   styleUrls: ['./spare-parts.component.css']
 })
 export class SparePartsComponent implements OnInit {
   parts = signal<SparePart[]>([]);
+  currentPage = signal(1);
+  readonly pageSize = 9;
   isLoading = signal(true);
   showModal = signal(false);
   isEditing = signal(false);

@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { ReportService } from '../../services/report.service';
 import { TaskOrderService } from '../../services/task-order.service';
 import { MaintenanceReport, CreateReportRequest, TaskOrder } from '../../models';
@@ -12,12 +13,13 @@ import { PdfService } from '../../services/pdf.service';
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
-  templateUrl: './reports.component.html',
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
   styleUrls: ['./reports.component.css']
 })
 export class ReportsComponent implements OnInit {
   reports = signal<MaintenanceReport[]>([]);
+  currentPage = signal(1);
+  readonly pageSize = 8;
   taskOrders = signal<TaskOrder[]>([]);
   showModal = signal(false);
   isEditing = signal(false);

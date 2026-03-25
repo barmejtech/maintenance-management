@@ -17,7 +17,7 @@
     </div>
   } @else {
     <div class="row g-3">
-      @for (manager of managers(); track manager.id) {
+      @for (manager of managers() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track manager.id) {
         <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
           <div class="card h-100 shadow-sm border-0 manager-card">
             <div class="card-body pb-2">
@@ -63,6 +63,9 @@
           </div>
         </div>
       }
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <pagination-controls [autoHide]="true" (pageChange)="currentPage.set($event)" previousLabel="" nextLabel=""></pagination-controls>
     </div>
   }
 </div>

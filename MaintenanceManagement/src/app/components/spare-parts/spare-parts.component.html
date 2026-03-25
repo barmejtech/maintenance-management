@@ -17,7 +17,7 @@
     </div>
   } @else {
     <div class="row g-3">
-      @for (part of parts(); track part.id) {
+      @for (part of parts() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track part.id) {
         <div class="col-12 col-md-6 col-xl-4">
           <div class="card h-100 shadow-sm border-0 part-card" [class.low-stock-card]="part.isLowStock">
             <!-- Photo Gallery -->
@@ -130,6 +130,9 @@
           </div>
         </div>
       }
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <pagination-controls [autoHide]="true" (pageChange)="currentPage.set($event)" previousLabel="" nextLabel=""></pagination-controls>
     </div>
   }
 </div>
