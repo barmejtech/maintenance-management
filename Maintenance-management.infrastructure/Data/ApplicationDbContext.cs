@@ -9,6 +9,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
+    public DbSet<Manager> Managers => Set<Manager>();
     public DbSet<Technician> Technicians => Set<Technician>();
     public DbSet<TechnicianGroup> TechnicianGroups => Set<TechnicianGroup>();
     public DbSet<TechnicianGroupMember> TechnicianGroupMembers => Set<TechnicianGroupMember>();
@@ -32,6 +33,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<Manager>(e =>
+        {
+            e.HasKey(m => m.Id);
+            e.Property(m => m.FirstName).IsRequired().HasMaxLength(100);
+            e.Property(m => m.LastName).IsRequired().HasMaxLength(100);
+            e.Property(m => m.Email).IsRequired().HasMaxLength(256);
+            e.Property(m => m.Phone).HasMaxLength(50);
+            e.Property(m => m.Department).HasMaxLength(200);
+            e.HasIndex(m => m.UserId).IsUnique();
+        });
 
         builder.Entity<Technician>(e =>
         {
