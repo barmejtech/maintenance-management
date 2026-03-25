@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, AfterViewInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -10,9 +10,7 @@ import { InvoiceService } from '../../services/invoice.service';
 import { ReportService } from '../../services/report.service';
 import { SparePartService } from '../../services/spare-part.service';
 import { MaintenanceScheduleService } from '../../services/maintenance-schedule.service';
-import { NotificationsComponent } from '../notifications/notifications.component';
 import { TranslationService } from '../../services/translate.service';
-import { ThemeService } from '../../services/theme.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TaskStatus, EquipmentStatus, TechnicianStatus, TaskPriority, InvoiceStatus, TaskOrder } from '../../models';
 import {
@@ -30,7 +28,7 @@ Chart.register(
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, NotificationsComponent, TranslatePipe],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -44,28 +42,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('myTaskChart') myTaskChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('myPriorityChart') myPriorityChartRef!: ElementRef<HTMLCanvasElement>;
 
-  // Sidebar visibility: open by default on desktop, closed on mobile
-  sidebarOpen = signal(typeof window !== 'undefined' ? window.innerWidth > 768 : true);
-
   // Current technician's entity ID (used when the logged-in user has the Technician role)
   private currentTechnicianId = signal<string | null>(null);
-
-  toggleSidebar(): void {
-    this.sidebarOpen.update(v => !v);
-  }
-
-  @HostListener('window:resize')
-  onResize(): void {
-    const isDesktop = window.innerWidth > 768;
-    // Auto-open on desktop, auto-close on mobile when crossing the breakpoint
-    if (isDesktop && !this.sidebarOpen()) {
-      this.sidebarOpen.set(true);
-    } else if (!isDesktop && this.sidebarOpen()) {
-      this.sidebarOpen.set(false);
-    }
-  }
-
-  // Period filter: 'today' | '7d' | '30d' | 'all'
   selectedPeriod = signal<'today' | '7d' | '30d' | 'all'>('all');
   lastRefreshed = signal<Date>(new Date());
   isRefreshing = signal(false);
@@ -111,7 +89,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public auth: AuthService,
     public translation: TranslationService,
-    public theme: ThemeService,
     private taskService: TaskOrderService,
     private techService: TechnicianService,
     private eqService: EquipmentService,
@@ -488,12 +465,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   getLastRefreshedLabel(): string {
     const d = this.lastRefreshed();
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  }
-
-  getRoleName(): string {
-    if (this.auth.isAdmin()) return this.translation.translate('dashboard.roles.administrator');
-    if (this.auth.isManager()) return this.translation.translate('dashboard.roles.manager');
-    return this.translation.translate('dashboard.roles.technician');
   }
 
   getDashboardTitle(): string {

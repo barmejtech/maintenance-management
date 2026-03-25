@@ -1,0 +1,110 @@
+<div class="dashboard" [ngClass]="{'role-admin': isAdmin(), 'role-manager': isManagerOrAdmin() && !isAdmin(), 'role-tech': isTechnicianRole(), 'sidebar-collapsed': !sidebarOpen()}">
+  <header class="dash-header">
+    <div class="dash-title">
+      <button class="btn-hamburger" (click)="toggleSidebar()" [title]="'dashboard.header.toggleSidebar' | translate" [attr.aria-expanded]="sidebarOpen()" aria-label="Toggle navigation">
+        <i class="bi bi-list"></i>
+      </button>
+      <span class="logo">🔧</span>
+      <h1>{{ 'dashboard.header.title' | translate }}</h1>
+    </div>
+    <div class="dash-user">
+      <app-notifications />
+      <span class="user-name">{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</span>
+      <span class="role-badge" [ngClass]="{'badge-admin': isAdmin(), 'badge-manager': isManagerOrAdmin() && !isAdmin(), 'badge-tech': isTechnicianRole()}">
+        {{ getRoleName() }}
+      </span>
+      <button class="btn-lang" (click)="translation.toggleLanguage()" title="Switch Language">
+        <i class="bi bi-globe2"></i> {{ 'lang.toggle' | translate }}
+      </button>
+      <button class="btn-theme" (click)="theme.toggleTheme()" [title]="'theme.toggle' | translate">
+        <i class="bi" [class.bi-moon-fill]="!theme.isDark" [class.bi-sun-fill]="theme.isDark"></i>
+      </button>
+      <button (click)="auth.logout()" class="btn-logout">{{ 'dashboard.header.signOut' | translate }}</button>
+    </div>
+  </header>
+
+  <div class="sidebar-overlay" [class.active]="sidebarOpen()" (click)="toggleSidebar()"></div>
+
+  <nav class="sidebar">
+    <a routerLink="/home" routerLinkActive="active" class="nav-item">
+      <span>🏠</span> {{ 'dashboard.sidebar.home' | translate }}
+    </a>
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+      <span>📊</span> {{ 'dashboard.sidebar.dashboard' | translate }}
+    </a>
+    <a routerLink="/tasks" routerLinkActive="active" class="nav-item">
+      <span>✅</span> {{ 'dashboard.sidebar.workOrders' | translate }}
+    </a>
+    <a routerLink="/equipment" routerLinkActive="active" class="nav-item">
+      <span>🔩</span> {{ 'dashboard.sidebar.equipment' | translate }}
+    </a>
+    <a routerLink="/hvac" routerLinkActive="active" class="nav-item">
+      <span>❄️</span> {{ 'dashboard.sidebar.hvac' | translate }}
+    </a>
+    <a routerLink="/reports" routerLinkActive="active" class="nav-item">
+      <span>📄</span> {{ 'dashboard.sidebar.reports' | translate }}
+    </a>
+    <a routerLink="/availability" routerLinkActive="active" class="nav-item">
+      <span>📅</span> {{ 'dashboard.sidebar.availability' | translate }}
+    </a>
+    <a routerLink="/calendar" routerLinkActive="active" class="nav-item">
+      <span>🗓️</span> {{ 'dashboard.sidebar.schedule' | translate }}
+    </a>
+    <a routerLink="/chat" routerLinkActive="active" class="nav-item">
+      <span>💬</span> {{ 'dashboard.sidebar.chat' | translate }}
+    </a>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-label">{{ 'dashboard.sidebar.intelligence' | translate }}</div>
+    <a routerLink="/predictive-maintenance" routerLinkActive="active" class="nav-item">
+      <span>🔮</span> {{ 'dashboard.sidebar.predictiveMaintenance' | translate }}
+    </a>
+    <a routerLink="/equipment-digital-twin" routerLinkActive="active" class="nav-item">
+      <span>🏭</span> {{ 'dashboard.sidebar.digitalTwin' | translate }}
+    </a>
+    <a routerLink="/spare-parts" routerLinkActive="active" class="nav-item">
+      <span>🔧</span> {{ 'dashboard.sidebar.spareParts' | translate }}
+    </a>
+    <a routerLink="/maintenance-schedules" routerLinkActive="active" class="nav-item">
+      <span>📋</span> {{ 'dashboard.sidebar.maintenanceSchedules' | translate }}
+    </a>
+    <a routerLink="/equipment-timeline" routerLinkActive="active" class="nav-item">
+      <span>🕐</span> {{ 'dashboard.sidebar.equipmentTimeline' | translate }}
+    </a>
+    <a routerLink="/mobile-workflow" routerLinkActive="active" class="nav-item">
+      <span>📱</span> {{ 'dashboard.sidebar.mobileWorkflow' | translate }}
+    </a>
+    @if (isManagerOrAdmin()) {
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section-label">{{ 'dashboard.sidebar.management' | translate }}</div>
+      <a routerLink="/performance" routerLinkActive="active" class="nav-item">
+        <span>📊</span> {{ 'dashboard.sidebar.performance' | translate }}
+      </a>
+      <a routerLink="/technicians" routerLinkActive="active" class="nav-item">
+        <span>👷</span> {{ 'dashboard.sidebar.technicians' | translate }}
+      </a>
+      <a routerLink="/groups" routerLinkActive="active" class="nav-item">
+        <span>👥</span> {{ 'dashboard.sidebar.groups' | translate }}
+      </a>
+      <a routerLink="/invoices" routerLinkActive="active" class="nav-item">
+        <span>💰</span> {{ 'dashboard.sidebar.invoices' | translate }}
+      </a>
+    }
+    @if (isAdmin()) {
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section-label">{{ 'dashboard.sidebar.admin' | translate }}</div>
+      <a routerLink="/managers" routerLinkActive="active" class="nav-item admin-item">
+        <span>👔</span> {{ 'dashboard.sidebar.manageManagers' | translate }}
+      </a>
+      <a routerLink="/users" routerLinkActive="active" class="nav-item admin-item">
+        <span>⚙️</span> {{ 'dashboard.sidebar.manageUsers' | translate }}
+      </a>
+      <a routerLink="/register" routerLinkActive="active" class="nav-item admin-item">
+        <span>➕</span> {{ 'dashboard.sidebar.registerUser' | translate }}
+      </a>
+    }
+  </nav>
+
+  <main class="main-content">
+    <router-outlet />
+  </main>
+</div>
