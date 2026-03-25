@@ -180,4 +180,32 @@ export class MaintenanceSchedulesComponent implements OnInit {
   isOverdue(s: MaintenanceSchedule): boolean {
     return !!s.nextDueAt && new Date(s.nextDueAt) < new Date();
   }
+
+  isDueSoon(s: MaintenanceSchedule): boolean {
+    if (!s.nextDueAt) return false;
+    const due = new Date(s.nextDueAt);
+    const now = new Date();
+    const diff = (due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+    return diff >= 0 && diff <= 7;
+  }
+
+  getTypeIcon(t: MaintenanceType): string {
+    const map: Record<number, string> = {
+      [MaintenanceType.Preventive]: 'bi-shield-check',
+      [MaintenanceType.Corrective]: 'bi-wrench-adjustable',
+      [MaintenanceType.Inspection]: 'bi-search',
+      [MaintenanceType.Emergency]: 'bi-lightning-charge',
+    };
+    return map[t] ?? 'bi-tools';
+  }
+
+  getTypeColor(t: MaintenanceType): string {
+    const map: Record<number, string> = {
+      [MaintenanceType.Preventive]: 'text-primary bg-primary-subtle',
+      [MaintenanceType.Corrective]: 'text-danger bg-danger-subtle',
+      [MaintenanceType.Inspection]: 'text-warning bg-warning-subtle',
+      [MaintenanceType.Emergency]: 'text-danger bg-danger-subtle',
+    };
+    return map[t] ?? 'text-secondary bg-secondary-subtle';
+  }
 }

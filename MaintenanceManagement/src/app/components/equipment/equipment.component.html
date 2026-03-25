@@ -13,95 +13,115 @@
       </a>
     </div>
   </div>
-  <div class="card shadow-sm border-0">
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="table-dark">
-            <tr>
-              <th><i class="bi bi-wrench me-1"></i>{{ 'asset.table.name' | translate }}</th>
-              <th><i class="bi bi-upc-scan me-1"></i>{{ 'asset.table.serialNo' | translate }}</th>
-              <th><i class="bi bi-building me-1"></i>{{ 'asset.table.manufacturer' | translate }}</th>
-              <th><i class="bi bi-geo-alt me-1"></i>{{ 'asset.table.location' | translate }}</th>
-              <th><i class="bi bi-activity me-1"></i>{{ 'asset.table.status' | translate }}</th>
-              <th><i class="bi bi-calendar-check me-1"></i>{{ 'asset.table.nextMaintenance' | translate }}</th>
-              <th><i class="bi bi-images me-1"></i>{{ 'asset.table.photos' | translate }}</th>
-              <th class="text-end">{{ 'asset.table.actions' | translate }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (eq of equipment(); track eq.id) {
-              <tr class="align-middle">
-                <td>
-                  <div class="d-flex align-items-center gap-2">
-                    <span class="equipment-icon bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-cpu"></i>
-                    </span>
-                    <span class="fw-semibold">{{ eq.name }}</span>
-                  </div>
-                </td>
-                <td><code class="text-secondary">{{ eq.serialNumber }}</code></td>
-                <td>{{ eq.manufacturer }}</td>
-                <td><i class="bi bi-pin-map text-muted me-1"></i>{{ eq.location }}</td>
-                <td><span class="badge rounded-pill" [class]="getStatusClass(eq.status)">{{ getStatusLabel(eq.status) }}</span></td>
-                <td>
-                  @if (eq.nextMaintenanceDate) {
-                    <span class="text-nowrap"><i class="bi bi-calendar3 me-1 text-info"></i>{{ eq.nextMaintenanceDate | date:'mediumDate' }}</span>
-                  } @else {
-                    <span class="text-muted">—</span>
-                  }
-                </td>
-                <td>
-                  <div class="d-flex gap-1 flex-wrap">
-                    @if (eq.beforeMaintenancePhotoUrl) {
-                      <a [href]="eq.beforeMaintenancePhotoUrl" target="_blank" title="{{ 'asset.form.photoBefore' | translate }}">
-                        <img [src]="eq.beforeMaintenancePhotoUrl" alt="Photo 1" class="photo-thumb" />
-                      </a>
-                    }
-                    @if (eq.afterMaintenancePhotoUrl) {
-                      <a [href]="eq.afterMaintenancePhotoUrl" target="_blank" title="{{ 'asset.form.photoAfter' | translate }}">
-                        <img [src]="eq.afterMaintenancePhotoUrl" alt="Photo 2" class="photo-thumb" />
-                      </a>
-                    }
-                    @if (eq.photo3Url) {
-                      <a [href]="eq.photo3Url" target="_blank" title="{{ 'asset.form.photo3' | translate }}">
-                        <img [src]="eq.photo3Url" alt="Photo 3" class="photo-thumb" />
-                      </a>
-                    }
-                    @if (eq.photo4Url) {
-                      <a [href]="eq.photo4Url" target="_blank" title="{{ 'asset.form.photo4' | translate }}">
-                        <img [src]="eq.photo4Url" alt="Photo 4" class="photo-thumb" />
-                      </a>
-                    }
-                    @if (!eq.beforeMaintenancePhotoUrl && !eq.afterMaintenancePhotoUrl && !eq.photo3Url && !eq.photo4Url) {
-                      <span class="text-muted small">—</span>
-                    }
-                  </div>
-                </td>
-                <td class="text-end">
-                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(eq)" [title]="'buttons.edit' | translate">
-                    <i class="bi bi-pencil-square"></i>
-                  </button>
-                  <button class="btn btn-sm btn-outline-danger" (click)="delete(eq.id)" [title]="'buttons.delete' | translate">
-                    <i class="bi bi-trash3"></i>
-                  </button>
-                </td>
-              </tr>
+
+  <div class="row g-3">
+    @for (eq of equipment(); track eq.id) {
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="card h-100 shadow-sm border-0 equipment-card">
+          <!-- Photo Gallery -->
+          <div class="equipment-photo-gallery">
+            @if (eq.beforeMaintenancePhotoUrl || eq.afterMaintenancePhotoUrl || eq.photo3Url || eq.photo4Url) {
+              <div class="photo-grid">
+                @if (eq.beforeMaintenancePhotoUrl) {
+                  <a [href]="eq.beforeMaintenancePhotoUrl" target="_blank" class="photo-cell" [title]="'asset.form.photoBefore' | translate">
+                    <img [src]="eq.beforeMaintenancePhotoUrl" alt="Before" />
+                    <span class="photo-label">{{ 'asset.form.photoBefore' | translate }}</span>
+                  </a>
+                }
+                @if (eq.afterMaintenancePhotoUrl) {
+                  <a [href]="eq.afterMaintenancePhotoUrl" target="_blank" class="photo-cell" [title]="'asset.form.photoAfter' | translate">
+                    <img [src]="eq.afterMaintenancePhotoUrl" alt="After" />
+                    <span class="photo-label">{{ 'asset.form.photoAfter' | translate }}</span>
+                  </a>
+                }
+                @if (eq.photo3Url) {
+                  <a [href]="eq.photo3Url" target="_blank" class="photo-cell" [title]="'asset.form.photo3' | translate">
+                    <img [src]="eq.photo3Url" alt="Photo 3" />
+                    <span class="photo-label">{{ 'asset.form.photo3' | translate }}</span>
+                  </a>
+                }
+                @if (eq.photo4Url) {
+                  <a [href]="eq.photo4Url" target="_blank" class="photo-cell" [title]="'asset.form.photo4' | translate">
+                    <img [src]="eq.photo4Url" alt="Photo 4" />
+                    <span class="photo-label">{{ 'asset.form.photo4' | translate }}</span>
+                  </a>
+                }
+              </div>
+            } @else {
+              <div class="photo-placeholder">
+                <i class="bi bi-cpu fs-1 text-primary opacity-50"></i>
+              </div>
             }
-            @if (equipment().length === 0) {
-              <tr>
-                <td colspan="8" class="text-center py-5">
-                  <div class="text-muted">
-                    <i class="bi bi-tools fs-2 d-block mb-2 text-secondary"></i>
-                    <span class="fw-medium">{{ 'asset.empty' | translate }}</span>
-                  </div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
+            <!-- Status badge overlaid on photo area -->
+            <span class="status-overlay badge rounded-pill" [class]="getStatusClass(eq.status)">
+              {{ getStatusLabel(eq.status) }}
+            </span>
+          </div>
+
+          <!-- Card Body -->
+          <div class="card-body px-3 pt-3 pb-2">
+            <div class="d-flex align-items-start gap-2 mb-3">
+              <span class="equipment-icon bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                <i class="bi bi-cpu"></i>
+              </span>
+              <div class="min-w-0">
+                <h6 class="card-title mb-0 fw-bold text-truncate">{{ eq.name }}</h6>
+                @if (eq.model) {
+                  <small class="text-muted">{{ eq.model }}</small>
+                }
+              </div>
+            </div>
+
+            <ul class="list-unstyled mb-0 eq-details">
+              @if (eq.serialNumber) {
+                <li>
+                  <i class="bi bi-upc-scan text-secondary"></i>
+                  <code class="text-secondary">{{ eq.serialNumber }}</code>
+                </li>
+              }
+              @if (eq.manufacturer) {
+                <li>
+                  <i class="bi bi-building text-secondary"></i>
+                  <span>{{ eq.manufacturer }}</span>
+                </li>
+              }
+              @if (eq.location) {
+                <li>
+                  <i class="bi bi-geo-alt text-danger"></i>
+                  <span>{{ eq.location }}</span>
+                </li>
+              }
+              @if (eq.nextMaintenanceDate) {
+                <li>
+                  <i class="bi bi-calendar-check text-info"></i>
+                  <span class="text-info fw-semibold">{{ eq.nextMaintenanceDate | date:'mediumDate' }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+
+          <div class="card-footer bg-transparent border-top d-flex justify-content-end gap-2 py-2 px-3">
+            <button class="btn btn-sm btn-outline-primary" (click)="openEdit(eq)" [title]="'buttons.edit' | translate">
+              <i class="bi bi-pencil-square me-1"></i>{{ 'buttons.edit' | translate }}
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="delete(eq.id)" [title]="'buttons.delete' | translate">
+              <i class="bi bi-trash3 me-1"></i>{{ 'buttons.delete' | translate }}
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    }
+
+    @if (equipment().length === 0) {
+      <div class="col-12">
+        <div class="card shadow-sm border-0">
+          <div class="card-body text-center py-5 text-muted">
+            <i class="bi bi-tools fs-1 d-block mb-3 text-secondary opacity-50"></i>
+            <p class="fw-medium mb-0">{{ 'asset.empty' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    }
   </div>
 </div>
 

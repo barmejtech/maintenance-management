@@ -128,4 +128,11 @@ export class SparePartsComponent implements OnInit {
   isUploading(): boolean {
     return this.isUploadingPhoto1() || this.isUploadingPhoto2() || this.isUploadingPhoto3() || this.isUploadingPhoto4();
   }
+
+  getStockPercent(qty: number, min: number): number {
+    if (min <= 0) return qty > 0 ? 100 : 0;
+    // Progress bar fills to 100% when stock reaches twice the minimum level
+    const targetStock = min * 2;
+    return Math.min(100, Math.round((qty / targetStock) * 100));
+  }
 }

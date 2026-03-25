@@ -1,3 +1,69 @@
+/* Report Card */
+.report-card {
+  border-radius: 12px;
+  transition: transform 0.18s, box-shadow 0.18s;
+  border-left: 4px solid #0d6efd !important;
+}
+.report-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+}
+
+.report-icon {
+  width: 38px;
+  height: 38px;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.report-card-header {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.report-content {
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Photo thumbnails in reports */
+.report-photo-thumb {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #dee2e6;
+  transition: border-color 0.15s;
+}
+.report-photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.report-photo-thumb .photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(13,110,253,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.1rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.report-photo-thumb:hover {
+  border-color: #0d6efd;
+}
+.report-photo-thumb:hover .photo-overlay {
+  opacity: 1;
+}
+
+
 .modal-backdrop-custom {
   position: fixed;
   inset: 0;

@@ -105,6 +105,17 @@ export class InvoicesComponent implements OnInit {
     return this.translation.translate(keys[s] ?? keys[0]);
   }
   getStatusClass(s: InvoiceStatus): string { return ['bg-secondary', 'bg-primary', 'bg-success', 'bg-danger', 'bg-dark'][s]; }
+  getStatusIcon(s: InvoiceStatus): string { return ['bi-pencil', 'bi-send', 'bi-check-circle', 'bi-exclamation-circle', 'bi-x-circle'][s] ?? 'bi-circle'; }
+
+  isOverdue(inv: Invoice): boolean {
+    if (inv.status !== InvoiceStatus.Overdue) return false;
+    if (!inv.dueDate) return false;
+    return new Date(inv.dueDate) < new Date();
+  }
+
+  getPaidCount(): number { return this.invoices().filter(i => i.status === InvoiceStatus.Paid).length; }
+  getOverdueCount(): number { return this.invoices().filter(i => i.status === InvoiceStatus.Overdue).length; }
+  getTotalAmount(): number { return this.invoices().reduce((sum, i) => sum + (i.totalAmount ?? 0), 0); }
 
   generatePdf(inv: Invoice): void {
     this.pdf.generateInvoicePdf(inv);

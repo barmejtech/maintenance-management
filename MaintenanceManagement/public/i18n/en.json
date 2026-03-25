@@ -307,7 +307,8 @@
       "dueDate": "Due Date",
       "total": "Total",
       "status": "Status",
-      "actions": "Actions"
+      "actions": "Actions",
+      "tax": "Tax"
     },
     "form": {
       "invoiceNumber": "Invoice Number *",
@@ -334,7 +335,14 @@
       "sent": "Sent",
       "paid": "Paid",
       "overdue": "Overdue",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "draft": "Draft"
+    },
+    "stats": {
+      "total": "Total Invoices",
+      "paid": "Paid",
+      "overdue": "Overdue",
+      "totalAmount": "Total Amount"
     }
   },
   "reports": {
@@ -898,5 +906,49 @@
     "pendingSync": "Pending Sync",
     "noTasks": "No active tasks assigned to you.",
     "noOffline": "No offline reports saved."
+  },
+  "hvac": {
+    "title": "HVAC Systems",
+    "addButton": "Add HVAC",
+    "backToDashboard": "Dashboard",
+    "empty": "No HVAC systems found.",
+    "deleteConfirm": "Delete this HVAC system?",
+    "fields": {
+      "type": "Type",
+      "brand": "Brand",
+      "model": "Model",
+      "capacity": "Capacity",
+      "refrigerant": "Refrigerant",
+      "location": "Location",
+      "nextInspection": "Next Inspection",
+      "lastInspection": "Last Inspection",
+      "installDate": "Installed"
+    },
+    "form": {
+      "addTitle": "Add HVAC System",
+      "editTitle": "Edit HVAC System",
+      "name": "Name *",
+      "namePlaceholder": "System name",
+      "systemType": "System Type",
+      "systemTypePlaceholder": "e.g. Central Air",
+      "brand": "Brand",
+      "brandPlaceholder": "Brand",
+      "model": "Model",
+      "modelPlaceholder": "Model",
+      "capacity": "Capacity",
+      "capacityUnit": "Capacity Unit",
+      "capacityUnitPlaceholder": "kW, BTU...",
+      "refrigerantType": "Refrigerant Type",
+      "refrigerantTypePlaceholder": "R-410A...",
+      "location": "Location",
+      "locationPlaceholder": "Location",
+      "installationDate": "Installation Date",
+      "lastInspection": "Last Inspection",
+      "nextInspection": "Next Inspection",
+      "notes": "Notes",
+      "cancel": "Cancel",
+      "create": "Create",
+      "update": "Update"
+    }
   }
 }

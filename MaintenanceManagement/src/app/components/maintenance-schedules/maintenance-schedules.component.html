@@ -40,45 +40,81 @@
       <span class="spinner-border spinner-border-sm me-2"></span>{{ 'maintenanceSchedules.loading' | translate }}
     </div>
   } @else {
-    <div class="table-responsive">
-      <table class="table table-hover align-middle shadow-sm rounded overflow-hidden">
-        <thead class="table-primary">
-          <tr>
-            <th>{{ 'maintenanceSchedules.table.name' | translate }}</th>
-            <th>{{ 'maintenanceSchedules.table.type' | translate }}</th>
-            <th>{{ 'maintenanceSchedules.table.frequency' | translate }}</th>
-            <th>{{ 'maintenanceSchedules.table.equipment' | translate }}</th>
-            <th>{{ 'maintenanceSchedules.table.assignedTo' | translate }}</th>
-            <th>{{ 'maintenanceSchedules.table.nextDue' | translate }}</th>
-            <th>{{ 'maintenanceSchedules.table.status' | translate }}</th>
-            <th>{{ 'maintenanceSchedules.table.actions' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (s of schedules(); track s.id) {
-            <tr>
-              <td class="fw-semibold">{{ s.name }}</td>
-              <td>{{ getTypeLabel(s.maintenanceType) }}</td>
-              <td>{{ getFrequencyLabel(s.frequency) }} × {{ s.frequencyValue }}</td>
-              <td>{{ s.equipmentName || '—' }}</td>
-              <td>{{ s.assignedTechnicianName || s.assignedGroupName || '—' }}</td>
-              <td>
-                @if (s.nextDueAt) {
-                  <span [class.text-danger]="isOverdue(s)" [class.fw-bold]="isOverdue(s)">
-                    {{ s.nextDueAt | date:'mediumDate' }}
-                  </span>
-                } @else {
-                  <span class="text-muted">—</span>
-                }
-              </td>
-              <td>
+    <div class="row g-3">
+      @for (s of schedules(); track s.id) {
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="card h-100 shadow-sm border-0 schedule-card"
+            [class.overdue-card]="isOverdue(s)"
+            [class.due-soon-card]="!isOverdue(s) && isDueSoon(s)">
+
+            <div class="card-body px-3 pt-3 pb-2">
+              <!-- Header row: type icon + name + active toggle -->
+              <div class="d-flex align-items-start gap-2 mb-3">
+                <span class="schedule-type-icon rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" [class]="getTypeColor(s.maintenanceType)">
+                  <i class="bi" [class]="getTypeIcon(s.maintenanceType)"></i>
+                </span>
+                <div class="flex-grow-1 min-w-0">
+                  <h6 class="card-title mb-0 fw-bold text-truncate">{{ s.name }}</h6>
+                  <small class="text-muted">{{ getTypeLabel(s.maintenanceType) }}</small>
+                </div>
                 @if (s.isActive) {
-                  <span class="badge bg-success">{{ 'maintenanceSchedules.active' | translate }}</span>
+                  <span class="badge bg-success rounded-pill flex-shrink-0"><i class="bi bi-check-circle me-1"></i>{{ 'maintenanceSchedules.active' | translate }}</span>
                 } @else {
-                  <span class="badge bg-secondary">{{ 'maintenanceSchedules.inactive' | translate }}</span>
+                  <span class="badge bg-secondary rounded-pill flex-shrink-0"><i class="bi bi-pause-circle me-1"></i>{{ 'maintenanceSchedules.inactive' | translate }}</span>
                 }
-              </td>
-              <td>
+              </div>
+
+              <!-- Details -->
+              <ul class="list-unstyled mb-0 schedule-details">
+                <li>
+                  <i class="bi bi-arrow-repeat text-secondary"></i>
+                  <span>{{ getFrequencyLabel(s.frequency) }} × {{ s.frequencyValue }}</span>
+                </li>
+                @if (s.equipmentName) {
+                  <li>
+                    <i class="bi bi-cpu text-primary"></i>
+                    <span>{{ s.equipmentName }}</span>
+                  </li>
+                }
+                @if (s.assignedTechnicianName || s.assignedGroupName) {
+                  <li>
+                    <i class="bi bi-person-hard-hat text-secondary"></i>
+                    <span>{{ s.assignedTechnicianName || s.assignedGroupName }}</span>
+                  </li>
+                }
+                @if (s.lastExecutedAt) {
+                  <li>
+                    <i class="bi bi-calendar-check text-success"></i>
+                    <span class="text-muted">{{ s.lastExecutedAt | date:'mediumDate' }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+
+            <!-- Next due date footer -->
+            <div class="card-footer border-0 px-3 py-2"
+              [class.bg-danger-subtle]="isOverdue(s)"
+              [class.bg-warning-subtle]="!isOverdue(s) && isDueSoon(s)"
+              [class.bg-light]="!isOverdue(s) && !isDueSoon(s)">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-1">
+                  @if (isOverdue(s)) {
+                    <i class="bi bi-exclamation-circle-fill text-danger"></i>
+                    <span class="text-danger fw-bold small">
+                      {{ 'maintenanceSchedules.tabs.overdue' | translate }}: {{ s.nextDueAt | date:'mediumDate' }}
+                    </span>
+                  } @else if (isDueSoon(s)) {
+                    <i class="bi bi-clock-fill text-warning"></i>
+                    <span class="text-warning fw-semibold small">
+                      {{ 'maintenanceSchedules.tabs.dueSoon' | translate }}: {{ s.nextDueAt | date:'mediumDate' }}
+                    </span>
+                  } @else if (s.nextDueAt) {
+                    <i class="bi bi-calendar3 text-muted"></i>
+                    <span class="text-muted small">{{ s.nextDueAt | date:'mediumDate' }}</span>
+                  } @else {
+                    <span class="text-muted small">—</span>
+                  }
+                </div>
                 <div class="d-flex gap-1">
                   <button class="btn btn-sm btn-outline-primary" (click)="openEdit(s)" [title]="'buttons.edit' | translate">
                     <i class="bi bi-pencil"></i>
@@ -87,18 +123,22 @@
                     <i class="bi bi-trash"></i>
                   </button>
                 </div>
-              </td>
-            </tr>
-          }
-          @empty {
-            <tr>
-              <td colspan="8" class="text-center text-muted py-5">
-                <i class="bi bi-calendar-x fs-3 d-block mb-2"></i>{{ 'maintenanceSchedules.empty' | translate }}
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      @empty {
+        <div class="col-12">
+          <div class="card shadow-sm border-0">
+            <div class="card-body text-center py-5 text-muted">
+              <i class="bi bi-calendar-x fs-1 d-block mb-3 opacity-50"></i>
+              <p class="fw-medium mb-0">{{ 'maintenanceSchedules.empty' | translate }}</p>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   }
 </div>

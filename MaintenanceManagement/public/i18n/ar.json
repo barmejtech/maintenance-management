@@ -307,7 +307,8 @@
       "dueDate": "تاريخ الاستحقاق",
       "total": "الإجمالي",
       "status": "الحالة",
-      "actions": "الإجراءات"
+      "actions": "الإجراءات",
+      "tax": "ضريبة"
     },
     "form": {
       "invoiceNumber": "رقم الفاتورة *",
@@ -336,6 +337,12 @@
       "paid": "مدفوعة",
       "overdue": "متأخرة",
       "cancelled": "ملغاة"
+    },
+    "stats": {
+      "total": "إجمالي الفواتير",
+      "paid": "مدفوعة",
+      "overdue": "متأخرة",
+      "totalAmount": "إجمالي المبلغ"
     }
   },
   "reports": {
@@ -932,5 +939,49 @@
     "pendingSync": "في انتظار المزامنة",
     "noTasks": "لا توجد مهام نشطة معينة لك.",
     "noOffline": "لا توجد تقارير محفوظة دون اتصال."
+  },
+  "hvac": {
+    "title": "أنظمة التكييف",
+    "addButton": "إضافة نظام تكييف",
+    "backToDashboard": "لوحة التحكم",
+    "empty": "لا توجد أنظمة تكييف.",
+    "deleteConfirm": "هل تريد حذف هذا النظام؟",
+    "fields": {
+      "type": "النوع",
+      "brand": "العلامة التجارية",
+      "model": "الموديل",
+      "capacity": "السعة",
+      "refrigerant": "نوع المبرد",
+      "location": "الموقع",
+      "nextInspection": "الفحص القادم",
+      "lastInspection": "آخر فحص",
+      "installDate": "تاريخ التركيب"
+    },
+    "form": {
+      "addTitle": "إضافة نظام تكييف",
+      "editTitle": "تعديل نظام تكييف",
+      "name": "الاسم *",
+      "namePlaceholder": "اسم النظام",
+      "systemType": "نوع النظام",
+      "systemTypePlaceholder": "مثال: تكييف مركزي",
+      "brand": "العلامة التجارية",
+      "brandPlaceholder": "العلامة التجارية",
+      "model": "الموديل",
+      "modelPlaceholder": "الموديل",
+      "capacity": "السعة",
+      "capacityUnit": "وحدة السعة",
+      "capacityUnitPlaceholder": "kW، BTU...",
+      "refrigerantType": "نوع المبرد",
+      "refrigerantTypePlaceholder": "R-410A...",
+      "location": "الموقع",
+      "locationPlaceholder": "الموقع",
+      "installationDate": "تاريخ التركيب",
+      "lastInspection": "آخر فحص",
+      "nextInspection": "الفحص القادم",
+      "notes": "ملاحظات",
+      "cancel": "إلغاء",
+      "create": "إنشاء",
+      "update": "تحديث"
+    }
   }
 }

@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HVACService } from '../../services/hvac.service';
 import { HVACSystem } from '../../models';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translate.service';
 
 @Component({
   selector: 'app-hvac',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
   templateUrl: './hvac.component.html',
   styleUrls: ['./hvac.component.css']
 })
@@ -25,7 +27,7 @@ export class HVACComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: HVACService) {}
+  constructor(private service: HVACService, private translation: TranslationService) {}
 
   ngOnInit() {
     this.load();
@@ -78,7 +80,20 @@ export class HVACComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm('Delete this HVAC system?')) return;
+    if (!confirm(this.translation.translate('hvac.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
+  }
+
+  isOverdueInspection(hvac: HVACSystem): boolean {
+    return !!hvac.nextInspectionDate && new Date(hvac.nextInspectionDate) < new Date();
+  }
+
+  // Uses 14-day window (vs 7 days for maintenance schedules) to allow more lead time for inspection bookings
+  isDueSoonInspection(hvac: HVACSystem): boolean {
+    if (!hvac.nextInspectionDate) return false;
+    const due = new Date(hvac.nextInspectionDate);
+    const now = new Date();
+    const diff = (due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+    return diff >= 0 && diff <= 14;
   }
 }

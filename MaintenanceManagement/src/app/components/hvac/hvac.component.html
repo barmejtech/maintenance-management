@@ -1,43 +1,89 @@
 <div class="container-fluid py-3">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0 fw-bold"><i class="bi bi-thermometer-half text-primary me-2"></i>HVAC Systems</h4>
+    <h4 class="mb-0 fw-bold"><i class="bi bi-thermometer-half text-primary me-2"></i>{{ 'hvac.title' | translate }}</h4>
     <div class="d-flex gap-2">
       <button class="btn btn-primary btn-sm" (click)="openAdd()">
-        <i class="bi bi-plus-circle me-1"></i>Add HVAC
+        <i class="bi bi-plus-circle me-1"></i>{{ 'hvac.addButton' | translate }}
       </button>
       <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left me-1"></i>Dashboard
+        <i class="bi bi-arrow-left me-1"></i>{{ 'hvac.backToDashboard' | translate }}
       </a>
     </div>
   </div>
   <div class="row g-3">
     @for (hvac of systems(); track hvac.id) {
       <div class="col-12 col-md-6 col-xl-4">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body">
-            <div class="d-flex align-items-center gap-2 mb-3">
-              <i class="bi bi-wind fs-3 text-info"></i>
-              <h5 class="card-title mb-0">{{ hvac.name }}</h5>
-            </div>
-            <dl class="row small mb-0">
-              <dt class="col-5 text-muted">Type</dt><dd class="col-7">{{ hvac.systemType }}</dd>
-              <dt class="col-5 text-muted">Brand</dt><dd class="col-7">{{ hvac.brand }}</dd>
-              <dt class="col-5 text-muted">Model</dt><dd class="col-7">{{ hvac.model }}</dd>
-              <dt class="col-5 text-muted">Capacity</dt><dd class="col-7">{{ hvac.capacity }} {{ hvac.capacityUnit }}</dd>
-              <dt class="col-5 text-muted">Refrigerant</dt><dd class="col-7">{{ hvac.refrigerantType }}</dd>
-              <dt class="col-5 text-muted">Location</dt><dd class="col-7">{{ hvac.location }}</dd>
+        <div class="card h-100 shadow-sm border-0 hvac-card">
+          <!-- Card Header -->
+          <div class="hvac-card-header p-3 pb-2">
+            <div class="d-flex align-items-center gap-2">
+              <span class="hvac-icon bg-info-subtle text-info rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                <i class="bi bi-wind"></i>
+              </span>
+              <div class="min-w-0 flex-grow-1">
+                <h6 class="card-title mb-0 fw-bold text-truncate">{{ hvac.name }}</h6>
+                @if (hvac.systemType) {
+                  <small class="text-muted">{{ hvac.systemType }}</small>
+                }
+              </div>
               @if (hvac.nextInspectionDate) {
-                <dt class="col-5 text-muted">Next Inspection</dt>
-                <dd class="col-7 text-warning fw-medium">{{ hvac.nextInspectionDate | date:'mediumDate' }}</dd>
+                <span class="badge rounded-pill"
+                  [class.bg-danger]="isOverdueInspection(hvac)"
+                  [class.bg-warning]="!isOverdueInspection(hvac) && isDueSoonInspection(hvac)"
+                  [class.bg-info]="!isOverdueInspection(hvac) && !isDueSoonInspection(hvac)">
+                  <i class="bi bi-wrench-adjustable me-1"></i>{{ hvac.nextInspectionDate | date:'shortDate' }}
+                </span>
               }
-            </dl>
+            </div>
           </div>
-          <div class="card-footer bg-transparent d-flex justify-content-end gap-2">
-            <button class="btn btn-sm btn-outline-primary" (click)="openEdit(hvac)" title="Edit">
-              <i class="bi bi-pencil me-1"></i>Edit
+
+          <div class="card-body pt-2 px-3 pb-2">
+            <ul class="list-unstyled mb-0 hvac-details">
+              @if (hvac.brand) {
+                <li>
+                  <i class="bi bi-building text-secondary"></i>
+                  <span>{{ 'hvac.fields.brand' | translate }}: <strong>{{ hvac.brand }}</strong></span>
+                </li>
+              }
+              @if (hvac.model) {
+                <li>
+                  <i class="bi bi-tag text-secondary"></i>
+                  <span>{{ 'hvac.fields.model' | translate }}: <strong>{{ hvac.model }}</strong></span>
+                </li>
+              }
+              @if (hvac.capacity) {
+                <li>
+                  <i class="bi bi-lightning-charge text-warning"></i>
+                  <span>{{ 'hvac.fields.capacity' | translate }}: <strong>{{ hvac.capacity }} {{ hvac.capacityUnit }}</strong></span>
+                </li>
+              }
+              @if (hvac.refrigerantType) {
+                <li>
+                  <i class="bi bi-droplet text-info"></i>
+                  <span>{{ 'hvac.fields.refrigerant' | translate }}: <strong>{{ hvac.refrigerantType }}</strong></span>
+                </li>
+              }
+              @if (hvac.location) {
+                <li>
+                  <i class="bi bi-geo-alt text-danger"></i>
+                  <span>{{ hvac.location }}</span>
+                </li>
+              }
+              @if (hvac.lastInspectionDate) {
+                <li>
+                  <i class="bi bi-calendar-check text-success"></i>
+                  <span class="text-muted">{{ 'hvac.fields.lastInspection' | translate }}: {{ hvac.lastInspectionDate | date:'mediumDate' }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+
+          <div class="card-footer bg-transparent border-top d-flex justify-content-end gap-2 py-2 px-3">
+            <button class="btn btn-sm btn-outline-primary" (click)="openEdit(hvac)" [title]="'buttons.edit' | translate">
+              <i class="bi bi-pencil me-1"></i>{{ 'buttons.edit' | translate }}
             </button>
-            <button class="btn btn-sm btn-outline-danger" (click)="delete(hvac.id)" title="Delete">
-              <i class="bi bi-trash me-1"></i>Delete
+            <button class="btn btn-sm btn-outline-danger" (click)="delete(hvac.id)" [title]="'buttons.delete' | translate">
+              <i class="bi bi-trash me-1"></i>{{ 'buttons.delete' | translate }}
             </button>
           </div>
         </div>
@@ -45,9 +91,10 @@
     }
     @empty {
       <div class="col-12">
-        <div class="card shadow-sm">
+        <div class="card shadow-sm border-0">
           <div class="card-body text-center text-muted py-5">
-            <i class="bi bi-wind fs-3 d-block mb-2"></i>No HVAC systems found.
+            <i class="bi bi-wind fs-1 d-block mb-3 opacity-50"></i>
+            <p class="fw-medium mb-0">{{ 'hvac.empty' | translate }}</p>
           </div>
         </div>
       </div>
@@ -61,67 +108,67 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">
-            <i class="bi bi-thermometer-half me-2"></i>{{ isEditing() ? 'Edit HVAC System' : 'Add HVAC System' }}
+            <i class="bi bi-thermometer-half me-2"></i>{{ isEditing() ? ('hvac.form.editTitle' | translate) : ('hvac.form.addTitle' | translate) }}
           </h5>
           <button type="button" class="btn-close-custom" (click)="closeModal()"><i class="bi bi-x-lg"></i></button>
         </div>
         <div class="modal-body">
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Name *</label>
-              <input class="form-control" [(ngModel)]="form.name" placeholder="Name" />
+              <label class="form-label fw-semibold"><i class="bi bi-wind me-1 text-info"></i>{{ 'hvac.form.name' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.name" [placeholder]="'hvac.form.namePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">System Type</label>
-              <input class="form-control" [(ngModel)]="form.systemType" placeholder="e.g. Central Air" />
+              <label class="form-label fw-semibold"><i class="bi bi-diagram-3 me-1 text-secondary"></i>{{ 'hvac.form.systemType' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.systemType" [placeholder]="'hvac.form.systemTypePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Brand</label>
-              <input class="form-control" [(ngModel)]="form.brand" placeholder="Brand" />
+              <label class="form-label fw-semibold"><i class="bi bi-building me-1 text-secondary"></i>{{ 'hvac.form.brand' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.brand" [placeholder]="'hvac.form.brandPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Model</label>
-              <input class="form-control" [(ngModel)]="form.model" placeholder="Model" />
+              <label class="form-label fw-semibold"><i class="bi bi-tag me-1 text-secondary"></i>{{ 'hvac.form.model' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.model" [placeholder]="'hvac.form.modelPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Capacity</label>
+              <label class="form-label fw-semibold"><i class="bi bi-lightning-charge me-1 text-warning"></i>{{ 'hvac.form.capacity' | translate }}</label>
               <input type="number" class="form-control" [(ngModel)]="form.capacity" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Capacity Unit</label>
-              <input class="form-control" [(ngModel)]="form.capacityUnit" placeholder="kW, BTU…" />
+              <label class="form-label fw-semibold"><i class="bi bi-rulers me-1 text-secondary"></i>{{ 'hvac.form.capacityUnit' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.capacityUnit" [placeholder]="'hvac.form.capacityUnitPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Refrigerant Type</label>
-              <input class="form-control" [(ngModel)]="form.refrigerantType" placeholder="R-410A…" />
+              <label class="form-label fw-semibold"><i class="bi bi-droplet me-1 text-info"></i>{{ 'hvac.form.refrigerantType' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.refrigerantType" [placeholder]="'hvac.form.refrigerantTypePlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Location</label>
-              <input class="form-control" [(ngModel)]="form.location" placeholder="Location" />
+              <label class="form-label fw-semibold"><i class="bi bi-geo-alt me-1 text-danger"></i>{{ 'hvac.form.location' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.location" [placeholder]="'hvac.form.locationPlaceholder' | translate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">Installation Date</label>
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-plus me-1 text-secondary"></i>{{ 'hvac.form.installationDate' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.installationDate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">Last Inspection</label>
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-check me-1 text-success"></i>{{ 'hvac.form.lastInspection' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.lastInspectionDate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold">Next Inspection</label>
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-event me-1 text-info"></i>{{ 'hvac.form.nextInspection' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.nextInspectionDate" />
             </div>
             <div class="col-12">
-              <label class="form-label fw-semibold">Notes</label>
+              <label class="form-label fw-semibold"><i class="bi bi-sticky me-1 text-secondary"></i>{{ 'hvac.form.notes' | translate }}</label>
               <textarea class="form-control" rows="2" [(ngModel)]="form.notes"></textarea>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'hvac.form.cancel' | translate }}</button>
           <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.name">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
-            {{ isEditing() ? 'Update' : 'Create' }}
+            {{ isEditing() ? ('hvac.form.update' | translate) : ('hvac.form.create' | translate) }}
           </button>
         </div>
       </div>

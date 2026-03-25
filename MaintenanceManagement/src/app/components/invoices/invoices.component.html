@@ -11,53 +11,126 @@
     </div>
   </div>
 
-  <div class="card shadow-sm">
+  <!-- Summary Stats Row -->
+  @if (invoices().length > 0) {
+    <div class="row g-3 mb-3">
+      <div class="col-6 col-md-3">
+        <div class="stat-card card border-0 shadow-sm text-center p-3">
+          <div class="stat-icon bg-primary-subtle text-primary mx-auto mb-2">
+            <i class="bi bi-receipt"></i>
+          </div>
+          <div class="stat-value fw-bold fs-4">{{ invoices().length }}</div>
+          <div class="stat-label text-muted small">{{ 'invoices.stats.total' | translate }}</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card card border-0 shadow-sm text-center p-3">
+          <div class="stat-icon bg-success-subtle text-success mx-auto mb-2">
+            <i class="bi bi-check-circle"></i>
+          </div>
+          <div class="stat-value fw-bold fs-4 text-success">{{ getPaidCount() }}</div>
+          <div class="stat-label text-muted small">{{ 'invoices.stats.paid' | translate }}</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card card border-0 shadow-sm text-center p-3">
+          <div class="stat-icon bg-danger-subtle text-danger mx-auto mb-2">
+            <i class="bi bi-exclamation-circle"></i>
+          </div>
+          <div class="stat-value fw-bold fs-4 text-danger">{{ getOverdueCount() }}</div>
+          <div class="stat-label text-muted small">{{ 'invoices.stats.overdue' | translate }}</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card card border-0 shadow-sm text-center p-3">
+          <div class="stat-icon bg-info-subtle text-info mx-auto mb-2">
+            <i class="bi bi-cash-stack"></i>
+          </div>
+          <div class="stat-value fw-bold fs-5 text-info">${{ getTotalAmount() | number:'1.2-2' }}</div>
+          <div class="stat-label text-muted small">{{ 'invoices.stats.totalAmount' | translate }}</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="card shadow-sm border-0">
     <div class="card-body p-0">
-      <table class="table table-hover table-striped mb-0">
-        <thead class="table-light">
-          <tr>
-            <th>{{ 'invoices.table.invoiceNum' | translate }}</th>
-            <th>{{ 'invoices.table.client' | translate }}</th>
-            <th>{{ 'invoices.table.issueDate' | translate }}</th>
-            <th>{{ 'invoices.table.dueDate' | translate }}</th>
-            <th>{{ 'invoices.table.total' | translate }}</th>
-            <th>{{ 'invoices.table.status' | translate }}</th>
-            <th class="text-end">{{ 'invoices.table.actions' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (inv of invoices(); track inv.id) {
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-dark">
             <tr>
-              <td><strong>{{ inv.invoiceNumber }}</strong></td>
-              <td>{{ inv.clientName }}</td>
-              <td>{{ inv.issueDate | date:'mediumDate' }}</td>
-              <td>{{ inv.dueDate ? (inv.dueDate | date:'mediumDate') : '—' }}</td>
-              <td class="fw-medium">${{ inv.totalAmount.toFixed(2) }}</td>
-              <td>
-                <span class="badge" [class]="getStatusClass(inv.status)">{{ getStatusLabel(inv.status) }}</span>
-              </td>
-              <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(inv)" [title]="'buttons.edit' | translate">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-success me-1" (click)="generatePdf(inv)" [title]="'buttons.generatePdf' | translate">
-                  <i class="bi bi-file-earmark-pdf"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="delete(inv.id)" [title]="'buttons.delete' | translate">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
+              <th><i class="bi bi-hash me-1"></i>{{ 'invoices.table.invoiceNum' | translate }}</th>
+              <th><i class="bi bi-person me-1"></i>{{ 'invoices.table.client' | translate }}</th>
+              <th><i class="bi bi-calendar-plus me-1"></i>{{ 'invoices.table.issueDate' | translate }}</th>
+              <th><i class="bi bi-calendar-x me-1"></i>{{ 'invoices.table.dueDate' | translate }}</th>
+              <th><i class="bi bi-cash-stack me-1"></i>{{ 'invoices.table.total' | translate }}</th>
+              <th><i class="bi bi-activity me-1"></i>{{ 'invoices.table.status' | translate }}</th>
+              <th class="text-end">{{ 'invoices.table.actions' | translate }}</th>
             </tr>
-          }
-          @if (invoices().length === 0) {
-            <tr>
-              <td colspan="7" class="text-center text-muted py-4">
-                <i class="bi bi-receipt fs-4 d-block mb-1"></i>{{ 'invoices.empty' | translate }}
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (inv of invoices(); track inv.id) {
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="invoice-icon bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                      <i class="bi bi-receipt"></i>
+                    </span>
+                    <strong>{{ inv.invoiceNumber }}</strong>
+                  </div>
+                </td>
+                <td>
+                  <div class="fw-semibold">{{ inv.clientName }}</div>
+                  @if (inv.clientEmail) {
+                    <small class="text-muted"><i class="bi bi-envelope me-1"></i>{{ inv.clientEmail }}</small>
+                  }
+                </td>
+                <td><i class="bi bi-calendar3 me-1 text-muted"></i>{{ inv.issueDate | date:'mediumDate' }}</td>
+                <td>
+                  @if (inv.dueDate) {
+                    <span [class.text-danger]="isOverdue(inv)" [class.fw-bold]="isOverdue(inv)">
+                      <i class="bi bi-calendar-event me-1" [class.text-danger]="isOverdue(inv)" [class.text-muted]="!isOverdue(inv)"></i>
+                      {{ inv.dueDate | date:'mediumDate' }}
+                    </span>
+                  } @else {
+                    <span class="text-muted">—</span>
+                  }
+                </td>
+                <td>
+                  <span class="fw-bold text-success">${{ inv.totalAmount.toFixed(2) }}</span>
+                  @if (inv.taxRate) {
+                    <br><small class="text-muted">{{ 'invoices.table.tax' | translate }}: {{ inv.taxRate }}%</small>
+                  }
+                </td>
+                <td>
+                  <span class="badge rounded-pill" [class]="getStatusClass(inv.status)">
+                    <i class="bi me-1" [class]="getStatusIcon(inv.status)"></i>{{ getStatusLabel(inv.status) }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(inv)" [title]="'buttons.edit' | translate">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-success me-1" (click)="generatePdf(inv)" [title]="'buttons.generatePdf' | translate">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="delete(inv.id)" [title]="'buttons.delete' | translate">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            }
+            @if (invoices().length === 0) {
+              <tr>
+                <td colspan="7" class="text-center text-muted py-5">
+                  <i class="bi bi-receipt fs-1 d-block mb-2 opacity-50"></i>
+                  <span class="fw-medium">{{ 'invoices.empty' | translate }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
