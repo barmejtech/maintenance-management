@@ -13,18 +13,24 @@
   <div class="row g-3">
     @for (group of groups(); track group.id) {
       <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card h-100 shadow-sm text-center">
-          <div class="card-body">
-            <div class="mb-2">
-              <i class="bi bi-people-fill fs-1 text-primary"></i>
+        <div class="card h-100 shadow-sm border-0 group-card text-center">
+          <div class="group-card-header py-4 px-3">
+            <div class="group-avatar mx-auto mb-3">
+              <i class="bi bi-people-fill fs-2 text-white"></i>
             </div>
-            <h5 class="card-title">{{ group.name }}</h5>
-            <p class="card-text text-muted small">{{ group.description }}</p>
-            <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill">
-              {{ group.memberCount }} {{ 'groups.members' | translate }}
+            <h5 class="card-title mb-1 fw-bold">{{ group.name }}</h5>
+            <span class="badge bg-white text-primary border border-primary-subtle rounded-pill px-3 py-1 fs-6">
+              <i class="bi bi-person me-1"></i>{{ group.memberCount }} {{ 'groups.members' | translate }}
             </span>
           </div>
-          <div class="card-footer bg-transparent d-flex justify-content-center gap-2">
+          <div class="card-body py-2 px-3">
+            @if (group.description) {
+              <p class="card-text text-muted small mb-0">{{ group.description }}</p>
+            } @else {
+              <p class="card-text text-muted small mb-0 fst-italic">—</p>
+            }
+          </div>
+          <div class="card-footer bg-transparent border-top d-flex justify-content-center gap-2 py-3">
             <button class="btn btn-sm btn-outline-primary" (click)="openEdit(group)" [title]="'buttons.edit' | translate">
               <i class="bi bi-pencil me-1"></i>{{ 'buttons.edit' | translate }}
             </button>
@@ -37,9 +43,10 @@
     }
     @empty {
       <div class="col-12">
-        <div class="card shadow-sm">
+        <div class="card shadow-sm border-0">
           <div class="card-body text-center text-muted py-5">
-            <i class="bi bi-people fs-3 d-block mb-2"></i>{{ 'groups.empty' | translate }}
+            <i class="bi bi-people fs-1 d-block mb-3 opacity-50"></i>
+            <p class="fw-medium mb-0">{{ 'groups.empty' | translate }}</p>
           </div>
         </div>
       </div>

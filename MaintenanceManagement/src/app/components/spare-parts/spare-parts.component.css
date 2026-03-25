@@ -104,8 +104,98 @@
 }
 
 .part-icon {
-  width: 34px;
-  height: 34px;
-  font-size: 1rem;
+  width: 38px;
+  height: 38px;
+  font-size: 1.1rem;
   flex-shrink: 0;
+}
+
+/* Card */
+.part-card {
+  border-radius: 12px;
+  transition: transform 0.18s, box-shadow 0.18s;
+  overflow: hidden;
+}
+.part-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+}
+.low-stock-card {
+  border-left: 4px solid #ffc107 !important;
+}
+
+/* Photo area */
+.part-photo-gallery {
+  position: relative;
+  background: #f8f9fa;
+  min-height: 120px;
+  border-bottom: 1px solid #e9ecef;
+  overflow: hidden;
+}
+
+.photo-strip {
+  display: flex;
+  height: 120px;
+  overflow: hidden;
+}
+.photo-strip-cell {
+  flex: 1;
+  overflow: hidden;
+  border-right: 2px solid #fff;
+}
+.photo-strip-cell:last-child {
+  border-right: none;
+}
+.photo-strip-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s;
+}
+.photo-strip-cell:hover img {
+  transform: scale(1.07);
+}
+
+.part-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  background: linear-gradient(135deg, #fff3cd 0%, #f8f9fa 100%);
+}
+
+.stock-alert-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 0.72rem;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Stock progress bar */
+.stock-progress {
+  height: 6px;
+  border-radius: 3px;
+  background-color: #e9ecef;
+}
+
+/* Part details list */
+.part-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.part-details li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.85rem;
+  color: #495057;
+}
+.part-details li i {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  width: 16px;
+  text-align: center;
 }

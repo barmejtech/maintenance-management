@@ -16,110 +16,120 @@
       <span class="spinner-border text-primary me-2"></span>{{ 'spareParts.loading' | translate }}
     </div>
   } @else {
-    <div class="card shadow-sm border-0">
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-dark">
-              <tr>
-                <th><i class="bi bi-box-seam me-1"></i>{{ 'spareParts.table.name' | translate }}</th>
-                <th><i class="bi bi-hash me-1"></i>{{ 'spareParts.table.partNumber' | translate }}</th>
-                <th><i class="bi bi-rulers me-1"></i>{{ 'spareParts.table.unit' | translate }}</th>
-                <th><i class="bi bi-stack me-1"></i>{{ 'spareParts.table.stock' | translate }}</th>
-                <th><i class="bi bi-arrow-down-circle me-1"></i>{{ 'spareParts.table.minStock' | translate }}</th>
-                <th><i class="bi bi-currency-dollar me-1"></i>{{ 'spareParts.table.unitPrice' | translate }}</th>
-                <th><i class="bi bi-truck me-1"></i>{{ 'spareParts.table.supplier' | translate }}</th>
-                <th><i class="bi bi-images me-1"></i>{{ 'spareParts.table.photos' | translate }}</th>
-                <th><i class="bi bi-circle-fill me-1"></i>{{ 'spareParts.table.status' | translate }}</th>
-                <th>{{ 'spareParts.table.actions' | translate }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (part of parts(); track part.id) {
-                <tr class="align-middle">
-                  <td>
-                    <div class="d-flex align-items-center gap-2">
-                      <span class="part-icon bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center">
-                        <i class="bi bi-gear"></i>
-                      </span>
-                      <div>
-                        <div class="fw-semibold">{{ part.name }}</div>
-                        @if (part.storageLocation) {
-                          <small class="text-muted"><i class="bi bi-geo-alt me-1"></i>{{ part.storageLocation }}</small>
-                        }
-                      </div>
-                    </div>
-                  </td>
-                  <td><code class="text-secondary">{{ part.partNumber }}</code></td>
-                  <td><span class="badge bg-secondary rounded-pill">{{ part.unit }}</span></td>
-                  <td>
-                    <span class="fw-bold" [class.text-danger]="part.isLowStock" [class.text-success]="!part.isLowStock">
-                      {{ part.quantityInStock }}
-                    </span>
-                  </td>
-                  <td>{{ part.minimumStockLevel }}</td>
-                  <td><span class="text-success fw-semibold">{{ part.unitPrice | number:'1.2-2' }}</span></td>
-                  <td>{{ part.supplier || '—' }}</td>
-                  <td>
-                    <div class="d-flex gap-1 flex-wrap">
-                      @if (part.photo1Url) {
-                        <a [href]="part.photo1Url" target="_blank" title="Photo 1">
-                          <img [src]="part.photo1Url" alt="Photo 1" class="photo-thumb" />
-                        </a>
-                      }
-                      @if (part.photo2Url) {
-                        <a [href]="part.photo2Url" target="_blank" title="Photo 2">
-                          <img [src]="part.photo2Url" alt="Photo 2" class="photo-thumb" />
-                        </a>
-                      }
-                      @if (part.photo3Url) {
-                        <a [href]="part.photo3Url" target="_blank" title="Photo 3">
-                          <img [src]="part.photo3Url" alt="Photo 3" class="photo-thumb" />
-                        </a>
-                      }
-                      @if (part.photo4Url) {
-                        <a [href]="part.photo4Url" target="_blank" title="Photo 4">
-                          <img [src]="part.photo4Url" alt="Photo 4" class="photo-thumb" />
-                        </a>
-                      }
-                      @if (!part.photo1Url && !part.photo2Url && !part.photo3Url && !part.photo4Url) {
-                        <span class="text-muted small">—</span>
-                      }
-                    </div>
-                  </td>
-                  <td>
-                    @if (part.isLowStock) {
-                      <span class="badge bg-warning text-dark rounded-pill"><i class="bi bi-exclamation-triangle me-1"></i>{{ 'spareParts.lowStock' | translate }}</span>
-                    } @else {
-                      <span class="badge bg-success rounded-pill"><i class="bi bi-check-circle me-1"></i>{{ 'spareParts.inStock' | translate }}</span>
-                    }
-                  </td>
-                  <td>
-                    <div class="d-flex gap-1">
-                      <button class="btn btn-sm btn-outline-primary" (click)="openEdit(part)" [title]="'buttons.edit' | translate">
-                        <i class="bi bi-pencil-square"></i>
-                      </button>
-                      <button class="btn btn-sm btn-outline-danger" (click)="delete(part.id)" [title]="'buttons.delete' | translate">
-                        <i class="bi bi-trash3"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+    <div class="row g-3">
+      @for (part of parts(); track part.id) {
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="card h-100 shadow-sm border-0 part-card" [class.low-stock-card]="part.isLowStock">
+            <!-- Photo Gallery -->
+            <div class="part-photo-gallery">
+              @if (part.photo1Url || part.photo2Url || part.photo3Url || part.photo4Url) {
+                <div class="photo-strip">
+                  @if (part.photo1Url) {
+                    <a [href]="part.photo1Url" target="_blank" class="photo-strip-cell" title="Photo 1">
+                      <img [src]="part.photo1Url" alt="Photo 1" />
+                    </a>
+                  }
+                  @if (part.photo2Url) {
+                    <a [href]="part.photo2Url" target="_blank" class="photo-strip-cell" title="Photo 2">
+                      <img [src]="part.photo2Url" alt="Photo 2" />
+                    </a>
+                  }
+                  @if (part.photo3Url) {
+                    <a [href]="part.photo3Url" target="_blank" class="photo-strip-cell" title="Photo 3">
+                      <img [src]="part.photo3Url" alt="Photo 3" />
+                    </a>
+                  }
+                  @if (part.photo4Url) {
+                    <a [href]="part.photo4Url" target="_blank" class="photo-strip-cell" title="Photo 4">
+                      <img [src]="part.photo4Url" alt="Photo 4" />
+                    </a>
+                  }
+                </div>
+              } @else {
+                <div class="part-photo-placeholder">
+                  <i class="bi bi-gear fs-1 text-warning opacity-50"></i>
+                </div>
               }
-              @empty {
-                <tr>
-                  <td colspan="10" class="text-center py-5">
-                    <div class="text-muted">
-                      <i class="bi bi-boxes fs-2 d-block mb-2 text-secondary"></i>
-                      <span class="fw-medium">{{ 'spareParts.empty' | translate }}</span>
-                    </div>
-                  </td>
-                </tr>
+              @if (part.isLowStock) {
+                <span class="stock-alert-badge badge bg-warning text-dark">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>{{ 'spareParts.lowStock' | translate }}
+                </span>
               }
-            </tbody>
-          </table>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body px-3 pt-3 pb-2">
+              <div class="d-flex align-items-start gap-2 mb-2">
+                <span class="part-icon bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                  <i class="bi bi-gear"></i>
+                </span>
+                <div class="min-w-0 flex-grow-1">
+                  <h6 class="card-title mb-0 fw-bold text-truncate">{{ part.name }}</h6>
+                  <code class="text-secondary small">{{ part.partNumber }}</code>
+                </div>
+                <span class="badge bg-secondary rounded-pill">{{ part.unit }}</span>
+              </div>
+
+              <!-- Stock Level -->
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <small class="text-muted"><i class="bi bi-stack me-1"></i>{{ 'spareParts.table.stock' | translate }}</small>
+                  <span class="fw-bold small" [class.text-danger]="part.isLowStock" [class.text-success]="!part.isLowStock">
+                    {{ part.quantityInStock }} / {{ part.minimumStockLevel }} min
+                  </span>
+                </div>
+                <div class="progress stock-progress">
+                  <div class="progress-bar"
+                    [class.bg-danger]="part.isLowStock"
+                    [class.bg-success]="!part.isLowStock"
+                    role="progressbar"
+                    [style.width.%]="getStockPercent(part.quantityInStock, part.minimumStockLevel)">
+                  </div>
+                </div>
+              </div>
+
+              <ul class="list-unstyled mb-0 part-details">
+                <li>
+                  <i class="bi bi-currency-dollar text-success"></i>
+                  <span class="text-success fw-semibold">{{ part.unitPrice | number:'1.2-2' }}</span>
+                </li>
+                @if (part.supplier) {
+                  <li>
+                    <i class="bi bi-truck text-secondary"></i>
+                    <span>{{ part.supplier }}</span>
+                  </li>
+                }
+                @if (part.storageLocation) {
+                  <li>
+                    <i class="bi bi-geo-alt text-secondary"></i>
+                    <span>{{ part.storageLocation }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+
+            <div class="card-footer bg-transparent border-top d-flex justify-content-end gap-2 py-2 px-3">
+              <button class="btn btn-sm btn-outline-primary" (click)="openEdit(part)" [title]="'buttons.edit' | translate">
+                <i class="bi bi-pencil-square me-1"></i>{{ 'buttons.edit' | translate }}
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="delete(part.id)" [title]="'buttons.delete' | translate">
+                <i class="bi bi-trash3 me-1"></i>{{ 'buttons.delete' | translate }}
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      }
+
+      @empty {
+        <div class="col-12">
+          <div class="card shadow-sm border-0">
+            <div class="card-body text-center py-5 text-muted">
+              <i class="bi bi-boxes fs-1 d-block mb-3 text-secondary opacity-50"></i>
+              <p class="fw-medium mb-0">{{ 'spareParts.empty' | translate }}</p>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   }
 </div>

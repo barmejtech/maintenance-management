@@ -1,3 +1,30 @@
+/* Stat summary cards */
+.stat-card {
+  border-radius: 12px;
+  transition: transform 0.15s;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+/* Invoice icon in table */
+.invoice-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+
 .modal-backdrop-custom {
   position: fixed;
   inset: 0;
