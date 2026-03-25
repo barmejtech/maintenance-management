@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { EquipmentService } from '../../services/equipment.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { TranslationService } from '../../services/translate.service';
@@ -12,12 +13,14 @@ import { Equipment, EquipmentStatus } from '../../models';
 @Component({
   selector: 'app-equipment',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
   templateUrl: './equipment.component.html',
   styleUrls: ['./equipment.component.css']
 })
 export class EquipmentComponent implements OnInit {
   equipment = signal<Equipment[]>([]);
+  currentPage = signal(1);
+  readonly pageSize = 9;
   showModal = signal(false);
   isEditing = signal(false);
   isSaving = signal(false);

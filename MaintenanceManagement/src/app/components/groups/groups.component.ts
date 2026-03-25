@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { GroupService } from '../../services/group.service';
 import { TechnicianGroup } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
@@ -10,12 +11,13 @@ import { TranslationService } from '../../services/translate.service';
 @Component({
   selector: 'app-groups',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
-  templateUrl: './groups.component.html',
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
   styleUrls: ['./groups.component.css']
 })
 export class GroupsComponent implements OnInit {
   groups = signal<TechnicianGroup[]>([]);
+  currentPage = signal(1);
+  readonly pageSize = 9;
   showModal = signal(false);
   isEditing = signal(false);
   isSaving = signal(false);

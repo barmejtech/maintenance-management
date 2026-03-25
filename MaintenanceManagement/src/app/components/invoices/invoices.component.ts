@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { InvoiceService } from '../../services/invoice.service';
 import { Invoice, InvoiceStatus } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
@@ -11,12 +12,13 @@ import { PdfService } from '../../services/pdf.service';
 @Component({
   selector: 'app-invoices',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
-  templateUrl: './invoices.component.html',
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
   styleUrls: ['./invoices.component.css']
 })
 export class InvoicesComponent implements OnInit {
   invoices = signal<Invoice[]>([]);
+  currentPage = signal(1);
+  readonly pageSize = 10;
   showModal = signal(false);
   isEditing = signal(false);
   isSaving = signal(false);

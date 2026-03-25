@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { TaskOrderService } from '../../services/task-order.service';
 import { TechnicianService } from '../../services/technician.service';
 import { EquipmentService } from '../../services/equipment.service';
@@ -21,12 +22,13 @@ export type SlaStatus = 'overdue' | 'due-soon' | 'on-time' | null;
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe],
-  templateUrl: './tasks.component.html',
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
   styleUrls: ['./tasks.component.css']
 })
 export class TasksComponent implements OnInit {
   tasks = signal<TaskOrder[]>([]);
+  currentPage = signal(1);
+  readonly pageSize = 9;
   technicians = signal<Technician[]>([]);
   equipmentList = signal<Equipment[]>([]);
   groups = signal<TechnicianGroup[]>([]);
@@ -58,6 +60,16 @@ export class TasksComponent implements OnInit {
     if (sla !== 'all') result = result.filter(t => this.getSlaStatus(t) === sla);
     return result;
   };
+
+  setFilterStatus(value: number | null) {
+    this.filterStatus.set(value);
+    this.currentPage.set(1);
+  }
+
+  setFilterSla(value: SlaStatus | 'all') {
+    this.filterSla.set(value);
+    this.currentPage.set(1);
+  }
 
   constructor(
     private service: TaskOrderService,

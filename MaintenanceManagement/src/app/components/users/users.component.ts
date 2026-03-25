@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { UserService } from '../../services/user.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { User } from '../../models';
@@ -10,12 +11,13 @@ import { TranslationService } from '../../services/translate.service';
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe],
-  templateUrl: './users.component.html',
+  imports: [CommonModule, RouterLink, TranslatePipe, NgxPaginationModule],
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
   users = signal<User[]>([]);
+  currentPage = signal(1);
+  readonly pageSize = 12;
   isLoading = signal(true);
 
   constructor(

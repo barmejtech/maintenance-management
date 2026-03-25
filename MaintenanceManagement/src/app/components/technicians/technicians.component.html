@@ -17,7 +17,7 @@
     </div>
   } @else {
     <div class="row g-3">
-      @for (tech of technicians(); track tech.id) {
+      @for (tech of technicians() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track tech.id) {
         <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
           <div class="card h-100 shadow-sm border-0 tech-card">
             <div class="card-body pb-2">
@@ -68,6 +68,9 @@
           </div>
         </div>
       }
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <pagination-controls [autoHide]="true" (pageChange)="currentPage.set($event)" previousLabel="" nextLabel=""></pagination-controls>
     </div>
   }
 </div>

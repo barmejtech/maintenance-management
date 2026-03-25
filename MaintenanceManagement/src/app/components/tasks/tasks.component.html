@@ -16,25 +16,25 @@
 
   <div class="d-flex gap-2 mb-2 flex-wrap">
     <button class="btn btn-sm" [class.btn-primary]="filterStatus() === null" [class.btn-outline-secondary]="filterStatus() !== null"
-            (click)="filterStatus.set(null)">{{ 'tasks.filterAll' | translate }}</button>
+            (click)="setFilterStatus(null)">{{ 'tasks.filterAll' | translate }}</button>
     <button class="btn btn-sm" [class.btn-warning]="filterStatus() === 0" [class.btn-outline-secondary]="filterStatus() !== 0"
-            (click)="filterStatus.set(0)">{{ 'tasks.filterPending' | translate }}</button>
+            (click)="setFilterStatus(0)">{{ 'tasks.filterPending' | translate }}</button>
     <button class="btn btn-sm" [class.btn-info]="filterStatus() === 1" [class.btn-outline-secondary]="filterStatus() !== 1"
-            (click)="filterStatus.set(1)">{{ 'tasks.filterInProgress' | translate }}</button>
+            (click)="setFilterStatus(1)">{{ 'tasks.filterInProgress' | translate }}</button>
     <button class="btn btn-sm" [class.btn-success]="filterStatus() === 2" [class.btn-outline-secondary]="filterStatus() !== 2"
-            (click)="filterStatus.set(2)">{{ 'tasks.filterCompleted' | translate }}</button>
+            (click)="setFilterStatus(2)">{{ 'tasks.filterCompleted' | translate }}</button>
   </div>
 
   <div class="d-flex gap-2 mb-3 flex-wrap align-items-center">
     <small class="text-muted me-1"><i class="bi bi-clock-history me-1"></i>{{ 'tasks.sla.filter' | translate }}:</small>
     <button class="btn btn-sm" [class.btn-secondary]="filterSla() === 'all'" [class.btn-outline-secondary]="filterSla() !== 'all'"
-            (click)="filterSla.set('all')">{{ 'tasks.filterAll' | translate }}</button>
+            (click)="setFilterSla('all')">{{ 'tasks.filterAll' | translate }}</button>
     <button class="btn btn-sm" [class.btn-danger]="filterSla() === 'overdue'" [class.btn-outline-danger]="filterSla() !== 'overdue'"
-            (click)="filterSla.set('overdue')"><i class="bi bi-exclamation-triangle-fill me-1"></i>{{ 'tasks.sla.overdue' | translate }}</button>
+            (click)="setFilterSla('overdue')"><i class="bi bi-exclamation-triangle-fill me-1"></i>{{ 'tasks.sla.overdue' | translate }}</button>
     <button class="btn btn-sm" [class.btn-warning]="filterSla() === 'due-soon'" [class.btn-outline-warning]="filterSla() !== 'due-soon'"
-            (click)="filterSla.set('due-soon')"><i class="bi bi-clock-fill me-1"></i>{{ 'tasks.sla.dueSoon' | translate }}</button>
+            (click)="setFilterSla('due-soon')"><i class="bi bi-clock-fill me-1"></i>{{ 'tasks.sla.dueSoon' | translate }}</button>
     <button class="btn btn-sm" [class.btn-success]="filterSla() === 'on-time'" [class.btn-outline-success]="filterSla() !== 'on-time'"
-            (click)="filterSla.set('on-time')"><i class="bi bi-check-circle-fill me-1"></i>{{ 'tasks.sla.onTime' | translate }}</button>
+            (click)="setFilterSla('on-time')"><i class="bi bi-check-circle-fill me-1"></i>{{ 'tasks.sla.onTime' | translate }}</button>
   </div>
 
   @if (isLoading()) {
@@ -43,7 +43,7 @@
     </div>
   } @else {
     <div class="d-flex flex-column gap-3">
-      @for (task of filteredTasks(); track task.id) {
+      @for (task of filteredTasks() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track task.id) {
         <div class="card shadow-sm task-card border-start border-4"
              [class.border-danger]="task.priority === 3"
              [class.border-warning]="task.priority === 2"
@@ -107,6 +107,9 @@
           </div>
         </div>
       }
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <pagination-controls [autoHide]="true" (pageChange)="currentPage.set($event)" previousLabel="" nextLabel=""></pagination-controls>
     </div>
   }
 </div>

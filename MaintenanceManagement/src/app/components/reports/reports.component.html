@@ -12,7 +12,7 @@
   </div>
 
   <div class="row g-3">
-    @for (report of reports(); track report.id) {
+    @for (report of reports() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track report.id) {
       <div class="col-12 col-lg-6">
         <div class="card h-100 shadow-sm border-0 report-card">
           <!-- Report header -->
@@ -98,6 +98,9 @@
         </div>
       </div>
     }
+  </div>
+  <div class="d-flex justify-content-center mt-3">
+    <pagination-controls [autoHide]="true" (pageChange)="currentPage.set($event)" previousLabel="" nextLabel=""></pagination-controls>
   </div>
 </div>
 
