@@ -986,5 +986,19 @@
     "deleteConfirm": "Delete this manager?",
     "profilePhoto": "Profile Photo",
     "uploading": "Uploading..."
+  },
+  "users": {
+    "title": "All Users",
+    "registerButton": "Register User",
+    "backToDashboard": "Dashboard",
+    "loading": "Loading users...",
+    "empty": "No users found.",
+    "active": "Active",
+    "inactive": "Inactive",
+    "roles": {
+      "admin": "Admin",
+      "manager": "Manager",
+      "technician": "Technician"
+    }
   }
 }
