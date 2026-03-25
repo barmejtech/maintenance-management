@@ -25,6 +25,8 @@ export class RegisterComponent {
   errorMessage = signal('');
   form: ReturnType<FormBuilder['group']>;
 
+  readonly roles = ['Technician', 'Manager'];
+
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -35,6 +37,7 @@ export class RegisterComponent {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      role: ['Technician', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     }, { validators: passwordMatchValidator });
@@ -44,16 +47,18 @@ export class RegisterComponent {
     if (this.form.invalid) return;
     this.isLoading.set(true);
     this.errorMessage.set('');
+    this.successMessage.set('');
 
     const v = this.form.value;
     this.auth.register({
       firstName: v.firstName!,
       lastName: v.lastName!,
       email: v.email!,
+      role: v.role!,
       password: v.password!,
       confirmPassword: v.confirmPassword!
     }).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => this.router.navigate(['/technicians']),
       error: (err) => {
         this.errorMessage.set(err.error?.message ?? this.translation.translate('register.failed'));
         this.isLoading.set(false);

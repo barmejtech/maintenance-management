@@ -13,6 +13,7 @@ public class AuthController : ControllerBase
 
     public AuthController(IAuthService authService) => _authService = authService;
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {

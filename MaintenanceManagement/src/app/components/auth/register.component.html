@@ -24,6 +24,14 @@
         <input type="email" formControlName="email" [placeholder]="'register.emailPlaceholder' | translate" />
       </div>
       <div class="form-group">
+        <label>{{ 'register.roleLabel' | translate }}</label>
+        <select formControlName="role">
+          @for (r of roles; track r) {
+            <option [value]="r">{{ 'register.role.' + r.toLowerCase() | translate }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
         <label>{{ 'register.passwordLabel' | translate }}</label>
         <input type="password" formControlName="password" [placeholder]="'register.passwordPlaceholder' | translate" />
       </div>
@@ -42,7 +50,7 @@
       </button>
     </form>
     <p class="auth-footer">
-      {{ 'register.haveAccount' | translate }} <a routerLink="/login">{{ 'register.signIn' | translate }}</a>
+      <a routerLink="/dashboard">{{ 'register.backToDashboard' | translate }}</a>
     </p>
   </div>
   <a routerLink="/home" class="auth-home-link">{{ 'register.backToHome' | translate }}</a>

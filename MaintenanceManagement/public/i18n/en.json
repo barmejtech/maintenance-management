@@ -161,7 +161,13 @@
     "haveAccount": "Already have an account?",
     "signIn": "Sign In",
     "backToHome": "← Back to Home",
-    "failed": "Registration failed."
+    "failed": "Registration failed.",
+    "roleLabel": "Role",
+    "role": {
+      "technician": "Technician",
+      "manager": "Manager"
+    },
+    "backToDashboard": "← Back to Dashboard"
   },
   "technicians": {
     "title": "Technicians",
@@ -408,7 +414,8 @@
       "maintenanceSchedules": "Maintenance Schedules",
       "performance": "Performance Analytics",
       "equipmentTimeline": "Equipment Timeline",
-      "mobileWorkflow": "Mobile Workflow"
+      "mobileWorkflow": "Mobile Workflow",
+      "registerUser": "Register User"
     },
     "hero": {
       "fullAccess": "Full Access",

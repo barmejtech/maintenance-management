@@ -24,6 +24,10 @@ public class AuthService : IAuthService
         if (dto.Password != dto.ConfirmPassword)
             throw new InvalidOperationException("Passwords do not match.");
 
+        var allowedRoles = new[] { "Technician", "Manager" };
+        if (!allowedRoles.Contains(dto.Role))
+            throw new InvalidOperationException("Invalid role. Only Technician or Manager roles are allowed.");
+
         var existingUser = await _userManager.FindByEmailAsync(dto.Email);
         if (existingUser is not null)
             throw new InvalidOperationException("User with this email already exists.");
@@ -44,7 +48,7 @@ public class AuthService : IAuthService
             throw new InvalidOperationException($"Registration failed: {errors}");
         }
 
-        await _userManager.AddToRoleAsync(user, "User");
+        await _userManager.AddToRoleAsync(user, dto.Role);
 
         return await GenerateAuthResponseAsync(user);
     }
