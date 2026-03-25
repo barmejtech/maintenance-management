@@ -440,7 +440,8 @@
       "spareParts": "قطع الغيار",
       "lowStock": "مخزون منخفض",
       "activeSchedules": "الجداول النشطة",
-      "overdue": "متأخر"
+      "overdue": "متأخر",
+      "managers": "المدراء"
     },
     "charts": {
       "workOrdersByStatus": "أوامر العمل حسب الحالة",

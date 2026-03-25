@@ -232,26 +232,40 @@
 /* Stat card color variants */
 .stat-card--tasks .stat-icon-box    { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
 .stat-card--tasks::before           { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+.stat-card--tasks                   { background: linear-gradient(160deg, #eff6ff 0%, #ffffff 55%); }
 .stat-card--technicians .stat-icon-box { background: linear-gradient(135deg, #10b981, #059669); }
 .stat-card--technicians::before     { background: linear-gradient(90deg, #10b981, #059669); }
+.stat-card--technicians             { background: linear-gradient(160deg, #ecfdf5 0%, #ffffff 55%); }
 .stat-card--equipment .stat-icon-box { background: linear-gradient(135deg, #f59e0b, #d97706); }
 .stat-card--equipment::before       { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.stat-card--equipment               { background: linear-gradient(160deg, #fffbeb 0%, #ffffff 55%); }
 .stat-card--maintenance .stat-icon-box { background: linear-gradient(135deg, #ef4444, #dc2626); }
 .stat-card--maintenance::before     { background: linear-gradient(90deg, #ef4444, #dc2626); }
+.stat-card--maintenance             { background: linear-gradient(160deg, #fff1f2 0%, #ffffff 55%); }
 .stat-card--invoices .stat-icon-box { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
 .stat-card--invoices::before        { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+.stat-card--invoices                { background: linear-gradient(160deg, #f5f3ff 0%, #ffffff 55%); }
 .stat-card--reports .stat-icon-box  { background: linear-gradient(135deg, #06b6d4, #0891b2); }
 .stat-card--reports::before         { background: linear-gradient(90deg, #06b6d4, #0891b2); }
+.stat-card--reports                 { background: linear-gradient(160deg, #ecfeff 0%, #ffffff 55%); }
 .stat-card--pending .stat-icon-box  { background: linear-gradient(135deg, #f59e0b, #d97706); }
 .stat-card--pending::before         { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.stat-card--pending                 { background: linear-gradient(160deg, #fffbeb 0%, #ffffff 55%); }
 .stat-card--inprogress .stat-icon-box { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
 .stat-card--inprogress::before      { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+.stat-card--inprogress              { background: linear-gradient(160deg, #eff6ff 0%, #ffffff 55%); }
 .stat-card--completed .stat-icon-box { background: linear-gradient(135deg, #10b981, #059669); }
 .stat-card--completed::before       { background: linear-gradient(90deg, #10b981, #059669); }
+.stat-card--completed               { background: linear-gradient(160deg, #ecfdf5 0%, #ffffff 55%); }
 .stat-card--spareparts .stat-icon-box { background: linear-gradient(135deg, #f97316, #ea580c); }
 .stat-card--spareparts::before      { background: linear-gradient(90deg, #f97316, #ea580c); }
+.stat-card--spareparts              { background: linear-gradient(160deg, #fff7ed 0%, #ffffff 55%); }
 .stat-card--schedules .stat-icon-box { background: linear-gradient(135deg, #6366f1, #4f46e5); }
 .stat-card--schedules::before       { background: linear-gradient(90deg, #6366f1, #4f46e5); }
+.stat-card--schedules               { background: linear-gradient(160deg, #eef2ff 0%, #ffffff 55%); }
+.stat-card--managers .stat-icon-box { background: linear-gradient(135deg, #0ea5e9, #0369a1); }
+.stat-card--managers::before        { background: linear-gradient(90deg, #0ea5e9, #0369a1); }
+.stat-card--managers                { background: linear-gradient(160deg, #f0f9ff 0%, #ffffff 55%); }
 
 /* Dark mode overrides for filter bar */
 [data-theme="dark"] .filter-bar {
@@ -407,7 +421,7 @@
 
 /* ===== DARK MODE ===== */
 [data-theme="dark"] .stat-card {
-  background: #1e293b;
+  background: linear-gradient(160deg, #1e293b 0%, #1e293b 100%);
   border-color: #334155;
 }
 
