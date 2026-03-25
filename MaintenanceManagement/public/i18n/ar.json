@@ -161,7 +161,13 @@
     "haveAccount": "هل لديك حساب بالفعل؟",
     "signIn": "تسجيل الدخول",
     "backToHome": "→ العودة إلى الرئيسية",
-    "failed": "فشل إنشاء الحساب."
+    "failed": "فشل إنشاء الحساب.",
+    "roleLabel": "الدور",
+    "role": {
+      "technician": "فني",
+      "manager": "مدير"
+    },
+    "backToDashboard": "→ العودة إلى لوحة التحكم"
   },
   "technicians": {
     "title": "الفنيون",
@@ -408,7 +414,8 @@
       "maintenanceSchedules": "جداول الصيانة",
       "performance": "تحليلات الأداء",
       "equipmentTimeline": "الجدول الزمني للمعدات",
-      "mobileWorkflow": "سير العمل المتنقل"
+      "mobileWorkflow": "سير العمل المتنقل",
+      "registerUser": "تسجيل مستخدم"
     },
     "hero": {
       "fullAccess": "صلاحية كاملة",
