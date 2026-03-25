@@ -122,4 +122,8 @@ export class ManagersComponent implements OnInit {
   getInitials(manager: Manager): string {
     return `${manager.firstName.length > 0 ? manager.firstName[0] : ''}${manager.lastName.length > 0 ? manager.lastName[0] : ''}`.toUpperCase();
   }
+
+  getPhotoUrl(url: string | undefined): string {
+    return this.fileService.getPhotoUrl(url ?? '');
+  }
 }

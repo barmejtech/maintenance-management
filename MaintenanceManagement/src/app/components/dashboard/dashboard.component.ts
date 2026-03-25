@@ -47,6 +47,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   // Sidebar visibility: open by default on desktop, closed on mobile
   sidebarOpen = signal(typeof window !== 'undefined' ? window.innerWidth > 768 : true);
 
+  // Current technician's entity ID (used when the logged-in user has the Technician role)
+  private currentTechnicianId = signal<string | null>(null);
+
   toggleSidebar(): void {
     this.sidebarOpen.update(v => !v);
   }
@@ -121,7 +124,20 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.trendLabels = this.buildTrendLabels();
-    this.loadData();
+    if (this.isTechnicianRole()) {
+      this.techService.getMe().subscribe({
+        next: tech => {
+          this.currentTechnicianId.set(tech.id);
+          this.loadData();
+        },
+        error: () => {
+          console.warn('Could not load technician profile; falling back to all tasks.');
+          this.loadData();
+        }
+      });
+    } else {
+      this.loadData();
+    }
     this.refreshInterval = setInterval(() => this.loadData(), 30000);
   }
 
@@ -180,7 +196,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private loadData() {
     this.isRefreshing.set(true);
-    this.taskService.getAll().subscribe({
+
+    const techId = this.currentTechnicianId();
+    const tasks$ = this.isTechnicianRole() && techId
+      ? this.taskService.getByTechnician(techId)
+      : this.taskService.getAll();
+
+    tasks$.subscribe({
       next: tasks => {
         this.allTasks = tasks;
         this.applyTaskFilter();
@@ -247,24 +269,23 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private computeMyTaskStats(tasks: TaskOrder[]) {
-    const userId = this.auth.currentUser()?.userId;
-    const myTasks = userId ? tasks.filter(t => t.createdByUserId === userId) : tasks;
-    this.myTaskCount.set(myTasks.length);
-    this.myPendingCount.set(myTasks.filter(t => t.status === TaskStatus.Pending).length);
-    this.myInProgressCount.set(myTasks.filter(t => t.status === TaskStatus.InProgress).length);
-    this.myCompletedCount.set(myTasks.filter(t => t.status === TaskStatus.Completed).length);
+    // tasks are already filtered for the current technician (via getByTechnician)
+    this.myTaskCount.set(tasks.length);
+    this.myPendingCount.set(tasks.filter(t => t.status === TaskStatus.Pending).length);
+    this.myInProgressCount.set(tasks.filter(t => t.status === TaskStatus.InProgress).length);
+    this.myCompletedCount.set(tasks.filter(t => t.status === TaskStatus.Completed).length);
     this.myTaskStats = {
-      pending: myTasks.filter(t => t.status === TaskStatus.Pending).length,
-      inProgress: myTasks.filter(t => t.status === TaskStatus.InProgress).length,
-      completed: myTasks.filter(t => t.status === TaskStatus.Completed).length,
-      cancelled: myTasks.filter(t => t.status === TaskStatus.Cancelled).length,
-      onHold: myTasks.filter(t => t.status === TaskStatus.OnHold).length
+      pending: tasks.filter(t => t.status === TaskStatus.Pending).length,
+      inProgress: tasks.filter(t => t.status === TaskStatus.InProgress).length,
+      completed: tasks.filter(t => t.status === TaskStatus.Completed).length,
+      cancelled: tasks.filter(t => t.status === TaskStatus.Cancelled).length,
+      onHold: tasks.filter(t => t.status === TaskStatus.OnHold).length
     };
     this.myPriorityStats = {
-      low: myTasks.filter(t => t.priority === TaskPriority.Low).length,
-      medium: myTasks.filter(t => t.priority === TaskPriority.Medium).length,
-      high: myTasks.filter(t => t.priority === TaskPriority.High).length,
-      critical: myTasks.filter(t => t.priority === TaskPriority.Critical).length
+      low: tasks.filter(t => t.priority === TaskPriority.Low).length,
+      medium: tasks.filter(t => t.priority === TaskPriority.Medium).length,
+      high: tasks.filter(t => t.priority === TaskPriority.High).length,
+      critical: tasks.filter(t => t.priority === TaskPriority.Critical).length
     };
     this.updateMyTaskChart();
     this.updateMyPriorityChart();

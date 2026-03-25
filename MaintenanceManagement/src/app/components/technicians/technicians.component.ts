@@ -134,4 +134,8 @@ export class TechniciansComponent implements OnInit {
   getInitials(tech: Technician): string {
     return `${tech.firstName[0] ?? ''}${tech.lastName[0] ?? ''}`.toUpperCase();
   }
+
+  getPhotoUrl(url: string | undefined): string {
+    return this.fileService.getPhotoUrl(url ?? '');
+  }
 }
