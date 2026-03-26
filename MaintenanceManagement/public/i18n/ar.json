@@ -425,7 +425,8 @@
     "hero": {
       "fullAccess": "صلاحية كاملة",
       "managementView": "عرض الإدارة",
-      "technicianView": "عرض الفني"
+      "technicianView": "عرض الفني",
+      "dataEntryView": "عرض مدخل البيانات"
     },
     "stats": {
       "activeWorkOrders": "أوامر العمل النشطة",
@@ -465,7 +466,8 @@
       "systemHealthRadar": "نظرة عامة على صحة النظام",
       "taskPriorityPolar": "توزيع أولوية المهام",
       "myPerformanceRadar": "مقاييس أدائي",
-      "myPriorityPolar": "نظرة عامة على أولوياتي"
+      "myPriorityPolar": "نظرة عامة على أولوياتي",
+      "sparePartsStock": "مخزون قطع الغيار"
     },
     "quickActions": {
       "title": "إجراءات سريعة",
@@ -478,7 +480,10 @@
       "myWorkOrders": "أوامر عملي",
       "viewEquipment": "عرض المعدات",
       "myAvailability": "توافري",
-      "schedule": "الجدول"
+      "schedule": "الجدول",
+      "manageEquipment": "إدارة المعدات",
+      "manageSpareParts": "إدارة قطع الغيار",
+      "viewSchedules": "عرض الجداول"
     },
     "roles": {
       "administrator": "المسؤول",
@@ -489,12 +494,14 @@
     "titles": {
       "admin": "لوحة تحكم المسؤول",
       "manager": "لوحة تحكم المدير",
-      "technician": "لوحتي الشخصية"
+      "technician": "لوحتي الشخصية",
+      "dataEntry": "لوحة تحكم مدخل البيانات"
     },
     "subtitles": {
       "admin": "نظرة عامة كاملة على النظام — جميع البيانات مرئية",
       "manager": "نظرة عامة على إدارة الفريق والعمليات",
-      "technician": "نظرة عامة على عملك الشخصي"
+      "technician": "نظرة عامة على عملك الشخصي",
+      "dataEntry": "نظرة عامة على إدارة البيانات"
     },
     "recentActivities": "الأنشطة الأخيرة",
     "filter": {

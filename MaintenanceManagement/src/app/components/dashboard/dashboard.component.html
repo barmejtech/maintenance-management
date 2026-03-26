@@ -636,4 +636,164 @@
     </div>
   </div>
   }
+
+  <!-- ===== DATA ENTRY DASHBOARD ===== -->
+  @if (isDataEntryRole()) {
+  <div class="dashboard-hero">
+    <div class="hero-content">
+      <div class="hero-icon"><i class="bi bi-database-fill-gear"></i></div>
+      <div>
+        <h2 class="hero-title">{{ getDashboardTitle() }}</h2>
+        <p class="hero-subtitle">{{ getDashboardSubtitle() }}</p>
+      </div>
+    </div>
+    <div class="hero-badge hero-badge--data-entry">
+      <span class="badge-icon"><i class="bi bi-pencil-fill"></i></span>
+      <span>{{ 'dashboard.hero.dataEntryView' | translate }}</span>
+    </div>
+  </div>
+
+  <!-- DataEntry Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card stat-card--equipment" (click)="navigateTo('equipment')">
+      <div class="stat-icon-box">
+        <i class="bi bi-gear-fill stat-icon"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ equipmentCount() }}</div>
+        <div class="stat-label">{{ 'dashboard.stats.equipment' | translate }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card--maintenance" (click)="navigateTo('equipment')">
+      <div class="stat-icon-box">
+        <i class="bi bi-exclamation-triangle-fill stat-icon"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ dueMaintenance() }}</div>
+        <div class="stat-label">{{ 'dashboard.stats.dueMaintenance' | translate }}</div>
+        @if (dueMaintenance() > 0) {
+        <div class="stat-badge stat-badge--danger">
+          <i class="bi bi-exclamation-triangle-fill badge-icon"></i>
+          {{ 'dashboard.stats.urgent' | translate }}
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="stat-card stat-card--spareparts" (click)="navigateTo('spareparts')">
+      <div class="stat-icon-box">
+        <i class="bi bi-wrench-adjustable stat-icon"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ sparePartsCount() }}</div>
+        <div class="stat-label">{{ 'dashboard.stats.spareParts' | translate }}</div>
+        @if (lowStockCount() > 0) {
+        <div class="stat-badge stat-badge--danger">
+          <i class="bi bi-exclamation-triangle-fill badge-icon"></i>
+          {{ lowStockCount() }} {{ 'dashboard.stats.lowStock' | translate }}
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="stat-card stat-card--schedules" (click)="navigateTo('schedules')">
+      <div class="stat-icon-box">
+        <i class="bi bi-clipboard-fill stat-icon"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ activeSchedulesCount() }}</div>
+        <div class="stat-label">{{ 'dashboard.stats.activeSchedules' | translate }}</div>
+        @if (overdueSchedulesCount() > 0) {
+        <div class="stat-badge stat-badge--danger">
+          <i class="bi bi-exclamation-triangle-fill badge-icon"></i>
+          {{ overdueSchedulesCount() }} {{ 'dashboard.stats.overdue' | translate }}
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- DataEntry Charts -->
+  <div class="section-header">
+    <h3 class="section-title">
+      <i class="bi bi-bar-chart-line section-icon"></i>
+      {{ 'dashboard.charts.analytics' | translate }}
+    </h3>
+    <div class="section-actions">
+      <button class="chart-action-btn" (click)="refreshCharts()">
+        <i class="bi bi-arrow-repeat action-icon"></i>
+        {{ 'dashboard.charts.refresh' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="charts-grid charts-grid--two">
+    <div class="chart-card chart-card--animate">
+      <div class="chart-header chart-header--amber">
+        <div class="header-content">
+          <i class="bi bi-gear-fill chart-header-icon"></i>
+          <h3>{{ 'dashboard.charts.equipmentStatus' | translate }}</h3>
+        </div>
+        <div class="chart-header-stats">
+          <span class="stat-pill">Total: {{ equipmentCount() }}</span>
+        </div>
+      </div>
+      <div class="chart-body">
+        <div class="chart-wrapper chart-wrapper--doughnut">
+          <canvas #deEquipmentChart></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card chart-card--animate">
+      <div class="chart-header chart-header--indigo">
+        <div class="header-content">
+          <i class="bi bi-wrench-adjustable chart-header-icon"></i>
+          <h3>{{ 'dashboard.charts.sparePartsStock' | translate }}</h3>
+        </div>
+        <div class="chart-header-stats">
+          <span class="stat-pill">Total: {{ sparePartsCount() }}</span>
+        </div>
+      </div>
+      <div class="chart-body">
+        <div class="chart-wrapper chart-wrapper--doughnut">
+          <canvas #deSparePartsChart></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DataEntry Quick Actions -->
+  <div class="quick-actions">
+    <div class="section-header">
+      <h3 class="section-title">
+        <i class="bi bi-lightning-fill section-icon"></i>
+        {{ 'dashboard.quickActions.title' | translate }}
+      </h3>
+    </div>
+    <div class="actions-grid">
+      <a routerLink="/equipment" class="action-btn action-btn--amber">
+        <i class="bi bi-gear-fill action-icon"></i>
+        <span>{{ 'dashboard.quickActions.manageEquipment' | translate }}</span>
+        <i class="bi bi-arrow-right action-arrow"></i>
+      </a>
+      <a routerLink="/spareparts" class="action-btn action-btn--indigo">
+        <i class="bi bi-wrench-adjustable action-icon"></i>
+        <span>{{ 'dashboard.quickActions.manageSpareParts' | translate }}</span>
+        <i class="bi bi-arrow-right action-arrow"></i>
+      </a>
+      <a routerLink="/schedules" class="action-btn action-btn--green">
+        <i class="bi bi-calendar3 action-icon"></i>
+        <span>{{ 'dashboard.quickActions.viewSchedules' | translate }}</span>
+        <i class="bi bi-arrow-right action-arrow"></i>
+      </a>
+      <a routerLink="/chat" class="action-btn action-btn--default">
+        <i class="bi bi-chat-dots-fill action-icon"></i>
+        <span>{{ 'dashboard.quickActions.teamChat' | translate }}</span>
+        <i class="bi bi-arrow-right action-arrow"></i>
+      </a>
+    </div>
+  </div>
+  }
 </div>
