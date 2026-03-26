@@ -417,7 +417,8 @@
       "mobileWorkflow": "Mobile Workflow",
       "registerUser": "Register User",
       "manageManagers": "Manage Managers",
-      "myAccount": "My Account"
+      "myAccount": "My Account",
+      "notifications": "Notifications"
     },
     "hero": {
       "fullAccess": "Full Access",
@@ -1055,5 +1056,44 @@
       "passwordChangeFailed": "Failed to change password. Please check your current password.",
       "photoUploadFailed": "Failed to upload photo. Please try again."
     }
+  },
+  "notifications": {
+    "pageTitle": "Notifications",
+    "pageSubtitle": "Stay informed about all system events",
+    "total": "Total",
+    "unread": "Unread",
+    "read": "Read",
+    "filtered": "Filtered",
+    "markAllRead": "Mark all as read",
+    "searchPlaceholder": "Search notifications...",
+    "filterAll": "All",
+    "filterUnread": "Unread",
+    "filterRead": "Read",
+    "filterAllTypes": "All Types",
+    "loading": "Loading notifications...",
+    "empty": "No notifications found",
+    "emptySubtitle": "Try adjusting your filters or check back later.",
+    "viewDetails": "View Details",
+    "markRead": "Read",
+    "delete": "Delete",
+    "justNow": "just now",
+    "minutesAgo": "{n}m ago",
+    "hoursAgo": "{n}h ago",
+    "daysAgo": "{n}d ago",
+    "types": {
+      "info": "Info",
+      "success": "Success",
+      "warning": "Warning",
+      "error": "Error"
+    },
+    "entities": {
+      "TaskOrder": "Work Order",
+      "MaintenanceSchedule": "Schedule",
+      "SparePart": "Spare Part",
+      "Technician": "Technician",
+      "Equipment": "Equipment"
+    },
+    "last5days": "Last 5 days",
+    "viewAll": "View all notifications"
   }
 }

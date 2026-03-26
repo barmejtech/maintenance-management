@@ -1,12 +1,13 @@
 import { Component, OnInit, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
 import { AppNotification, NotificationType } from '../../models';
 
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.css']
 })
@@ -54,5 +55,13 @@ export class NotificationsComponent implements OnInit {
 
   getTypeName(type: NotificationType): string {
     return ['info', 'success', 'warning', 'error'][type] ?? 'info';
+  }
+
+  getEntityRoute(relatedEntityType?: string): string | null {
+    return this.notifService.getEntityRoute(relatedEntityType);
+  }
+
+  closePanel(): void {
+    this.isOpen.set(false);
   }
 }

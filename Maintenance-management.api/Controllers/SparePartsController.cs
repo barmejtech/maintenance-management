@@ -11,8 +11,13 @@ namespace Maintenance_management.api.Controllers;
 public class SparePartsController : ControllerBase
 {
     private readonly ISparePartService _service;
+    private readonly INotificationService _notificationService;
 
-    public SparePartsController(ISparePartService service) => _service = service;
+    public SparePartsController(ISparePartService service, INotificationService notificationService)
+    {
+        _service = service;
+        _notificationService = notificationService;
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -34,6 +39,20 @@ public class SparePartsController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateSparePartDto dto)
     {
         var result = await _service.CreateAsync(dto);
+
+        // Warn if newly added part is already at or below minimum stock level
+        if (result.IsLowStock)
+        {
+            await _notificationService.SendToRoleAsync("Admin",
+                "Low Stock Alert",
+                $"Spare part \"{result.Name}\" (#{result.PartNumber}) is at or below minimum stock level ({result.QuantityInStock}/{result.MinimumStockLevel}).",
+                "warning", result.Id.ToString(), "SparePart");
+            await _notificationService.SendToRoleAsync("Manager",
+                "Low Stock Alert",
+                $"Spare part \"{result.Name}\" (#{result.PartNumber}) is at or below minimum stock level ({result.QuantityInStock}/{result.MinimumStockLevel}).",
+                "warning", result.Id.ToString(), "SparePart");
+        }
+
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
@@ -42,7 +61,22 @@ public class SparePartsController : ControllerBase
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateSparePartDto dto)
     {
         var result = await _service.UpdateAsync(id, dto);
-        return result is null ? NotFound() : Ok(result);
+        if (result is null) return NotFound();
+
+        // Notify if updated stock is at or below minimum
+        if (result.IsLowStock)
+        {
+            await _notificationService.SendToRoleAsync("Admin",
+                "Low Stock Alert",
+                $"Spare part \"{result.Name}\" (#{result.PartNumber}) is at or below minimum stock level ({result.QuantityInStock}/{result.MinimumStockLevel}).",
+                "warning", result.Id.ToString(), "SparePart");
+            await _notificationService.SendToRoleAsync("Manager",
+                "Low Stock Alert",
+                $"Spare part \"{result.Name}\" (#{result.PartNumber}) is at or below minimum stock level ({result.QuantityInStock}/{result.MinimumStockLevel}).",
+                "warning", result.Id.ToString(), "SparePart");
+        }
+
+        return Ok(result);
     }
 
     [HttpDelete("{id:guid}")]
@@ -64,6 +98,21 @@ public class SparePartsController : ControllerBase
         {
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
             var result = await _service.AddUsageAsync(dto, userId);
+
+            // Check if the spare part is now low on stock after usage
+            var sparePart = await _service.GetByIdAsync(dto.SparePartId);
+            if (sparePart?.IsLowStock == true)
+            {
+                await _notificationService.SendToRoleAsync("Admin",
+                    "Low Stock Alert",
+                    $"Spare part \"{sparePart.Name}\" (#{sparePart.PartNumber}) is at or below minimum stock level ({sparePart.QuantityInStock}/{sparePart.MinimumStockLevel}).",
+                    "warning", sparePart.Id.ToString(), "SparePart");
+                await _notificationService.SendToRoleAsync("Manager",
+                    "Low Stock Alert",
+                    $"Spare part \"{sparePart.Name}\" (#{sparePart.PartNumber}) is at or below minimum stock level ({sparePart.QuantityInStock}/{sparePart.MinimumStockLevel}).",
+                    "warning", sparePart.Id.ToString(), "SparePart");
+            }
+
             return Ok(result);
         }
         catch (InvalidOperationException ex)

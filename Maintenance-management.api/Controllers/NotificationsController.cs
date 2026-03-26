@@ -18,12 +18,12 @@ public class NotificationsController : ControllerBase
         _repo = repo;
     }
 
-    /// <summary>Returns this user's notifications from the last 5 days.</summary>
+    /// <summary>Returns this user's notifications from the last N days (default: 5).</summary>
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] int days = 5)
     {
         var userId = GetUserId();
-        var since = DateTime.UtcNow.AddDays(-5);
+        var since = DateTime.UtcNow.AddDays(-Math.Clamp(days, 1, 90));
         var notifications = await _repo.GetForUserAsync(userId, since);
         return Ok(notifications.Select(MapToDto));
     }

@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { TranslationService } from '../../services/translate.service';
 import { ThemeService } from '../../services/theme.service';
 import { NotificationsComponent } from '../notifications/notifications.component';
+import { NotificationService } from '../../services/notification.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
@@ -20,7 +21,8 @@ export class ShellComponent {
   constructor(
     public auth: AuthService,
     public translation: TranslationService,
-    public theme: ThemeService
+    public theme: ThemeService,
+    public notifService: NotificationService
   ) {}
 
   toggleSidebar(): void {

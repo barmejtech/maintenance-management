@@ -192,7 +192,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   // Refresh charts method
   refreshCharts(): void {
     this.loadData();
-    this.notifService.showSuccess('Dashboard refreshed successfully');
   }
 
   // Get active technicians count

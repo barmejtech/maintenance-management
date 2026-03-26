@@ -81,7 +81,7 @@ export const routes: Routes = [
       },
       {
         path: 'notifications',
-        loadComponent: () => import('./components/notifications/notifications.component').then(m => m.NotificationsComponent)
+        loadComponent: () => import('./components/notifications-page/notifications-page.component').then(m => m.NotificationsPageComponent)
       },
       {
         path: 'predictive-maintenance',

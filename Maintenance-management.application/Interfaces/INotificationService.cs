@@ -9,4 +9,8 @@ public interface INotificationService
     /// <summary>Sends a real-time notification to all users in a given role.</summary>
     Task SendToRoleAsync(string role, string title, string message,
         string type = "info", string? relatedEntityId = null, string? relatedEntityType = null);
+
+    /// <summary>Sends a real-time notification to all users in Admin, Manager, and Technician roles.</summary>
+    Task SendToAllRolesAsync(string title, string message,
+        string type = "info", string? relatedEntityId = null, string? relatedEntityType = null);
 }

@@ -218,3 +218,46 @@
   color: #e74c3c;
 }
 
+
+.notif-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.btn-view-details {
+  font-size: 0.68rem;
+  color: #0f3460;
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.btn-view-details:hover {
+  color: #16213e;
+  text-decoration: underline;
+}
+
+.notif-footer {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid #f0f2f6;
+  background: #fafbff;
+  text-align: center;
+}
+
+.btn-view-all {
+  font-size: 0.8rem;
+  color: #0f3460;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition: color 0.15s;
+}
+
+.btn-view-all:hover {
+  color: #e94560;
+  text-decoration: underline;
+}
