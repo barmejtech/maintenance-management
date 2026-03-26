@@ -10,6 +10,7 @@ import { TranslationService } from '../../services/translate.service';
 import { CsvExportService } from '../../services/csv-export.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { Equipment, EquipmentStatus } from '../../models';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-equipment',
@@ -49,7 +50,7 @@ export class EquipmentComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: EquipmentService, private fileService: FileUploadService, private translation: TranslationService, private csvExport: CsvExportService, public auth: AuthService) {}
+  constructor(private service: EquipmentService, private fileService: FileUploadService, private translation: TranslationService, private csvExport: CsvExportService, private toast: ToastService, public auth: AuthService) {}
 
   ngOnInit() {
     this.load();
@@ -159,14 +160,14 @@ export class EquipmentComponent implements OnInit {
       ? this.service.update(this.editingId, dto)
       : this.service.create(dto);
     obs.subscribe({
-      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
-      error: () => this.isSaving.set(false)
+      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+      error: () => { this.isSaving.set(false); this.toast.error(); }
     });
   }
 
   delete(id: string) {
     if (!confirm(this.translation.translate('asset.deleteConfirm'))) return;
-    this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
+    this.service.delete(id).subscribe({ next: () => { this.load(); this.toast.success('messages.deleted'); }, error: () => this.toast.error() });
   }
 
   getStatusLabel(s: EquipmentStatus): string {

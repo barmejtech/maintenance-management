@@ -6,6 +6,7 @@ import { AvailabilityService } from '../../services/availability.service';
 import { TechnicianService } from '../../services/technician.service';
 import { Availability, CreateAvailabilityRequest, Technician } from '../../models';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-availability',
@@ -31,7 +32,7 @@ export class AvailabilityComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: AvailabilityService, private techService: TechnicianService, public auth: AuthService) {}
+  constructor(private service: AvailabilityService, private techService: TechnicianService, private toast: ToastService, public auth: AuthService) {}
 
   ngOnInit() {
     this.load();
@@ -73,13 +74,13 @@ export class AvailabilityComponent implements OnInit {
       ? this.service.update(this.editingId, this.form)
       : this.service.create(this.form);
     obs.subscribe({
-      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
-      error: () => this.isSaving.set(false)
+      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+      error: () => { this.isSaving.set(false); this.toast.error(); }
     });
   }
 
   delete(id: string) {
     if (!confirm('Delete this availability record?')) return;
-    this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
+    this.service.delete(id).subscribe({ next: () => { this.load(); this.toast.success('messages.deleted'); }, error: () => this.toast.error() });
   }
 }

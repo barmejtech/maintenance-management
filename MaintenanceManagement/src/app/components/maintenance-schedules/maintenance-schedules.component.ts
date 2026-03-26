@@ -14,6 +14,7 @@ import {
   MaintenanceSchedule, CreateMaintenanceScheduleRequest, UpdateMaintenanceScheduleRequest,
   MaintenanceType, ScheduleFrequency, Equipment, Technician, TechnicianGroup
 } from '../../models';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-maintenance-schedules',
@@ -57,6 +58,7 @@ export class MaintenanceSchedulesComponent implements OnInit {
     private technicianService: TechnicianService,
     private groupService: GroupService,
     private translation: TranslationService,
+    private toast: ToastService,
     public auth: AuthService
   ) {}
 
@@ -133,9 +135,9 @@ export class MaintenanceSchedulesComponent implements OnInit {
         assignedTechnicianId: this.form.assignedTechnicianId || undefined,
         assignedGroupId: this.form.assignedGroupId || undefined
       };
-      this.service.update(this.editingId, dto).subscribe({
-        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
-        error: () => this.isSaving.set(false)
+      this.service.update(this.editingId, dto as UpdateMaintenanceScheduleRequest).subscribe({
+        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+        error: () => { this.isSaving.set(false); this.toast.error(); }
       });
     } else {
       const dto: CreateMaintenanceScheduleRequest = {
@@ -148,16 +150,16 @@ export class MaintenanceSchedulesComponent implements OnInit {
         assignedTechnicianId: this.form.assignedTechnicianId || undefined,
         assignedGroupId: this.form.assignedGroupId || undefined
       };
-      this.service.create(dto).subscribe({
-        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
-        error: () => this.isSaving.set(false)
+      this.service.create(dto as CreateMaintenanceScheduleRequest).subscribe({
+        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+        error: () => { this.isSaving.set(false); this.toast.error(); }
       });
     }
   }
 
   delete(id: string) {
     if (!confirm(this.translation.translate('maintenanceSchedules.deleteConfirm'))) return;
-    this.service.delete(id).subscribe({ next: () => this.load() });
+    this.service.delete(id).subscribe({ next: () => { this.load(); this.toast.success('messages.deleted'); }, error: () => this.toast.error() });
   }
 
   getFrequencyLabel(f: ScheduleFrequency): string {

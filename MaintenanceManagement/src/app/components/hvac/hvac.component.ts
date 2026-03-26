@@ -7,6 +7,7 @@ import { HVACSystem } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-hvac',
@@ -28,7 +29,7 @@ export class HVACComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: HVACService, private translation: TranslationService, public auth: AuthService) {}
+  constructor(private service: HVACService, private translation: TranslationService, private toast: ToastService, public auth: AuthService) {}
 
   ngOnInit() {
     this.load();
@@ -75,14 +76,14 @@ export class HVACComponent implements OnInit {
       ? this.service.update(this.editingId, dto)
       : this.service.create(dto);
     obs.subscribe({
-      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
-      error: () => this.isSaving.set(false)
+      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+      error: () => { this.isSaving.set(false); this.toast.error(); }
     });
   }
 
   delete(id: string) {
     if (!confirm(this.translation.translate('hvac.deleteConfirm'))) return;
-    this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
+    this.service.delete(id).subscribe({ next: () => { this.load(); this.toast.success('messages.deleted'); }, error: () => this.toast.error() });
   }
 
   isOverdueInspection(hvac: HVACSystem): boolean {

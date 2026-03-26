@@ -9,6 +9,7 @@ import { Manager, CreateManagerRequest, UpdateManagerRequest } from '../../model
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-managers',
@@ -41,6 +42,7 @@ export class ManagersComponent implements OnInit {
     private service: ManagerService,
     private fileService: FileUploadService,
     private translation: TranslationService,
+    private toast: ToastService,
     public auth: AuthService
   ) {}
 
@@ -100,8 +102,8 @@ export class ManagersComponent implements OnInit {
         profilePhotoUrl: this.form.profilePhotoUrl || undefined
       };
       this.service.update(this.editingId, dto).subscribe({
-        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
-        error: () => this.isSaving.set(false)
+        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+        error: () => { this.isSaving.set(false); this.toast.error(); }
       });
     } else {
       const dto: CreateManagerRequest = {
@@ -113,15 +115,15 @@ export class ManagersComponent implements OnInit {
         password: this.form.password
       };
       this.service.create(dto).subscribe({
-        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
-        error: () => this.isSaving.set(false)
+        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+        error: () => { this.isSaving.set(false); this.toast.error(); }
       });
     }
   }
 
   delete(id: string) {
     if (!confirm(this.translation.translate('managers.deleteConfirm'))) return;
-    this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
+    this.service.delete(id).subscribe({ next: () => { this.load(); this.toast.success('messages.deleted'); }, error: () => this.toast.error() });
   }
 
   getInitials(manager: Manager): string {
