@@ -166,7 +166,7 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer gap-2">
           <button type="button" class="btn btn-secondary px-4" (click)="closeModal()">{{ 'reports.cancel' | translate }}</button>
           <button type="button" class="btn btn-primary px-4" (click)="save()"
                   [disabled]="isSaving() || !form.title || !form.content || !form.technicianName">
