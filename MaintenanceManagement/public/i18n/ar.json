@@ -419,7 +419,8 @@
       "registerUser": "تسجيل مستخدم",
       "manageManagers": "إدارة المديرين",
       "myAccount": "حسابي",
-      "notifications": "الإشعارات"
+      "notifications": "الإشعارات",
+      "powerBi": "Power BI"
     },
     "hero": {
       "fullAccess": "صلاحية كاملة",
@@ -1127,5 +1128,25 @@
       "passwordChangeFailed": "فشل تغيير كلمة المرور. تحقق من كلمة المرور الحالية.",
       "photoUploadFailed": "فشل رفع الصورة. حاول مرة أخرى."
     }
+  },
+  "powerBi": {
+    "title": "تحليلات Power BI",
+    "subtitle": "تضمين وعرض تقارير ولوحات معلومات Power BI",
+    "backToDashboard": "العودة إلى لوحة التحكم",
+    "urlLabel": "رابط التضمين للتقرير",
+    "urlPlaceholder": "الصق رابط التضمين من Power BI هنا...",
+    "urlHint": "أدخل رابط التضمين من خدمة Power BI (ملف ← تضمين ← نشر على الويب أو رابط التضمين الآمن).",
+    "loadButton": "تحميل التقرير",
+    "clearButton": "مسح",
+    "reportViewer": "تقرير Power BI",
+    "fullscreen": "ملء الشاشة",
+    "exitFullscreen": "إنهاء ملء الشاشة",
+    "placeholderTitle": "لم يتم تحميل أي تقرير",
+    "placeholderDesc": "أدخل رابط تضمين Power BI أعلاه لتحميل وعرض تقاريرك ولوحات المعلومات مباشرة في النظام.",
+    "hint1": "يدعم روابط تضمين النشر على الويب من Power BI",
+    "hint2": "يدعم روابط التضمين الآمنة من خدمة Power BI",
+    "hint3": "المخططات التفاعلية والفلاتر والتنقل تعمل داخل العارض",
+    "invalidDomain": "يُسمح فقط بروابط Power BI من app.powerbi.com.",
+    "invalidUrl": "يرجى إدخال رابط صالح."
   }
 }

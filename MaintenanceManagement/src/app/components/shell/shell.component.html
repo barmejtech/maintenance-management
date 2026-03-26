@@ -79,6 +79,9 @@
     <a routerLink="/mobile-workflow" routerLinkActive="active" class="nav-item">
       <span>📱</span> {{ 'dashboard.sidebar.mobileWorkflow' | translate }}
     </a>
+    <a routerLink="/power-bi" routerLinkActive="active" class="nav-item">
+      <span>📈</span> {{ 'dashboard.sidebar.powerBi' | translate }}
+    </a>
     @if (isManagerOrAdmin()) {
       <div class="sidebar-divider"></div>
       <div class="sidebar-section-label">{{ 'dashboard.sidebar.management' | translate }}</div>

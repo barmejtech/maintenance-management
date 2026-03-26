@@ -419,7 +419,8 @@
       "registerUser": "Register User",
       "manageManagers": "Manage Managers",
       "myAccount": "My Account",
-      "notifications": "Notifications"
+      "notifications": "Notifications",
+      "powerBi": "Power BI"
     },
     "hero": {
       "fullAccess": "Full Access",
@@ -1098,5 +1099,25 @@
     },
     "last5days": "Last 5 days",
     "viewAll": "View all notifications"
+  },
+  "powerBi": {
+    "title": "Power BI Analytics",
+    "subtitle": "Embed and view Power BI reports and dashboards",
+    "backToDashboard": "Back to Dashboard",
+    "urlLabel": "Report Embed URL",
+    "urlPlaceholder": "Paste your Power BI embed URL here...",
+    "urlHint": "Enter the embed URL from Power BI service (File → Embed → Publish to web or Secure embed link).",
+    "loadButton": "Load Report",
+    "clearButton": "Clear",
+    "reportViewer": "Power BI Report",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit Fullscreen",
+    "placeholderTitle": "No Report Loaded",
+    "placeholderDesc": "Enter a Power BI embed URL above to load and view your reports and dashboards directly in the system.",
+    "hint1": "Supports Power BI Publish to web embed URLs",
+    "hint2": "Supports secure embed links from Power BI Service",
+    "hint3": "Interactive charts, filters, and drill-throughs work inside the viewer",
+    "invalidDomain": "Only Power BI URLs from app.powerbi.com are allowed.",
+    "invalidUrl": "Please enter a valid URL."
   }
 }

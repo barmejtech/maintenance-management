@@ -1,0 +1,35 @@
+.pbi-frame {
+  width: 100%;
+  height: 600px;
+  display: block;
+  border: none;
+}
+
+.pbi-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  border-radius: 0 !important;
+  margin: 0;
+}
+
+.pbi-fullscreen .pbi-frame {
+  height: calc(100vh - 55px);
+}
+
+.pbi-placeholder {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pbi-placeholder-icon {
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.pbi-placeholder-desc {
+  max-width: 480px;
+}

@@ -113,6 +113,10 @@ export const routes: Routes = [
         loadComponent: () => import('./components/mobile-workflow/mobile-workflow.component').then(m => m.MobileWorkflowComponent)
       },
       {
+        path: 'power-bi',
+        loadComponent: () => import('./components/power-bi/power-bi.component').then(m => m.PowerBiComponent)
+      },
+      {
         path: 'account',
         loadComponent: () => import('./components/account/account.component').then(m => m.AccountComponent)
       }
