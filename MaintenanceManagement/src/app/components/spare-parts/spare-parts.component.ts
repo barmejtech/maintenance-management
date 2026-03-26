@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SparePartService } from '../../services/spare-part.service';
 import { FileUploadService } from '../../services/file-upload.service';
+import { AuthService } from '../../services/auth.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 import { SparePart, CreateSparePartRequest, UpdateSparePartRequest } from '../../models';
@@ -45,7 +46,8 @@ export class SparePartsComponent implements OnInit {
   constructor(
     private service: SparePartService,
     private fileService: FileUploadService,
-    private translation: TranslationService
+    private translation: TranslationService,
+    public auth: AuthService
   ) {}
 
   ngOnInit() { this.load(); }

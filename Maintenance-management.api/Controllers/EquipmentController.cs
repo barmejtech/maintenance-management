@@ -30,7 +30,7 @@ public class EquipmentController : ControllerBase
         => Ok(await _service.GetDueForMaintenanceAsync());
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Manager,DataEntry")]
     public async Task<IActionResult> Create([FromBody] CreateEquipmentDto dto)
     {
         var result = await _service.CreateAsync(dto);
@@ -38,7 +38,7 @@ public class EquipmentController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Manager,DataEntry")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateEquipmentDto dto)
     {
         var result = await _service.UpdateAsync(id, dto);

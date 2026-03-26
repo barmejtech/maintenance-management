@@ -26,7 +26,7 @@ export class RegisterComponent {
   successMessage = signal('');
   form: ReturnType<FormBuilder['group']>;
 
-  readonly roles = ['Technician', 'Manager'];
+  readonly roles = ['Technician', 'Manager', 'DataEntry'];
 
   constructor(
     private fb: FormBuilder,
@@ -60,7 +60,9 @@ export class RegisterComponent {
       confirmPassword: v.confirmPassword!
     }).subscribe({
       next: () => {
-        const dest = v.role === 'Manager' ? '/managers' : '/technicians';
+        let dest = '/dashboard';
+        if (v.role === 'Manager') dest = '/managers';
+        else if (v.role === 'Technician') dest = '/technicians';
         this.router.navigate([dest]);
       },
       error: (err) => {

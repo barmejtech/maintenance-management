@@ -9,6 +9,7 @@ import { EquipmentService } from '../../services/equipment.service';
 import { GroupService } from '../../services/group.service';
 import { CsvExportService } from '../../services/csv-export.service';
 import { PerformanceService } from '../../services/performance.service';
+import { AuthService } from '../../services/auth.service';
 import { TaskOrder, TaskStatus, TaskPriority, MaintenanceType, Technician, Equipment, TechnicianGroup, CreateTaskOrderRequest, SmartDispatchResult } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
@@ -79,7 +80,8 @@ export class TasksComponent implements OnInit {
     private groupService: GroupService,
     private translation: TranslationService,
     private csvExport: CsvExportService,
-    private performanceService: PerformanceService
+    private performanceService: PerformanceService,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {

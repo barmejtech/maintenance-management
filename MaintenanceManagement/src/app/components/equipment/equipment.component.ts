@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { EquipmentService } from '../../services/equipment.service';
 import { FileUploadService } from '../../services/file-upload.service';
+import { AuthService } from '../../services/auth.service';
 import { TranslationService } from '../../services/translate.service';
 import { CsvExportService } from '../../services/csv-export.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
@@ -48,7 +49,7 @@ export class EquipmentComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: EquipmentService, private fileService: FileUploadService, private translation: TranslationService, private csvExport: CsvExportService) {}
+  constructor(private service: EquipmentService, private fileService: FileUploadService, private translation: TranslationService, private csvExport: CsvExportService, public auth: AuthService) {}
 
   ngOnInit() {
     this.load();

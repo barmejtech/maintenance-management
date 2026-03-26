@@ -41,11 +41,13 @@ export class ShellComponent {
 
   isAdmin(): boolean { return this.auth.isAdmin(); }
   isManagerOrAdmin(): boolean { return this.auth.isManager(); }
-  isTechnicianRole(): boolean { return !this.auth.isManager() && this.auth.isAuthenticated(); }
+  isDataEntryRole(): boolean { return this.auth.isDataEntry() && !this.auth.isAdmin() && !this.auth.hasRole('Manager'); }
+  isTechnicianRole(): boolean { return this.auth.isTechnician(); }
 
   getRoleName(): string {
     if (this.auth.isAdmin()) return this.translation.translate('dashboard.roles.administrator');
-    if (this.auth.isManager()) return this.translation.translate('dashboard.roles.manager');
+    if (this.auth.hasRole('Manager')) return this.translation.translate('dashboard.roles.manager');
+    if (this.auth.isDataEntry()) return this.translation.translate('dashboard.roles.dataEntry');
     return this.translation.translate('dashboard.roles.technician');
   }
 }

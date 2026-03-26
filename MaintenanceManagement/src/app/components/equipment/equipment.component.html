@@ -5,9 +5,11 @@
       <button class="btn btn-outline-success btn-sm" (click)="exportToCsv()" title="{{ 'asset.exportCsv' | translate }}">
         <i class="bi bi-download me-1"></i>{{ 'asset.exportCsv' | translate }}
       </button>
+      @if (auth.canManageData()) {
       <button class="btn btn-primary btn-sm" (click)="openAdd()">
         <i class="bi bi-plus-circle me-1"></i>{{ 'asset.addButton' | translate }}
       </button>
+      }
       <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
         <i class="bi bi-arrow-left me-1"></i>{{ 'asset.backToDashboard' | translate }}
       </a>
@@ -101,12 +103,16 @@
           </div>
 
           <div class="card-footer bg-transparent border-top d-flex justify-content-end gap-2 py-2 px-3">
+            @if (auth.canManageData()) {
             <button class="btn btn-sm btn-outline-primary" (click)="openEdit(eq)" [title]="'buttons.edit' | translate">
               <i class="bi bi-pencil-square me-1"></i>{{ 'buttons.edit' | translate }}
             </button>
+            }
+            @if (auth.canManageTasks()) {
             <button class="btn btn-sm btn-outline-danger" (click)="delete(eq.id)" [title]="'buttons.delete' | translate">
               <i class="bi bi-trash3 me-1"></i>{{ 'buttons.delete' | translate }}
             </button>
+            }
           </div>
         </div>
       </div>
