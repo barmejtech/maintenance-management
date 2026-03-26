@@ -263,8 +263,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" (click)="closeModal()">{{ 'spareParts.form.cancel' | translate }}</button>
-          <button class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.name || isUploading()">
+          <button class="btn btn-secondary px-4" (click)="closeModal()">{{ 'spareParts.form.cancel' | translate }}</button>
+          <button class="btn btn-primary px-4" (click)="save()" [disabled]="isSaving() || !form.name || isUploading()">
             @if (isSaving()) {
               <span class="spinner-border spinner-border-sm me-1"></span>{{ 'spareParts.form.saving' | translate }}
             } @else {

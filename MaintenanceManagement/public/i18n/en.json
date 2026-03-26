@@ -369,6 +369,7 @@
       "titlePlaceholder": "Report title",
       "technicianName": "Technician Name *",
       "technicianNamePlaceholder": "Technician name",
+      "selectTechnician": "— Select Technician —",
       "reportDate": "Report Date *",
       "content": "Content *",
       "contentPlaceholder": "Report content...",

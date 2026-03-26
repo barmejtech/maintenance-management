@@ -238,8 +238,8 @@
           @if (gpsStatus() === 'unavailable') {
             <span class="text-secondary small me-auto"><i class="bi bi-geo-alt me-1"></i>{{ 'tasks.gpsUnavailable' | translate }}</span>
           }
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'tasks.cancel' | translate }}</button>
-          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.title">
+          <button type="button" class="btn btn-secondary px-4" (click)="closeModal()">{{ 'tasks.cancel' | translate }}</button>
+          <button type="button" class="btn btn-primary px-4" (click)="save()" [disabled]="isSaving() || !form.title">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
             {{ isEditing() ? ('tasks.update' | translate) : ('tasks.create' | translate) }}
           </button>

@@ -5,7 +5,8 @@ import { RouterLink } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReportService } from '../../services/report.service';
 import { TaskOrderService } from '../../services/task-order.service';
-import { MaintenanceReport, CreateReportRequest, TaskOrder } from '../../models';
+import { TechnicianService } from '../../services/technician.service';
+import { MaintenanceReport, CreateReportRequest, TaskOrder, Technician } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 import { PdfService } from '../../services/pdf.service';
@@ -23,6 +24,7 @@ export class ReportsComponent implements OnInit {
   currentPage = signal(1);
   readonly pageSize = 8;
   taskOrders = signal<TaskOrder[]>([]);
+  technicians = signal<Technician[]>([]);
   showModal = signal(false);
   isEditing = signal(false);
   isSaving = signal(false);
@@ -42,6 +44,7 @@ export class ReportsComponent implements OnInit {
   constructor(
     private service: ReportService,
     private taskService: TaskOrderService,
+    private techService: TechnicianService,
     private translation: TranslationService,
     private pdf: PdfService,
     public auth: AuthService
@@ -50,6 +53,7 @@ export class ReportsComponent implements OnInit {
   ngOnInit() {
     this.load();
     this.taskService.getAll().subscribe({ next: d => this.taskOrders.set(d), error: () => {} });
+    this.techService.getAll().subscribe({ next: d => this.technicians.set(d), error: () => {} });
   }
 
   load() {

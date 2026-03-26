@@ -109,8 +109,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="save()"
+          <button type="button" class="btn btn-secondary px-4" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-primary px-4" (click)="save()"
                   [disabled]="isSaving() || !form.technicianId || !form.startTime || !form.endTime">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
             {{ isEditing() ? 'Update' : 'Create' }}
