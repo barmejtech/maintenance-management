@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -35,6 +35,12 @@ export class TasksComponent implements OnInit {
   technicians = signal<Technician[]>([]);
   equipmentList = signal<Equipment[]>([]);
   groups = signal<TechnicianGroup[]>([]);
+  groupMemberIds = signal<Set<string>>(new Set());
+  filteredTechniciansForGroup = computed(() => {
+    const ids = this.groupMemberIds();
+    if (ids.size === 0) return this.technicians();
+    return this.technicians().filter(t => ids.has(t.id));
+  });
   isLoading = signal(true);
   filterStatus = signal<number | null>(null);
   filterSla = signal<SlaStatus | 'all'>('all');

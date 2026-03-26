@@ -74,6 +74,37 @@ export interface UpdateManagerRequest {
   profilePhotoUrl?: string;
 }
 
+// DataEntry models
+export interface DataEntry {
+  id: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  section: string;
+  profilePhotoUrl?: string;
+  createdAt: string;
+}
+
+export interface CreateDataEntryRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  section: string;
+  password: string;
+}
+
+export interface UpdateDataEntryRequest {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  section: string;
+  profilePhotoUrl?: string;
+}
+
 // Technician models
 export interface Technician {
   id: string;

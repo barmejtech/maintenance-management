@@ -32,6 +32,11 @@ export const routes: Routes = [
         canActivate: [adminGuard]
       },
       {
+        path: 'data-entry',
+        loadComponent: () => import('./components/data-entry/data-entry.component').then(m => m.DataEntryComponent),
+        canActivate: [adminGuard]
+      },
+      {
         path: 'users',
         loadComponent: () => import('./components/users/users.component').then(m => m.UsersComponent),
         canActivate: [adminGuard]

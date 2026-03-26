@@ -101,6 +101,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IManagerRepository, Maintenance_management.infrastructure.Repositories.ManagerRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IDataEntryRepository, Maintenance_management.infrastructure.Repositories.DataEntryRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITechnicianRepository, Maintenance_management.infrastructure.Repositories.TechnicianRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITaskOrderRepository, Maintenance_management.infrastructure.Repositories.TaskOrderRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IEquipmentRepository, Maintenance_management.infrastructure.Repositories.EquipmentRepository>();
@@ -121,6 +122,7 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAuthSe
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IJwtService, Maintenance_management.infrastructure.Services.JwtService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IIdentityService, Maintenance_management.infrastructure.Services.IdentityService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IManagerService, Maintenance_management.application.Services.ManagerService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IDataEntryService, Maintenance_management.application.Services.DataEntryService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITechnicianService, Maintenance_management.application.Services.TechnicianService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITaskOrderService, Maintenance_management.application.Services.TaskOrderService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IGroupService, Maintenance_management.application.Services.GroupService>();
