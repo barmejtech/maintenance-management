@@ -78,6 +78,15 @@ export class AuthService {
     return this.hasRole('Admin') || this.hasRole('Manager');
   }
 
+  updateCurrentUserInfo(firstName: string, lastName: string, profilePhotoUrl?: string): void {
+    const user = this.currentUserSignal();
+    if (!user) return;
+    const updated: AuthResponse = { ...user, firstName, lastName };
+    if (profilePhotoUrl !== undefined) (updated as any).profilePhotoUrl = profilePhotoUrl;
+    localStorage.setItem(this.USER_KEY, JSON.stringify(updated));
+    this.currentUserSignal.set(updated);
+  }
+
   private storeAuth(response: AuthResponse): void {
     localStorage.setItem(this.TOKEN_KEY, response.accessToken);
     localStorage.setItem(this.REFRESH_TOKEN_KEY, response.refreshToken);

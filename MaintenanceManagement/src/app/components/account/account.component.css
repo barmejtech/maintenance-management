@@ -1,0 +1,109 @@
+.account-page {
+  padding: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.page-subtitle {
+  font-size: 0.95rem;
+}
+
+/* Profile Card */
+.profile-card {
+  position: sticky;
+  top: 1rem;
+}
+
+.avatar-wrapper {
+  width: 100px;
+  height: 100px;
+}
+
+.avatar-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 3px solid #dee2e6;
+}
+
+.avatar-initials {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Photo preview in form */
+.photo-preview {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border: 2px solid #dee2e6;
+}
+
+.photo-preview-placeholder {
+  width: 64px;
+  height: 64px;
+  border: 2px dashed #dee2e6;
+  background: #f8f9fa;
+}
+
+/* Tab styling */
+.nav-tabs .nav-link {
+  border-radius: 0.5rem 0.5rem 0 0;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.nav-tabs .nav-link.active {
+  font-weight: 600;
+}
+
+/* Dark mode */
+:host-context(.dark-mode) .card,
+:host-context([data-bs-theme="dark"]) .card {
+  background-color: #1e2130;
+  border-color: #2d3348;
+}
+
+:host-context(.dark-mode) .avatar-img,
+:host-context([data-bs-theme="dark"]) .avatar-img {
+  border-color: #4a5568;
+}
+
+:host-context(.dark-mode) .photo-preview-placeholder,
+:host-context([data-bs-theme="dark"]) .photo-preview-placeholder {
+  background: #2d3348;
+  border-color: #4a5568;
+}
+
+:host-context(.dark-mode) .form-control,
+:host-context([data-bs-theme="dark"]) .form-control {
+  background-color: #2d3348;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+:host-context(.dark-mode) .form-control:disabled,
+:host-context([data-bs-theme="dark"]) .form-control:disabled {
+  background-color: #1a1f2e;
+}
+
+@media (max-width: 767px) {
+  .account-page {
+    padding: 1rem;
+  }
+
+  .profile-card {
+    position: static;
+  }
+}

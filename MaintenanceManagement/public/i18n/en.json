@@ -416,7 +416,8 @@
       "equipmentTimeline": "Equipment Timeline",
       "mobileWorkflow": "Mobile Workflow",
       "registerUser": "Register User",
-      "manageManagers": "Manage Managers"
+      "manageManagers": "Manage Managers",
+      "myAccount": "My Account"
     },
     "hero": {
       "fullAccess": "Full Access",
@@ -1012,6 +1013,47 @@
       "admin": "Admin",
       "manager": "Manager",
       "technician": "Technician"
+    }
+  },
+  "account": {
+    "title": "My Account",
+    "subtitle": "Manage your personal information and security settings",
+    "tabs": {
+      "profile": "Profile",
+      "password": "Change Password"
+    },
+    "editProfile": "Edit Profile",
+    "photo": "Profile Photo",
+    "uploadPhoto": "Upload Photo",
+    "uploading": "Uploading...",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "emailReadOnly": "Email address cannot be changed",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Enter phone number",
+    "saveChanges": "Save Changes",
+    "reset": "Reset",
+    "memberSince": "Member since",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "currentPasswordPlaceholder": "Enter current password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmNewPassword": "Confirm New Password",
+    "confirmNewPasswordPlaceholder": "Confirm new password",
+    "passwordHint": "Must be at least 8 characters with uppercase, lowercase, digit and special character",
+    "updatePassword": "Update Password",
+    "profileUpdated": "Profile updated successfully",
+    "passwordChanged": "Password changed successfully",
+    "errors": {
+      "nameRequired": "First name and last name are required",
+      "allFieldsRequired": "All password fields are required",
+      "passwordsMismatch": "New passwords do not match",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "updateFailed": "Failed to update profile. Please try again.",
+      "passwordChangeFailed": "Failed to change password. Please check your current password.",
+      "photoUploadFailed": "Failed to upload photo. Please try again."
     }
   }
 }
