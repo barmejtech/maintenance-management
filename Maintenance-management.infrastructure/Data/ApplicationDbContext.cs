@@ -10,6 +10,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     public DbSet<Manager> Managers => Set<Manager>();
+    public DbSet<DataEntry> DataEntries => Set<DataEntry>();
     public DbSet<Technician> Technicians => Set<Technician>();
     public DbSet<TechnicianGroup> TechnicianGroups => Set<TechnicianGroup>();
     public DbSet<TechnicianGroupMember> TechnicianGroupMembers => Set<TechnicianGroupMember>();
@@ -43,6 +44,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.Property(m => m.Phone).HasMaxLength(50);
             e.Property(m => m.Department).HasMaxLength(200);
             e.HasIndex(m => m.UserId).IsUnique();
+        });
+
+        builder.Entity<DataEntry>(e =>
+        {
+            e.HasKey(d => d.Id);
+            e.Property(d => d.FirstName).IsRequired().HasMaxLength(100);
+            e.Property(d => d.LastName).IsRequired().HasMaxLength(100);
+            e.Property(d => d.Email).IsRequired().HasMaxLength(256);
+            e.Property(d => d.Phone).HasMaxLength(50);
+            e.Property(d => d.Section).HasMaxLength(200);
+            e.HasIndex(d => d.UserId).IsUnique();
         });
 
         builder.Entity<Technician>(e =>

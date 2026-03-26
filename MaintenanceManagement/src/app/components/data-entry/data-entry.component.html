@@ -1,0 +1,143 @@
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-person-vcard text-primary me-2"></i>{{ 'dataEntry.title' | translate }}</h4>
+    <div class="d-flex gap-2">
+      @if (auth.isAdmin()) {
+      <button class="btn btn-primary btn-sm" (click)="openAdd()">
+        <i class="bi bi-person-plus-fill me-1"></i>{{ 'dataEntry.addButton' | translate }}
+      </button>
+      }
+      <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>{{ 'dataEntry.backToDashboard' | translate }}
+      </a>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="text-center text-muted py-5">
+      <span class="spinner-border text-primary me-2"></span>{{ 'dataEntry.loading' | translate }}
+    </div>
+  } @else {
+    <div class="row g-3">
+      @for (entry of entries() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track entry.id) {
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="card h-100 shadow-sm border-0 de-card">
+            <div class="card-body pb-2">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                @if (entry.profilePhotoUrl) {
+                  <img [src]="getPhotoUrl(entry.profilePhotoUrl)" alt="{{ entry.fullName }}" class="de-avatar-photo rounded-circle flex-shrink-0" />
+                } @else {
+                  <div class="de-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold text-white bg-info flex-shrink-0">
+                    {{ getInitials(entry) }}
+                  </div>
+                }
+                <div class="overflow-hidden">
+                  <h6 class="mb-0 fw-bold text-truncate">{{ entry.fullName }}</h6>
+                  <small class="text-muted"><i class="bi bi-layers me-1"></i>{{ entry.section }}</small>
+                </div>
+              </div>
+              <div class="d-flex flex-column gap-1 mb-2">
+                <p class="small mb-0"><i class="bi bi-envelope me-1 text-muted"></i>{{ entry.email }}</p>
+                <p class="small mb-0"><i class="bi bi-telephone me-1 text-muted"></i>{{ entry.phone }}</p>
+              </div>
+              <span class="badge bg-info rounded-pill">
+                <i class="bi bi-pencil-square me-1"></i>{{ 'dataEntry.roleLabel' | translate }}
+              </span>
+            </div>
+            <div class="card-footer bg-transparent border-top d-flex justify-content-end gap-2 py-2">
+              @if (auth.isAdmin()) {
+              <button class="btn btn-sm btn-outline-primary" (click)="openEdit(entry)" [title]="'buttons.edit' | translate">
+                <i class="bi bi-pencil-square me-1"></i>{{ 'buttons.edit' | translate }}
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="delete(entry.id)" [title]="'buttons.delete' | translate">
+                <i class="bi bi-trash3"></i>
+              </button>
+              }
+            </div>
+          </div>
+        </div>
+      }
+      @empty {
+        <div class="col-12">
+          <div class="card shadow-sm border-0">
+            <div class="card-body text-center py-5">
+              <i class="bi bi-person-x fs-2 d-block mb-2 text-secondary"></i>
+              <span class="text-muted fw-medium">{{ 'dataEntry.empty' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      <pagination-controls [autoHide]="true" (pageChange)="currentPage.set($event)" previousLabel="" nextLabel=""></pagination-controls>
+    </div>
+  }
+</div>
+
+@if (showModal()) {
+  <div class="modal-backdrop-custom" (click)="closeModal()">
+    <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-person-vcard me-2"></i>{{ isEditing() ? ('dataEntry.editTitle' | translate) : ('dataEntry.addTitle' | translate) }}
+          </h5>
+          <button type="button" class="btn-close-custom" (click)="closeModal()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-person me-1 text-primary"></i>{{ 'dataEntry.firstName' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.firstName" [placeholder]="'dataEntry.firstNamePlaceholder' | translate" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-person me-1 text-secondary"></i>{{ 'dataEntry.lastName' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.lastName" [placeholder]="'dataEntry.lastNamePlaceholder' | translate" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-envelope me-1 text-secondary"></i>{{ 'dataEntry.email' | translate }}</label>
+              <input type="email" class="form-control" [(ngModel)]="form.email" [placeholder]="'dataEntry.emailPlaceholder' | translate" [disabled]="isEditing()" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-telephone me-1 text-secondary"></i>{{ 'dataEntry.phone' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.phone" [placeholder]="'dataEntry.phonePlaceholder' | translate" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-layers me-1 text-secondary"></i>{{ 'dataEntry.section' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.section" [placeholder]="'dataEntry.sectionPlaceholder' | translate" />
+            </div>
+            @if (!isEditing()) {
+              <div class="col-md-6">
+                <label class="form-label fw-semibold"><i class="bi bi-lock me-1 text-secondary"></i>{{ 'dataEntry.password' | translate }}</label>
+                <input type="password" class="form-control" [(ngModel)]="form.password" [placeholder]="'dataEntry.passwordPlaceholder' | translate" />
+              </div>
+            }
+
+            <!-- Profile Photo -->
+            <div class="col-12">
+              <div class="border-top pt-3 mt-1">
+                <label class="form-label fw-semibold"><i class="bi bi-person-circle me-1 text-primary"></i>{{ 'dataEntry.profilePhoto' | translate }}</label>
+                <input type="file" class="form-control" accept="image/*" (change)="uploadProfilePhoto($event)" />
+                @if (isUploadingPhoto()) {
+                  <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'dataEntry.uploading' | translate }}</div>
+                }
+                @if (form.profilePhotoUrl) {
+                  <div class="mt-2">
+                    <img [src]="form.profilePhotoUrl" alt="Profile photo preview" class="profile-photo-preview rounded-circle" />
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer gap-2">
+          <button type="button" class="btn btn-secondary px-4" (click)="closeModal()">{{ 'dataEntry.cancel' | translate }}</button>
+          <button type="button" class="btn btn-primary px-4" (click)="save()" [disabled]="isSaving() || !form.firstName || !form.lastName || (!isEditing() && (!form.email || !form.password)) || isUploadingPhoto()">
+            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            {{ isEditing() ? ('dataEntry.update' | translate) : ('dataEntry.create' | translate) }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

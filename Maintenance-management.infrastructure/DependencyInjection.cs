@@ -35,6 +35,7 @@ public static class DependencyInjection
 
         // Repositories
         services.AddScoped<IManagerRepository, ManagerRepository>();
+        services.AddScoped<IDataEntryRepository, DataEntryRepository>();
         services.AddScoped<ITechnicianRepository, TechnicianRepository>();
         services.AddScoped<ITaskOrderRepository, TaskOrderRepository>();
         services.AddScoped<IGroupRepository, GroupRepository>();
@@ -58,6 +59,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IManagerService, ManagerService>();
+        services.AddScoped<IDataEntryService, DataEntryService>();
         services.AddScoped<ITechnicianService, TechnicianService>();
         services.AddScoped<ITaskOrderService, TaskOrderService>();
         services.AddScoped<IGroupService, GroupService>();
