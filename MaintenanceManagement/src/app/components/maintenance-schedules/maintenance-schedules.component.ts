@@ -9,6 +9,7 @@ import { TechnicianService } from '../../services/technician.service';
 import { GroupService } from '../../services/group.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
+import { AuthService } from '../../services/auth.service';
 import {
   MaintenanceSchedule, CreateMaintenanceScheduleRequest, UpdateMaintenanceScheduleRequest,
   MaintenanceType, ScheduleFrequency, Equipment, Technician, TechnicianGroup
@@ -55,7 +56,8 @@ export class MaintenanceSchedulesComponent implements OnInit {
     private equipmentService: EquipmentService,
     private technicianService: TechnicianService,
     private groupService: GroupService,
-    private translation: TranslationService
+    private translation: TranslationService,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {

@@ -8,6 +8,7 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { Technician, TechnicianStatus, CreateTechnicianRequest, UpdateTechnicianRequest } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-technicians',
@@ -41,7 +42,8 @@ export class TechniciansComponent implements OnInit {
   constructor(
     private service: TechnicianService,
     private fileService: FileUploadService,
-    private translation: TranslationService
+    private translation: TranslationService,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {

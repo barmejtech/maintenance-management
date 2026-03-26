@@ -6,6 +6,7 @@ import { HVACService } from '../../services/hvac.service';
 import { HVACSystem } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-hvac',
@@ -27,7 +28,7 @@ export class HVACComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: HVACService, private translation: TranslationService) {}
+  constructor(private service: HVACService, private translation: TranslationService, public auth: AuthService) {}
 
   ngOnInit() {
     this.load();

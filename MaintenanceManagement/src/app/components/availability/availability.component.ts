@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { AvailabilityService } from '../../services/availability.service';
 import { TechnicianService } from '../../services/technician.service';
 import { Availability, CreateAvailabilityRequest, Technician } from '../../models';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-availability',
@@ -30,7 +31,7 @@ export class AvailabilityComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: AvailabilityService, private techService: TechnicianService) {}
+  constructor(private service: AvailabilityService, private techService: TechnicianService, public auth: AuthService) {}
 
   ngOnInit() {
     this.load();
