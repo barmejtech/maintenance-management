@@ -369,6 +369,7 @@
       "titlePlaceholder": "عنوان التقرير",
       "technicianName": "اسم الفني *",
       "technicianNamePlaceholder": "اسم الفني",
+      "selectTechnician": "— اختر الفني —",
       "reportDate": "تاريخ التقرير *",
       "content": "المحتوى *",
       "contentPlaceholder": "محتوى التقرير...",

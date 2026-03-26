@@ -128,7 +128,12 @@
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">{{ 'reports.form.technicianName' | translate }}</label>
-              <input class="form-control" [(ngModel)]="form.technicianName" [placeholder]="'reports.form.technicianNamePlaceholder' | translate" />
+              <select class="form-select" [(ngModel)]="form.technicianName">
+                <option value="">{{ 'reports.form.selectTechnician' | translate }}</option>
+                @for (t of technicians(); track t.id) {
+                  <option [value]="t.fullName">{{ t.fullName }}</option>
+                }
+              </select>
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">{{ 'reports.form.reportDate' | translate }}</label>
@@ -162,8 +167,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'reports.cancel' | translate }}</button>
-          <button type="button" class="btn btn-primary" (click)="save()"
+          <button type="button" class="btn btn-secondary px-4" (click)="closeModal()">{{ 'reports.cancel' | translate }}</button>
+          <button type="button" class="btn btn-primary px-4" (click)="save()"
                   [disabled]="isSaving() || !form.title || !form.content || !form.technicianName">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
             {{ isEditing() ? ('reports.update' | translate) : ('reports.create' | translate) }}

@@ -262,8 +262,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ 'asset.cancel' | translate }}</button>
-          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.name || isUploadingBefore() || isUploadingAfter() || isUploadingPhoto3() || isUploadingPhoto4()">
+          <button type="button" class="btn btn-secondary px-4" (click)="closeModal()">{{ 'asset.cancel' | translate }}</button>
+          <button type="button" class="btn btn-primary px-4" (click)="save()" [disabled]="isSaving() || !form.name || isUploadingBefore() || isUploadingAfter() || isUploadingPhoto3() || isUploadingPhoto4()">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
             {{ isEditing() ? ('asset.update' | translate) : ('asset.create' | translate) }}
           </button>
