@@ -1,0 +1,205 @@
+<div class="account-page">
+  <!-- Page Header -->
+  <div class="page-header mb-4">
+    <h2 class="page-title">
+      <span class="me-2">👤</span>{{ 'account.title' | translate }}
+    </h2>
+    <p class="page-subtitle text-muted">{{ 'account.subtitle' | translate }}</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">{{ 'common.loading' | translate }}</span>
+      </div>
+    </div>
+  } @else {
+    <div class="row g-4">
+      <!-- Profile Card -->
+      <div class="col-lg-4 col-md-5">
+        <div class="card border-0 shadow-sm rounded-4 text-center p-4 profile-card">
+          <div class="avatar-wrapper mx-auto mb-3">
+            @if (profile()?.profilePhotoUrl) {
+              <img [src]="getPhotoUrl(profile()!.profilePhotoUrl)" alt="Profile photo" class="avatar-img rounded-circle" />
+            } @else {
+              <div class="avatar-initials rounded-circle d-flex align-items-center justify-content-center">
+                {{ profile()?.firstName?.[0]?.toUpperCase() }}{{ profile()?.lastName?.[0]?.toUpperCase() }}
+              </div>
+            }
+          </div>
+          <h4 class="fw-semibold mb-1">{{ profile()?.firstName }} {{ profile()?.lastName }}</h4>
+          <p class="text-muted small mb-2">{{ profile()?.email }}</p>
+          <div class="mb-2">
+            @for (role of profile()?.roles ?? []; track role) {
+              <span [class]="getRoleBadgeClass(role)" class="me-1">{{ role }}</span>
+            }
+          </div>
+          @if (profile()?.phoneNumber) {
+            <p class="text-muted small"><i class="bi bi-telephone me-1"></i>{{ profile()?.phoneNumber }}</p>
+          }
+          <hr />
+          <p class="text-muted small">
+            <i class="bi bi-calendar3 me-1"></i>
+            {{ 'account.memberSince' | translate }}: {{ profile()?.createdAt | date:'mediumDate' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Tabs Panel -->
+      <div class="col-lg-8 col-md-7">
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-4">
+          <li class="nav-item">
+            <button class="nav-link" [class.active]="activeTab() === 'profile'" (click)="setTab('profile')">
+              <i class="bi bi-person-fill me-1"></i>{{ 'account.tabs.profile' | translate }}
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" [class.active]="activeTab() === 'password'" (click)="setTab('password')">
+              <i class="bi bi-lock-fill me-1"></i>{{ 'account.tabs.password' | translate }}
+            </button>
+          </li>
+        </ul>
+
+        <!-- Profile Tab -->
+        @if (activeTab() === 'profile') {
+          <div class="card border-0 shadow-sm rounded-4 p-4">
+            <h5 class="mb-4 fw-semibold">{{ 'account.editProfile' | translate }}</h5>
+
+            @if (profileSuccess()) {
+              <div class="alert alert-success d-flex align-items-center gap-2" role="alert">
+                <i class="bi bi-check-circle-fill"></i>{{ profileSuccess() }}
+              </div>
+            }
+            @if (profileError()) {
+              <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>{{ profileError() }}
+              </div>
+            }
+
+            <form (ngSubmit)="saveProfile()" #profileFormRef="ngForm">
+              <!-- Profile Photo -->
+              <div class="mb-4">
+                <label class="form-label fw-medium">{{ 'account.photo' | translate }}</label>
+                <div class="d-flex align-items-center gap-3">
+                  @if (profileForm.profilePhotoUrl) {
+                    <img [src]="getPhotoUrl(profileForm.profilePhotoUrl)" alt="Preview" class="photo-preview rounded-circle" />
+                  } @else {
+                    <div class="photo-preview-placeholder rounded-circle d-flex align-items-center justify-content-center text-muted">
+                      <i class="bi bi-person fs-4"></i>
+                    </div>
+                  }
+                  <div>
+                    <label class="btn btn-outline-secondary btn-sm" [class.disabled]="isUploadingPhoto()">
+                      @if (isUploadingPhoto()) {
+                        <span class="spinner-border spinner-border-sm me-1"></span>{{ 'account.uploading' | translate }}
+                      } @else {
+                        <i class="bi bi-upload me-1"></i>{{ 'account.uploadPhoto' | translate }}
+                      }
+                      <input type="file" accept="image/*" class="d-none" (change)="uploadPhoto($event)" [disabled]="isUploadingPhoto()" />
+                    </label>
+                    @if (profileForm.profilePhotoUrl) {
+                      <button type="button" class="btn btn-outline-danger btn-sm ms-2" (click)="profileForm.profilePhotoUrl = ''">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <label class="form-label fw-medium">{{ 'account.firstName' | translate }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="profileForm.firstName" name="firstName" required />
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label fw-medium">{{ 'account.lastName' | translate }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="profileForm.lastName" name="lastName" required />
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label fw-medium">{{ 'account.email' | translate }}</label>
+                  <input type="email" class="form-control" [value]="profile()?.email ?? ''" disabled />
+                  <div class="form-text">{{ 'account.emailReadOnly' | translate }}</div>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label fw-medium">{{ 'account.phone' | translate }}</label>
+                  <input type="tel" class="form-control" [(ngModel)]="profileForm.phoneNumber" name="phoneNumber" [placeholder]="'account.phonePlaceholder' | translate" />
+                </div>
+              </div>
+
+              <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary px-4" [disabled]="isSavingProfile()">
+                  @if (isSavingProfile()) {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                  }
+                  {{ 'account.saveChanges' | translate }}
+                </button>
+                <button type="button" class="btn btn-outline-secondary px-4" (click)="loadProfile()">
+                  {{ 'account.reset' | translate }}
+                </button>
+              </div>
+            </form>
+          </div>
+        }
+
+        <!-- Change Password Tab -->
+        @if (activeTab() === 'password') {
+          <div class="card border-0 shadow-sm rounded-4 p-4">
+            <h5 class="mb-4 fw-semibold">{{ 'account.changePassword' | translate }}</h5>
+
+            @if (passwordSuccess()) {
+              <div class="alert alert-success d-flex align-items-center gap-2" role="alert">
+                <i class="bi bi-check-circle-fill"></i>{{ passwordSuccess() }}
+              </div>
+            }
+            @if (passwordError()) {
+              <div class="alert alert-danger d-flex align-items-center gap-2" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>{{ passwordError() }}
+              </div>
+            }
+
+            <form (ngSubmit)="changePassword()">
+              <div class="mb-3">
+                <label class="form-label fw-medium">{{ 'account.currentPassword' | translate }}</label>
+                <div class="input-group">
+                  <input [type]="showCurrentPassword() ? 'text' : 'password'" class="form-control" [(ngModel)]="passwordForm.currentPassword" name="currentPassword" required [placeholder]="'account.currentPasswordPlaceholder' | translate" />
+                  <button type="button" class="btn btn-outline-secondary" (click)="showCurrentPassword.update(v => !v)">
+                    <i class="bi" [class.bi-eye]="!showCurrentPassword()" [class.bi-eye-slash]="showCurrentPassword()"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-medium">{{ 'account.newPassword' | translate }}</label>
+                <div class="input-group">
+                  <input [type]="showNewPassword() ? 'text' : 'password'" class="form-control" [(ngModel)]="passwordForm.newPassword" name="newPassword" required [placeholder]="'account.newPasswordPlaceholder' | translate" />
+                  <button type="button" class="btn btn-outline-secondary" (click)="showNewPassword.update(v => !v)">
+                    <i class="bi" [class.bi-eye]="!showNewPassword()" [class.bi-eye-slash]="showNewPassword()"></i>
+                  </button>
+                </div>
+                <div class="form-text">{{ 'account.passwordHint' | translate }}</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-medium">{{ 'account.confirmNewPassword' | translate }}</label>
+                <div class="input-group">
+                  <input [type]="showConfirmPassword() ? 'text' : 'password'" class="form-control" [(ngModel)]="passwordForm.confirmNewPassword" name="confirmNewPassword" required [placeholder]="'account.confirmNewPasswordPlaceholder' | translate" />
+                  <button type="button" class="btn btn-outline-secondary" (click)="showConfirmPassword.update(v => !v)">
+                    <i class="bi" [class.bi-eye]="!showConfirmPassword()" [class.bi-eye-slash]="showConfirmPassword()"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <button type="submit" class="btn btn-warning px-4" [disabled]="isChangingPassword()">
+                  @if (isChangingPassword()) {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                  }
+                  <i class="bi bi-shield-lock me-1"></i>{{ 'account.updatePassword' | translate }}
+                </button>
+              </div>
+            </form>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

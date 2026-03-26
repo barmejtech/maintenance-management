@@ -21,6 +21,7 @@ export interface AuthResponse {
   email: string;
   firstName: string;
   lastName: string;
+  profilePhotoUrl?: string;
   roles: string[];
 }
 
@@ -603,4 +604,30 @@ export interface UpdateMaintenanceScheduleRequest {
   equipmentId?: string;
   assignedTechnicianId?: string;
   assignedGroupId?: string;
+}
+
+
+// Account models
+export interface AccountProfile {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber?: string;
+  profilePhotoUrl?: string;
+  createdAt: string;
+  roles: string[];
+}
+
+export interface UpdateProfileRequest {
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  profilePhotoUrl?: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
 }

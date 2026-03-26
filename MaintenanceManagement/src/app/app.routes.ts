@@ -111,6 +111,10 @@ export const routes: Routes = [
       {
         path: 'mobile-workflow',
         loadComponent: () => import('./components/mobile-workflow/mobile-workflow.component').then(m => m.MobileWorkflowComponent)
+      },
+      {
+        path: 'account',
+        loadComponent: () => import('./components/account/account.component').then(m => m.AccountComponent)
       }
     ]
   },
