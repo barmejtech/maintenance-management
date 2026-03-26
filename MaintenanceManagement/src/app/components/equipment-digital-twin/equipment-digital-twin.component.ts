@@ -7,6 +7,7 @@ import { EquipmentService } from '../../services/equipment.service';
 import { EquipmentDigitalTwin, Equipment, EquipmentStatus, UpsertDigitalTwinRequest } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-equipment-digital-twin',
@@ -39,7 +40,8 @@ export class EquipmentDigitalTwinComponent implements OnInit {
   constructor(
     private service: EquipmentDigitalTwinService,
     private equipmentService: EquipmentService,
-    private translation: TranslationService
+    private translation: TranslationService,
+    private toast: ToastService
   ) {}
 
   ngOnInit() {
@@ -96,8 +98,8 @@ export class EquipmentDigitalTwinComponent implements OnInit {
       usageHours: this.form.usageHours != null && this.form.usageHours !== undefined && String(this.form.usageHours) !== '' ? Number(this.form.usageHours) : undefined
     };
     this.service.upsert(dto).subscribe({
-      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
-      error: () => this.isSaving.set(false)
+      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+      error: () => { this.isSaving.set(false); this.toast.error(); }
     });
   }
 

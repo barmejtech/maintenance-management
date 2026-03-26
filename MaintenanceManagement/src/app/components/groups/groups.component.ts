@@ -8,6 +8,7 @@ import { TechnicianGroup } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-groups',
@@ -27,7 +28,7 @@ export class GroupsComponent implements OnInit {
   form = { name: '', description: '' };
   private editingId = '';
 
-  constructor(private service: GroupService, private translation: TranslationService, public auth: AuthService) {}
+  constructor(private service: GroupService, private translation: TranslationService, public auth: AuthService, private toast: ToastService) {}
 
   ngOnInit() {
     this.load();
@@ -59,13 +60,13 @@ export class GroupsComponent implements OnInit {
       ? this.service.update(this.editingId, this.form)
       : this.service.create(this.form);
     obs.subscribe({
-      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
-      error: () => this.isSaving.set(false)
+      next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+      error: () => { this.isSaving.set(false); this.toast.error(); }
     });
   }
 
   delete(id: string) {
     if (!confirm(this.translation.translate('groups.deleteConfirm'))) return;
-    this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
+    this.service.delete(id).subscribe({ next: () => { this.load(); this.toast.success('messages.deleted'); }, error: () => this.toast.error() });
   }
 }

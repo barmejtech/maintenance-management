@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { TaskOrder, TaskStatus, TaskPriority, MaintenanceType, Technician, Equipment, TechnicianGroup, CreateTaskOrderRequest, SmartDispatchResult } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
+import { ToastService } from '../../services/toast.service';
 
 const GPS_TIMEOUT_MS = 10_000;
 const GPS_MAX_AGE_MS = 60_000;
@@ -81,6 +82,7 @@ export class TasksComponent implements OnInit {
     private translation: TranslationService,
     private csvExport: CsvExportService,
     private performanceService: PerformanceService,
+    private toast: ToastService,
     public auth: AuthService
   ) {}
 
@@ -186,14 +188,15 @@ export class TasksComponent implements OnInit {
         if (dto.status === TaskStatus.InProgress && dto.technicianId) {
           this.captureAndSendGps(dto.technicianId);
         }
+        this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created');
       },
-      error: () => this.isSaving.set(false)
+      error: () => { this.isSaving.set(false); this.toast.error(); }
     });
   }
 
   delete(id: string) {
     if (!confirm(this.translation.translate('tasks.deleteConfirm'))) return;
-    this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
+    this.service.delete(id).subscribe({ next: () => { this.load(); this.toast.success('messages.deleted'); }, error: () => this.toast.error() });
   }
 
   getTechnicianLocation(technicianId?: string): Technician | undefined {

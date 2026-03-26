@@ -9,6 +9,7 @@ import { Technician, TechnicianStatus, CreateTechnicianRequest, UpdateTechnician
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-technicians',
@@ -43,6 +44,7 @@ export class TechniciansComponent implements OnInit {
     private service: TechnicianService,
     private fileService: FileUploadService,
     private translation: TranslationService,
+    private toast: ToastService,
     public auth: AuthService
   ) {}
 
@@ -103,8 +105,8 @@ export class TechniciansComponent implements OnInit {
         profilePhotoUrl: this.form.profilePhotoUrl || undefined
       };
       this.service.update(this.editingId, dto).subscribe({
-        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
-        error: () => this.isSaving.set(false)
+        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+        error: () => { this.isSaving.set(false); this.toast.error(); }
       });
     } else {
       const dto: CreateTechnicianRequest = {
@@ -116,15 +118,15 @@ export class TechniciansComponent implements OnInit {
         password: this.form.password
       };
       this.service.create(dto).subscribe({
-        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); },
-        error: () => this.isSaving.set(false)
+        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+        error: () => { this.isSaving.set(false); this.toast.error(); }
       });
     }
   }
 
   delete(id: string) {
     if (!confirm(this.translation.translate('technicians.deleteConfirm'))) return;
-    this.service.delete(id).subscribe({ next: () => this.load(), error: () => {} });
+    this.service.delete(id).subscribe({ next: () => { this.load(); this.toast.success('messages.deleted'); }, error: () => this.toast.error() });
   }
 
   getStatusLabel(status: TechnicianStatus): string {

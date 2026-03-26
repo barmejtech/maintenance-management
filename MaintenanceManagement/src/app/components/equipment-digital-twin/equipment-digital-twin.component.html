@@ -233,7 +233,7 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer gap-2">
           <button class="btn btn-secondary px-4" (click)="closeModal()">{{ 'digitalTwin.modal.cancel' | translate }}</button>
           <button class="btn btn-primary px-4" (click)="save()" [disabled]="isSaving() || !form.equipmentId">
             @if (isSaving()) {

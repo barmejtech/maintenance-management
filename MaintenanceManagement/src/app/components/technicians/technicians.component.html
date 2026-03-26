@@ -145,7 +145,7 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer gap-2">
           <button type="button" class="btn btn-secondary px-4" (click)="closeModal()">{{ 'technicians.cancel' | translate }}</button>
           <button type="button" class="btn btn-primary px-4" (click)="save()" [disabled]="isSaving() || !form.firstName || !form.lastName || isUploadingPhoto()">
             @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
