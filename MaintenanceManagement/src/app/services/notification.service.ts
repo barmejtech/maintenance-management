@@ -8,17 +8,20 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-  showSuccess(arg0: string) {
-    throw new Error('Method not implemented.');
-  }
   private readonly base = `${environment.apiUrl}/notifications`;
   private hubConnection: signalR.HubConnection | null = null;
 
   private notificationsSignal = signal<AppNotification[]>([]);
+
+  /** Notifications from the last 5 days for the header dropdown. */
   readonly notifications = computed(() => {
     const cutoff = Date.now() - 5 * 24 * 60 * 60 * 1000;
     return this.notificationsSignal().filter(n => new Date(n.createdAt).getTime() >= cutoff);
   });
+
+  /** All cached notifications (for the full-page view). */
+  readonly allNotifications = computed(() => this.notificationsSignal());
+
   readonly unreadCount = computed(() => {
     const cutoff = Date.now() - 5 * 24 * 60 * 60 * 1000;
     return this.notificationsSignal().filter(n => !n.isRead && new Date(n.createdAt).getTime() >= cutoff).length;
@@ -45,13 +48,14 @@ export class NotificationService {
     this.hubConnection?.stop();
   }
 
-  loadAll(): Observable<AppNotification[]> {
-    return this.http.get<AppNotification[]>(this.base).pipe(
+  /** Load notifications. Pass days > 5 to fetch a longer history (for the full-page view). */
+  loadAll(days = 5): Observable<AppNotification[]> {
+    return this.http.get<AppNotification[]>(`${this.base}?days=${days}`).pipe(
       tap(data => this.notificationsSignal.set(data))
     );
   }
 
-  /** Returns only the last 5 days of notifications - same as notifications computed, kept for backward compatibility */
+  /** Returns only the last 5 days of notifications – kept for backward compatibility. */
   get recentNotifications(): AppNotification[] {
     return this.notifications();
   }
@@ -84,5 +88,17 @@ export class NotificationService {
 
   addLocal(notification: AppNotification): void {
     this.notificationsSignal.update(list => [notification, ...list]);
+  }
+
+  /** Returns the Angular route path for the related entity of a notification. */
+  getEntityRoute(relatedEntityType?: string): string | null {
+    switch (relatedEntityType) {
+      case 'TaskOrder':           return '/tasks';
+      case 'MaintenanceSchedule': return '/maintenance-schedules';
+      case 'SparePart':           return '/spare-parts';
+      case 'Technician':          return '/technicians';
+      case 'Equipment':           return '/equipment';
+      default:                    return null;
+    }
   }
 }

@@ -1,0 +1,139 @@
+<div class="np-page">
+
+  <!-- Page Header -->
+  <div class="np-header">
+    <div class="np-header-left">
+      <div class="np-icon-wrap">🔔</div>
+      <div>
+        <h1 class="np-title">Notifications</h1>
+        <p class="np-subtitle">Stay informed about all system events</p>
+      </div>
+    </div>
+    <div class="np-header-actions">
+      @if (notifService.unreadCount() > 0) {
+        <button class="btn-mark-all" (click)="markAllRead()">
+          ✓ Mark all as read
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Stats row -->
+  <div class="np-stats">
+    <div class="np-stat">
+      <span class="np-stat-value">{{ notifService.allNotifications().length }}</span>
+      <span class="np-stat-label">Total</span>
+    </div>
+    <div class="np-stat accent-red">
+      <span class="np-stat-value">{{ notifService.unreadCount() }}</span>
+      <span class="np-stat-label">Unread</span>
+    </div>
+    <div class="np-stat accent-green">
+      <span class="np-stat-value">{{ notifService.allNotifications().length - notifService.unreadCount() }}</span>
+      <span class="np-stat-label">Read</span>
+    </div>
+    <div class="np-stat accent-orange">
+      <span class="np-stat-value">{{ filtered().length }}</span>
+      <span class="np-stat-label">Filtered</span>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="np-toolbar">
+    <div class="np-search-wrap">
+      <span class="np-search-icon">🔍</span>
+      <input
+        class="np-search"
+        type="text"
+        placeholder="Search notifications..."
+        [value]="searchQuery()"
+        (input)="onSearch($any($event.target).value)"
+      />
+    </div>
+
+    <div class="np-filters">
+      <div class="np-filter-group">
+        <button class="np-filter-btn" [class.active]="filterStatus() === 'all'"
+          (click)="setFilterStatus('all')">All</button>
+        <button class="np-filter-btn" [class.active]="filterStatus() === 'unread'"
+          (click)="setFilterStatus('unread')">Unread</button>
+        <button class="np-filter-btn" [class.active]="filterStatus() === 'read'"
+          (click)="setFilterStatus('read')">Read</button>
+      </div>
+
+      <div class="np-filter-group">
+        <button class="np-filter-btn" [class.active]="filterType() === 'all'"
+          (click)="setFilterType('all')">All Types</button>
+        <button class="np-filter-btn type-info" [class.active]="filterType() === 'info'"
+          (click)="setFilterType('info')">ℹ️ Info</button>
+        <button class="np-filter-btn type-success" [class.active]="filterType() === 'success'"
+          (click)="setFilterType('success')">✅ Success</button>
+        <button class="np-filter-btn type-warning" [class.active]="filterType() === 'warning'"
+          (click)="setFilterType('warning')">⚠️ Warning</button>
+        <button class="np-filter-btn type-error" [class.active]="filterType() === 'error'"
+          (click)="setFilterType('error')">❌ Error</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification List -->
+  <div class="np-list">
+    @if (isLoading()) {
+      <div class="np-loading">
+        <div class="np-spinner"></div>
+        <span>Loading notifications...</span>
+      </div>
+    } @else if (filtered().length === 0) {
+      <div class="np-empty">
+        <div class="np-empty-icon">🔕</div>
+        <h3>No notifications found</h3>
+        <p>Try adjusting your filters or check back later.</p>
+      </div>
+    } @else {
+      @for (n of filtered(); track n.id) {
+        <div class="np-item" [class.unread]="!n.isRead"
+          [class.type-success]="getTypeName(n.type) === 'success'"
+          [class.type-warning]="getTypeName(n.type) === 'warning'"
+          [class.type-error]="getTypeName(n.type) === 'error'"
+          [class.type-info]="getTypeName(n.type) === 'info'">
+
+          <div class="np-item-icon">{{ getTypeIcon(n.type) }}</div>
+
+          <div class="np-item-body">
+            <div class="np-item-top">
+              <span class="np-item-title">{{ n.title }}</span>
+              <span class="np-type-badge type-{{ getTypeName(n.type) }}">{{ getTypeLabel(n.type) }}</span>
+              @if (!n.isRead) {
+                <span class="np-unread-dot"></span>
+              }
+            </div>
+            <p class="np-item-msg">{{ n.message }}</p>
+            <div class="np-item-meta">
+              <span class="np-item-time" [title]="n.createdAt | date:'medium'">🕐 {{ timeAgo(n.createdAt) }}</span>
+              @if (n.relatedEntityType) {
+                <span class="np-entity-tag">📎 {{ getEntityLabel(n.relatedEntityType) }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="np-item-actions">
+            @if (getEntityRoute(n.relatedEntityType); as route) {
+              <a class="btn-view" [routerLink]="route" title="View {{ getEntityLabel(n.relatedEntityType) }}">
+                View Details
+              </a>
+            }
+            @if (!n.isRead) {
+              <button class="btn-read" (click)="markRead(n)" title="Mark as read">
+                ✓ Read
+              </button>
+            }
+            <button class="btn-del" (click)="deleteNotif(n)" title="Delete notification">
+              🗑
+            </button>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+</div>

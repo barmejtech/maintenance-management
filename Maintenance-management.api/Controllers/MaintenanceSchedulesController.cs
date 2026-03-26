@@ -11,8 +11,18 @@ namespace Maintenance_management.api.Controllers;
 public class MaintenanceSchedulesController : ControllerBase
 {
     private readonly IMaintenanceScheduleService _service;
+    private readonly INotificationService _notificationService;
+    private readonly ITechnicianService _technicianService;
 
-    public MaintenanceSchedulesController(IMaintenanceScheduleService service) => _service = service;
+    public MaintenanceSchedulesController(
+        IMaintenanceScheduleService service,
+        INotificationService notificationService,
+        ITechnicianService technicianService)
+    {
+        _service = service;
+        _notificationService = notificationService;
+        _technicianService = technicianService;
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -47,6 +57,30 @@ public class MaintenanceSchedulesController : ControllerBase
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
         var result = await _service.CreateAsync(dto, userId);
+
+        // Notify admins and managers about the new maintenance schedule
+        await _notificationService.SendToRoleAsync("Admin",
+            "New Maintenance Schedule",
+            $"A new maintenance schedule \"{result.Name}\" has been created.",
+            "info", result.Id.ToString(), "MaintenanceSchedule");
+        await _notificationService.SendToRoleAsync("Manager",
+            "New Maintenance Schedule",
+            $"A new maintenance schedule \"{result.Name}\" has been created.",
+            "info", result.Id.ToString(), "MaintenanceSchedule");
+
+        // Notify the assigned technician
+        if (dto.AssignedTechnicianId.HasValue)
+        {
+            var technician = await _technicianService.GetByIdAsync(dto.AssignedTechnicianId.Value);
+            if (technician is not null)
+            {
+                await _notificationService.SendToUserAsync(technician.UserId,
+                    "Maintenance Schedule Assigned to You",
+                    $"You have been assigned to maintenance schedule \"{result.Name}\".",
+                    "success", result.Id.ToString(), "MaintenanceSchedule");
+            }
+        }
+
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
@@ -54,8 +88,28 @@ public class MaintenanceSchedulesController : ControllerBase
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateMaintenanceScheduleDto dto)
     {
+        // Fetch the current state before updating so we can detect technician assignment changes.
+        // This extra query is intentional: change-detection logic belongs at the controller boundary
+        // to keep the service layer free of notification concerns.
+        var oldSchedule = await _service.GetByIdAsync(id);
         var result = await _service.UpdateAsync(id, dto);
-        return result is null ? NotFound() : Ok(result);
+        if (result is null) return NotFound();
+
+        // Notify technician if assignment changed
+        if (dto.AssignedTechnicianId.HasValue &&
+            dto.AssignedTechnicianId != oldSchedule?.AssignedTechnicianId)
+        {
+            var technician = await _technicianService.GetByIdAsync(dto.AssignedTechnicianId.Value);
+            if (technician is not null)
+            {
+                await _notificationService.SendToUserAsync(technician.UserId,
+                    "Maintenance Schedule Assigned to You",
+                    $"You have been assigned to maintenance schedule \"{result.Name}\".",
+                    "success", result.Id.ToString(), "MaintenanceSchedule");
+            }
+        }
+
+        return Ok(result);
     }
 
     [HttpDelete("{id:guid}")]

@@ -50,6 +50,27 @@ public class HubNotificationService : INotificationService
         await Task.WhenAll(tasks);
     }
 
+    public async Task SendToAllRolesAsync(string title, string message,
+        string type = "info", string? relatedEntityId = null, string? relatedEntityType = null)
+    {
+        // Collect all unique users across roles to avoid duplicate notifications
+        var allUsers = new Dictionary<string, ApplicationUser>();
+        foreach (var role in new[] { "Admin", "Manager", "Technician" })
+        {
+            var users = await _userManager.GetUsersInRoleAsync(role);
+            foreach (var user in users)
+                allUsers.TryAdd(user.Id, user);
+        }
+
+        var tasks = allUsers.Values.Select(async u =>
+        {
+            var notification = await PersistAsync(u.Id, title, message, type, relatedEntityId, relatedEntityType);
+            var payload = MapToPayload(notification);
+            await _hub.Clients.Group($"user-{u.Id}").SendAsync("ReceiveNotification", payload);
+        });
+        await Task.WhenAll(tasks);
+    }
+
     private async Task<AppNotification> PersistAsync(string userId, string title, string message,
         string type, string? relatedEntityId, string? relatedEntityType)
     {

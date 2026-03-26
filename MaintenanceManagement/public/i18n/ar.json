@@ -417,7 +417,8 @@
       "mobileWorkflow": "سير العمل المتنقل",
       "registerUser": "تسجيل مستخدم",
       "manageManagers": "إدارة المديرين",
-      "myAccount": "حسابي"
+      "myAccount": "حسابي",
+      "notifications": "الإشعارات"
     },
     "hero": {
       "fullAccess": "صلاحية كاملة",
@@ -620,9 +621,43 @@
     "cancelled": "ملغي"
   },
   "notifications": {
-    "newRequest": "طلب صيانة جديد",
-    "requestUpdated": "تم تحديث طلب الصيانة",
-    "requestCompleted": "تم إكمال طلب الصيانة"
+    "pageTitle": "الإشعارات",
+    "pageSubtitle": "ابق على اطلاع بجميع أحداث النظام",
+    "total": "الإجمالي",
+    "unread": "غير مقروء",
+    "read": "مقروء",
+    "filtered": "المصفى",
+    "markAllRead": "تحديد الكل كمقروء",
+    "searchPlaceholder": "البحث في الإشعارات...",
+    "filterAll": "الكل",
+    "filterUnread": "غير مقروء",
+    "filterRead": "مقروء",
+    "filterAllTypes": "جميع الأنواع",
+    "loading": "جاري تحميل الإشعارات...",
+    "empty": "لا توجد إشعارات",
+    "emptySubtitle": "حاول تعديل عوامل التصفية أو تحقق لاحقاً.",
+    "viewDetails": "عرض التفاصيل",
+    "markRead": "قراءة",
+    "delete": "حذف",
+    "justNow": "الآن",
+    "minutesAgo": "منذ {n} دقيقة",
+    "hoursAgo": "منذ {n} ساعة",
+    "daysAgo": "منذ {n} يوم",
+    "types": {
+      "info": "معلومات",
+      "success": "نجاح",
+      "warning": "تحذير",
+      "error": "خطأ"
+    },
+    "entities": {
+      "TaskOrder": "أمر عمل",
+      "MaintenanceSchedule": "جدول صيانة",
+      "SparePart": "قطعة غيار",
+      "Technician": "فني",
+      "Equipment": "معدة"
+    },
+    "last5days": "آخر 5 أيام",
+    "viewAll": "عرض جميع الإشعارات"
   },
   "footer": {
     "contact": "اتصل بنا",

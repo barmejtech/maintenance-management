@@ -32,7 +32,12 @@
               <div class="notif-body">
                 <div class="notif-title">{{ n.title }}</div>
                 <div class="notif-msg">{{ n.message }}</div>
-                <div class="notif-time">{{ n.createdAt | date:'short' }}</div>
+                <div class="notif-footer-row">
+                  <div class="notif-time">{{ n.createdAt | date:'short' }}</div>
+                  @if (getEntityRoute(n.relatedEntityType); as route) {
+                    <a class="btn-view-details" [routerLink]="route" (click)="closePanel()">View Details →</a>
+                  }
+                </div>
               </div>
               <div class="notif-item-actions">
                 @if (!n.isRead) {
@@ -43,6 +48,10 @@
             </div>
           }
         }
+      </div>
+
+      <div class="notif-footer">
+        <a class="btn-view-all" routerLink="/notifications" (click)="closePanel()">View all notifications</a>
       </div>
     </div>
   }

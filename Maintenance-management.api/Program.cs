@@ -138,6 +138,9 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAccoun
 // Notification service (SignalR-based)
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.INotificationService, Maintenance_management.api.Services.HubNotificationService>();
 
+// Background service: sends notifications for maintenance schedules due today
+builder.Services.AddHostedService<Maintenance_management.api.Services.ScheduleTodayNotificationService>();
+
 // ===================== SERVICES =====================
 
 // Add SignalR services

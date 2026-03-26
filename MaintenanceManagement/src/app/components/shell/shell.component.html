@@ -53,6 +53,12 @@
     <a routerLink="/chat" routerLinkActive="active" class="nav-item">
       <span>💬</span> {{ 'dashboard.sidebar.chat' | translate }}
     </a>
+    <a routerLink="/notifications" routerLinkActive="active" class="nav-item nav-item-notif">
+      <span>🔔</span> {{ 'dashboard.sidebar.notifications' | translate }}
+      @if (notifService.unreadCount() > 0) {
+        <span class="nav-notif-count">{{ notifService.unreadCount() > 99 ? '99+' : notifService.unreadCount() }}</span>
+      }
+    </a>
     <div class="sidebar-divider"></div>
     <div class="sidebar-section-label">{{ 'dashboard.sidebar.intelligence' | translate }}</div>
     <a routerLink="/predictive-maintenance" routerLinkActive="active" class="nav-item">

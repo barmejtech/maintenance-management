@@ -11,8 +11,13 @@ namespace Maintenance_management.api.Controllers;
 public class TechniciansController : ControllerBase
 {
     private readonly ITechnicianService _service;
+    private readonly INotificationService _notificationService;
 
-    public TechniciansController(ITechnicianService service) => _service = service;
+    public TechniciansController(ITechnicianService service, INotificationService notificationService)
+    {
+        _service = service;
+        _notificationService = notificationService;
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -33,6 +38,17 @@ public class TechniciansController : ControllerBase
         {
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
             var result = await _service.CreateAsync(dto, userId);
+
+            // Notify admins and managers about the new technician
+            await _notificationService.SendToRoleAsync("Admin",
+                "New Technician Registered",
+                $"A new technician \"{result.FullName}\" ({result.Specialization}) has been added.",
+                "success", result.Id.ToString(), "Technician");
+            await _notificationService.SendToRoleAsync("Manager",
+                "New Technician Registered",
+                $"A new technician \"{result.FullName}\" ({result.Specialization}) has been added.",
+                "success", result.Id.ToString(), "Technician");
+
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
         catch (InvalidOperationException ex)
