@@ -88,6 +88,9 @@ public class MaintenanceSchedulesController : ControllerBase
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateMaintenanceScheduleDto dto)
     {
+        // Fetch the current state before updating so we can detect technician assignment changes.
+        // This extra query is intentional: change-detection logic belongs at the controller boundary
+        // to keep the service layer free of notification concerns.
         var oldSchedule = await _service.GetByIdAsync(id);
         var result = await _service.UpdateAsync(id, dto);
         if (result is null) return NotFound();

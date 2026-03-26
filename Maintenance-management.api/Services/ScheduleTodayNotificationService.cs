@@ -20,20 +20,14 @@ public class ScheduleTodayNotificationService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        // Run immediately on startup, then every 24 hours
+        // Run immediately on startup, then repeat every 24 hours
         while (!stoppingToken.IsCancellationRequested)
         {
             await NotifyTodaySchedulesAsync(stoppingToken);
 
-            // Wait until the same time tomorrow
-            var now = DateTime.UtcNow;
-            var nextRun = now.Date.AddDays(1).AddHours(6); // 06:00 UTC next day
-            var delay = nextRun - now;
-            if (delay < TimeSpan.FromMinutes(1)) delay = TimeSpan.FromHours(24);
-
             try
             {
-                await Task.Delay(delay, stoppingToken);
+                await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
             }
             catch (OperationCanceledException)
             {

@@ -94,7 +94,9 @@ public class TaskOrdersController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTaskOrderDto dto)
     {
-        // Capture old state before update for change detection
+        // Fetch the current state before updating so we can detect technician and status changes.
+        // This extra query is intentional: change-detection logic belongs at the controller boundary
+        // to keep the service layer free of notification concerns.
         var oldTask = await _service.GetByIdAsync(id);
         var result = await _service.UpdateAsync(id, dto);
         if (result is null) return NotFound();

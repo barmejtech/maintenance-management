@@ -91,7 +91,11 @@
       </div>
     } @else {
       @for (n of filtered(); track n.id) {
-        <div class="np-item" [class.unread]="!n.isRead" [class]="'np-item type-' + getTypeName(n.type)">
+        <div class="np-item" [class.unread]="!n.isRead"
+          [class.type-success]="getTypeName(n.type) === 'success'"
+          [class.type-warning]="getTypeName(n.type) === 'warning'"
+          [class.type-error]="getTypeName(n.type) === 'error'"
+          [class.type-info]="getTypeName(n.type) === 'info'">
 
           <div class="np-item-icon">{{ getTypeIcon(n.type) }}</div>
 
