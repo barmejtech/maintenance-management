@@ -16,6 +16,7 @@ import { AccountProfile, UpdateProfileRequest, ChangePasswordRequest } from '../
   styleUrls: ['./account.component.css']
 })
 export class AccountComponent implements OnInit {
+  private readonly MIN_PASSWORD_LENGTH = 8;
   profile = signal<AccountProfile | null>(null);
   isLoading = signal(true);
   isSavingProfile = signal(false);
@@ -113,7 +114,7 @@ export class AccountComponent implements OnInit {
       this.passwordError.set(this.translation.translate('account.errors.passwordsMismatch'));
       return;
     }
-    if (this.passwordForm.newPassword.length < 8) {
+    if (this.passwordForm.newPassword.length < this.MIN_PASSWORD_LENGTH) {
       this.passwordError.set(this.translation.translate('account.errors.passwordTooShort'));
       return;
     }

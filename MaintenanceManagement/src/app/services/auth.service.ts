@@ -81,8 +81,7 @@ export class AuthService {
   updateCurrentUserInfo(firstName: string, lastName: string, profilePhotoUrl?: string): void {
     const user = this.currentUserSignal();
     if (!user) return;
-    const updated: AuthResponse = { ...user, firstName, lastName };
-    if (profilePhotoUrl !== undefined) (updated as any).profilePhotoUrl = profilePhotoUrl;
+    const updated: AuthResponse = { ...user, firstName, lastName, profilePhotoUrl };
     localStorage.setItem(this.USER_KEY, JSON.stringify(updated));
     this.currentUserSignal.set(updated);
   }
