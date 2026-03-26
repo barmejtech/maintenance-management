@@ -2,9 +2,11 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="mb-0 fw-bold"><i class="bi bi-calendar-check-fill text-primary me-2"></i>Technician Availability</h4>
     <div class="d-flex gap-2">
+      @if (auth.canManageData()) {
       <button class="btn btn-primary btn-sm" (click)="openAdd()">
         <i class="bi bi-plus-circle me-1"></i>Add Availability
       </button>
+      }
       <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
         <i class="bi bi-arrow-left me-1"></i>Dashboard
       </a>
@@ -41,12 +43,16 @@
               </td>
               <td class="text-muted small">{{ avail.notes || '—' }}</td>
               <td class="text-end">
+                @if (auth.canManageData()) {
                 <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(avail)" title="Edit">
                   <i class="bi bi-pencil"></i>
                 </button>
+                }
+                @if (auth.canManageTasks()) {
                 <button class="btn btn-sm btn-outline-danger" (click)="delete(avail.id)" title="Delete">
                   <i class="bi bi-trash"></i>
                 </button>
+                }
               </td>
             </tr>
           }

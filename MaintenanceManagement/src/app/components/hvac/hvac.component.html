@@ -2,9 +2,11 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="mb-0 fw-bold"><i class="bi bi-thermometer-half text-primary me-2"></i>{{ 'hvac.title' | translate }}</h4>
     <div class="d-flex gap-2">
+      @if (auth.canManageData()) {
       <button class="btn btn-primary btn-sm" (click)="openAdd()">
         <i class="bi bi-plus-circle me-1"></i>{{ 'hvac.addButton' | translate }}
       </button>
+      }
       <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
         <i class="bi bi-arrow-left me-1"></i>{{ 'hvac.backToDashboard' | translate }}
       </a>
@@ -79,12 +81,16 @@
           </div>
 
           <div class="card-footer bg-transparent border-top d-flex justify-content-end gap-2 py-2 px-3">
+            @if (auth.canManageData()) {
             <button class="btn btn-sm btn-outline-primary" (click)="openEdit(hvac)" [title]="'buttons.edit' | translate">
               <i class="bi bi-pencil me-1"></i>{{ 'buttons.edit' | translate }}
             </button>
+            }
+            @if (auth.canManageTasks()) {
             <button class="btn btn-sm btn-outline-danger" (click)="delete(hvac.id)" [title]="'buttons.delete' | translate">
               <i class="bi bi-trash me-1"></i>{{ 'buttons.delete' | translate }}
             </button>
+            }
           </div>
         </div>
       </div>

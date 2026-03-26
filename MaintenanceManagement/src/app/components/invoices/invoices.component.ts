@@ -8,6 +8,7 @@ import { Invoice, InvoiceStatus } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 import { PdfService } from '../../services/pdf.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-invoices',
@@ -39,7 +40,7 @@ export class InvoicesComponent implements OnInit {
   };
   private editingId = '';
 
-  constructor(private service: InvoiceService, private translation: TranslationService, private pdf: PdfService) {}
+  constructor(private service: InvoiceService, private translation: TranslationService, private pdf: PdfService, public auth: AuthService) {}
 
   ngOnInit() {
     this.load();

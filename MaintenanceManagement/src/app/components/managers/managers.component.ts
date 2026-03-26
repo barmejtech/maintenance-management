@@ -8,6 +8,7 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { Manager, CreateManagerRequest, UpdateManagerRequest } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-managers',
@@ -39,7 +40,8 @@ export class ManagersComponent implements OnInit {
   constructor(
     private service: ManagerService,
     private fileService: FileUploadService,
-    private translation: TranslationService
+    private translation: TranslationService,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {

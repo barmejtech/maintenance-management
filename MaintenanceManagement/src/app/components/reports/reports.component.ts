@@ -9,6 +9,7 @@ import { MaintenanceReport, CreateReportRequest, TaskOrder } from '../../models'
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 import { PdfService } from '../../services/pdf.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-reports',
@@ -42,7 +43,8 @@ export class ReportsComponent implements OnInit {
     private service: ReportService,
     private taskService: TaskOrderService,
     private translation: TranslationService,
-    private pdf: PdfService
+    private pdf: PdfService,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {

@@ -7,6 +7,7 @@ import { GroupService } from '../../services/group.service';
 import { TechnicianGroup } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-groups',
@@ -26,7 +27,7 @@ export class GroupsComponent implements OnInit {
   form = { name: '', description: '' };
   private editingId = '';
 
-  constructor(private service: GroupService, private translation: TranslationService) {}
+  constructor(private service: GroupService, private translation: TranslationService, public auth: AuthService) {}
 
   ngOnInit() {
     this.load();
