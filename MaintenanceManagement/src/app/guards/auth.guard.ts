@@ -28,6 +28,14 @@ export const managerGuard: CanActivateFn = () => {
   return router.createUrlTree(['/dashboard']);
 };
 
+export const dataEntryGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  if (auth.canManageData()) return true;
+  return router.createUrlTree(['/dashboard']);
+};
+
 export const guestGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);

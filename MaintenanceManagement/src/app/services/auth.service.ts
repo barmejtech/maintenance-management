@@ -78,6 +78,24 @@ export class AuthService {
     return this.hasRole('Admin') || this.hasRole('Manager');
   }
 
+  isDataEntry(): boolean {
+    return this.hasRole('DataEntry');
+  }
+
+  /** Admin, Manager, or DataEntry can create/edit data entries (equipment, spare parts) */
+  canManageData(): boolean {
+    return this.isAdmin() || this.hasRole('Manager') || this.hasRole('DataEntry');
+  }
+
+  /** Only Admin and Manager can create/edit/delete work tasks and delete records */
+  canManageTasks(): boolean {
+    return this.isAdmin() || this.hasRole('Manager');
+  }
+
+  isTechnician(): boolean {
+    return this.hasRole('Technician') && !this.isAdmin() && !this.hasRole('Manager') && !this.hasRole('DataEntry');
+  }
+
   updateCurrentUserInfo(firstName: string, lastName: string, profilePhotoUrl?: string): void {
     const user = this.currentUserSignal();
     if (!user) return;

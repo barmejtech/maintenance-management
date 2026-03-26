@@ -165,7 +165,8 @@
     "roleLabel": "الدور",
     "role": {
       "technician": "فني",
-      "manager": "مدير"
+      "manager": "مدير",
+      "dataentry": "إدخال البيانات"
     },
     "backToDashboard": "→ العودة إلى لوحة التحكم"
   },
@@ -481,7 +482,8 @@
     "roles": {
       "administrator": "المسؤول",
       "manager": "المدير",
-      "technician": "الفني"
+      "technician": "الفني",
+      "dataEntry": "مدخل البيانات"
     },
     "titles": {
       "admin": "لوحة تحكم المسؤول",
@@ -612,6 +614,7 @@
     "admin": "المسؤول",
     "manager": "المدير",
     "technician": "الفني",
+    "dataentry": "مدخل البيانات",
     "user": "المستخدم"
   },
   "statuses": {
@@ -1080,7 +1083,8 @@
     "roles": {
       "admin": "مسؤول",
       "manager": "مدير",
-      "technician": "فني"
+      "technician": "فني",
+      "dataentry": "مدخل البيانات"
     }
   },
   "account": {

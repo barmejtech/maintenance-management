@@ -35,7 +35,7 @@ public class SparePartsController : ControllerBase
         => Ok(await _service.GetLowStockAsync());
 
     [HttpPost]
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Manager,DataEntry")]
     public async Task<IActionResult> Create([FromBody] CreateSparePartDto dto)
     {
         var result = await _service.CreateAsync(dto);
@@ -57,7 +57,7 @@ public class SparePartsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Manager,DataEntry")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateSparePartDto dto)
     {
         var result = await _service.UpdateAsync(id, dto);

@@ -60,6 +60,7 @@ public class TaskOrdersController : ControllerBase
         => Ok(await _service.GetScheduledBetweenAsync(from, to));
 
     [HttpPost]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Create([FromBody] CreateTaskOrderDto dto)
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
@@ -92,6 +93,7 @@ public class TaskOrdersController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTaskOrderDto dto)
     {
         // Fetch the current state before updating so we can detect technician and status changes.

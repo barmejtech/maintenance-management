@@ -165,7 +165,8 @@
     "roleLabel": "Role",
     "role": {
       "technician": "Technician",
-      "manager": "Manager"
+      "manager": "Manager",
+      "dataentry": "Data Entry"
     },
     "backToDashboard": "← Back to Dashboard"
   },
@@ -481,7 +482,8 @@
     "roles": {
       "administrator": "Administrator",
       "manager": "Manager",
-      "technician": "Technician"
+      "technician": "Technician",
+      "dataEntry": "Data Entry"
     },
     "titles": {
       "admin": "Admin Dashboard",
@@ -1013,7 +1015,8 @@
     "roles": {
       "admin": "Admin",
       "manager": "Manager",
-      "technician": "Technician"
+      "technician": "Technician",
+      "dataentry": "Data Entry"
     }
   },
   "account": {

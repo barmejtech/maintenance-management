@@ -1,4 +1,4 @@
-<div class="dashboard" [ngClass]="{'role-admin': isAdmin(), 'role-manager': isManagerOrAdmin() && !isAdmin(), 'role-tech': isTechnicianRole(), 'sidebar-collapsed': !sidebarOpen()}">
+<div class="dashboard" [ngClass]="{'role-admin': isAdmin(), 'role-manager': isManagerOrAdmin() && !isAdmin(), 'role-data-entry': isDataEntryRole(), 'role-tech': isTechnicianRole(), 'sidebar-collapsed': !sidebarOpen()}">
   <header class="dash-header">
     <div class="dash-title">
       <button class="btn-hamburger" (click)="toggleSidebar()" [title]="'dashboard.header.toggleSidebar' | translate" [attr.aria-expanded]="sidebarOpen()" aria-label="Toggle navigation">
@@ -10,7 +10,7 @@
     <div class="dash-user">
       <app-notifications />
       <span class="user-name">{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</span>
-      <span class="role-badge" [ngClass]="{'badge-admin': isAdmin(), 'badge-manager': isManagerOrAdmin() && !isAdmin(), 'badge-tech': isTechnicianRole()}">
+      <span class="role-badge" [ngClass]="{'badge-admin': isAdmin(), 'badge-manager': isManagerOrAdmin() && !isAdmin(), 'badge-data-entry': isDataEntryRole(), 'badge-tech': isTechnicianRole()}">
         {{ getRoleName() }}
       </span>
       <button class="btn-lang" (click)="translation.toggleLanguage()" title="Switch Language">
