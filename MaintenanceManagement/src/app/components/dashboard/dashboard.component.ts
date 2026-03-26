@@ -56,6 +56,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   // Technician advanced chart refs
   @ViewChild('myRadarChart') myRadarChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('myPriorityPolarChart') myPriorityPolarChartRef!: ElementRef<HTMLCanvasElement>;
+  // DataEntry chart refs
+  @ViewChild('deEquipmentChart') deEquipmentChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('deSparePartsChart') deSparePartsChartRef!: ElementRef<HTMLCanvasElement>;
 
   // Current technician's entity ID
   private currentTechnicianId = signal<string | null>(null);
@@ -110,6 +113,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private priorityPolarChart: Chart | null = null;
   private myRadarChart: Chart | null = null;
   private myPriorityPolarChart: Chart | null = null;
+  private deEquipmentChart: Chart | null = null;
+  private deSparePartsChart: Chart | null = null;
   private refreshInterval: ReturnType<typeof setInterval> | null = null;
 
   private taskStats = { pending: 0, inProgress: 0, completed: 0, cancelled: 0, onHold: 0 };
@@ -182,6 +187,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.priorityPolarChart?.destroy();
     this.myRadarChart?.destroy();
     this.myPriorityPolarChart?.destroy();
+    this.deEquipmentChart?.destroy();
+    this.deSparePartsChart?.destroy();
   }
 
   // Navigation method
@@ -305,19 +312,24 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const techId = this.currentTechnicianId();
     const tasks$ = this.isTechnicianRole() && techId
       ? this.taskService.getByTechnician(techId)
-      : this.taskService.getAll();
+      : (!this.isDataEntryRole() ? this.taskService.getAll() : null);
 
-    tasks$.subscribe({
-      next: tasks => {
-        this.allTasks = tasks;
-        this.applyTaskFilter();
-        this.isRefreshing.set(false);
-        this.lastRefreshed.set(new Date());
-      },
-      error: () => { 
-        this.isRefreshing.set(false);
-      }
-    });
+    if (tasks$) {
+      tasks$.subscribe({
+        next: tasks => {
+          this.allTasks = tasks;
+          this.applyTaskFilter();
+          this.isRefreshing.set(false);
+          this.lastRefreshed.set(new Date());
+        },
+        error: () => {
+          this.isRefreshing.set(false);
+        }
+      });
+    } else {
+      this.isRefreshing.set(false);
+      this.lastRefreshed.set(new Date());
+    }
 
     if (this.isManagerOrAdmin()) {
       this.techService.getAll().subscribe({
@@ -385,6 +397,28 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
+    if (this.isDataEntryRole()) {
+      this.sparePartService.getAll().subscribe({
+        next: parts => {
+          this.sparePartsCount.set(parts.length);
+          this.lowStockCount.set(parts.filter(p => p.isLowStock).length);
+          this.updateDeSparePartsChart();
+        },
+        error: () => {}
+      });
+
+      this.scheduleService.getAll().subscribe({
+        next: schedules => {
+          const now = new Date();
+          this.activeSchedulesCount.set(schedules.filter(s => s.isActive).length);
+          this.overdueSchedulesCount.set(
+            schedules.filter(s => s.isActive && s.nextDueAt && new Date(s.nextDueAt) < now).length
+          );
+        },
+        error: () => {}
+      });
+    }
+
     this.eqService.getAll().subscribe({
       next: eqs => {
         this.equipmentCount.set(eqs.length);
@@ -396,6 +430,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           decommissioned: eqs.filter(e => e.status === EquipmentStatus.Decommissioned).length
         };
         this.updateEquipmentChart();
+        this.updateDeEquipmentChart();
         this.updateSystemRadarChart();
       },
       error: () => {}
@@ -1035,6 +1070,78 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     }
+
+    // DataEntry Equipment Status Doughnut Chart
+    if (this.deEquipmentChartRef) {
+      this.deEquipmentChart = new Chart(this.deEquipmentChartRef.nativeElement, {
+        type: 'doughnut',
+        data: {
+          labels: ['Operational', 'Under Maintenance', 'Out of Service', 'Decommissioned'],
+          datasets: [{
+            data: [0, 0, 0, 0],
+            backgroundColor: ['#10b981', '#f59e0b', '#ef4444', '#6b7280'],
+            borderWidth: 0,
+            hoverOffset: 15,
+            borderRadius: 8,
+            spacing: 2
+          }]
+        },
+        options: {
+          ...baseOpts,
+          cutout: '70%',
+          plugins: {
+            legend: { ...legendSimple },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const label = context.label || '';
+                  const value = context.raw as number;
+                  const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+                  const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return `${label}: ${value} (${percentage}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // DataEntry Spare Parts Doughnut Chart
+    if (this.deSparePartsChartRef) {
+      this.deSparePartsChart = new Chart(this.deSparePartsChartRef.nativeElement, {
+        type: 'doughnut',
+        data: {
+          labels: ['In Stock', 'Low Stock'],
+          datasets: [{
+            data: [0, 0],
+            backgroundColor: ['rgba(16,185,129,0.85)', 'rgba(239,68,68,0.85)'],
+            borderWidth: 0,
+            hoverOffset: 15,
+            borderRadius: 8,
+            spacing: 2
+          }]
+        },
+        options: {
+          ...baseOpts,
+          cutout: '70%',
+          plugins: {
+            legend: { ...legendSimple },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const label = context.label || '';
+                  const value = context.raw as number;
+                  const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+                  const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return `${label}: ${value} (${percentage}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
   }
 
   private updateTaskChart() {
@@ -1049,6 +1156,20 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const { operational, maintenance, outOfService, decommissioned } = this.equipmentStats;
     this.equipmentChart.data.datasets[0].data = [operational, maintenance, outOfService, decommissioned];
     this.equipmentChart.update();
+  }
+
+  private updateDeEquipmentChart() {
+    if (!this.deEquipmentChart) return;
+    const { operational, maintenance, outOfService, decommissioned } = this.equipmentStats;
+    this.deEquipmentChart.data.datasets[0].data = [operational, maintenance, outOfService, decommissioned];
+    this.deEquipmentChart.update();
+  }
+
+  private updateDeSparePartsChart() {
+    if (!this.deSparePartsChart) return;
+    const inStock = this.sparePartsCount() - this.lowStockCount();
+    this.deSparePartsChart.data.datasets[0].data = [inStock, this.lowStockCount()];
+    this.deSparePartsChart.update();
   }
 
   private updateTechnicianChart() {
@@ -1150,8 +1271,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.auth.isManager() || this.auth.isAdmin(); 
   }
   
+  isDataEntryRole(): boolean {
+    // Auth service isDataEntry() only checks for DataEntry role, but a user could technically
+    // have both DataEntry and Admin/Manager roles assigned. Guard against that edge case so
+    // DataEntry dashboard is never shown to privileged users.
+    return this.auth.isDataEntry() && !this.auth.isAdmin() && !this.auth.isManager();
+  }
+
   isTechnicianRole(): boolean { 
-    return !this.auth.isManager() && !this.auth.isAdmin() && this.auth.isAuthenticated(); 
+    return this.auth.isTechnician();
   }
 
   getLastRefreshedLabel(): string {
@@ -1162,12 +1290,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   getDashboardTitle(): string {
     if (this.auth.isAdmin()) return this.translation.translate('dashboard.titles.admin');
     if (this.auth.isManager()) return this.translation.translate('dashboard.titles.manager');
+    if (this.isDataEntryRole()) return this.translation.translate('dashboard.titles.dataEntry');
     return this.translation.translate('dashboard.titles.technician');
   }
 
   getDashboardSubtitle(): string {
     if (this.auth.isAdmin()) return this.translation.translate('dashboard.subtitles.admin');
     if (this.auth.isManager()) return this.translation.translate('dashboard.subtitles.manager');
+    if (this.isDataEntryRole()) return this.translation.translate('dashboard.subtitles.dataEntry');
     return this.translation.translate('dashboard.subtitles.technician');
   }
 

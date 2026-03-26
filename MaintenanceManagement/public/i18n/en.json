@@ -425,7 +425,8 @@
     "hero": {
       "fullAccess": "Full Access",
       "managementView": "Management View",
-      "technicianView": "Technician View"
+      "technicianView": "Technician View",
+      "dataEntryView": "Data Entry View"
     },
     "stats": {
       "activeWorkOrders": "Active Work Orders",
@@ -465,7 +466,8 @@
       "systemHealthRadar": "System Health Overview",
       "taskPriorityPolar": "Task Priority Distribution",
       "myPerformanceRadar": "My Performance Metrics",
-      "myPriorityPolar": "My Priority Overview"
+      "myPriorityPolar": "My Priority Overview",
+      "sparePartsStock": "Spare Parts Stock"
     },
     "quickActions": {
       "title": "Quick Actions",
@@ -478,7 +480,10 @@
       "myWorkOrders": "My Work Orders",
       "viewEquipment": "View Equipment",
       "myAvailability": "My Availability",
-      "schedule": "Schedule"
+      "schedule": "Schedule",
+      "manageEquipment": "Manage Equipment",
+      "manageSpareParts": "Manage Spare Parts",
+      "viewSchedules": "View Schedules"
     },
     "roles": {
       "administrator": "Administrator",
@@ -489,12 +494,14 @@
     "titles": {
       "admin": "Admin Dashboard",
       "manager": "Manager Dashboard",
-      "technician": "My Dashboard"
+      "technician": "My Dashboard",
+      "dataEntry": "Data Entry Dashboard"
     },
     "subtitles": {
       "admin": "Complete system overview — all data visible",
       "manager": "Team & operations management overview",
-      "technician": "Your personal work overview"
+      "technician": "Your personal work overview",
+      "dataEntry": "Your data management overview"
     },
     "recentActivities": "Recent Activities",
     "filter": {

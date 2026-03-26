@@ -90,6 +90,12 @@
   border: 1px solid rgba(6, 95, 70, 0.2);
 }
 
+.hero-badge--data-entry {
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+  color: #3730a3;
+  border: 1px solid rgba(55, 48, 163, 0.2);
+}
+
 .badge-icon {
   font-size: 1rem;
 }
@@ -268,14 +274,134 @@
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
 }
 
 .stat-card:hover::before {
   opacity: 1;
 }
+
+/* Per-card color themes */
+.stat-card--tasks {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+.stat-card--tasks::before { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+.stat-card--tasks .stat-icon-box { background: linear-gradient(135deg, #3b82f6, #1d4ed8); box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35); }
+.stat-card--tasks .stat-value { color: #1e3a8a; }
+.stat-card--tasks .stat-label { color: #3b82f6; }
+.stat-card--tasks:hover { border-color: rgba(59, 130, 246, 0.4); }
+
+.stat-card--technicians {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+.stat-card--technicians::before { background: linear-gradient(90deg, #10b981, #059669); }
+.stat-card--technicians .stat-icon-box { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35); }
+.stat-card--technicians .stat-value { color: #064e3b; }
+.stat-card--technicians .stat-label { color: #10b981; }
+.stat-card--technicians:hover { border-color: rgba(16, 185, 129, 0.4); }
+
+.stat-card--managers {
+  background: linear-gradient(135deg, #faf5ff 0%, #ede9fe 100%);
+  border-color: rgba(139, 92, 246, 0.2);
+}
+.stat-card--managers::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+.stat-card--managers .stat-icon-box { background: linear-gradient(135deg, #8b5cf6, #7c3aed); box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35); }
+.stat-card--managers .stat-value { color: #3b0764; }
+.stat-card--managers .stat-label { color: #8b5cf6; }
+.stat-card--managers:hover { border-color: rgba(139, 92, 246, 0.4); }
+
+.stat-card--equipment {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+.stat-card--equipment::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.stat-card--equipment .stat-icon-box { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 6px 16px rgba(245, 158, 11, 0.35); }
+.stat-card--equipment .stat-value { color: #78350f; }
+.stat-card--equipment .stat-label { color: #d97706; }
+.stat-card--equipment:hover { border-color: rgba(245, 158, 11, 0.4); }
+
+.stat-card--maintenance {
+  background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+.stat-card--maintenance::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+.stat-card--maintenance .stat-icon-box { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35); }
+.stat-card--maintenance .stat-value { color: #7f1d1d; }
+.stat-card--maintenance .stat-label { color: #ef4444; }
+.stat-card--maintenance:hover { border-color: rgba(239, 68, 68, 0.4); }
+
+.stat-card--invoices {
+  background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+  border-color: rgba(20, 184, 166, 0.2);
+}
+.stat-card--invoices::before { background: linear-gradient(90deg, #14b8a6, #0d9488); }
+.stat-card--invoices .stat-icon-box { background: linear-gradient(135deg, #14b8a6, #0d9488); box-shadow: 0 6px 16px rgba(20, 184, 166, 0.35); }
+.stat-card--invoices .stat-value { color: #134e4a; }
+.stat-card--invoices .stat-label { color: #14b8a6; }
+.stat-card--invoices:hover { border-color: rgba(20, 184, 166, 0.4); }
+
+.stat-card--reports {
+  background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+  border-color: rgba(6, 182, 212, 0.2);
+}
+.stat-card--reports::before { background: linear-gradient(90deg, #06b6d4, #0891b2); }
+.stat-card--reports .stat-icon-box { background: linear-gradient(135deg, #06b6d4, #0891b2); box-shadow: 0 6px 16px rgba(6, 182, 212, 0.35); }
+.stat-card--reports .stat-value { color: #164e63; }
+.stat-card--reports .stat-label { color: #06b6d4; }
+.stat-card--reports:hover { border-color: rgba(6, 182, 212, 0.4); }
+
+.stat-card--spareparts {
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+.stat-card--spareparts::before { background: linear-gradient(90deg, #6366f1, #4f46e5); }
+.stat-card--spareparts .stat-icon-box { background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35); }
+.stat-card--spareparts .stat-value { color: #1e1b4b; }
+.stat-card--spareparts .stat-label { color: #6366f1; }
+.stat-card--spareparts:hover { border-color: rgba(99, 102, 241, 0.4); }
+
+.stat-card--schedules {
+  background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
+  border-color: rgba(52, 211, 153, 0.2);
+}
+.stat-card--schedules::before { background: linear-gradient(90deg, #34d399, #059669); }
+.stat-card--schedules .stat-icon-box { background: linear-gradient(135deg, #34d399, #059669); box-shadow: 0 6px 16px rgba(52, 211, 153, 0.35); }
+.stat-card--schedules .stat-value { color: #064e3b; }
+.stat-card--schedules .stat-label { color: #059669; }
+.stat-card--schedules:hover { border-color: rgba(52, 211, 153, 0.4); }
+
+.stat-card--pending {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border-color: rgba(249, 115, 22, 0.2);
+}
+.stat-card--pending::before { background: linear-gradient(90deg, #f97316, #ea580c); }
+.stat-card--pending .stat-icon-box { background: linear-gradient(135deg, #f97316, #ea580c); box-shadow: 0 6px 16px rgba(249, 115, 22, 0.35); }
+.stat-card--pending .stat-value { color: #7c2d12; }
+.stat-card--pending .stat-label { color: #f97316; }
+.stat-card--pending:hover { border-color: rgba(249, 115, 22, 0.4); }
+
+.stat-card--inprogress {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+.stat-card--inprogress::before { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+.stat-card--inprogress .stat-icon-box { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35); }
+.stat-card--inprogress .stat-value { color: #1e3a8a; }
+.stat-card--inprogress .stat-label { color: #3b82f6; }
+.stat-card--inprogress:hover { border-color: rgba(59, 130, 246, 0.4); }
+
+.stat-card--completed {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+.stat-card--completed::before { background: linear-gradient(90deg, #22c55e, #16a34a); }
+.stat-card--completed .stat-icon-box { background: linear-gradient(135deg, #22c55e, #16a34a); box-shadow: 0 6px 16px rgba(34, 197, 94, 0.35); }
+.stat-card--completed .stat-value { color: #14532d; }
+.stat-card--completed .stat-label { color: #22c55e; }
+.stat-card--completed:hover { border-color: rgba(34, 197, 94, 0.4); }
 
 .stat-icon-box {
   width: 64px;
@@ -306,7 +432,7 @@
 }
 
 .stat-value {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
   color: #1e3a8a;
   line-height: 1.2;
@@ -707,6 +833,12 @@
   background: linear-gradient(135deg, #f5f0ff, #ffffff);
 }
 
+.action-btn--indigo:hover {
+  border-color: #6366f1;
+  color: #4f46e5;
+  background: linear-gradient(135deg, #eef2ff, #ffffff);
+}
+
 .action-btn--default:hover {
   border-color: #667eea;
   color: #667eea;
@@ -814,9 +946,78 @@
 }
 
 [data-theme="dark"] .stat-card {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+[data-theme="dark"] .stat-card--tasks {
   background: linear-gradient(135deg, #1e3a5f 0%, #172554 100%);
   border-color: rgba(59, 130, 246, 0.3);
 }
+[data-theme="dark"] .stat-card--technicians {
+  background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+[data-theme="dark"] .stat-card--technicians .stat-value { color: #a7f3d0; }
+[data-theme="dark"] .stat-card--technicians .stat-label { color: #6ee7b7; }
+[data-theme="dark"] .stat-card--managers {
+  background: linear-gradient(135deg, #2e1065 0%, #1a0038 100%);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+[data-theme="dark"] .stat-card--managers .stat-value { color: #ddd6fe; }
+[data-theme="dark"] .stat-card--managers .stat-label { color: #c4b5fd; }
+[data-theme="dark"] .stat-card--equipment {
+  background: linear-gradient(135deg, #451a03 0%, #27100a 100%);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+[data-theme="dark"] .stat-card--equipment .stat-value { color: #fde68a; }
+[data-theme="dark"] .stat-card--equipment .stat-label { color: #fbbf24; }
+[data-theme="dark"] .stat-card--maintenance {
+  background: linear-gradient(135deg, #450a0a 0%, #280606 100%);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+[data-theme="dark"] .stat-card--maintenance .stat-value { color: #fecaca; }
+[data-theme="dark"] .stat-card--maintenance .stat-label { color: #f87171; }
+[data-theme="dark"] .stat-card--invoices {
+  background: linear-gradient(135deg, #042f2e 0%, #011c1c 100%);
+  border-color: rgba(20, 184, 166, 0.3);
+}
+[data-theme="dark"] .stat-card--invoices .stat-value { color: #99f6e4; }
+[data-theme="dark"] .stat-card--invoices .stat-label { color: #5eead4; }
+[data-theme="dark"] .stat-card--reports {
+  background: linear-gradient(135deg, #0c4a6e 0%, #062d45 100%);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+[data-theme="dark"] .stat-card--reports .stat-value { color: #a5f3fc; }
+[data-theme="dark"] .stat-card--reports .stat-label { color: #67e8f9; }
+[data-theme="dark"] .stat-card--spareparts {
+  background: linear-gradient(135deg, #1e1b4b 0%, #0f0e2e 100%);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+[data-theme="dark"] .stat-card--spareparts .stat-value { color: #c7d2fe; }
+[data-theme="dark"] .stat-card--spareparts .stat-label { color: #a5b4fc; }
+[data-theme="dark"] .stat-card--schedules {
+  background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+[data-theme="dark"] .stat-card--schedules .stat-value { color: #a7f3d0; }
+[data-theme="dark"] .stat-card--schedules .stat-label { color: #6ee7b7; }
+[data-theme="dark"] .stat-card--pending {
+  background: linear-gradient(135deg, #431407 0%, #260b04 100%);
+  border-color: rgba(249, 115, 22, 0.3);
+}
+[data-theme="dark"] .stat-card--pending .stat-value { color: #fed7aa; }
+[data-theme="dark"] .stat-card--pending .stat-label { color: #fb923c; }
+[data-theme="dark"] .stat-card--inprogress {
+  background: linear-gradient(135deg, #1e3a5f 0%, #172554 100%);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+[data-theme="dark"] .stat-card--completed {
+  background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+[data-theme="dark"] .stat-card--completed .stat-value { color: #bbf7d0; }
+[data-theme="dark"] .stat-card--completed .stat-label { color: #86efac; }
 
 [data-theme="dark"] .stat-value {
   color: #bfdbfe;
