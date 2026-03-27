@@ -314,9 +314,11 @@ export interface CreateReportRequest {
 export interface Invoice {
   id: string;
   invoiceNumber: string;
+  clientId?: string;
   clientName: string;
   clientEmail?: string;
   clientAddress?: string;
+  clientCompany?: string;
   issueDate: string;
   dueDate?: string;
   paidDate?: string;

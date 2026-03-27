@@ -97,3 +97,16 @@
   padding: 1rem 1.5rem;
   border-top: 1px solid #e9ecef;
 }
+
+/* Maintenance photo thumbnails in invoice form */
+.maintenance-photo {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.maintenance-photo:hover {
+  opacity: 0.85;
+  transform: scale(1.04);
+}

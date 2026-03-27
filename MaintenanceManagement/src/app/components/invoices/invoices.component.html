@@ -170,18 +170,104 @@
                 <option [value]="InvoiceStatus.Cancelled">{{ 'invoices.statuses.cancelled' | translate }}</option>
               </select>
             </div>
+
+            <!-- Client Selection -->
+            <div class="col-12">
+              <label class="form-label fw-semibold"><i class="bi bi-person-circle me-1 text-primary"></i>{{ 'invoices.form.selectClient' | translate }}</label>
+              <select class="form-select" [(ngModel)]="form.clientId" (ngModelChange)="onClientSelect()">
+                <option value="">{{ 'invoices.form.selectClientPlaceholder' | translate }}</option>
+                @for (client of clients(); track client.id) {
+                  <option [value]="client.id">{{ client.name }}@if (client.companyName) { — {{ client.companyName }}}</option>
+                }
+              </select>
+            </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">{{ 'invoices.form.clientName' | translate }}</label>
-              <input class="form-control" [(ngModel)]="form.clientName" [placeholder]="'invoices.form.clientNamePlaceholder' | translate" />
+              <input class="form-control" [(ngModel)]="form.clientName" [placeholder]="'invoices.form.clientNamePlaceholder' | translate" [readonly]="!!form.clientId" />
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">{{ 'invoices.form.clientEmail' | translate }}</label>
-              <input type="email" class="form-control" [(ngModel)]="form.clientEmail" [placeholder]="'invoices.form.clientEmailPlaceholder' | translate" />
+              <input type="email" class="form-control" [(ngModel)]="form.clientEmail" [placeholder]="'invoices.form.clientEmailPlaceholder' | translate" [readonly]="!!form.clientId" />
             </div>
             <div class="col-12">
               <label class="form-label fw-semibold">{{ 'invoices.form.clientAddress' | translate }}</label>
-              <input class="form-control" [(ngModel)]="form.clientAddress" [placeholder]="'invoices.form.clientAddressPlaceholder' | translate" />
+              <input class="form-control" [(ngModel)]="form.clientAddress" [placeholder]="'invoices.form.clientAddressPlaceholder' | translate" [readonly]="!!form.clientId" />
             </div>
+
+            <!-- Task Order / Work Technician -->
+            <div class="col-12">
+              <label class="form-label fw-semibold"><i class="bi bi-clipboard-check me-1 text-primary"></i>{{ 'invoices.form.taskOrder' | translate }}</label>
+              <select class="form-select" [(ngModel)]="form.taskOrderId" (ngModelChange)="onTaskOrderSelect()">
+                <option value="">{{ 'invoices.form.selectTaskOrderPlaceholder' | translate }}</option>
+                @for (task of taskOrders(); track task.id) {
+                  <option [value]="task.id">{{ task.title }}@if (task.equipmentName) { — {{ task.equipmentName }}}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Task Order Details (Technician + Equipment) -->
+            @if (selectedTaskOrder()) {
+              <div class="col-12">
+                <div class="card border-0 bg-light p-3">
+                  <div class="row g-2">
+                    <!-- Technician -->
+                    @if (selectedTaskOrder()!.technicianName) {
+                      <div class="col-md-6">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="badge bg-primary-subtle text-primary rounded-circle p-2"><i class="bi bi-person-badge fs-5"></i></span>
+                          <div>
+                            <div class="text-muted small">{{ 'invoices.form.workTechnician' | translate }}</div>
+                            <div class="fw-semibold">{{ selectedTaskOrder()!.technicianName }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+
+                    <!-- Equipment Status -->
+                    @if (selectedTaskOrder()!.equipmentName) {
+                      <div class="col-md-6">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="badge bg-info-subtle text-info rounded-circle p-2"><i class="bi bi-gear fs-5"></i></span>
+                          <div>
+                            <div class="text-muted small">{{ 'invoices.form.equipment' | translate }}</div>
+                            <div class="fw-semibold">{{ selectedTaskOrder()!.equipmentName }}</div>
+                            @if (selectedEquipment()) {
+                              <span class="badge rounded-pill mt-1" [class]="getEquipmentStatusClass(selectedEquipment()!.status)">{{ getEquipmentStatusLabel(selectedEquipment()!.status) }}</span>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    }
+
+                    <!-- Maintenance Photos -->
+                    @if (selectedEquipment() && (selectedEquipment()!.beforeMaintenancePhotoUrl || selectedEquipment()!.afterMaintenancePhotoUrl)) {
+                      <div class="col-12 mt-2">
+                        <div class="text-muted small fw-semibold mb-2"><i class="bi bi-camera me-1"></i>{{ 'invoices.form.maintenancePhotos' | translate }}</div>
+                        <div class="d-flex gap-3 flex-wrap">
+                          @if (selectedEquipment()!.beforeMaintenancePhotoUrl) {
+                            <div class="text-center">
+                              <a [href]="selectedEquipment()!.beforeMaintenancePhotoUrl" target="_blank">
+                                <img [src]="selectedEquipment()!.beforeMaintenancePhotoUrl" alt="Before" class="maintenance-photo rounded border" />
+                              </a>
+                              <div class="text-muted small mt-1">{{ 'invoices.form.photoBefore' | translate }}</div>
+                            </div>
+                          }
+                          @if (selectedEquipment()!.afterMaintenancePhotoUrl) {
+                            <div class="text-center">
+                              <a [href]="selectedEquipment()!.afterMaintenancePhotoUrl" target="_blank">
+                                <img [src]="selectedEquipment()!.afterMaintenancePhotoUrl" alt="After" class="maintenance-photo rounded border" />
+                              </a>
+                              <div class="text-muted small mt-1">{{ 'invoices.form.photoAfter' | translate }}</div>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+
             <div class="col-md-6">
               <label class="form-label fw-semibold">{{ 'invoices.form.issueDate' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.issueDate" />
