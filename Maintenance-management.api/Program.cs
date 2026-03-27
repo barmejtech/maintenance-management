@@ -116,6 +116,8 @@ builder.Services.AddScoped<Maintenance_management.domain.Interfaces.INotificatio
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITechnicianPerformanceScoreRepository, Maintenance_management.infrastructure.Repositories.TechnicianPerformanceScoreRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ISparePartRepository, Maintenance_management.infrastructure.Repositories.SparePartRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IMaintenanceScheduleRepository, Maintenance_management.infrastructure.Repositories.MaintenanceScheduleRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IClientRepository, Maintenance_management.infrastructure.Repositories.ClientRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IMaintenanceRequestRepository, Maintenance_management.infrastructure.Repositories.MaintenanceRequestRepository>();
 
 // Application services
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAuthService, Maintenance_management.infrastructure.Services.AuthService>();
@@ -136,6 +138,8 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.ISpareP
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IMaintenanceScheduleService, Maintenance_management.application.Services.MaintenanceScheduleService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IUserService, Maintenance_management.application.Services.UserService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAccountService, Maintenance_management.infrastructure.Services.AccountService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IClientService, Maintenance_management.application.Services.ClientService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IMaintenanceRequestService, Maintenance_management.application.Services.MaintenanceRequestService>();
 
 // Notification service (SignalR-based)
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.INotificationService, Maintenance_management.api.Services.HubNotificationService>();

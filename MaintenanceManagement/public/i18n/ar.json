@@ -421,7 +421,8 @@
       "manageManagers": "إدارة المديرين",
       "myAccount": "حسابي",
       "notifications": "الإشعارات",
-      "powerBi": "Power BI"
+      "powerBi": "Power BI",
+      "clients": "العملاء"
     },
     "hero": {
       "fullAccess": "صلاحية كاملة",
@@ -1188,5 +1189,87 @@
     "deleteConfirm": "هل تريد حذف مستخدم إدخال البيانات هذا؟",
     "profilePhoto": "صورة الملف الشخصي",
     "uploading": "جارٍ الرفع..."
+  },
+  "clients": {
+    "title": "العملاء",
+    "addButton": "إضافة عميل",
+    "editButton": "تعديل",
+    "deleteButton": "حذف",
+    "viewDetails": "عرض التفاصيل",
+    "backToDashboard": "لوحة التحكم",
+    "backToList": "العودة إلى العملاء",
+    "empty": "لا يوجد عملاء.",
+    "editTitle": "تعديل العميل",
+    "addTitle": "إضافة عميل",
+    "deleteConfirm": "هل تريد حذف هذا العميل؟",
+    "cancel": "إلغاء",
+    "update": "تحديث",
+    "create": "إنشاء",
+    "table": {
+      "name": "الاسم",
+      "company": "الشركة",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "requests": "الطلبات",
+      "actions": "الإجراءات"
+    },
+    "form": {
+      "name": "الاسم الكامل *",
+      "namePlaceholder": "اسم العميل الكامل",
+      "company": "الشركة",
+      "companyPlaceholder": "اسم الشركة",
+      "email": "البريد الإلكتروني *",
+      "emailPlaceholder": "client@example.com",
+      "phone": "الهاتف",
+      "phonePlaceholder": "+966 5x xxx xxxx",
+      "address": "العنوان",
+      "addressPlaceholder": "العنوان الكامل",
+      "notes": "ملاحظات",
+      "notesPlaceholder": "ملاحظات اختيارية..."
+    },
+    "details": {
+      "info": "معلومات الاتصال",
+      "totalRequests": "إجمالي الطلبات",
+      "totalInvoiced": "إجمالي الفواتير",
+      "invoices": "الفواتير المرتبطة",
+      "noInvoices": "لا توجد فواتير لهذا العميل بعد."
+    },
+    "requests": {
+      "title": "طلبات الصيانة",
+      "addButton": "طلب جديد",
+      "empty": "لا توجد طلبات صيانة لهذا العميل.",
+      "editTitle": "تعديل الطلب",
+      "addTitle": "طلب صيانة جديد",
+      "deleteConfirm": "هل تريد حذف طلب الصيانة هذا؟",
+      "table": {
+        "title": "العنوان",
+        "equipment": "المعدات",
+        "date": "التاريخ",
+        "status": "الحالة",
+        "invoice": "الفاتورة",
+        "actions": "الإجراءات"
+      },
+      "form": {
+        "title": "العنوان *",
+        "titlePlaceholder": "وصف احتياج الصيانة",
+        "description": "الوصف",
+        "descriptionPlaceholder": "وصف تفصيلي للمشكلة...",
+        "equipment": "المعدة / الأصل",
+        "equipmentPlaceholder": "اسم أو وصف المعدة",
+        "date": "تاريخ الطلب",
+        "status": "الحالة",
+        "notes": "ملاحظات",
+        "notesPlaceholder": "ملاحظات إضافية..."
+      },
+      "statuses": {
+        "pending": "قيد الانتظار",
+        "underReview": "قيد المراجعة",
+        "approved": "موافق عليه",
+        "inProgress": "قيد التنفيذ",
+        "completed": "مكتمل",
+        "rejected": "مرفوض",
+        "cancelled": "ملغى"
+      }
+    }
   }
 }

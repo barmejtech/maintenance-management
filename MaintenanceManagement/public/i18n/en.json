@@ -421,7 +421,8 @@
       "manageManagers": "Manage Managers",
       "myAccount": "My Account",
       "notifications": "Notifications",
-      "powerBi": "Power BI"
+      "powerBi": "Power BI",
+      "clients": "Clients"
     },
     "hero": {
       "fullAccess": "Full Access",
@@ -1159,5 +1160,87 @@
     "deleteConfirm": "Delete this data entry user?",
     "profilePhoto": "Profile Photo",
     "uploading": "Uploading..."
+  },
+  "clients": {
+    "title": "Clients",
+    "addButton": "Add Client",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "viewDetails": "View Details",
+    "backToDashboard": "Dashboard",
+    "backToList": "Back to Clients",
+    "empty": "No clients found.",
+    "editTitle": "Edit Client",
+    "addTitle": "Add Client",
+    "deleteConfirm": "Delete this client?",
+    "cancel": "Cancel",
+    "update": "Update",
+    "create": "Create",
+    "table": {
+      "name": "Name",
+      "company": "Company",
+      "email": "Email",
+      "phone": "Phone",
+      "requests": "Requests",
+      "actions": "Actions"
+    },
+    "form": {
+      "name": "Full Name *",
+      "namePlaceholder": "Client full name",
+      "company": "Company",
+      "companyPlaceholder": "Company name",
+      "email": "Email *",
+      "emailPlaceholder": "client@example.com",
+      "phone": "Phone",
+      "phonePlaceholder": "+1 234 567 8900",
+      "address": "Address",
+      "addressPlaceholder": "Full address",
+      "notes": "Notes",
+      "notesPlaceholder": "Optional notes..."
+    },
+    "details": {
+      "info": "Contact Information",
+      "totalRequests": "Total Requests",
+      "totalInvoiced": "Total Invoiced",
+      "invoices": "Related Invoices",
+      "noInvoices": "No invoices for this client yet."
+    },
+    "requests": {
+      "title": "Maintenance Requests",
+      "addButton": "New Request",
+      "empty": "No maintenance requests for this client.",
+      "editTitle": "Edit Request",
+      "addTitle": "New Maintenance Request",
+      "deleteConfirm": "Delete this maintenance request?",
+      "table": {
+        "title": "Title",
+        "equipment": "Equipment",
+        "date": "Date",
+        "status": "Status",
+        "invoice": "Invoice",
+        "actions": "Actions"
+      },
+      "form": {
+        "title": "Title *",
+        "titlePlaceholder": "Describe the maintenance need",
+        "description": "Description",
+        "descriptionPlaceholder": "Detailed description of the issue...",
+        "equipment": "Equipment / Asset",
+        "equipmentPlaceholder": "Equipment name or description",
+        "date": "Request Date",
+        "status": "Status",
+        "notes": "Notes",
+        "notesPlaceholder": "Additional notes..."
+      },
+      "statuses": {
+        "pending": "Pending",
+        "underReview": "Under Review",
+        "approved": "Approved",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "rejected": "Rejected",
+        "cancelled": "Cancelled"
+      }
+    }
   }
 }
