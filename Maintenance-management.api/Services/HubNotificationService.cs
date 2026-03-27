@@ -41,13 +41,14 @@ public class HubNotificationService : INotificationService
         string type = "info", string? relatedEntityId = null, string? relatedEntityType = null)
     {
         var users = await _userManager.GetUsersInRoleAsync(role);
-        var tasks = users.Select(async u =>
+        var notifications = new List<(string UserId, object Payload)>();
+        foreach (var u in users)
         {
             var notification = await PersistAsync(u.Id, title, message, type, relatedEntityId, relatedEntityType);
-            var payload = MapToPayload(notification);
-            await _hub.Clients.Group($"user-{u.Id}").SendAsync("ReceiveNotification", payload);
-        });
-        await Task.WhenAll(tasks);
+            notifications.Add((u.Id, MapToPayload(notification)));
+        }
+        await Task.WhenAll(notifications.Select(n =>
+            _hub.Clients.Group($"user-{n.UserId}").SendAsync("ReceiveNotification", n.Payload)));
     }
 
     public async Task SendToAllRolesAsync(string title, string message,
@@ -62,13 +63,14 @@ public class HubNotificationService : INotificationService
                 allUsers.TryAdd(user.Id, user);
         }
 
-        var tasks = allUsers.Values.Select(async u =>
+        var notifications = new List<(string UserId, object Payload)>();
+        foreach (var u in allUsers.Values)
         {
             var notification = await PersistAsync(u.Id, title, message, type, relatedEntityId, relatedEntityType);
-            var payload = MapToPayload(notification);
-            await _hub.Clients.Group($"user-{u.Id}").SendAsync("ReceiveNotification", payload);
-        });
-        await Task.WhenAll(tasks);
+            notifications.Add((u.Id, MapToPayload(notification)));
+        }
+        await Task.WhenAll(notifications.Select(n =>
+            _hub.Clients.Group($"user-{n.UserId}").SendAsync("ReceiveNotification", n.Payload)));
     }
 
     private async Task<AppNotification> PersistAsync(string userId, string title, string message,
