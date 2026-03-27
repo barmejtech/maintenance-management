@@ -214,10 +214,12 @@
   border-left: 3px solid transparent;
 }
 
-.nav-item span {
+.nav-item span,
+.nav-item i.bi {
   font-size: 1.1rem;
   width: 22px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .nav-item:hover {

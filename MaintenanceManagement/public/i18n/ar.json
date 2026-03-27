@@ -431,7 +431,10 @@
       "myAccount": "حسابي",
       "notifications": "الإشعارات",
       "powerBi": "Power BI",
-      "clients": "العملاء"
+      "clients": "العملاء",
+      "operations": "العمليات",
+      "assets": "الأصول والمعدات",
+      "userManagement": "إدارة المستخدمين"
     },
     "hero": {
       "fullAccess": "صلاحية كاملة",

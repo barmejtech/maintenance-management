@@ -4,7 +4,7 @@
       <button class="btn-hamburger" (click)="toggleSidebar()" [title]="'dashboard.header.toggleSidebar' | translate" [attr.aria-expanded]="sidebarOpen()" aria-label="Toggle navigation">
         <i class="bi bi-list"></i>
       </button>
-      <span class="logo">🔧</span>
+      <i class="bi bi-tools logo"></i>
       <h1>{{ 'dashboard.header.title' | translate }}</h1>
     </div>
     <div class="dash-user">
@@ -26,97 +26,116 @@
   <div class="sidebar-overlay" [class.active]="sidebarOpen()" (click)="toggleSidebar()"></div>
 
   <nav class="sidebar">
+    <!-- ===== MAIN ===== -->
     <a routerLink="/home" routerLinkActive="active" class="nav-item">
-      <span>🏠</span> {{ 'dashboard.sidebar.home' | translate }}
+      <i class="bi bi-house-door"></i> {{ 'dashboard.sidebar.home' | translate }}
     </a>
     <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
-      <span>📊</span> {{ 'dashboard.sidebar.dashboard' | translate }}
+      <i class="bi bi-speedometer2"></i> {{ 'dashboard.sidebar.dashboard' | translate }}
     </a>
+
+    <!-- ===== OPERATIONS ===== -->
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-label">{{ 'dashboard.sidebar.operations' | translate }}</div>
     <a routerLink="/tasks" routerLinkActive="active" class="nav-item">
-      <span>✅</span> {{ 'dashboard.sidebar.workOrders' | translate }}
-    </a>
-    <a routerLink="/equipment" routerLinkActive="active" class="nav-item">
-      <span>🔩</span> {{ 'dashboard.sidebar.equipment' | translate }}
-    </a>
-    <a routerLink="/hvac" routerLinkActive="active" class="nav-item">
-      <span>❄️</span> {{ 'dashboard.sidebar.hvac' | translate }}
-    </a>
-    <a routerLink="/reports" routerLinkActive="active" class="nav-item">
-      <span>📄</span> {{ 'dashboard.sidebar.reports' | translate }}
-    </a>
-    <a routerLink="/availability" routerLinkActive="active" class="nav-item">
-      <span>📅</span> {{ 'dashboard.sidebar.availability' | translate }}
+      <i class="bi bi-clipboard-check"></i> {{ 'dashboard.sidebar.workOrders' | translate }}
     </a>
     <a routerLink="/calendar" routerLinkActive="active" class="nav-item">
-      <span>🗓️</span> {{ 'dashboard.sidebar.schedule' | translate }}
+      <i class="bi bi-calendar3"></i> {{ 'dashboard.sidebar.schedule' | translate }}
+    </a>
+    <a routerLink="/availability" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-calendar-check"></i> {{ 'dashboard.sidebar.availability' | translate }}
     </a>
     <a routerLink="/chat" routerLinkActive="active" class="nav-item">
-      <span>💬</span> {{ 'dashboard.sidebar.chat' | translate }}
+      <i class="bi bi-chat-dots"></i> {{ 'dashboard.sidebar.chat' | translate }}
     </a>
     <a routerLink="/notifications" routerLinkActive="active" class="nav-item nav-item-notif">
-      <span>🔔</span> {{ 'dashboard.sidebar.notifications' | translate }}
+      <i class="bi bi-bell"></i> {{ 'dashboard.sidebar.notifications' | translate }}
       @if (notifService.unreadCount() > 0) {
         <span class="nav-notif-count">{{ notifService.unreadCount() > 99 ? '99+' : notifService.unreadCount() }}</span>
       }
     </a>
+
+    <!-- ===== ASSETS & EQUIPMENT ===== -->
     <div class="sidebar-divider"></div>
-    <div class="sidebar-section-label">{{ 'dashboard.sidebar.intelligence' | translate }}</div>
-    <a routerLink="/predictive-maintenance" routerLinkActive="active" class="nav-item">
-      <span>🔮</span> {{ 'dashboard.sidebar.predictiveMaintenance' | translate }}
+    <div class="sidebar-section-label">{{ 'dashboard.sidebar.assets' | translate }}</div>
+    <a routerLink="/equipment" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-cpu"></i> {{ 'dashboard.sidebar.equipment' | translate }}
     </a>
-    <a routerLink="/equipment-digital-twin" routerLinkActive="active" class="nav-item">
-      <span>🏭</span> {{ 'dashboard.sidebar.digitalTwin' | translate }}
+    <a routerLink="/hvac" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-thermometer-half"></i> {{ 'dashboard.sidebar.hvac' | translate }}
     </a>
     <a routerLink="/spare-parts" routerLinkActive="active" class="nav-item">
-      <span>🔧</span> {{ 'dashboard.sidebar.spareParts' | translate }}
+      <i class="bi bi-wrench-adjustable"></i> {{ 'dashboard.sidebar.spareParts' | translate }}
+    </a>
+
+    <!-- ===== INTELLIGENCE ===== -->
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-label">{{ 'dashboard.sidebar.intelligence' | translate }}</div>
+    <a routerLink="/reports" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-file-earmark-bar-graph"></i> {{ 'dashboard.sidebar.reports' | translate }}
+    </a>
+    <a routerLink="/predictive-maintenance" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-graph-up-arrow"></i> {{ 'dashboard.sidebar.predictiveMaintenance' | translate }}
+    </a>
+    <a routerLink="/equipment-digital-twin" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-building"></i> {{ 'dashboard.sidebar.digitalTwin' | translate }}
     </a>
     <a routerLink="/maintenance-schedules" routerLinkActive="active" class="nav-item">
-      <span>📋</span> {{ 'dashboard.sidebar.maintenanceSchedules' | translate }}
+      <i class="bi bi-clipboard"></i> {{ 'dashboard.sidebar.maintenanceSchedules' | translate }}
     </a>
     <a routerLink="/equipment-timeline" routerLinkActive="active" class="nav-item">
-      <span>🕐</span> {{ 'dashboard.sidebar.equipmentTimeline' | translate }}
+      <i class="bi bi-clock-history"></i> {{ 'dashboard.sidebar.equipmentTimeline' | translate }}
     </a>
     <a routerLink="/mobile-workflow" routerLinkActive="active" class="nav-item">
-      <span>📱</span> {{ 'dashboard.sidebar.mobileWorkflow' | translate }}
+      <i class="bi bi-phone"></i> {{ 'dashboard.sidebar.mobileWorkflow' | translate }}
     </a>
     <a routerLink="/power-bi" routerLinkActive="active" class="nav-item">
-      <span>📈</span> {{ 'dashboard.sidebar.powerBi' | translate }}
+      <i class="bi bi-bar-chart-line"></i> {{ 'dashboard.sidebar.powerBi' | translate }}
     </a>
+
+    <!-- ===== MANAGEMENT ===== -->
     @if (isManagerOrAdmin()) {
       <div class="sidebar-divider"></div>
       <div class="sidebar-section-label">{{ 'dashboard.sidebar.management' | translate }}</div>
       <a routerLink="/performance" routerLinkActive="active" class="nav-item">
-        <span>📊</span> {{ 'dashboard.sidebar.performance' | translate }}
-      </a>
-      <a routerLink="/technicians" routerLinkActive="active" class="nav-item">
-        <span>👷</span> {{ 'dashboard.sidebar.technicians' | translate }}
-      </a>
-      <a routerLink="/groups" routerLinkActive="active" class="nav-item">
-        <span>👥</span> {{ 'dashboard.sidebar.groups' | translate }}
+        <i class="bi bi-bar-chart"></i> {{ 'dashboard.sidebar.performance' | translate }}
       </a>
       <a routerLink="/invoices" routerLinkActive="active" class="nav-item">
-        <span>💰</span> {{ 'dashboard.sidebar.invoices' | translate }}
+        <i class="bi bi-receipt"></i> {{ 'dashboard.sidebar.invoices' | translate }}
+      </a>
+    }
+
+    <!-- ===== USER MANAGEMENT ===== -->
+    @if (isManagerOrAdmin()) {
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section-label">{{ 'dashboard.sidebar.userManagement' | translate }}</div>
+      <a routerLink="/technicians" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-person-gear"></i> {{ 'dashboard.sidebar.technicians' | translate }}
+      </a>
+      <a routerLink="/groups" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-people"></i> {{ 'dashboard.sidebar.groups' | translate }}
       </a>
       <a routerLink="/clients" routerLinkActive="active" class="nav-item">
-        <span>🤝</span> {{ 'dashboard.sidebar.clients' | translate }}
+        <i class="bi bi-briefcase"></i> {{ 'dashboard.sidebar.clients' | translate }}
       </a>
+      @if (isAdmin()) {
+        <a routerLink="/managers" routerLinkActive="active" class="nav-item admin-item">
+          <i class="bi bi-person-badge"></i> {{ 'dashboard.sidebar.manageManagers' | translate }}
+        </a>
+        <a routerLink="/users" routerLinkActive="active" class="nav-item admin-item">
+          <i class="bi bi-people-fill"></i> {{ 'dashboard.sidebar.manageUsers' | translate }}
+        </a>
+        <a routerLink="/register" routerLinkActive="active" class="nav-item admin-item">
+          <i class="bi bi-person-plus"></i> {{ 'dashboard.sidebar.registerUser' | translate }}
+        </a>
+      }
     }
-    @if (isAdmin()) {
-      <div class="sidebar-divider"></div>
-      <div class="sidebar-section-label">{{ 'dashboard.sidebar.admin' | translate }}</div>
-      <a routerLink="/managers" routerLinkActive="active" class="nav-item admin-item">
-        <span>👔</span> {{ 'dashboard.sidebar.manageManagers' | translate }}
-      </a>
-      <a routerLink="/users" routerLinkActive="active" class="nav-item admin-item">
-        <span>⚙️</span> {{ 'dashboard.sidebar.manageUsers' | translate }}
-      </a>
-      <a routerLink="/register" routerLinkActive="active" class="nav-item admin-item">
-        <span>➕</span> {{ 'dashboard.sidebar.registerUser' | translate }}
-      </a>
-    }
+
+    <!-- ===== ACCOUNT ===== -->
     <div class="sidebar-divider"></div>
     <a routerLink="/account" routerLinkActive="active" class="nav-item">
-      <span>👤</span> {{ 'dashboard.sidebar.myAccount' | translate }}
+      <i class="bi bi-person-circle"></i> {{ 'dashboard.sidebar.myAccount' | translate }}
     </a>
   </nav>
 
