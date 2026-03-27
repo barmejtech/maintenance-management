@@ -332,7 +332,16 @@
       "subTotal": "Sub Total ($)",
       "taxRate": "Tax Rate (%)",
       "notes": "Notes",
-      "notesPlaceholder": "Optional notes..."
+      "notesPlaceholder": "Optional notes...",
+      "selectClient": "Select Client",
+      "selectClientPlaceholder": "— Select from client list —",
+      "taskOrder": "Linked Task Order",
+      "selectTaskOrderPlaceholder": "— Select a task order (optional) —",
+      "workTechnician": "Work Technician",
+      "equipment": "Equipment",
+      "maintenancePhotos": "Maintenance Photos",
+      "photoBefore": "Before Maintenance",
+      "photoAfter": "After Maintenance"
     },
     "cancel": "Cancel",
     "update": "Update",

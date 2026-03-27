@@ -332,7 +332,16 @@
       "subTotal": "المجموع الفرعي ($)",
       "taxRate": "نسبة الضريبة (%)",
       "notes": "ملاحظات",
-      "notesPlaceholder": "ملاحظات اختيارية..."
+      "notesPlaceholder": "ملاحظات اختيارية...",
+      "selectClient": "اختر العميل",
+      "selectClientPlaceholder": "— اختر من قائمة العملاء —",
+      "taskOrder": "أمر العمل المرتبط",
+      "selectTaskOrderPlaceholder": "— اختر أمر عمل (اختياري) —",
+      "workTechnician": "الفني المنفذ",
+      "equipment": "المعدة",
+      "maintenancePhotos": "صور الصيانة",
+      "photoBefore": "قبل الصيانة",
+      "photoAfter": "بعد الصيانة"
     },
     "cancel": "إلغاء",
     "update": "تحديث",
