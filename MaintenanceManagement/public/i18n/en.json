@@ -431,7 +431,10 @@
       "myAccount": "My Account",
       "notifications": "Notifications",
       "powerBi": "Power BI",
-      "clients": "Clients"
+      "clients": "Clients",
+      "operations": "Operations",
+      "assets": "Assets & Equipment",
+      "userManagement": "User Management"
     },
     "hero": {
       "fullAccess": "Full Access",
