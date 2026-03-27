@@ -224,7 +224,13 @@ export class ClientsComponent implements OnInit {
           this.isSavingRequest.set(false);
           this.showRequestModal.set(false);
           this.viewClient(client);
-          this.load();
+          // Update the client's request count in the list without reloading all clients
+          this.clients.update(list =>
+            list.map(c => c.id === client.id
+              ? { ...c, maintenanceRequestCount: c.maintenanceRequestCount + 1 }
+              : c
+            )
+          );
           this.toast.success('messages.created');
         },
         error: () => { this.isSavingRequest.set(false); this.toast.error(); }
