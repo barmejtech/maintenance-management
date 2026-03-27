@@ -73,6 +73,11 @@ export const routes: Routes = [
         canActivate: [managerGuard]
       },
       {
+        path: 'clients',
+        loadComponent: () => import('./components/clients/clients.component').then(m => m.ClientsComponent),
+        canActivate: [managerGuard]
+      },
+      {
         path: 'availability',
         loadComponent: () => import('./components/availability/availability.component').then(m => m.AvailabilityComponent)
       },

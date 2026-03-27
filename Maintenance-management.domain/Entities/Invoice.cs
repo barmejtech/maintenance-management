@@ -22,5 +22,8 @@ public class Invoice : BaseEntity
     public Guid? TaskOrderId { get; set; }
     public TaskOrder? TaskOrder { get; set; }
 
+    public Guid? ClientId { get; set; }
+    public Client? Client { get; set; }
+
     public ICollection<InvoiceLineItem> LineItems { get; set; } = new List<InvoiceLineItem>();
 }

@@ -30,6 +30,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<SparePart> SpareParts => Set<SparePart>();
     public DbSet<SparePartUsage> SparePartUsages => Set<SparePartUsage>();
     public DbSet<MaintenanceSchedule> MaintenanceSchedules => Set<MaintenanceSchedule>();
+    public DbSet<Client> Clients => Set<Client>();
+    public DbSet<MaintenanceRequest> MaintenanceRequests => Set<MaintenanceRequest>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -298,6 +300,46 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.HasOne(s => s.AssignedGroup)
                 .WithMany()
                 .HasForeignKey(s => s.AssignedGroupId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        builder.Entity<Client>(e =>
+        {
+            e.HasKey(c => c.Id);
+            e.Property(c => c.Name).IsRequired().HasMaxLength(200);
+            e.Property(c => c.CompanyName).HasMaxLength(300);
+            e.Property(c => c.Email).IsRequired().HasMaxLength(256);
+            e.Property(c => c.Phone).HasMaxLength(50);
+            e.Property(c => c.Address).HasMaxLength(500);
+            e.Property(c => c.Notes).HasMaxLength(1000);
+        });
+
+        builder.Entity<MaintenanceRequest>(e =>
+        {
+            e.HasKey(r => r.Id);
+            e.Property(r => r.Title).IsRequired().HasMaxLength(200);
+            e.Property(r => r.Description).HasMaxLength(2000);
+            e.Property(r => r.EquipmentDescription).HasMaxLength(500);
+            e.Property(r => r.Notes).HasMaxLength(1000);
+            e.HasOne(r => r.Client)
+                .WithMany(c => c.MaintenanceRequests)
+                .HasForeignKey(r => r.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(r => r.TaskOrder)
+                .WithMany()
+                .HasForeignKey(r => r.TaskOrderId)
+                .OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(r => r.Invoice)
+                .WithMany()
+                .HasForeignKey(r => r.InvoiceId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        builder.Entity<Invoice>(e =>
+        {
+            e.HasOne(i => i.Client)
+                .WithMany(c => c.Invoices)
+                .HasForeignKey(i => i.ClientId)
                 .OnDelete(DeleteBehavior.SetNull);
         });
     }

@@ -20,6 +20,8 @@ public class InvoiceDto
     public string? Notes { get; set; }
     public Guid? TaskOrderId { get; set; }
     public string? TaskTitle { get; set; }
+    public Guid? ClientId { get; set; }
+    public string? ClientCompany { get; set; }
     public IList<InvoiceLineItemDto> LineItems { get; set; } = new List<InvoiceLineItemDto>();
     public DateTime CreatedAt { get; set; }
 }
@@ -42,6 +44,7 @@ public class CreateInvoiceDto
     public decimal TaxRate { get; set; }
     public string? Notes { get; set; }
     public Guid? TaskOrderId { get; set; }
+    public Guid? ClientId { get; set; }
     public IList<CreateLineItemDto> LineItems { get; set; } = new List<CreateLineItemDto>();
 }
 

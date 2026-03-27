@@ -1,0 +1,384 @@
+<div class="container-fluid py-3">
+
+  <!-- List View -->
+  @if (!showDetail()) {
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="mb-0 fw-bold"><i class="bi bi-people text-primary me-2"></i>{{ 'clients.title' | translate }}</h4>
+      <div class="d-flex gap-2">
+        @if (auth.isManager()) {
+          <button class="btn btn-primary btn-sm" (click)="openAdd()">
+            <i class="bi bi-plus-circle me-1"></i>{{ 'clients.addButton' | translate }}
+          </button>
+        }
+        <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+          <i class="bi bi-arrow-left me-1"></i>{{ 'clients.backToDashboard' | translate }}
+        </a>
+      </div>
+    </div>
+
+    @if (isLoading()) {
+      <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+    } @else if (clients().length === 0) {
+      <div class="text-center py-5 text-muted">
+        <i class="bi bi-people fs-1 d-block mb-2"></i>
+        <p>{{ 'clients.empty' | translate }}</p>
+      </div>
+    } @else {
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th><i class="bi bi-person me-1"></i>{{ 'clients.table.name' | translate }}</th>
+                  <th><i class="bi bi-building me-1"></i>{{ 'clients.table.company' | translate }}</th>
+                  <th><i class="bi bi-envelope me-1"></i>{{ 'clients.table.email' | translate }}</th>
+                  <th><i class="bi bi-telephone me-1"></i>{{ 'clients.table.phone' | translate }}</th>
+                  <th><i class="bi bi-wrench me-1"></i>{{ 'clients.table.requests' | translate }}</th>
+                  <th class="text-end">{{ 'clients.table.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (client of clients() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track client.id) {
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="client-avatar bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                          <i class="bi bi-person-fill"></i>
+                        </span>
+                        <strong>{{ client.name }}</strong>
+                      </div>
+                    </td>
+                    <td>{{ client.companyName || '—' }}</td>
+                    <td><small>{{ client.email }}</small></td>
+                    <td>{{ client.phone || '—' }}</td>
+                    <td>
+                      <span class="badge bg-primary-subtle text-primary">
+                        {{ client.maintenanceRequestCount }}
+                      </span>
+                    </td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-outline-info me-1" (click)="viewClient(client)" [title]="'clients.viewDetails' | translate">
+                        <i class="bi bi-eye"></i>
+                      </button>
+                      @if (auth.isManager()) {
+                        <button class="btn btn-sm btn-outline-warning me-1" (click)="openEdit(client)" [title]="'clients.editButton' | translate">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="delete(client.id)" [title]="'clients.deleteButton' | translate">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex justify-content-center py-2">
+            <pagination-controls (pageChange)="currentPage.set($event)" [responsive]="true"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    }
+  }
+
+  <!-- Detail View -->
+  @if (showDetail() && selectedClient()) {
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <button class="btn btn-outline-secondary btn-sm me-2" (click)="backToList()">
+          <i class="bi bi-arrow-left me-1"></i>{{ 'clients.backToList' | translate }}
+        </button>
+        <h4 class="d-inline-block mb-0 fw-bold">
+          <i class="bi bi-person-circle text-primary me-2"></i>{{ selectedClient()!.name }}
+          @if (selectedClient()!.companyName) {
+            <small class="text-muted fw-normal ms-2">— {{ selectedClient()!.companyName }}</small>
+          }
+        </h4>
+      </div>
+      @if (auth.isManager()) {
+        <button class="btn btn-primary btn-sm" (click)="openAddRequest()">
+          <i class="bi bi-plus-circle me-1"></i>{{ 'clients.requests.addButton' | translate }}
+        </button>
+      }
+    </div>
+
+    <!-- Client Info Card -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <h6 class="fw-bold text-muted mb-3"><i class="bi bi-info-circle me-1"></i>{{ 'clients.details.info' | translate }}</h6>
+            <div class="mb-2"><i class="bi bi-envelope me-2 text-muted"></i>{{ selectedClient()!.email }}</div>
+            @if (selectedClient()!.phone) {
+              <div class="mb-2"><i class="bi bi-telephone me-2 text-muted"></i>{{ selectedClient()!.phone }}</div>
+            }
+            @if (selectedClient()!.address) {
+              <div class="mb-2"><i class="bi bi-geo-alt me-2 text-muted"></i>{{ selectedClient()!.address }}</div>
+            }
+            @if (selectedClient()!.notes) {
+              <div class="mb-2"><i class="bi bi-sticky me-2 text-muted"></i>{{ selectedClient()!.notes }}</div>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100 text-center p-3">
+          <div class="stat-icon bg-primary-subtle text-primary mx-auto mb-2 rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px">
+            <i class="bi bi-wrench fs-5"></i>
+          </div>
+          <div class="fw-bold fs-3">{{ clientRequests().length }}</div>
+          <div class="text-muted small">{{ 'clients.details.totalRequests' | translate }}</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100 text-center p-3">
+          <div class="stat-icon bg-success-subtle text-success mx-auto mb-2 rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px">
+            <i class="bi bi-receipt fs-5"></i>
+          </div>
+          <div class="fw-bold fs-3">${{ getTotalInvoiceAmount() | number:'1.2-2' }}</div>
+          <div class="text-muted small">{{ 'clients.details.totalInvoiced' | translate }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Maintenance Requests -->
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-header bg-transparent fw-bold">
+        <i class="bi bi-tools me-2 text-warning"></i>{{ 'clients.requests.title' | translate }}
+      </div>
+      <div class="card-body p-0">
+        @if (clientRequests().length === 0) {
+          <p class="text-center text-muted py-4">{{ 'clients.requests.empty' | translate }}</p>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>{{ 'clients.requests.table.title' | translate }}</th>
+                  <th>{{ 'clients.requests.table.equipment' | translate }}</th>
+                  <th>{{ 'clients.requests.table.date' | translate }}</th>
+                  <th>{{ 'clients.requests.table.status' | translate }}</th>
+                  <th>{{ 'clients.requests.table.invoice' | translate }}</th>
+                  @if (auth.isManager()) {
+                    <th class="text-end">{{ 'clients.requests.table.actions' | translate }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (req of clientRequests(); track req.id) {
+                  <tr>
+                    <td>
+                      <div class="fw-semibold">{{ req.title }}</div>
+                      @if (req.description) {
+                        <small class="text-muted">{{ req.description }}</small>
+                      }
+                    </td>
+                    <td>{{ req.equipmentDescription || '—' }}</td>
+                    <td><small>{{ req.requestDate | date:'mediumDate' }}</small></td>
+                    <td>
+                      <span class="badge {{ getRequestStatusClass(req.status) }}">
+                        {{ getRequestStatusLabel(req.status) }}
+                      </span>
+                    </td>
+                    <td>
+                      @if (req.invoiceNumber) {
+                        <span class="badge bg-success-subtle text-success">{{ req.invoiceNumber }}</span>
+                      } @else {
+                        <span class="text-muted">—</span>
+                      }
+                    </td>
+                    @if (auth.isManager()) {
+                      <td class="text-end">
+                        <button class="btn btn-sm btn-outline-warning me-1" (click)="openEditRequest(req)">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="deleteRequest(req.id)">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Invoices -->
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-transparent fw-bold">
+        <i class="bi bi-receipt me-2 text-success"></i>{{ 'clients.details.invoices' | translate }}
+      </div>
+      <div class="card-body p-0">
+        @if (clientInvoices().length === 0) {
+          <p class="text-center text-muted py-4">{{ 'clients.details.noInvoices' | translate }}</p>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>{{ 'invoices.table.invoiceNum' | translate }}</th>
+                  <th>{{ 'invoices.table.issueDate' | translate }}</th>
+                  <th>{{ 'invoices.table.dueDate' | translate }}</th>
+                  <th>{{ 'invoices.table.total' | translate }}</th>
+                  <th>{{ 'invoices.table.status' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (inv of clientInvoices(); track inv.id) {
+                  <tr>
+                    <td><strong>{{ inv.invoiceNumber }}</strong></td>
+                    <td>{{ inv.issueDate | date:'mediumDate' }}</td>
+                    <td>{{ inv.dueDate ? (inv.dueDate | date:'mediumDate') : '—' }}</td>
+                    <td class="fw-bold">${{ inv.totalAmount | number:'1.2-2' }}</td>
+                    <td>
+                      <span class="badge {{ getInvoiceStatusClass(inv.status) }}">
+                        {{ getInvoiceStatusLabel(inv.status) }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Client Create/Edit Modal -->
+@if (showModal()) {
+  <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.4)">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-person me-2"></i>
+            {{ (isEditing() ? 'clients.editTitle' : 'clients.addTitle') | translate }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <form (ngSubmit)="save()">
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ 'clients.form.name' | translate }}</label>
+                <input class="form-control" [(ngModel)]="form.name" name="name" required
+                  [placeholder]="'clients.form.namePlaceholder' | translate">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ 'clients.form.company' | translate }}</label>
+                <input class="form-control" [(ngModel)]="form.companyName" name="companyName"
+                  [placeholder]="'clients.form.companyPlaceholder' | translate">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ 'clients.form.email' | translate }}</label>
+                <input class="form-control" type="email" [(ngModel)]="form.email" name="email" required
+                  [placeholder]="'clients.form.emailPlaceholder' | translate">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ 'clients.form.phone' | translate }}</label>
+                <input class="form-control" [(ngModel)]="form.phone" name="phone"
+                  [placeholder]="'clients.form.phonePlaceholder' | translate">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">{{ 'clients.form.address' | translate }}</label>
+                <input class="form-control" [(ngModel)]="form.address" name="address"
+                  [placeholder]="'clients.form.addressPlaceholder' | translate">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">{{ 'clients.form.notes' | translate }}</label>
+                <textarea class="form-control" rows="2" [(ngModel)]="form.notes" name="notes"
+                  [placeholder]="'clients.form.notesPlaceholder' | translate"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">
+              {{ 'clients.cancel' | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving()">
+              <span *ngIf="isSaving()" class="spinner-border spinner-border-sm me-1"></span>
+              {{ (isEditing() ? 'clients.update' : 'clients.create') | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Maintenance Request Modal -->
+@if (showRequestModal()) {
+  <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.4)">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-tools me-2"></i>
+            {{ (isEditingRequest() ? 'clients.requests.editTitle' : 'clients.requests.addTitle') | translate }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeRequestModal()"></button>
+        </div>
+        <form (ngSubmit)="saveRequest()">
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label fw-semibold">{{ 'clients.requests.form.title' | translate }}</label>
+                <input class="form-control" [(ngModel)]="requestForm.title" name="reqTitle" required
+                  [placeholder]="'clients.requests.form.titlePlaceholder' | translate">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">{{ 'clients.requests.form.description' | translate }}</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="requestForm.description" name="reqDesc"
+                  [placeholder]="'clients.requests.form.descriptionPlaceholder' | translate"></textarea>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ 'clients.requests.form.equipment' | translate }}</label>
+                <input class="form-control" [(ngModel)]="requestForm.equipmentDescription" name="reqEquip"
+                  [placeholder]="'clients.requests.form.equipmentPlaceholder' | translate">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ 'clients.requests.form.date' | translate }}</label>
+                <input class="form-control" type="date" [(ngModel)]="requestForm.requestDate" name="reqDate">
+              </div>
+              @if (isEditingRequest()) {
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">{{ 'clients.requests.form.status' | translate }}</label>
+                  <select class="form-select" [(ngModel)]="requestForm.status" name="reqStatus">
+                    <option [value]="MaintenanceRequestStatus.Pending">{{ 'clients.requests.statuses.pending' | translate }}</option>
+                    <option [value]="MaintenanceRequestStatus.UnderReview">{{ 'clients.requests.statuses.underReview' | translate }}</option>
+                    <option [value]="MaintenanceRequestStatus.Approved">{{ 'clients.requests.statuses.approved' | translate }}</option>
+                    <option [value]="MaintenanceRequestStatus.InProgress">{{ 'clients.requests.statuses.inProgress' | translate }}</option>
+                    <option [value]="MaintenanceRequestStatus.Completed">{{ 'clients.requests.statuses.completed' | translate }}</option>
+                    <option [value]="MaintenanceRequestStatus.Rejected">{{ 'clients.requests.statuses.rejected' | translate }}</option>
+                    <option [value]="MaintenanceRequestStatus.Cancelled">{{ 'clients.requests.statuses.cancelled' | translate }}</option>
+                  </select>
+                </div>
+              }
+              <div class="col-12">
+                <label class="form-label fw-semibold">{{ 'clients.requests.form.notes' | translate }}</label>
+                <textarea class="form-control" rows="2" [(ngModel)]="requestForm.notes" name="reqNotes"
+                  [placeholder]="'clients.requests.form.notesPlaceholder' | translate"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" (click)="closeRequestModal()">
+              {{ 'clients.cancel' | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="isSavingRequest()">
+              <span *ngIf="isSavingRequest()" class="spinner-border spinner-border-sm me-1"></span>
+              {{ (isEditingRequest() ? 'clients.update' : 'clients.create') | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}

@@ -662,3 +662,82 @@ export interface ChangePasswordRequest {
   newPassword: string;
   confirmNewPassword: string;
 }
+
+// Client models
+export interface Client {
+  id: string;
+  name: string;
+  companyName?: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  notes?: string;
+  maintenanceRequestCount: number;
+  createdAt: string;
+}
+
+export interface CreateClientRequest {
+  name: string;
+  companyName?: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  notes?: string;
+}
+
+export interface UpdateClientRequest {
+  name: string;
+  companyName?: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  notes?: string;
+}
+
+// Maintenance Request models
+export interface MaintenanceRequest {
+  id: string;
+  title: string;
+  description?: string;
+  equipmentDescription?: string;
+  requestDate: string;
+  status: MaintenanceRequestStatus;
+  notes?: string;
+  clientId: string;
+  clientName: string;
+  taskOrderId?: string;
+  taskTitle?: string;
+  invoiceId?: string;
+  invoiceNumber?: string;
+  createdAt: string;
+}
+
+export interface CreateMaintenanceRequestRequest {
+  title: string;
+  description?: string;
+  equipmentDescription?: string;
+  requestDate?: string;
+  clientId: string;
+  notes?: string;
+}
+
+export interface UpdateMaintenanceRequestRequest {
+  title: string;
+  description?: string;
+  equipmentDescription?: string;
+  requestDate?: string;
+  status: MaintenanceRequestStatus;
+  notes?: string;
+  taskOrderId?: string;
+  invoiceId?: string;
+}
+
+export enum MaintenanceRequestStatus {
+  Pending = 0,
+  UnderReview = 1,
+  Approved = 2,
+  InProgress = 3,
+  Completed = 4,
+  Rejected = 5,
+  Cancelled = 6
+}
