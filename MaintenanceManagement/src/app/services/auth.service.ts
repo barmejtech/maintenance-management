@@ -2,7 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, throwError } from 'rxjs';
-import { AuthResponse, LoginRequest, RegisterRequest, RefreshTokenRequest } from '../models';
+import { AuthResponse, LoginRequest, RegisterRequest, RefreshTokenRequest, ClientRegisterRequest } from '../models';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -23,6 +23,12 @@ export class AuthService {
 
   register(request: RegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, request).pipe(
+      tap(response => this.storeAuth(response))
+    );
+  }
+
+  clientRegister(request: ClientRegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/client-register`, request).pipe(
       tap(response => this.storeAuth(response))
     );
   }
@@ -80,6 +86,14 @@ export class AuthService {
 
   isDataEntry(): boolean {
     return this.hasRole('DataEntry');
+  }
+
+  isClient(): boolean {
+    return this.hasRole('Client');
+  }
+
+  isSupport(): boolean {
+    return this.hasRole('Support');
   }
 
   /** Admin, Manager, or DataEntry can create/edit data entries (equipment, spare parts) */
