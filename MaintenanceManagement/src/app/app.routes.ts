@@ -129,6 +129,10 @@ export const routes: Routes = [
       {
         path: 'account',
         loadComponent: () => import('./components/account/account.component').then(m => m.AccountComponent)
+      },
+      {
+        path: 'premium-maintenance',
+        loadComponent: () => import('./components/premium-maintenance/premium-maintenance.component').then(m => m.PremiumMaintenanceComponent)
       }
     ]
   },

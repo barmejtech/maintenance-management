@@ -32,6 +32,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<MaintenanceSchedule> MaintenanceSchedules => Set<MaintenanceSchedule>();
     public DbSet<Client> Clients => Set<Client>();
     public DbSet<MaintenanceRequest> MaintenanceRequests => Set<MaintenanceRequest>();
+    public DbSet<PremiumService> PremiumServices => Set<PremiumService>();
+    public DbSet<PremiumMaintenanceRequest> PremiumMaintenanceRequests => Set<PremiumMaintenanceRequest>();
+    public DbSet<Payment> Payments => Set<Payment>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -341,6 +344,43 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .WithMany(c => c.Invoices)
                 .HasForeignKey(i => i.ClientId)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        builder.Entity<PremiumService>(e =>
+        {
+            e.HasKey(s => s.Id);
+            e.Property(s => s.Name).IsRequired().HasMaxLength(200);
+            e.Property(s => s.Description).HasMaxLength(2000);
+            e.Property(s => s.Price).HasColumnType("decimal(18,2)");
+            e.Property(s => s.Features).HasMaxLength(2000);
+        });
+
+        builder.Entity<PremiumMaintenanceRequest>(e =>
+        {
+            e.HasKey(r => r.Id);
+            e.Property(r => r.Notes).HasMaxLength(1000);
+            e.Property(r => r.Address).HasMaxLength(500);
+            e.HasOne(r => r.Client)
+                .WithMany()
+                .HasForeignKey(r => r.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(r => r.PremiumService)
+                .WithMany(s => s.Requests)
+                .HasForeignKey(r => r.PremiumServiceId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(r => r.Payment)
+                .WithOne(p => p.PremiumMaintenanceRequest)
+                .HasForeignKey<Payment>(p => p.PremiumMaintenanceRequestId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<Payment>(e =>
+        {
+            e.HasKey(p => p.Id);
+            e.Property(p => p.Amount).HasColumnType("decimal(18,2)");
+            e.Property(p => p.TransactionId).HasMaxLength(500);
+            e.Property(p => p.Notes).HasMaxLength(1000);
+            e.Property(p => p.FailureReason).HasMaxLength(1000);
         });
     }
 }

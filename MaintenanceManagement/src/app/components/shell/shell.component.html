@@ -119,6 +119,9 @@
       <a routerLink="/clients" routerLinkActive="active" class="nav-item">
         <i class="bi bi-briefcase"></i> {{ 'dashboard.sidebar.clients' | translate }}
       </a>
+      <a routerLink="/premium-maintenance" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-star-fill"></i> {{ 'dashboard.sidebar.premiumMaintenance' | translate }}
+      </a>
       @if (isAdmin()) {
         <a routerLink="/managers" routerLinkActive="active" class="nav-item admin-item">
           <i class="bi bi-person-badge"></i> {{ 'dashboard.sidebar.manageManagers' | translate }}

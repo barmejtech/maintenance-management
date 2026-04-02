@@ -743,3 +743,129 @@ export enum MaintenanceRequestStatus {
   Rejected = 5,
   Cancelled = 6
 }
+
+// Premium Service models
+export enum PremiumServiceType {
+  Preventive = 0,
+  Emergency = 1,
+  Inspection = 2,
+  FullOverhaul = 3,
+  Corrective = 4,
+  Consultation = 5
+}
+
+export enum PremiumMaintenanceStatus {
+  Draft = 0,
+  PaymentPending = 1,
+  Paid = 2,
+  InProgress = 3,
+  Completed = 4,
+  Cancelled = 5,
+  Refunded = 6
+}
+
+export enum PaymentStatus {
+  Pending = 0,
+  Processing = 1,
+  Completed = 2,
+  Failed = 3,
+  Refunded = 4,
+  Cancelled = 5
+}
+
+export enum PaymentMethod {
+  CreditCard = 0,
+  DebitCard = 1,
+  BankTransfer = 2,
+  Cash = 3,
+  OnlinePayment = 4
+}
+
+export interface PremiumService {
+  id: string;
+  name: string;
+  description?: string;
+  serviceType: PremiumServiceType;
+  price: number;
+  durationHours: number;
+  priorityLevel: number;
+  isActive: boolean;
+  features?: string;
+  createdAt: string;
+}
+
+export interface CreatePremiumServiceRequest {
+  name: string;
+  description?: string;
+  serviceType: PremiumServiceType;
+  price: number;
+  durationHours: number;
+  priorityLevel: number;
+  isActive: boolean;
+  features?: string;
+}
+
+export interface UpdatePremiumServiceRequest {
+  name: string;
+  description?: string;
+  serviceType: PremiumServiceType;
+  price: number;
+  durationHours: number;
+  priorityLevel: number;
+  isActive: boolean;
+  features?: string;
+}
+
+export interface PremiumMaintenanceRequest {
+  id: string;
+  clientId: string;
+  clientName: string;
+  premiumServiceId: string;
+  serviceName: string;
+  servicePrice: number;
+  serviceType: PremiumServiceType;
+  status: PremiumMaintenanceStatus;
+  requestDate: string;
+  scheduledDate?: string;
+  notes?: string;
+  address?: string;
+  paymentStatus?: PaymentStatus;
+  transactionId?: string;
+  createdAt: string;
+}
+
+export interface CreatePremiumMaintenanceRequestRequest {
+  clientId: string;
+  premiumServiceId: string;
+  scheduledDate?: string;
+  notes?: string;
+  address?: string;
+}
+
+export interface UpdatePremiumMaintenanceRequestRequest {
+  status: PremiumMaintenanceStatus;
+  scheduledDate?: string;
+  notes?: string;
+  address?: string;
+}
+
+export interface Payment {
+  id: string;
+  premiumMaintenanceRequestId: string;
+  amount: number;
+  status: PaymentStatus;
+  paymentMethod: PaymentMethod;
+  transactionId?: string;
+  paymentDate?: string;
+  notes?: string;
+  failureReason?: string;
+  createdAt: string;
+}
+
+export interface PaymentCheckout {
+  paymentId: string;
+  checkoutUrl: string;
+  clientSecret: string;
+  amount: number;
+  currency: string;
+}
