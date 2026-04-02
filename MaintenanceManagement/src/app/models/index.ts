@@ -249,6 +249,7 @@ export interface Equipment {
   afterMaintenancePhotoUrl?: string;
   photo3Url?: string;
   photo4Url?: string;
+  qrCode?: string;
   createdAt: string;
 }
 
@@ -520,6 +521,7 @@ export interface SparePart {
   photo2Url?: string;
   photo3Url?: string;
   photo4Url?: string;
+  qrCode?: string;
   isLowStock: boolean;
   createdAt: string;
 }
