@@ -41,5 +41,15 @@ export const guestGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (!auth.isAuthenticated()) return true;
+  // Clients go to the client portal, other users go to the dashboard
+  if (auth.isClient()) return router.createUrlTree(['/client-portal']);
+  return router.createUrlTree(['/dashboard']);
+};
+
+export const clientGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  if (auth.isClient()) return true;
   return router.createUrlTree(['/dashboard']);
 };

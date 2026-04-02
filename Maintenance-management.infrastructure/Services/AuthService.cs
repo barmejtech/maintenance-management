@@ -1,5 +1,7 @@
 using Maintenance_management.application.DTOs.Auth;
 using Maintenance_management.application.Interfaces;
+using Maintenance_management.domain.Entities;
+using Maintenance_management.domain.Interfaces;
 using Maintenance_management.infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -11,12 +13,14 @@ public class AuthService : IAuthService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IJwtService _jwtService;
     private readonly IConfiguration _config;
+    private readonly IClientRepository _clientRepository;
 
-    public AuthService(UserManager<ApplicationUser> userManager, IJwtService jwtService, IConfiguration config)
+    public AuthService(UserManager<ApplicationUser> userManager, IJwtService jwtService, IConfiguration config, IClientRepository clientRepository)
     {
         _userManager = userManager;
         _jwtService = jwtService;
         _config = config;
+        _clientRepository = clientRepository;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
@@ -49,6 +53,51 @@ public class AuthService : IAuthService
         }
 
         await _userManager.AddToRoleAsync(user, dto.Role);
+
+        return await GenerateAuthResponseAsync(user);
+    }
+
+    public async Task<AuthResponseDto> RegisterClientAsync(ClientRegisterDto dto)
+    {
+        if (dto.Password != dto.ConfirmPassword)
+            throw new InvalidOperationException("Passwords do not match.");
+
+        var existingUser = await _userManager.FindByEmailAsync(dto.Email);
+        if (existingUser is not null)
+            throw new InvalidOperationException("User with this email already exists.");
+
+        // Create a Client entity record
+        var clientEntity = new Client
+        {
+            Name = $"{dto.FirstName} {dto.LastName}",
+            CompanyName = dto.CompanyName,
+            Email = dto.Email,
+            Phone = dto.Phone,
+            Address = dto.Address
+        };
+        var savedClient = await _clientRepository.AddAsync(clientEntity);
+
+        var user = new ApplicationUser
+        {
+            UserName = dto.Email,
+            Email = dto.Email,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            PhoneNumber = dto.Phone,
+            IsActive = true,
+            ClientType = dto.ClientType,
+            CompanyName = dto.CompanyName,
+            ClientRecordId = savedClient.Id
+        };
+
+        var result = await _userManager.CreateAsync(user, dto.Password);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"Registration failed: {errors}");
+        }
+
+        await _userManager.AddToRoleAsync(user, "Client");
 
         return await GenerateAuthResponseAsync(user);
     }
@@ -118,6 +167,10 @@ public class AuthService : IAuthService
             Email = user.Email!,
             FirstName = user.FirstName,
             LastName = user.LastName,
+            ProfilePhotoUrl = user.ProfilePhotoUrl,
+            ClientType = user.ClientType,
+            CompanyName = user.CompanyName,
+            ClientRecordId = user.ClientRecordId,
             Roles = roles
         };
     }

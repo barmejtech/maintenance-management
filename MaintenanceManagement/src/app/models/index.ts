@@ -1,4 +1,9 @@
 // Auth models
+export enum ClientType {
+  Person = 0,
+  Company = 1
+}
+
 export interface RegisterRequest {
   firstName: string;
   lastName: string;
@@ -6,6 +11,18 @@ export interface RegisterRequest {
   password: string;
   confirmPassword: string;
   role: string;
+}
+
+export interface ClientRegisterRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  clientType: ClientType;
+  companyName?: string;
+  phone?: string;
+  address?: string;
 }
 
 export interface LoginRequest {
@@ -22,6 +39,9 @@ export interface AuthResponse {
   firstName: string;
   lastName: string;
   profilePhotoUrl?: string;
+  clientType?: ClientType;
+  companyName?: string;
+  clientRecordId?: string;
   roles: string[];
 }
 
@@ -722,6 +742,14 @@ export interface CreateMaintenanceRequestRequest {
   equipmentDescription?: string;
   requestDate?: string;
   clientId: string;
+  notes?: string;
+}
+
+export interface SubmitMaintenanceRequestRequest {
+  title: string;
+  description?: string;
+  equipmentDescription?: string;
+  requestDate?: string;
   notes?: string;
 }
 
