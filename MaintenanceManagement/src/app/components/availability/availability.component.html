@@ -33,7 +33,7 @@
         <tbody>
           @for (avail of availabilities(); track avail.id) {
             <tr>
-              <td class="fw-medium">{{ avail.technicianName || 'Unknown' }}</td>
+              <td class="fw-medium">{{ getTechnicianName(avail.technicianId) }}</td>
               <td>{{ avail.startTime | date:'short' }}</td>
               <td>{{ avail.endTime | date:'short' }}</td>
               <td>

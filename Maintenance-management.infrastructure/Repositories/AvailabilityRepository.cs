@@ -9,6 +9,12 @@ public class AvailabilityRepository : Repository<Availability>, IAvailabilityRep
 {
     public AvailabilityRepository(ApplicationDbContext context) : base(context) { }
 
+    public override async Task<IEnumerable<Availability>> GetAllAsync()
+        => await _dbSet
+            .Include(a => a.Technician)
+            .Where(a => !a.IsDeleted)
+            .ToListAsync();
+
     public async Task<IEnumerable<Availability>> GetByTechnicianIdAsync(Guid technicianId)
         => await _dbSet
             .Include(a => a.Technician)
