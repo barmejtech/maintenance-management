@@ -1,0 +1,389 @@
+<div class="pm-container">
+  <div class="pm-header">
+    <div>
+      <h2 class="pm-title">
+        <i class="bi bi-star-fill"></i> {{ 'premiumMaintenance.title' | translate }}
+      </h2>
+      <p class="pm-subtitle">{{ 'premiumMaintenance.subtitle' | translate }}</p>
+    </div>
+    <div class="pm-header-actions">
+      @if (isManagerOrAdmin()) {
+        <button class="btn btn-primary" (click)="openAddService()">
+          <i class="bi bi-plus-circle"></i> {{ 'premiumMaintenance.addService' | translate }}
+        </button>
+      }
+      <button class="btn btn-success" (click)="openNewRequest()">
+        <i class="bi bi-cart-plus"></i> {{ 'premiumMaintenance.bookService' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="pm-tabs">
+    <button class="pm-tab" [class.active]="activeTab() === 'services'" (click)="setTab('services')">
+      <i class="bi bi-grid-3x3-gap"></i> {{ 'premiumMaintenance.catalog' | translate }}
+    </button>
+    <button class="pm-tab" [class.active]="activeTab() === 'requests'" (click)="setTab('requests')">
+      <i class="bi bi-list-check"></i> {{ 'premiumMaintenance.myRequests' | translate }}
+      @if (requests().length > 0) {
+        <span class="pm-tab-badge">{{ requests().length }}</span>
+      }
+    </button>
+  </div>
+
+  <!-- ============ SERVICES CATALOG ============ -->
+  @if (activeTab() === 'services') {
+    @if (isLoadingServices()) {
+      <div class="pm-loading">
+        <div class="spinner-border text-primary"></div>
+        <p>{{ 'common.loading' | translate }}</p>
+      </div>
+    } @else if (services().length === 0) {
+      <div class="pm-empty">
+        <i class="bi bi-star"></i>
+        <p>{{ 'premiumMaintenance.noServices' | translate }}</p>
+        @if (isManagerOrAdmin()) {
+          <button class="btn btn-primary" (click)="openAddService()">
+            {{ 'premiumMaintenance.addFirstService' | translate }}
+          </button>
+        }
+      </div>
+    } @else {
+      <div class="pm-services-grid">
+        @for (service of services() | paginate: { id: 'services', itemsPerPage: pageSize, currentPage: servicesPage() }; track service.id) {
+          <div class="pm-service-card" [class.inactive]="!service.isActive">
+            <div class="pm-service-header">
+              <span class="pm-service-type" [class]="getServiceTypeClass(service.serviceType)">
+                {{ getServiceTypeName(service.serviceType) }}
+              </span>
+              @if (!service.isActive) {
+                <span class="badge bg-secondary">{{ 'common.inactive' | translate }}</span>
+              }
+            </div>
+            <h3 class="pm-service-name">{{ service.name }}</h3>
+            @if (service.description) {
+              <p class="pm-service-desc">{{ service.description }}</p>
+            }
+            <div class="pm-service-meta">
+              <div class="pm-meta-item">
+                <i class="bi bi-clock"></i>
+                <span>{{ service.durationHours }}h</span>
+              </div>
+              <div class="pm-meta-item" [class]="getPriorityClass(service.priorityLevel)">
+                <i class="bi bi-lightning-fill"></i>
+                <span>{{ getPriorityName(service.priorityLevel) }}</span>
+              </div>
+            </div>
+            @if (service.features) {
+              <ul class="pm-features">
+                @for (f of service.features.split(','); track $index) {
+                  <li><i class="bi bi-check-circle-fill"></i> {{ f.trim() }}</li>
+                }
+              </ul>
+            }
+            <div class="pm-service-footer">
+              <div class="pm-price">${{ service.price | number:'1.2-2' }}</div>
+              <div class="pm-service-actions">
+                <button class="btn btn-sm btn-success" (click)="openNewRequest(); requestForm.premiumServiceId = service.id">
+                  <i class="bi bi-cart-plus"></i> {{ 'premiumMaintenance.book' | translate }}
+                </button>
+                @if (isManagerOrAdmin()) {
+                  <button class="btn btn-sm btn-outline-primary" (click)="openEditService(service)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteService(service.id)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+      <pagination-controls id="services" (pageChange)="servicesPage.set($event)" class="pm-pagination"></pagination-controls>
+    }
+  }
+
+  <!-- ============ REQUESTS ============ -->
+  @if (activeTab() === 'requests') {
+    @if (isLoadingRequests()) {
+      <div class="pm-loading">
+        <div class="spinner-border text-primary"></div>
+        <p>{{ 'common.loading' | translate }}</p>
+      </div>
+    } @else if (requests().length === 0) {
+      <div class="pm-empty">
+        <i class="bi bi-list-check"></i>
+        <p>{{ 'premiumMaintenance.noRequests' | translate }}</p>
+        <button class="btn btn-primary" (click)="setTab('services')">
+          {{ 'premiumMaintenance.browseServices' | translate }}
+        </button>
+      </div>
+    } @else {
+      <div class="pm-table-wrap">
+        <table class="table pm-table">
+          <thead>
+            <tr>
+              <th>{{ 'premiumMaintenance.service' | translate }}</th>
+              <th>{{ 'premiumMaintenance.client' | translate }}</th>
+              <th>{{ 'premiumMaintenance.price' | translate }}</th>
+              <th>{{ 'premiumMaintenance.status' | translate }}</th>
+              <th>{{ 'premiumMaintenance.paymentStatus' | translate }}</th>
+              <th>{{ 'premiumMaintenance.requestDate' | translate }}</th>
+              <th>{{ 'premiumMaintenance.scheduledDate' | translate }}</th>
+              <th>{{ 'common.actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (req of requests() | paginate: { id: 'requests', itemsPerPage: pageSize, currentPage: requestsPage() }; track req.id) {
+              <tr>
+                <td>
+                  <strong>{{ req.serviceName }}</strong>
+                  <div class="text-muted small">{{ getServiceTypeName(req.serviceType) }}</div>
+                </td>
+                <td>{{ req.clientName }}</td>
+                <td>${{ req.servicePrice | number:'1.2-2' }}</td>
+                <td>
+                  <span class="badge" [class]="getStatusClass(req.status)">
+                    {{ getStatusName(req.status) }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-muted small">{{ getPaymentStatusName(req.paymentStatus) }}</span>
+                </td>
+                <td>{{ req.requestDate | date:'mediumDate' }}</td>
+                <td>{{ req.scheduledDate ? (req.scheduledDate | date:'mediumDate') : '-' }}</td>
+                <td>
+                  <div class="d-flex gap-1">
+                    @if (canPay(req)) {
+                      <button class="btn btn-sm btn-warning" (click)="openPayment(req)" title="{{ 'premiumMaintenance.pay' | translate }}">
+                        <i class="bi bi-credit-card"></i> {{ 'premiumMaintenance.pay' | translate }}
+                      </button>
+                    }
+                    @if (isManagerOrAdmin()) {
+                      <button class="btn btn-sm btn-outline-danger" (click)="deleteRequest(req.id)">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <pagination-controls id="requests" (pageChange)="requestsPage.set($event)" class="pm-pagination"></pagination-controls>
+      </div>
+    }
+  }
+</div>
+
+<!-- ============ SERVICE MODAL ============ -->
+@if (showServiceModal()) {
+  <div class="modal-overlay" (click)="closeServiceModal()"></div>
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h3>{{ (isEditingService() ? 'premiumMaintenance.editService' : 'premiumMaintenance.addService') | translate }}</h3>
+      <button class="btn-close-modal" (click)="closeServiceModal()"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label">{{ 'premiumMaintenance.fields.name' | translate }} *</label>
+          <input class="form-control" [(ngModel)]="serviceForm.name" placeholder="{{ 'premiumMaintenance.fields.namePlaceholder' | translate }}" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">{{ 'premiumMaintenance.fields.description' | translate }}</label>
+          <textarea class="form-control" [(ngModel)]="serviceForm.description" rows="3"></textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">{{ 'premiumMaintenance.fields.serviceType' | translate }}</label>
+          <select class="form-select" [(ngModel)]="serviceForm.serviceType">
+            @for (opt of serviceTypeOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">{{ 'premiumMaintenance.fields.priority' | translate }}</label>
+          <select class="form-select" [(ngModel)]="serviceForm.priorityLevel">
+            @for (opt of priorityOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">{{ 'premiumMaintenance.fields.price' | translate }} (USD) *</label>
+          <input type="number" class="form-control" [(ngModel)]="serviceForm.price" min="0" step="0.01" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">{{ 'premiumMaintenance.fields.duration' | translate }} (h) *</label>
+          <input type="number" class="form-control" [(ngModel)]="serviceForm.durationHours" min="1" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">{{ 'premiumMaintenance.fields.features' | translate }}</label>
+          <input class="form-control" [(ngModel)]="serviceForm.features" placeholder="{{ 'premiumMaintenance.fields.featuresPlaceholder' | translate }}" />
+          <div class="form-text">{{ 'premiumMaintenance.fields.featuresHint' | translate }}</div>
+        </div>
+        <div class="col-12">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="serviceForm.isActive" />
+            <label class="form-check-label">{{ 'premiumMaintenance.fields.active' | translate }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeServiceModal()">{{ 'common.cancel' | translate }}</button>
+      <button class="btn btn-primary" (click)="saveService()" [disabled]="isSavingService() || !serviceForm.name">
+        @if (isSavingService()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+        {{ 'common.save' | translate }}
+      </button>
+    </div>
+  </div>
+}
+
+<!-- ============ REQUEST MODAL ============ -->
+@if (showRequestModal()) {
+  <div class="modal-overlay" (click)="closeRequestModal()"></div>
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h3>{{ 'premiumMaintenance.bookService' | translate }}</h3>
+      <button class="btn-close-modal" (click)="closeRequestModal()"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label">{{ 'premiumMaintenance.fields.client' | translate }} *</label>
+          <select class="form-select" [(ngModel)]="requestForm.clientId">
+            <option value="">{{ 'premiumMaintenance.fields.selectClient' | translate }}</option>
+            @for (c of clients(); track c.id) {
+              <option [value]="c.id">{{ c.name }} {{ c.companyName ? '(' + c.companyName + ')' : '' }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label">{{ 'premiumMaintenance.fields.service' | translate }} *</label>
+          <select class="form-select" [(ngModel)]="requestForm.premiumServiceId">
+            <option value="">{{ 'premiumMaintenance.fields.selectService' | translate }}</option>
+            @for (s of services(); track s.id) {
+              @if (s.isActive) {
+                <option [value]="s.id">{{ s.name }} — ${{ s.price | number:'1.2-2' }}</option>
+              }
+            }
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label">{{ 'premiumMaintenance.fields.scheduledDate' | translate }}</label>
+          <input type="date" class="form-control" [(ngModel)]="requestForm.scheduledDate" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">{{ 'premiumMaintenance.fields.address' | translate }}</label>
+          <input class="form-control" [(ngModel)]="requestForm.address" placeholder="{{ 'premiumMaintenance.fields.addressPlaceholder' | translate }}" />
+        </div>
+        <div class="col-12">
+          <label class="form-label">{{ 'premiumMaintenance.fields.notes' | translate }}</label>
+          <textarea class="form-control" [(ngModel)]="requestForm.notes" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeRequestModal()">{{ 'common.cancel' | translate }}</button>
+      <button class="btn btn-success" (click)="saveRequest()" [disabled]="isSavingRequest() || !requestForm.clientId || !requestForm.premiumServiceId">
+        @if (isSavingRequest()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+        {{ 'premiumMaintenance.bookNow' | translate }}
+      </button>
+    </div>
+  </div>
+}
+
+<!-- ============ PAYMENT MODAL ============ -->
+@if (showPaymentModal()) {
+  <div class="modal-overlay" (click)="closePaymentModal()"></div>
+  <div class="modal-panel modal-payment">
+    <div class="modal-header">
+      <h3><i class="bi bi-credit-card"></i> {{ 'premiumMaintenance.payment.title' | translate }}</h3>
+      <button class="btn-close-modal" (click)="closePaymentModal()"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      @if (selectedRequest(); as req) {
+        <div class="payment-summary">
+          <div class="payment-service-info">
+            <div class="payment-service-name">{{ req.serviceName }}</div>
+            <div class="payment-amount">${{ req.servicePrice | number:'1.2-2' }}</div>
+          </div>
+          <div class="payment-client">{{ 'premiumMaintenance.payment.for' | translate }}: <strong>{{ req.clientName }}</strong></div>
+        </div>
+
+        @if (!checkoutData()) {
+          <!-- Step 1: Choose payment method -->
+          <div class="payment-step">
+            <h5>{{ 'premiumMaintenance.payment.method' | translate }}</h5>
+            <div class="payment-methods">
+              <label class="payment-method-option" [class.selected]="paymentForm.method === PaymentMethod.CreditCard">
+                <input type="radio" [(ngModel)]="paymentForm.method" [value]="PaymentMethod.CreditCard" />
+                <i class="bi bi-credit-card-2-front"></i> {{ 'premiumMaintenance.payment.creditCard' | translate }}
+              </label>
+              <label class="payment-method-option" [class.selected]="paymentForm.method === PaymentMethod.DebitCard">
+                <input type="radio" [(ngModel)]="paymentForm.method" [value]="PaymentMethod.DebitCard" />
+                <i class="bi bi-credit-card"></i> {{ 'premiumMaintenance.payment.debitCard' | translate }}
+              </label>
+              <label class="payment-method-option" [class.selected]="paymentForm.method === PaymentMethod.BankTransfer">
+                <input type="radio" [(ngModel)]="paymentForm.method" [value]="PaymentMethod.BankTransfer" />
+                <i class="bi bi-bank"></i> {{ 'premiumMaintenance.payment.bankTransfer' | translate }}
+              </label>
+            </div>
+            <div class="payment-card-form mt-3">
+              <div class="row g-2">
+                <div class="col-12">
+                  <label class="form-label">{{ 'premiumMaintenance.payment.cardNumber' | translate }}</label>
+                  <input class="form-control" [(ngModel)]="paymentForm.cardNumber" placeholder="•••• •••• •••• ••••" maxlength="19" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label">{{ 'premiumMaintenance.payment.cardName' | translate }}</label>
+                  <input class="form-control" [(ngModel)]="paymentForm.cardName" placeholder="{{ 'premiumMaintenance.payment.cardNamePlaceholder' | translate }}" />
+                </div>
+                <div class="col-6">
+                  <label class="form-label">{{ 'premiumMaintenance.payment.expiry' | translate }}</label>
+                  <input class="form-control" [(ngModel)]="paymentForm.expiry" placeholder="MM/YY" maxlength="5" />
+                </div>
+                <div class="col-6">
+                  <label class="form-label">{{ 'premiumMaintenance.payment.cvv' | translate }}</label>
+                  <input class="form-control" [(ngModel)]="paymentForm.cvv" placeholder="•••" maxlength="4" type="password" />
+                </div>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <!-- Step 2: Confirm payment -->
+          <div class="payment-step payment-confirm">
+            <div class="payment-confirm-icon"><i class="bi bi-shield-check"></i></div>
+            <h5>{{ 'premiumMaintenance.payment.confirmTitle' | translate }}</h5>
+            <p class="text-muted">{{ 'premiumMaintenance.payment.confirmDesc' | translate }}</p>
+            <div class="payment-confirm-detail">
+              <span>{{ 'premiumMaintenance.payment.amount' | translate }}</span>
+              <strong>${{ checkoutData()!.amount | number:'1.2-2' }} {{ checkoutData()!.currency }}</strong>
+            </div>
+          </div>
+        }
+
+        <div class="payment-secure">
+          <i class="bi bi-lock-fill"></i> {{ 'premiumMaintenance.payment.secure' | translate }}
+        </div>
+      }
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closePaymentModal()">{{ 'common.cancel' | translate }}</button>
+      @if (!checkoutData()) {
+        <button class="btn btn-warning" (click)="initiatePayment()" [disabled]="isProcessingPayment()">
+          @if (isProcessingPayment()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+          {{ 'premiumMaintenance.payment.proceed' | translate }}
+        </button>
+      } @else {
+        <button class="btn btn-success" (click)="confirmPayment()" [disabled]="isProcessingPayment()">
+          @if (isProcessingPayment()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+          <i class="bi bi-check-lg"></i> {{ 'premiumMaintenance.payment.confirm' | translate }}
+        </button>
+      }
+    </div>
+  </div>
+}

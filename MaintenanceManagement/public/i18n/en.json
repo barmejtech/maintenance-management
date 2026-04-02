@@ -434,7 +434,8 @@
       "clients": "Clients",
       "operations": "Operations",
       "assets": "Assets & Equipment",
-      "userManagement": "User Management"
+      "userManagement": "User Management",
+      "premiumMaintenance": "Premium Maintenance"
     },
     "hero": {
       "fullAccess": "Full Access",
@@ -1253,6 +1254,81 @@
         "rejected": "Rejected",
         "cancelled": "Cancelled"
       }
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "save": "Save",
+    "actions": "Actions",
+    "inactive": "Inactive",
+    "active": "Active",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "premiumMaintenance": {
+    "title": "Premium Maintenance",
+    "subtitle": "Enhanced maintenance services with online payment",
+    "catalog": "Service Catalog",
+    "myRequests": "My Requests",
+    "addService": "Add Service",
+    "editService": "Edit Service",
+    "bookService": "Book a Service",
+    "bookNow": "Book Now",
+    "book": "Book",
+    "noServices": "No premium services available yet.",
+    "addFirstService": "Add First Service",
+    "noRequests": "No requests yet. Browse the service catalog to get started.",
+    "browseServices": "Browse Services",
+    "deleteServiceConfirm": "Delete this service?",
+    "deleteRequestConfirm": "Delete this request?",
+    "service": "Service",
+    "client": "Client",
+    "price": "Price",
+    "status": "Status",
+    "paymentStatus": "Payment",
+    "requestDate": "Requested",
+    "scheduledDate": "Scheduled",
+    "paymentSuccess": "Payment completed successfully!",
+    "fields": {
+      "name": "Service Name",
+      "namePlaceholder": "e.g. Emergency HVAC Repair",
+      "description": "Description",
+      "serviceType": "Service Type",
+      "priority": "Priority Level",
+      "price": "Price",
+      "duration": "Duration",
+      "features": "Features",
+      "featuresPlaceholder": "24/7 support, Priority dispatch, Warranty",
+      "featuresHint": "Comma-separated list of features",
+      "active": "Active (visible in catalog)",
+      "client": "Client",
+      "selectClient": "Select a client...",
+      "service": "Premium Service",
+      "selectService": "Select a service...",
+      "scheduledDate": "Preferred Date",
+      "address": "Service Address",
+      "addressPlaceholder": "Service location address",
+      "notes": "Notes"
+    },
+    "payment": {
+      "title": "Complete Payment",
+      "for": "For",
+      "method": "Payment Method",
+      "creditCard": "Credit Card",
+      "debitCard": "Debit Card",
+      "bankTransfer": "Bank Transfer",
+      "cardNumber": "Card Number",
+      "cardName": "Name on Card",
+      "cardNamePlaceholder": "John Doe",
+      "expiry": "Expiry Date",
+      "cvv": "CVV",
+      "proceed": "Proceed to Pay",
+      "confirmTitle": "Confirm Payment",
+      "confirmDesc": "Your payment details are encrypted and secure. Click confirm to complete the transaction.",
+      "amount": "Total Amount",
+      "confirm": "Confirm Payment",
+      "secure": "Secured by 256-bit SSL encryption"
     }
   }
 }
