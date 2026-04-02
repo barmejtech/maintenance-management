@@ -118,6 +118,9 @@ builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ISparePartRe
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IMaintenanceScheduleRepository, Maintenance_management.infrastructure.Repositories.MaintenanceScheduleRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IClientRepository, Maintenance_management.infrastructure.Repositories.ClientRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IMaintenanceRequestRepository, Maintenance_management.infrastructure.Repositories.MaintenanceRequestRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPremiumServiceRepository, Maintenance_management.infrastructure.Repositories.PremiumServiceRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPremiumMaintenanceRequestRepository, Maintenance_management.infrastructure.Repositories.PremiumMaintenanceRequestRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPaymentRepository, Maintenance_management.infrastructure.Repositories.PaymentRepository>();
 
 // Application services
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAuthService, Maintenance_management.infrastructure.Services.AuthService>();
@@ -140,6 +143,9 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IUserSe
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAccountService, Maintenance_management.infrastructure.Services.AccountService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IClientService, Maintenance_management.application.Services.ClientService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IMaintenanceRequestService, Maintenance_management.application.Services.MaintenanceRequestService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPremiumServiceService, Maintenance_management.application.Services.PremiumServiceService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPremiumMaintenanceRequestService, Maintenance_management.application.Services.PremiumMaintenanceRequestService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPaymentService, Maintenance_management.application.Services.PaymentService>();
 
 // Notification service (SignalR-based)
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.INotificationService, Maintenance_management.api.Services.HubNotificationService>();

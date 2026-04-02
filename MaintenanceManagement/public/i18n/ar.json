@@ -434,7 +434,8 @@
       "clients": "العملاء",
       "operations": "العمليات",
       "assets": "الأصول والمعدات",
-      "userManagement": "إدارة المستخدمين"
+      "userManagement": "إدارة المستخدمين",
+      "premiumMaintenance": "الصيانة المميزة"
     },
     "hero": {
       "fullAccess": "صلاحية كاملة",
@@ -1282,6 +1283,81 @@
         "rejected": "مرفوض",
         "cancelled": "ملغى"
       }
+    }
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "actions": "إجراءات",
+    "inactive": "غير نشط",
+    "active": "نشط",
+    "yes": "نعم",
+    "no": "لا"
+  },
+  "premiumMaintenance": {
+    "title": "الصيانة المميزة",
+    "subtitle": "خدمات صيانة معززة مع الدفع الإلكتروني",
+    "catalog": "كتالوج الخدمات",
+    "myRequests": "طلباتي",
+    "addService": "إضافة خدمة",
+    "editService": "تعديل الخدمة",
+    "bookService": "حجز خدمة",
+    "bookNow": "احجز الآن",
+    "book": "احجز",
+    "noServices": "لا توجد خدمات مميزة متاحة حتى الآن.",
+    "addFirstService": "إضافة أول خدمة",
+    "noRequests": "لا توجد طلبات بعد. تصفح كتالوج الخدمات للبدء.",
+    "browseServices": "تصفح الخدمات",
+    "deleteServiceConfirm": "حذف هذه الخدمة؟",
+    "deleteRequestConfirm": "حذف هذا الطلب؟",
+    "service": "الخدمة",
+    "client": "العميل",
+    "price": "السعر",
+    "status": "الحالة",
+    "paymentStatus": "الدفع",
+    "requestDate": "تاريخ الطلب",
+    "scheduledDate": "الموعد المحدد",
+    "paymentSuccess": "تم الدفع بنجاح!",
+    "fields": {
+      "name": "اسم الخدمة",
+      "namePlaceholder": "مثال: إصلاح طارئ لنظام التكييف",
+      "description": "الوصف",
+      "serviceType": "نوع الخدمة",
+      "priority": "مستوى الأولوية",
+      "price": "السعر",
+      "duration": "المدة",
+      "features": "المميزات",
+      "featuresPlaceholder": "دعم على مدار الساعة، إرسال ذو أولوية، ضمان",
+      "featuresHint": "قائمة مميزات مفصولة بفواصل",
+      "active": "نشطة (تظهر في الكتالوج)",
+      "client": "العميل",
+      "selectClient": "اختر عميلاً...",
+      "service": "الخدمة المميزة",
+      "selectService": "اختر خدمة...",
+      "scheduledDate": "التاريخ المفضل",
+      "address": "عنوان الخدمة",
+      "addressPlaceholder": "عنوان موقع الخدمة",
+      "notes": "ملاحظات"
+    },
+    "payment": {
+      "title": "إتمام الدفع",
+      "for": "لـ",
+      "method": "طريقة الدفع",
+      "creditCard": "بطاقة ائتمانية",
+      "debitCard": "بطاقة خصم",
+      "bankTransfer": "تحويل بنكي",
+      "cardNumber": "رقم البطاقة",
+      "cardName": "الاسم على البطاقة",
+      "cardNamePlaceholder": "محمد أحمد",
+      "expiry": "تاريخ الانتهاء",
+      "cvv": "CVV",
+      "proceed": "المتابعة للدفع",
+      "confirmTitle": "تأكيد الدفع",
+      "confirmDesc": "تفاصيل الدفع الخاصة بك مشفرة وآمنة. انقر تأكيد لإتمام المعاملة.",
+      "amount": "المبلغ الإجمالي",
+      "confirm": "تأكيد الدفع",
+      "secure": "مؤمن بتشفير SSL بـ 256 بت"
     }
   }
 }
