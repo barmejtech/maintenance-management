@@ -269,7 +269,8 @@ export class PremiumMaintenanceComponent implements OnInit {
     const checkout = this.checkoutData();
     if (!checkout) return;
     this.isProcessingPayment.set(true);
-    // Simulate a transaction ID (in production, this comes from Stripe/PayPal after card processing)
+    // NOTE: In production, this transaction ID is provided by the payment gateway (e.g. Stripe/PayPal)
+    // after card processing. This simulated ID is used for development/testing only.
     const simulatedTransactionId = `TXN-${Date.now()}-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
     this.paymentService.confirmPayment(checkout.paymentId, simulatedTransactionId).subscribe({
       next: () => {
