@@ -49,7 +49,8 @@ public class SparePartService : ISparePartService
             Photo1Url = dto.Photo1Url,
             Photo2Url = dto.Photo2Url,
             Photo3Url = dto.Photo3Url,
-            Photo4Url = dto.Photo4Url
+            Photo4Url = dto.Photo4Url,
+            QrCode = dto.QrCode ?? GenerateQrCode(dto.Name, dto.PartNumber)
         };
 
         var created = await _repo.AddAsync(part);
@@ -75,6 +76,7 @@ public class SparePartService : ISparePartService
         part.Photo2Url = dto.Photo2Url;
         part.Photo3Url = dto.Photo3Url;
         part.Photo4Url = dto.Photo4Url;
+        part.QrCode = dto.QrCode ?? part.QrCode ?? GenerateQrCode(dto.Name, dto.PartNumber);
         part.UpdatedAt = DateTime.UtcNow;
 
         await _repo.UpdateAsync(part);
@@ -161,8 +163,18 @@ public class SparePartService : ISparePartService
         Photo2Url = p.Photo2Url,
         Photo3Url = p.Photo3Url,
         Photo4Url = p.Photo4Url,
+        QrCode = p.QrCode,
         CreatedAt = p.CreatedAt
     };
+
+    private static string GenerateQrCode(string name, string partNumber)
+    {
+        var words = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var namePart = string.Join(' ', words.Take(3));
+        var parts = new[] { namePart, partNumber }
+            .Where(p => !string.IsNullOrEmpty(p));
+        return string.Join(' ', parts);
+    }
 
     private static SparePartUsageDto MapUsageToDto(SparePartUsage u) => new()
     {

@@ -100,6 +100,13 @@
                 </li>
               }
             </ul>
+
+            @if (eq.qrCode) {
+              <div class="text-center mt-2">
+                <qrcode [qrdata]="eq.qrCode" [width]="100" [errorCorrectionLevel]="'M'"></qrcode>
+                <small class="d-block text-muted text-truncate" style="max-width:100%;font-size:0.65rem;">{{ eq.qrCode }}</small>
+              </div>
+            }
           </div>
 
           <div class="card-footer bg-transparent border-top d-flex justify-content-end gap-2 py-2 px-3">

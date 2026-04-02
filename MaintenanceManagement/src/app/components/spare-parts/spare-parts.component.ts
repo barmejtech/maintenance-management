@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { QRCodeComponent } from 'angularx-qrcode';
 import { SparePartService } from '../../services/spare-part.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { AuthService } from '../../services/auth.service';
@@ -14,7 +15,7 @@ import { ToastService } from '../../services/toast.service';
 @Component({
   selector: 'app-spare-parts',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule, QRCodeComponent],
   templateUrl: './spare-parts.component.html',
   styleUrls: ['./spare-parts.component.css']
 })
