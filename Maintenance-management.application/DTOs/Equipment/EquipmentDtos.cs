@@ -19,6 +19,7 @@ public class EquipmentDto
     public string? AfterMaintenancePhotoUrl { get; set; }
     public string? Photo3Url { get; set; }
     public string? Photo4Url { get; set; }
+    public string? QrCode { get; set; }
     public DateTime CreatedAt { get; set; }
 }
 
@@ -36,6 +37,7 @@ public class CreateEquipmentDto
     public string? AfterMaintenancePhotoUrl { get; set; }
     public string? Photo3Url { get; set; }
     public string? Photo4Url { get; set; }
+    public string? QrCode { get; set; }
 }
 
 public class UpdateEquipmentDto
@@ -54,4 +56,5 @@ public class UpdateEquipmentDto
     public string? AfterMaintenancePhotoUrl { get; set; }
     public string? Photo3Url { get; set; }
     public string? Photo4Url { get; set; }
+    public string? QrCode { get; set; }
 }

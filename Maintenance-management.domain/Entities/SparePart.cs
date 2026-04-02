@@ -16,6 +16,7 @@ public class SparePart : BaseEntity
     public string? Photo2Url { get; set; }
     public string? Photo3Url { get; set; }
     public string? Photo4Url { get; set; }
+    public string? QrCode { get; set; }
 
     public ICollection<SparePartUsage> Usages { get; set; } = new List<SparePartUsage>();
 }

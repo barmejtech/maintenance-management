@@ -250,6 +250,7 @@ public static class DataSeeder
                 NextMaintenanceDate = new DateTime(2024, 7, 10),
                 Status = EquipmentStatus.Operational,
                 Notes = "Primary air handler for Building A",
+                QrCode = "2020-06-15 Air Handler Unit AHU-2023-001",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -269,6 +270,7 @@ public static class DataSeeder
                 NextMaintenanceDate = new DateTime(2024, 5, 5),
                 Status = EquipmentStatus.UnderMaintenance,
                 Notes = "Cooling unit for floors 2-5",
+                QrCode = "2019-03-22 Chiller Unit #2 CHU-2022-002",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -855,6 +857,7 @@ public static class DataSeeder
                 Supplier = "FilterPro Supplies",
                 StorageLocation = "Warehouse A - Shelf 3",
                 Notes = "Replace every 3 months",
+                QrCode = "HVAC Air Filter AF-MERV11-16",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -874,6 +877,7 @@ public static class DataSeeder
                 Supplier = "CoolTech Refrigerants",
                 StorageLocation = "Warehouse B - Refrigerant Bay",
                 Notes = "Low stock — reorder immediately",
+                QrCode = "Refrigerant R-410A REF-R410A-25LB",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -893,6 +897,7 @@ public static class DataSeeder
                 Supplier = "Trane Parts Direct",
                 StorageLocation = "Warehouse A - Shelf 7",
                 Notes = "Compatible with Chiller Unit #2",
+                QrCode = "Pump Seal Kit PSK-CH800-STD",
                 CreatedAt = DateTime.UtcNow
             });
         }

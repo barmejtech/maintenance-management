@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { QRCodeComponent } from 'angularx-qrcode';
 import { EquipmentService } from '../../services/equipment.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { AuthService } from '../../services/auth.service';
@@ -15,7 +16,7 @@ import { ToastService } from '../../services/toast.service';
 @Component({
   selector: 'app-equipment',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule, QRCodeComponent],
   templateUrl: './equipment.component.html',
   styleUrls: ['./equipment.component.css']
 })

@@ -38,7 +38,8 @@ public class EquipmentService : IEquipmentService
             BeforeMaintenancePhotoUrl = dto.BeforeMaintenancePhotoUrl,
             AfterMaintenancePhotoUrl = dto.AfterMaintenancePhotoUrl,
             Photo3Url = dto.Photo3Url,
-            Photo4Url = dto.Photo4Url
+            Photo4Url = dto.Photo4Url,
+            QrCode = dto.QrCode ?? GenerateQrCode(dto.Name, dto.InstallationDate, dto.SerialNumber)
         };
 
         var created = await _repo.AddAsync(entity);
@@ -64,6 +65,7 @@ public class EquipmentService : IEquipmentService
         item.AfterMaintenancePhotoUrl = dto.AfterMaintenancePhotoUrl;
         item.Photo3Url = dto.Photo3Url;
         item.Photo4Url = dto.Photo4Url;
+        item.QrCode = dto.QrCode ?? item.QrCode ?? GenerateQrCode(dto.Name, dto.InstallationDate, dto.SerialNumber);
         item.UpdatedAt = DateTime.UtcNow;
 
         await _repo.UpdateAsync(item);
@@ -104,6 +106,19 @@ public class EquipmentService : IEquipmentService
         AfterMaintenancePhotoUrl = e.AfterMaintenancePhotoUrl,
         Photo3Url = e.Photo3Url,
         Photo4Url = e.Photo4Url,
+        QrCode = e.QrCode,
         CreatedAt = e.CreatedAt
     };
+
+    private static string GenerateQrCode(string name, DateTime? installationDate, string serialNumber)
+    {
+        var datePart = installationDate.HasValue
+            ? installationDate.Value.ToString("yyyy-MM-dd")
+            : string.Empty;
+        var words = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var namePart = string.Join(' ', words.Take(3));
+        var parts = new[] { datePart, namePart, serialNumber }
+            .Where(p => !string.IsNullOrEmpty(p));
+        return string.Join(' ', parts);
+    }
 }

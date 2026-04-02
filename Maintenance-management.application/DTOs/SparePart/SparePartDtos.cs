@@ -17,6 +17,7 @@ public class SparePartDto
     public string? Photo2Url { get; set; }
     public string? Photo3Url { get; set; }
     public string? Photo4Url { get; set; }
+    public string? QrCode { get; set; }
     public bool IsLowStock => QuantityInStock <= MinimumStockLevel;
     public DateTime CreatedAt { get; set; }
 }
@@ -37,6 +38,7 @@ public class CreateSparePartDto
     public string? Photo2Url { get; set; }
     public string? Photo3Url { get; set; }
     public string? Photo4Url { get; set; }
+    public string? QrCode { get; set; }
 }
 
 public class UpdateSparePartDto
@@ -55,6 +57,7 @@ public class UpdateSparePartDto
     public string? Photo2Url { get; set; }
     public string? Photo3Url { get; set; }
     public string? Photo4Url { get; set; }
+    public string? QrCode { get; set; }
 }
 
 public class SparePartUsageDto
