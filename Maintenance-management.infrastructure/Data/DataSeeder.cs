@@ -182,9 +182,10 @@ public static class DataSeeder
         // ── Seed domain entities ─────────────────────────────────────────────────
         var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
-        var techUser    = await userManager.FindByEmailAsync(techEmail);
-        var managerUser = await userManager.FindByEmailAsync(managerEmail);
-        var adminUser   = await userManager.FindByEmailAsync(configuration["AdminSettings:Email"] ?? "admin@maintenance.com");
+        var techUser      = await userManager.FindByEmailAsync(techEmail);
+        var managerUser   = await userManager.FindByEmailAsync(managerEmail);
+        var dataEntryUser = await userManager.FindByEmailAsync(dataEntryEmail);
+        var adminUser     = await userManager.FindByEmailAsync(configuration["AdminSettings:Email"] ?? "admin@maintenance.com");
         if (adminUser is null)
         {
             logger.LogWarning("Admin user not found; skipping domain entity seeding.");
@@ -232,6 +233,48 @@ public static class DataSeeder
 
         await context.SaveChangesAsync();
 
+        // ── Managers ─────────────────────────────────────────────────────────────
+        var manager1Id = new Guid("00000000-0000-0000-0040-000000000040");
+
+        if (managerUser is not null && !await context.Managers.AnyAsync(m => m.Id == manager1Id))
+        {
+            context.Managers.Add(new Manager
+            {
+                Id = manager1Id,
+                UserId = managerUser.Id,
+                FirstName = "Maintenance",
+                LastName = "Manager",
+                Email = managerEmail,
+                Phone = "555-0200",
+                Department = "Facilities Management",
+                CreatedAt = DateTime.UtcNow
+            });
+            logger.LogInformation("Seeding Manager record.");
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── DataEntries ───────────────────────────────────────────────────────────
+        var dataEntry1Id = new Guid("00000000-0000-0000-0041-000000000041");
+
+        if (dataEntryUser is not null && !await context.DataEntries.AnyAsync(d => d.Id == dataEntry1Id))
+        {
+            context.DataEntries.Add(new DataEntry
+            {
+                Id = dataEntry1Id,
+                UserId = dataEntryUser.Id,
+                FirstName = "Data",
+                LastName = "Entry",
+                Email = dataEntryEmail,
+                Phone = "555-0500",
+                Section = "Operations",
+                CreatedAt = DateTime.UtcNow
+            });
+            logger.LogInformation("Seeding DataEntry record.");
+        }
+
+        await context.SaveChangesAsync();
+
         // ── TechnicianGroups ─────────────────────────────────────────────────────
         var group1Id = new Guid("33333333-3333-3333-3333-333333333333");
         var group2Id = new Guid("44444444-4444-4444-4444-444444444444");
@@ -243,6 +286,7 @@ public static class DataSeeder
                 Id = group1Id,
                 Name = "HVAC Team",
                 Description = "Handles all HVAC maintenance and repairs",
+                LeaderUserId = techUser?.Id,
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -254,6 +298,43 @@ public static class DataSeeder
                 Id = group2Id,
                 Name = "Electrical Team",
                 Description = "Handles electrical systems and inspections",
+                LeaderUserId = managerUser?.Id,
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── Clients ───────────────────────────────────────────────────────────────
+        var client1Id = new Guid("00000000-0000-0000-0029-000000000029");
+        var client2Id = new Guid("00000000-0000-0000-0030-000000000030");
+
+        if (!await context.Clients.AnyAsync(c => c.Id == client1Id))
+        {
+            context.Clients.Add(new Client
+            {
+                Id = client1Id,
+                Name = "John Smith",
+                CompanyName = "Acme Corporation",
+                Email = "john.smith@acme.com",
+                Phone = "555-0300",
+                Address = "123 Business Ave, New York, NY 10001",
+                Notes = "Primary client for HVAC services",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.Clients.AnyAsync(c => c.Id == client2Id))
+        {
+            context.Clients.Add(new Client
+            {
+                Id = client2Id,
+                Name = "Sarah Johnson",
+                CompanyName = "TechCorp Inc.",
+                Email = "sarah.johnson@techcorp.com",
+                Phone = "555-0400",
+                Address = "456 Tech Street, San Francisco, CA 94105",
+                Notes = "Annual maintenance contract client",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -414,6 +495,7 @@ public static class DataSeeder
                 InvoiceNumber = "INV-2024-001",
                 ClientName = "Acme Corporation",
                 ClientEmail = "billing@acme.com",
+                ClientAddress = "123 Business Ave, New York, NY 10001",
                 IssueDate = DateTime.UtcNow.AddDays(-30),
                 DueDate = DateTime.UtcNow,
                 SubTotal = 1500m,
@@ -424,6 +506,7 @@ public static class DataSeeder
                 Notes = "HVAC inspection services",
                 CreatedByUserId = adminUserId,
                 TaskOrderId = task1Id,
+                ClientId = client1Id,
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -436,6 +519,7 @@ public static class DataSeeder
                 InvoiceNumber = "INV-2024-002",
                 ClientName = "TechCorp Inc.",
                 ClientEmail = "accounts@techcorp.com",
+                ClientAddress = "456 Tech Street, San Francisco, CA 94105",
                 IssueDate = DateTime.UtcNow,
                 DueDate = DateTime.UtcNow.AddDays(30),
                 SubTotal = 3200m,
@@ -445,6 +529,7 @@ public static class DataSeeder
                 Status = InvoiceStatus.Draft,
                 Notes = "Annual chiller maintenance",
                 CreatedByUserId = adminUserId,
+                ClientId = client2Id,
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1035,6 +1120,153 @@ public static class DataSeeder
                 CreatedByUserId = adminUserId,
                 AssignedTechnicianId = tech1Id,
                 CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── PremiumServices ───────────────────────────────────────────────────────
+        var premService1Id = new Guid("00000000-0000-0000-0033-000000000033");
+        var premService2Id = new Guid("00000000-0000-0000-0034-000000000034");
+
+        if (!await context.PremiumServices.AnyAsync(s => s.Id == premService1Id))
+        {
+            context.PremiumServices.Add(new PremiumService
+            {
+                Id = premService1Id,
+                Name = "Emergency HVAC Response",
+                Description = "24/7 emergency response for critical HVAC system failures",
+                ServiceType = PremiumServiceType.Emergency,
+                Price = 499.00m,
+                DurationHours = 4,
+                PriorityLevel = TaskPriority.Critical,
+                IsActive = true,
+                Features = "Same-day response, priority technician dispatch, parts included",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.PremiumServices.AnyAsync(s => s.Id == premService2Id))
+        {
+            context.PremiumServices.Add(new PremiumService
+            {
+                Id = premService2Id,
+                Name = "Annual Full System Overhaul",
+                Description = "Complete annual maintenance and overhaul of all HVAC systems",
+                ServiceType = PremiumServiceType.FullOverhaul,
+                Price = 1200.00m,
+                DurationHours = 16,
+                PriorityLevel = TaskPriority.High,
+                IsActive = true,
+                Features = "Comprehensive inspection, parts replacement, performance optimization",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── PremiumMaintenanceRequests ────────────────────────────────────────────
+        var premReq1Id = new Guid("00000000-0000-0000-0035-000000000035");
+        var premReq2Id = new Guid("00000000-0000-0000-0036-000000000036");
+
+        if (!await context.PremiumMaintenanceRequests.AnyAsync(r => r.Id == premReq1Id)
+            && await context.Clients.AnyAsync(c => c.Id == client1Id)
+            && await context.PremiumServices.AnyAsync(s => s.Id == premService1Id))
+        {
+            context.PremiumMaintenanceRequests.Add(new PremiumMaintenanceRequest
+            {
+                Id = premReq1Id,
+                ClientId = client1Id,
+                PremiumServiceId = premService1Id,
+                Status = PremiumMaintenanceStatus.Completed,
+                RequestDate = DateTime.UtcNow.AddDays(-20),
+                ScheduledDate = DateTime.UtcNow.AddDays(-18),
+                Notes = "Emergency fix for AHU failure in Building A",
+                Address = "123 Business Ave, New York, NY 10001",
+                CreatedAt = DateTime.UtcNow.AddDays(-20)
+            });
+        }
+
+        if (!await context.PremiumMaintenanceRequests.AnyAsync(r => r.Id == premReq2Id)
+            && await context.Clients.AnyAsync(c => c.Id == client2Id)
+            && await context.PremiumServices.AnyAsync(s => s.Id == premService2Id))
+        {
+            context.PremiumMaintenanceRequests.Add(new PremiumMaintenanceRequest
+            {
+                Id = premReq2Id,
+                ClientId = client2Id,
+                PremiumServiceId = premService2Id,
+                Status = PremiumMaintenanceStatus.PaymentPending,
+                RequestDate = DateTime.UtcNow.AddDays(-5),
+                ScheduledDate = DateTime.UtcNow.AddDays(25),
+                Notes = "Annual overhaul for all HVAC systems",
+                Address = "456 Tech Street, San Francisco, CA 94105",
+                CreatedAt = DateTime.UtcNow.AddDays(-5)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── Payments ──────────────────────────────────────────────────────────────
+        var payment1Id = new Guid("00000000-0000-0000-0037-000000000037");
+
+        if (!await context.Payments.AnyAsync(p => p.Id == payment1Id)
+            && await context.PremiumMaintenanceRequests.AnyAsync(r => r.Id == premReq1Id))
+        {
+            context.Payments.Add(new Payment
+            {
+                Id = payment1Id,
+                PremiumMaintenanceRequestId = premReq1Id,
+                Amount = 499.00m,
+                Status = PaymentStatus.Completed,
+                PaymentMethod = PaymentMethod.CreditCard,
+                TransactionId = "TXN-2024-001-ACME",
+                PaymentDate = DateTime.UtcNow.AddDays(-20),
+                Notes = "Payment for emergency HVAC response service",
+                CreatedAt = DateTime.UtcNow.AddDays(-20)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── MaintenanceRequests ───────────────────────────────────────────────────
+        var req1Id = new Guid("00000000-0000-0000-0038-000000000038");
+        var req2Id = new Guid("00000000-0000-0000-0039-000000000039");
+
+        if (!await context.MaintenanceRequests.AnyAsync(r => r.Id == req1Id)
+            && await context.Clients.AnyAsync(c => c.Id == client1Id))
+        {
+            context.MaintenanceRequests.Add(new MaintenanceRequest
+            {
+                Id = req1Id,
+                Title = "Air Handler Unit Not Cooling",
+                Description = "The air handler unit in Building A is not producing cold air. Temperature in office spaces is rising.",
+                EquipmentDescription = "Air Handler Unit #1, located on the rooftop of Building A",
+                RequestDate = DateTime.UtcNow.AddDays(-10),
+                Status = MaintenanceRequestStatus.Completed,
+                Notes = "Resolved during Q1 inspection — refrigerant topped up",
+                ClientId = client1Id,
+                TaskOrderId = task1Id,
+                InvoiceId = inv1Id,
+                CreatedAt = DateTime.UtcNow.AddDays(-10)
+            });
+        }
+
+        if (!await context.MaintenanceRequests.AnyAsync(r => r.Id == req2Id)
+            && await context.Clients.AnyAsync(c => c.Id == client2Id))
+        {
+            context.MaintenanceRequests.Add(new MaintenanceRequest
+            {
+                Id = req2Id,
+                Title = "Chiller Making Unusual Noise",
+                Description = "Chiller Unit #2 in Mechanical Room B is making a grinding noise and has elevated vibration.",
+                EquipmentDescription = "Chiller Unit #2, Trane CH-800, located in Mechanical Room B",
+                RequestDate = DateTime.UtcNow.AddDays(-3),
+                Status = MaintenanceRequestStatus.InProgress,
+                Notes = "Pump seal replacement scheduled",
+                ClientId = client2Id,
+                TaskOrderId = task2Id,
+                CreatedAt = DateTime.UtcNow.AddDays(-3)
             });
         }
 
