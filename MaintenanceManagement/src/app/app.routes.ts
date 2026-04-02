@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard, adminGuard, managerGuard } from './guards/auth.guard';
+import { authGuard, guestGuard, adminGuard, managerGuard, clientGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -12,6 +12,44 @@ export const routes: Routes = [
     loadComponent: () => import('./components/auth/login.component').then(m => m.LoginComponent),
     canActivate: [guestGuard]
   },
+  {
+    path: 'client-register',
+    loadComponent: () => import('./components/auth/client-register.component').then(m => m.ClientRegisterComponent)
+  },
+  // ── Client Portal ───────────────────────────────────────────────────────────
+  {
+    path: 'client-portal',
+    loadComponent: () => import('./components/client-portal/client-portal.component').then(m => m.ClientPortalComponent),
+    canActivate: [authGuard, clientGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./components/client-portal/client-dashboard.component').then(m => m.ClientDashboardComponent)
+      },
+      {
+        path: 'my-requests',
+        loadComponent: () => import('./components/client-portal/client-requests.component').then(m => m.ClientRequestsComponent)
+      },
+      {
+        path: 'new-request',
+        loadComponent: () => import('./components/client-portal/new-request.component').then(m => m.NewRequestComponent)
+      },
+      {
+        path: 'chat',
+        loadComponent: () => import('./components/chat/chat.component').then(m => m.ChatComponent)
+      },
+      {
+        path: 'notifications',
+        loadComponent: () => import('./components/notifications-page/notifications-page.component').then(m => m.NotificationsPageComponent)
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./components/client-portal/client-profile.component').then(m => m.ClientProfileComponent)
+      }
+    ]
+  },
+  // ── Internal Portal (non-client users) ──────────────────────────────────────
   {
     path: '',
     loadComponent: () => import('./components/shell/shell.component').then(m => m.ShellComponent),

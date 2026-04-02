@@ -20,7 +20,7 @@ public static class DataSeeder
         var logger = serviceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
 
         // ── Seed roles ──────────────────────────────────────────────────────────
-        string[] roles = ["Admin", "Manager", "Technician", "DataEntry"];
+        string[] roles = ["Admin", "Manager", "Technician", "DataEntry", "Client", "Support"];
         foreach (var role in roles)
         {
             if (!await roleManager.RoleExistsAsync(role))
@@ -146,6 +146,35 @@ public static class DataSeeder
             else
             {
                 logger.LogWarning("Failed to create data-entry user: {Errors}",
+                    string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+        }
+
+        // ── Seed support user ────────────────────────────────────────────────────
+        const string supportEmail = "support@maintenance.com";
+        const string supportPassword = "Support@123";
+
+        if (await userManager.FindByEmailAsync(supportEmail) is null)
+        {
+            var support = new ApplicationUser
+            {
+                UserName = supportEmail,
+                Email = supportEmail,
+                FirstName = "Support",
+                LastName = "Agent",
+                EmailConfirmed = true,
+                IsActive = true
+            };
+
+            var result = await userManager.CreateAsync(support, supportPassword);
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(support, "Support");
+                logger.LogInformation("Support user '{Email}' created.", supportEmail);
+            }
+            else
+            {
+                logger.LogWarning("Failed to create support user: {Errors}",
                     string.Join(", ", result.Errors.Select(e => e.Description)));
             }
         }

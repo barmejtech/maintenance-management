@@ -30,6 +30,16 @@ public class CreateMaintenanceRequestDto
     public string? Notes { get; set; }
 }
 
+/// <summary>Used by clients submitting their own requests — ClientId is resolved server-side from JWT.</summary>
+public class SubmitMaintenanceRequestDto
+{
+    public string Title { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public string? EquipmentDescription { get; set; }
+    public DateTime? RequestDate { get; set; }
+    public string? Notes { get; set; }
+}
+
 public class UpdateMaintenanceRequestDto
 {
     public string Title { get; set; } = string.Empty;
