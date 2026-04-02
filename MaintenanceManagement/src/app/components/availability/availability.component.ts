@@ -79,6 +79,11 @@ export class AvailabilityComponent implements OnInit {
     });
   }
 
+  getTechnicianName(technicianId: string): string {
+    const tech = this.technicians().find(t => t.id === technicianId);
+    return tech ? tech.fullName : 'Unknown';
+  }
+
   delete(id: string) {
     if (!confirm('Delete this availability record?')) return;
     this.service.delete(id).subscribe({ next: () => { this.load(); this.toast.success('messages.deleted'); }, error: () => this.toast.error() });
