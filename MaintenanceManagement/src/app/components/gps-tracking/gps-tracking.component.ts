@@ -77,7 +77,7 @@ export class GpsTrackingComponent implements OnInit, OnDestroy {
       next: loc => {
         this.latestLocation.set(loc);
         this.isLoadingLatest.set(false);
-        setTimeout(() => this.initLatestMap(), 100);
+        requestAnimationFrame(() => this.initLatestMap());
       },
       error: () => { this.latestLocation.set(null); this.isLoadingLatest.set(false); }
     });
@@ -100,7 +100,7 @@ export class GpsTrackingComponent implements OnInit, OnDestroy {
       next: result => {
         this.distanceResult.set(result);
         this.isCalculatingDistance.set(false);
-        setTimeout(() => this.initDistanceMap(), 100);
+        requestAnimationFrame(() => this.initDistanceMap());
       },
       error: () => {
         this.toast.show(this.translation.translate('gpsTracking.failedCalculateDistance'), 'error');
@@ -113,6 +113,15 @@ export class GpsTrackingComponent implements OnInit, OnDestroy {
     const recorded = new Date(recordedAt).getTime();
     const now = Date.now();
     return (now - recorded) > 4 * 60 * 60 * 1000;
+  }
+
+  private escapeHtml(text: string): string {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   private initLatestMap() {
@@ -146,7 +155,7 @@ export class GpsTrackingComponent implements OnInit, OnDestroy {
       const techName = this.getTechnicianName();
       L.marker([loc.latitude, loc.longitude], { icon: techIcon })
         .addTo(map)
-        .bindPopup(`<strong>📍 ${techName}</strong><br/><small>${loc.latitude.toFixed(6)}, ${loc.longitude.toFixed(6)}</small>`)
+        .bindPopup(`<strong>📍 ${this.escapeHtml(techName)}</strong><br/><small>${loc.latitude.toFixed(6)}, ${loc.longitude.toFixed(6)}</small>`)
         .openPopup();
 
       this.latestMap = map;
@@ -194,11 +203,11 @@ export class GpsTrackingComponent implements OnInit, OnDestroy {
 
       const techMarker = L.marker([result.technicianLatitude, result.technicianLongitude], { icon: techIcon })
         .addTo(map)
-        .bindPopup(`<strong>🔵 ${techLabel}</strong><br/><strong>${result.technicianName}</strong>${result.technicianAddress ? '<br/><small>' + result.technicianAddress + '</small>' : ''}<br/><small>${result.technicianLatitude.toFixed(6)}, ${result.technicianLongitude.toFixed(6)}</small>`);
+        .bindPopup(`<strong>🔵 ${this.escapeHtml(techLabel)}</strong><br/><strong>${this.escapeHtml(result.technicianName)}</strong>${result.technicianAddress ? '<br/><small>' + this.escapeHtml(result.technicianAddress) + '</small>' : ''}<br/><small>${result.technicianLatitude.toFixed(6)}, ${result.technicianLongitude.toFixed(6)}</small>`);
 
       L.marker([result.serviceLatitude, result.serviceLongitude], { icon: serviceIcon })
         .addTo(map)
-        .bindPopup(`<strong>🔴 ${serviceLabel}</strong><br/><small>${result.serviceLatitude.toFixed(6)}, ${result.serviceLongitude.toFixed(6)}</small>`);
+        .bindPopup(`<strong>🔴 ${this.escapeHtml(serviceLabel)}</strong><br/><small>${result.serviceLatitude.toFixed(6)}, ${result.serviceLongitude.toFixed(6)}</small>`);
 
       L.polyline(
         [[result.technicianLatitude, result.technicianLongitude], [result.serviceLatitude, result.serviceLongitude]],
