@@ -110,8 +110,15 @@ export class AuthService {
     return this.hasRole('Technician') && !this.isAdmin() && !this.hasRole('Manager') && !this.hasRole('DataEntry');
   }
 
-  updateCurrentUserInfo(firstName: string, lastName: string, profilePhotoUrl?: string): void {
-    const user = this.currentUserSignal();
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(request: { email: string; token: string; newPassword: string; confirmNewPassword: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, request);
+  }
+
+  updateCurrentUserInfo(firstName: string, lastName: string, profilePhotoUrl?: string): void {    const user = this.currentUserSignal();
     if (!user) return;
     const updated: AuthResponse = { ...user, firstName, lastName, profilePhotoUrl };
     localStorage.setItem(this.USER_KEY, JSON.stringify(updated));

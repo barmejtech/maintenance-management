@@ -46,6 +46,19 @@ public class UpdateProfileDto
     public string? ProfilePhotoUrl { get; set; }
 }
 
+public class ForgotPasswordDto
+{
+    public string Email { get; set; } = string.Empty;
+}
+
+public class ResetPasswordDto
+{
+    public string Email { get; set; } = string.Empty;
+    public string Token { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
+    public string ConfirmNewPassword { get; set; } = string.Empty;
+}
+
 public class AuthResponseDto
 {
     public string AccessToken { get; set; } = string.Empty;
