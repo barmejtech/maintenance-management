@@ -1,0 +1,150 @@
+<div class="admin-dashboard">
+
+  <!-- ── Header ───────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <h2><i class="bi bi-shield-lock-fill"></i> {{ 'adminDashboard.title' | translate }}</h2>
+    <p class="page-subtitle">{{ 'adminDashboard.subtitle' | translate }}</p>
+  </div>
+
+  <!-- ── Summary Cards ─────────────────────────────────────────────────── -->
+  @if (!isLoading() && data()) {
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="card-icon icon-blue"><i class="bi bi-inbox-fill"></i></div>
+      <div class="card-body">
+        <div class="card-value">{{ data()!.rows.length }}</div>
+        <div class="card-label">{{ 'adminDashboard.cards.totalRequests' | translate }}</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="card-icon icon-green"><i class="bi bi-check-circle-fill"></i></div>
+      <div class="card-body">
+        <div class="card-value">{{ completedCount }}</div>
+        <div class="card-label">{{ 'adminDashboard.cards.completed' | translate }}</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="card-icon icon-purple"><i class="bi bi-currency-dollar"></i></div>
+      <div class="card-body">
+        <div class="card-value">{{ totalRevenue | number:'1.2-2' }}</div>
+        <div class="card-label">{{ 'adminDashboard.cards.totalRevenue' | translate }}</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="card-icon icon-orange"><i class="bi bi-bar-chart-line-fill"></i></div>
+      <div class="card-body">
+        <div class="card-value">{{ data()!.weeklyAverage | number:'1.1-1' }}</div>
+        <div class="card-label">{{ 'adminDashboard.cards.weeklyAverage' | translate }}</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="card-icon icon-teal"><i class="bi bi-credit-card-fill"></i></div>
+      <div class="card-body">
+        <div class="card-value">{{ paidCount }}/{{ data()!.rows.length }}</div>
+        <div class="card-label">{{ 'adminDashboard.cards.paidInvoices' | translate }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Daily Stats ────────────────────────────────────────────────────── -->
+  @if (data()!.dailyStats.length > 0) {
+  <div class="section-block">
+    <h3 class="section-title"><i class="bi bi-calendar3"></i> {{ 'adminDashboard.dailyStats.title' | translate }}</h3>
+    <div class="daily-stats-grid">
+      @for (stat of data()!.dailyStats; track stat.date) {
+        <div class="daily-stat-item">
+          <div class="stat-count">{{ stat.count }}</div>
+          <div class="stat-date">{{ stat.date | date:'dd MMM' }}</div>
+        </div>
+      }
+    </div>
+  </div>
+  }
+  }
+
+  <!-- ── Filters ────────────────────────────────────────────────────────── -->
+  <div class="filters-bar">
+    <div class="filter-group">
+      <label>{{ 'adminDashboard.filter.search' | translate }}</label>
+      <input type="text" [(ngModel)]="filterSearch" [placeholder]="'adminDashboard.filter.searchPlaceholder' | translate" class="filter-input" />
+    </div>
+    <div class="filter-group">
+      <label>{{ 'adminDashboard.filter.status' | translate }}</label>
+      <select [(ngModel)]="filterStatus" class="filter-select">
+        <option value="">{{ 'adminDashboard.filter.allStatuses' | translate }}</option>
+        <option value="0">{{ 'adminDashboard.status.pending' | translate }}</option>
+        <option value="1">{{ 'adminDashboard.status.underReview' | translate }}</option>
+        <option value="2">{{ 'adminDashboard.status.approved' | translate }}</option>
+        <option value="3">{{ 'adminDashboard.status.inProgress' | translate }}</option>
+        <option value="4">{{ 'adminDashboard.status.completed' | translate }}</option>
+        <option value="5">{{ 'adminDashboard.status.rejected' | translate }}</option>
+        <option value="6">{{ 'adminDashboard.status.cancelled' | translate }}</option>
+      </select>
+    </div>
+    <button class="btn-clear" (click)="filterStatus=''; filterSearch=''">
+      <i class="bi bi-x-circle"></i> {{ 'adminDashboard.filter.clear' | translate }}
+    </button>
+    <button class="btn-refresh" (click)="load()">
+      <i class="bi bi-arrow-clockwise"></i> {{ 'adminDashboard.filter.refresh' | translate }}
+    </button>
+  </div>
+
+  <!-- ── Main Table ─────────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="loading-state">
+      <i class="bi bi-arrow-repeat spin"></i> {{ 'adminDashboard.loading' | translate }}
+    </div>
+  } @else if (filteredRows.length === 0) {
+    <div class="empty-state">
+      <i class="bi bi-inbox"></i>
+      <p>{{ 'adminDashboard.noData' | translate }}</p>
+    </div>
+  } @else {
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ 'adminDashboard.table.client' | translate }}</th>
+          <th>{{ 'adminDashboard.table.dateRequest' | translate }}</th>
+          <th>{{ 'adminDashboard.table.technician' | translate }}</th>
+          <th>{{ 'adminDashboard.table.dateOfTask' | translate }}</th>
+          <th>{{ 'adminDashboard.table.status' | translate }}</th>
+          <th>{{ 'adminDashboard.table.price' | translate }}</th>
+          <th>{{ 'adminDashboard.table.paymentStatus' | translate }}</th>
+          <th>{{ 'adminDashboard.table.datePay' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of filteredRows; track row.requestId) {
+          <tr>
+            <td>{{ row.clientName || '—' }}</td>
+            <td>{{ row.dateRequest | date:'dd/MM/yyyy' }}</td>
+            <td>{{ row.technicians || '—' }}</td>
+            <td>{{ row.dateOfTask ? (row.dateOfTask | date:'dd/MM/yyyy') : '—' }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="statusClass(row.status)">
+                {{ statusLabel(row.status) }}
+              </span>
+            </td>
+            <td>
+              @if (row.price !== null) {
+                <span class="price-cell">{{ row.price | number:'1.2-2' }}</span>
+              } @else {
+                <span class="no-data">—</span>
+              }
+            </td>
+            <td>
+              <span class="payment-badge" [class.paid]="row.isPaid" [class.unpaid]="!row.isPaid">
+                <i class="bi" [class.bi-check-circle-fill]="row.isPaid" [class.bi-clock-fill]="!row.isPaid"></i>
+                {{ row.isPaid ? ('adminDashboard.payment.paid' | translate) : ('adminDashboard.payment.unpaid' | translate) }}
+              </span>
+            </td>
+            <td>{{ row.datePay ? (row.datePay | date:'dd/MM/yyyy') : '—' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+
+</div>

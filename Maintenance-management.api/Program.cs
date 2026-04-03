@@ -147,6 +147,7 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IMainte
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPremiumServiceService, Maintenance_management.application.Services.PremiumServiceService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPremiumMaintenanceRequestService, Maintenance_management.application.Services.PremiumMaintenanceRequestService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPaymentService, Maintenance_management.application.Services.PaymentService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAdminDashboardService, Maintenance_management.application.Services.AdminDashboardService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITravelEstimationService, Maintenance_management.api.Services.TravelEstimationService>();
 
 // Notification service (SignalR-based)

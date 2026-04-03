@@ -428,6 +428,7 @@
             "mobileWorkflow": "سير العمل المتنقل",
             "registerUser": "تسجيل مستخدم",
             "manageManagers": "إدارة المديرين",
+            "adminDashboard": "لوحة تحكم المشرف",
             "myAccount": "حسابي",
             "notifications": "الإشعارات",
             "powerBi": "Power BI",
@@ -1366,6 +1367,53 @@
             "amount": "المبلغ الإجمالي",
             "confirm": "تأكيد الدفع",
             "secure": "مؤمن بتشفير SSL بـ 256 بت"
+        }
+    },
+    "adminDashboard": {
+        "title": "لوحة تحكم المشرف",
+        "subtitle": "نظرة شاملة على جميع عمليات الصيانة",
+        "loading": "جارٍ تحميل البيانات...",
+        "noData": "لا توجد طلبات.",
+        "cards": {
+            "totalRequests": "إجمالي الطلبات",
+            "completed": "مكتملة",
+            "totalRevenue": "إجمالي الإيرادات",
+            "weeklyAverage": "متوسط أسبوعي (مهام)",
+            "paidInvoices": "فواتير مدفوعة"
+        },
+        "dailyStats": {
+            "title": "المهام المكتملة – آخر 30 يوماً"
+        },
+        "filter": {
+            "search": "بحث",
+            "searchPlaceholder": "العميل أو الفني...",
+            "status": "الحالة",
+            "allStatuses": "جميع الحالات",
+            "clear": "مسح",
+            "refresh": "تحديث"
+        },
+        "table": {
+            "client": "العميل",
+            "dateRequest": "تاريخ الطلب",
+            "technician": "الفني",
+            "dateOfTask": "تاريخ المهمة",
+            "status": "الحالة",
+            "price": "السعر",
+            "paymentStatus": "حالة الدفع",
+            "datePay": "تاريخ الدفع"
+        },
+        "status": {
+            "pending": "قيد الانتظار",
+            "underReview": "قيد المراجعة",
+            "approved": "موافق عليه",
+            "inProgress": "جارٍ التنفيذ",
+            "completed": "مكتمل",
+            "rejected": "مرفوض",
+            "cancelled": "ملغى"
+        },
+        "payment": {
+            "paid": "مدفوع",
+            "unpaid": "غير مدفوع"
         }
     }
 }
