@@ -12,7 +12,7 @@ public class AccountProfileDto
     public IList<string> Roles { get; set; } = new List<string>();
 }
 
-public class UpdateProfileDto
+public class UpdateAccountProfileDto
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
