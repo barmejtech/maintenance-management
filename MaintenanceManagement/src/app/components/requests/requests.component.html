@@ -264,6 +264,77 @@
               }
             </div>
           </div>
+
+          <!-- Travel Estimation -->
+          @if (req.assignedTechnicians?.length) {
+            <div class="card shadow-sm border-0">
+              <div class="card-header bg-transparent border-bottom fw-semibold">
+                <i class="bi bi-geo-alt me-2 text-warning"></i>Travel Estimation
+              </div>
+              <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                  @for (t of req.assignedTechnicians; track t.technicianId) {
+                    @let key = getTravelKey(t.technicianId, req.clientId);
+                    <li class="list-group-item py-3 px-3">
+                      <div class="d-flex align-items-center justify-content-between mb-2 gap-2 flex-wrap">
+                        <span class="fw-semibold small">
+                          <i class="bi bi-person-gear me-1 text-primary"></i>{{ t.fullName }}
+                        </span>
+                        @if (!getTravelEstimate(key) && !isTravelLoading(key) && !getTravelError(key)) {
+                          <button class="btn btn-outline-warning btn-sm"
+                            (click)="estimateTravel(t.technicianId, req.clientId)">
+                            <i class="bi bi-calculator me-1"></i>Calculate
+                          </button>
+                        } @else if (!isTravelLoading(key)) {
+                          <button class="btn btn-outline-secondary btn-sm"
+                            (click)="estimateTravel(t.technicianId, req.clientId)">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                          </button>
+                        }
+                      </div>
+
+                      @if (isTravelLoading(key)) {
+                        <div class="text-center py-2">
+                          <span class="spinner-border spinner-border-sm text-warning me-2"></span>
+                          <small class="text-muted">Calculating route…</small>
+                        </div>
+                      }
+
+                      @if (getTravelError(key)) {
+                        <div class="alert alert-warning py-1 px-2 mb-0 small">
+                          <i class="bi bi-exclamation-triangle me-1"></i>{{ getTravelError(key) }}
+                        </div>
+                      }
+
+                      @if (getTravelEstimate(key); as est) {
+                        <div class="row g-2">
+                          <div class="col-6">
+                            <div class="travel-stat rounded p-2 text-center">
+                              <i class="bi bi-signpost-2 fs-5 text-warning d-block mb-1"></i>
+                              <div class="fw-bold">{{ est.formattedDistance }}</div>
+                              <small class="text-muted">Distance</small>
+                            </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="travel-stat rounded p-2 text-center">
+                              <i class="bi bi-clock fs-5 text-success d-block mb-1"></i>
+                              <div class="fw-bold">{{ est.formattedDuration }}</div>
+                              <small class="text-muted">Est. Travel Time</small>
+                            </div>
+                          </div>
+                        </div>
+                        @if (est.clientAddress) {
+                          <div class="mt-2">
+                            <small class="text-muted"><i class="bi bi-pin-map me-1"></i>{{ est.clientAddress }}</small>
+                          </div>
+                        }
+                      }
+                    </li>
+                  }
+                </ul>
+              </div>
+            </div>
+          }
         </div>
       </div>
     </div>
