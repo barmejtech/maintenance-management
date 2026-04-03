@@ -6,6 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { MaintenanceRequestService } from '../../services/maintenance-request.service';
 import { TechnicianService } from '../../services/technician.service';
 import { ToastService } from '../../services/toast.service';
+import { TravelEstimationService, TravelEstimationResult } from '../../services/travel-estimation.service';
 import {
   MaintenanceRequest,
   MaintenanceRequestStatus,
@@ -50,6 +51,11 @@ export class RequestsComponent implements OnInit {
   // Audit log modal
   showAuditModal = signal(false);
 
+  // Travel estimation
+  travelEstimates = signal<Record<string, TravelEstimationResult | null>>({});
+  travelEstimateLoading = signal<Record<string, boolean>>({});
+  travelEstimateError = signal<Record<string, string>>({});
+
   currentPage = signal(1);
   readonly pageSize = 12;
   MaintenanceRequestStatus = MaintenanceRequestStatus;
@@ -57,7 +63,8 @@ export class RequestsComponent implements OnInit {
   constructor(
     private requestService: MaintenanceRequestService,
     private technicianService: TechnicianService,
-    private toast: ToastService
+    private toast: ToastService,
+    private travelService: TravelEstimationService
   ) {}
 
   ngOnInit() {
@@ -194,6 +201,45 @@ export class RequestsComponent implements OnInit {
         this.isProcessing.set(false);
       }
     });
+  }
+
+  // ─── Travel Estimation ─────────────────────────────────────────────────────
+  estimateTravel(technicianId: string, clientId: string) {
+    const key = `${technicianId}:${clientId}`;
+    this.travelEstimateLoading.update(s => ({ ...s, [key]: true }));
+    this.travelEstimateError.update(s => ({ ...s, [key]: '' }));
+    this.travelEstimates.update(s => ({ ...s, [key]: null }));
+
+    this.travelService.estimate(technicianId, clientId).subscribe({
+      next: (res) => {
+        this.travelEstimateLoading.update(s => ({ ...s, [key]: false }));
+        if (res.success) {
+          this.travelEstimates.update(s => ({ ...s, [key]: res.data }));
+        } else {
+          this.travelEstimateError.update(s => ({ ...s, [key]: res.message ?? 'Unable to calculate route.' }));
+        }
+      },
+      error: () => {
+        this.travelEstimateLoading.update(s => ({ ...s, [key]: false }));
+        this.travelEstimateError.update(s => ({ ...s, [key]: 'Failed to contact routing service.' }));
+      }
+    });
+  }
+
+  getTravelKey(technicianId: string, clientId: string): string {
+    return `${technicianId}:${clientId}`;
+  }
+
+  getTravelEstimate(key: string): TravelEstimationResult | null {
+    return this.travelEstimates()[key] ?? null;
+  }
+
+  isTravelLoading(key: string): boolean {
+    return this.travelEstimateLoading()[key] ?? false;
+  }
+
+  getTravelError(key: string): string {
+    return this.travelEstimateError()[key] ?? '';
   }
 
   // ─── Audit Log ─────────────────────────────────────────────────────────────
