@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 import { environment } from '../../../environments/environment';
-import { MaintenanceRequestStatus } from '../../models';
+import { MaintenanceRequestStatus, AppNotification, NotificationType } from '../../models';
 
 interface ClientDashboardStats {
   totalRequests: number;
@@ -119,6 +120,33 @@ interface ClientDashboardStats {
           }
         </div>
 
+        <!-- Recent Notifications -->
+        <div class="section-card">
+          <div class="section-header">
+            <h2>Recent Notifications</h2>
+            <a routerLink="/client-portal/notifications" class="view-all-link">View All</a>
+          </div>
+          @if (recentNotifications().length) {
+            <div class="notif-list">
+              @for (n of recentNotifications(); track n.id) {
+                <div class="notif-item" [class.unread]="!n.isRead">
+                  <span class="notif-icon">{{ getNotifIcon(n.type) }}</span>
+                  <div class="notif-body">
+                    <span class="notif-title">{{ n.title }}</span>
+                    <span class="notif-msg">{{ n.message }}</span>
+                  </div>
+                  <span class="notif-time">{{ timeAgo(n.createdAt) }}</span>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="empty-state">
+              <i class="bi bi-bell-slash"></i>
+              <p>No recent notifications</p>
+            </div>
+          }
+        </div>
+
         <!-- Quick Actions -->
         <div class="quick-actions">
           <h2>Quick Actions</h2>
@@ -228,6 +256,22 @@ interface ClientDashboardStats {
     .empty-state i { font-size: 48px; }
     .btn-create-first { background: #e3f2fd; color: #1565c0; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 500; }
 
+    .notif-list { display: flex; flex-direction: column; gap: 2px; }
+    .notif-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .notif-item.unread { background: #f0f7ff; }
+    .notif-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+    .notif-body { flex: 1; display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+    .notif-title { font-weight: 600; color: #1a237e; font-size: 0.9rem; }
+    .notif-msg { color: #555; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .notif-time { color: #aaa; font-size: 0.78rem; white-space: nowrap; flex-shrink: 0; }
+
     .quick-actions h2 { font-size: 1.1rem; font-weight: 600; color: #1a237e; margin: 0 0 16px; }
     .actions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
     .action-card {
@@ -258,7 +302,8 @@ export class ClientDashboardComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    public auth: AuthService
+    public auth: AuthService,
+    public notifService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -266,6 +311,36 @@ export class ClientDashboardComponent implements OnInit {
       next: (data) => { this.stats.set(data); this.isLoading.set(false); },
       error: () => this.isLoading.set(false)
     });
+    // Load recent notifications if not already loaded (fetch 5 days to match the preview count)
+    if (this.notifService.allNotifications().length === 0) {
+      this.notifService.loadAll(5).subscribe();
+    }
+  }
+
+  /** Returns the 5 most recent notifications for the dashboard preview. */
+  recentNotifications(): AppNotification[] {
+    return this.notifService.allNotifications().slice(0, 5);
+  }
+
+  getNotifIcon(type: NotificationType): string {
+    const icons: Record<number, string> = {
+      [NotificationType.Info]:    'ℹ️',
+      [NotificationType.Success]: '✅',
+      [NotificationType.Warning]: '⚠️',
+      [NotificationType.Error]:   '❌'
+    };
+    return icons[type] ?? 'ℹ️';
+  }
+
+  timeAgo(dateStr: string): string {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 1)  return 'just now';
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24)   return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return days < 7 ? `${days}d ago` : new Date(dateStr).toLocaleDateString();
   }
 
   getStatusClass(status: MaintenanceRequestStatus): string {
