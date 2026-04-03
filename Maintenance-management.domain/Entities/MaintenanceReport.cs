@@ -18,4 +18,5 @@ public class MaintenanceReport : BaseEntity
     public TaskOrder? TaskOrder { get; set; }
 
     public ICollection<Document> Documents { get; set; } = new List<Document>();
+    public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

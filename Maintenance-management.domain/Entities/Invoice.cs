@@ -25,5 +25,8 @@ public class Invoice : BaseEntity
     public Guid? ClientId { get; set; }
     public Client? Client { get; set; }
 
+    public Guid? MaintenanceReportId { get; set; }
+    public MaintenanceReport? MaintenanceReport { get; set; }
+
     public ICollection<InvoiceLineItem> LineItems { get; set; } = new List<InvoiceLineItem>();
 }

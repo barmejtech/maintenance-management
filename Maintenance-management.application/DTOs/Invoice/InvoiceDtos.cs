@@ -22,6 +22,8 @@ public class InvoiceDto
     public string? TaskTitle { get; set; }
     public Guid? ClientId { get; set; }
     public string? ClientCompany { get; set; }
+    public Guid? MaintenanceReportId { get; set; }
+    public string? MaintenanceReportTitle { get; set; }
     public IList<InvoiceLineItemDto> LineItems { get; set; } = new List<InvoiceLineItemDto>();
     public DateTime CreatedAt { get; set; }
 }
@@ -45,6 +47,7 @@ public class CreateInvoiceDto
     public string? Notes { get; set; }
     public Guid? TaskOrderId { get; set; }
     public Guid? ClientId { get; set; }
+    public Guid? MaintenanceReportId { get; set; }
     public IList<CreateLineItemDto> LineItems { get; set; } = new List<CreateLineItemDto>();
 }
 
