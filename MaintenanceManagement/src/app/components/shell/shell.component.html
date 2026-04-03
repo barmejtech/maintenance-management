@@ -33,6 +33,11 @@
     <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
       <i class="bi bi-speedometer2"></i> {{ 'dashboard.sidebar.dashboard' | translate }}
     </a>
+    @if (isAdmin()) {
+    <a routerLink="/admin-dashboard" routerLinkActive="active" class="nav-item admin-item">
+      <i class="bi bi-shield-lock-fill"></i> {{ 'dashboard.sidebar.adminDashboard' | translate }}
+    </a>
+    }
 
     <!-- ===== OPERATIONS ===== -->
     @if (isManagerOrAdmin() || isTechnicianRole() || isSupportRole()) {
@@ -156,9 +161,6 @@
         </a>
         <a routerLink="/register" routerLinkActive="active" class="nav-item admin-item">
           <i class="bi bi-person-plus"></i> {{ 'dashboard.sidebar.registerUser' | translate }}
-        </a>
-        <a routerLink="/admin-dashboard" routerLinkActive="active" class="nav-item admin-item">
-          <i class="bi bi-shield-lock-fill"></i> {{ 'dashboard.sidebar.adminDashboard' | translate }}
         </a>
       }
     }
