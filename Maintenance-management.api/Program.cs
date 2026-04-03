@@ -164,7 +164,7 @@ builder.Services.AddSignalR();
 builder.Services.AddHttpClient("TravelEstimation", client =>
 {
     client.DefaultRequestHeaders.UserAgent.ParseAdd("MaintenanceManagement/1.0");
-    client.Timeout = TimeSpan.FromSeconds(10);
+    client.Timeout = TimeSpan.FromSeconds(15);
 });
 
 // In-memory cache for travel estimates

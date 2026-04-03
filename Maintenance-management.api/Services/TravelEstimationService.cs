@@ -147,11 +147,12 @@ public class TravelEstimationService : ITravelEstimationService
     }
 
     private static string FormatDistance(double km) =>
-        km >= 1 ? $"{km:F1} km" : $"{km * 1000:F0} m";
+        km >= 1 ? $"{km:F1} km" : $"{Math.Round(km * 1000)} m";
 
     private static string FormatDuration(double minutes)
     {
         var totalMinutes = (int)Math.Round(minutes);
+        if (totalMinutes <= 0) return "< 1 min";
         if (totalMinutes < 60) return $"{totalMinutes} min";
         var hours = totalMinutes / 60;
         var mins = totalMinutes % 60;
