@@ -30,8 +30,13 @@ public class EmailService : IEmailService
         // If SMTP is not configured, log the reset link so it is usable in development
         if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(user))
         {
+            // Sanitize user-supplied values to prevent log forging (CRLF injection)
+            var safeEmail = toEmail.Replace("\r", "", StringComparison.Ordinal)
+                                   .Replace("\n", "", StringComparison.Ordinal);
+            var safeLink = resetLink.Replace("\r", "", StringComparison.Ordinal)
+                                    .Replace("\n", "", StringComparison.Ordinal);
             _logger.LogInformation(
-                "[DEV] Password reset link for {Email}: {ResetLink}", toEmail, resetLink);
+                "[DEV] Password reset link for {Email}: {ResetLink}", safeEmail, safeLink);
             return;
         }
 
