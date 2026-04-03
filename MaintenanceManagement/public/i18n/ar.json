@@ -428,7 +428,7 @@
             "mobileWorkflow": "سير العمل المتنقل",
             "registerUser": "تسجيل مستخدم",
             "manageManagers": "إدارة المديرين",
-            "adminDashboard": "لوحة تحكم المشرف",
+            "incomeDashboard": "لوحة تحكم الإيرادات",
             "myAccount": "حسابي",
             "notifications": "الإشعارات",
             "powerBi": "Power BI",
@@ -1369,8 +1369,8 @@
             "secure": "مؤمن بتشفير SSL بـ 256 بت"
         }
     },
-    "adminDashboard": {
-        "title": "لوحة تحكم المشرف",
+    "incomeDashboard": {
+        "title": "لوحة تحكم الإيرادات",
         "subtitle": "نظرة شاملة على جميع عمليات الصيانة",
         "loading": "جارٍ تحميل البيانات...",
         "noData": "لا توجد طلبات.",

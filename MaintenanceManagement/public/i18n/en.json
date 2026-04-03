@@ -428,7 +428,7 @@
             "mobileWorkflow": "Mobile Workflow",
             "registerUser": "Register User",
             "manageManagers": "Manage Managers",
-            "adminDashboard": "Admin Dashboard",
+            "incomeDashboard": "Income Dashboard",
             "myAccount": "My Account",
             "notifications": "Notifications",
             "powerBi": "Power BI",
@@ -1340,8 +1340,8 @@
             "secure": "Secured by 256-bit SSL encryption"
         }
     },
-    "adminDashboard": {
-        "title": "Admin Dashboard",
+    "incomeDashboard": {
+        "title": "Income Dashboard",
         "subtitle": "Comprehensive overview of all maintenance operations",
         "loading": "Loading dashboard...",
         "noData": "No requests found.",
