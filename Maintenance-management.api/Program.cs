@@ -118,6 +118,7 @@ builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ISparePartRe
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IMaintenanceScheduleRepository, Maintenance_management.infrastructure.Repositories.MaintenanceScheduleRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IClientRepository, Maintenance_management.infrastructure.Repositories.ClientRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IMaintenanceRequestRepository, Maintenance_management.infrastructure.Repositories.MaintenanceRequestRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IAuditLogRepository, Maintenance_management.infrastructure.Repositories.AuditLogRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPremiumServiceRepository, Maintenance_management.infrastructure.Repositories.PremiumServiceRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPremiumMaintenanceRequestRepository, Maintenance_management.infrastructure.Repositories.PremiumMaintenanceRequestRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPaymentRepository, Maintenance_management.infrastructure.Repositories.PaymentRepository>();

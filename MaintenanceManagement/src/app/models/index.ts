@@ -734,6 +734,26 @@ export interface MaintenanceRequest {
   invoiceId?: string;
   invoiceNumber?: string;
   createdAt: string;
+  reviewedByUserId?: string;
+  reviewedAt?: string;
+  reviewNotes?: string;
+  assignedTechnicians: AssignedTechnician[];
+}
+
+export interface AssignedTechnician {
+  technicianId: string;
+  fullName: string;
+  specialization: string;
+  email: string;
+  assignedAt: string;
+}
+
+export interface AuditLogEntry {
+  id: string;
+  action: string;
+  performedByName: string;
+  details?: string;
+  createdAt: string;
 }
 
 export interface CreateMaintenanceRequestRequest {

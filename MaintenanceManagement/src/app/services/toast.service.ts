@@ -29,4 +29,17 @@ export class ToastService {
       timerProgressBar: true
     });
   }
+
+  /** Show a toast with a literal message string (no translation lookup). */
+  show(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info'): void {
+    Swal.fire({
+      icon: type,
+      title: message,
+      toast: true,
+      position: this.translation.isRtl ? 'top-start' : 'top-end',
+      showConfirmButton: false,
+      timer: type === 'error' ? 4000 : 3000,
+      timerProgressBar: true
+    });
+  }
 }

@@ -32,6 +32,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<MaintenanceSchedule> MaintenanceSchedules => Set<MaintenanceSchedule>();
     public DbSet<Client> Clients => Set<Client>();
     public DbSet<MaintenanceRequest> MaintenanceRequests => Set<MaintenanceRequest>();
+    public DbSet<MaintenanceRequestAssignment> MaintenanceRequestAssignments => Set<MaintenanceRequestAssignment>();
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<PremiumService> PremiumServices => Set<PremiumService>();
     public DbSet<PremiumMaintenanceRequest> PremiumMaintenanceRequests => Set<PremiumMaintenanceRequest>();
     public DbSet<Payment> Payments => Set<Payment>();
@@ -324,6 +326,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.Property(r => r.Description).HasMaxLength(2000);
             e.Property(r => r.EquipmentDescription).HasMaxLength(500);
             e.Property(r => r.Notes).HasMaxLength(1000);
+            e.Property(r => r.ReviewedByUserId).HasMaxLength(450);
+            e.Property(r => r.ReviewNotes).HasMaxLength(2000);
             e.HasOne(r => r.Client)
                 .WithMany(c => c.MaintenanceRequests)
                 .HasForeignKey(r => r.ClientId)
@@ -336,6 +340,33 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .WithMany()
                 .HasForeignKey(r => r.InvoiceId)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        builder.Entity<MaintenanceRequestAssignment>(e =>
+        {
+            e.HasKey(a => a.Id);
+            e.Property(a => a.AssignedByUserId).IsRequired().HasMaxLength(450);
+            e.HasOne(a => a.MaintenanceRequest)
+                .WithMany(r => r.Assignments)
+                .HasForeignKey(a => a.MaintenanceRequestId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(a => a.Technician)
+                .WithMany()
+                .HasForeignKey(a => a.TechnicianId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(a => new { a.MaintenanceRequestId, a.TechnicianId }).IsUnique();
+        });
+
+        builder.Entity<AuditLog>(e =>
+        {
+            e.HasKey(l => l.Id);
+            e.Property(l => l.EntityType).IsRequired().HasMaxLength(100);
+            e.Property(l => l.EntityId).IsRequired().HasMaxLength(450);
+            e.Property(l => l.Action).IsRequired().HasMaxLength(100);
+            e.Property(l => l.PerformedByUserId).IsRequired().HasMaxLength(450);
+            e.Property(l => l.PerformedByName).HasMaxLength(200);
+            e.Property(l => l.Details).HasMaxLength(2000);
+            e.HasIndex(l => new { l.EntityType, l.EntityId });
         });
 
         builder.Entity<Invoice>(e =>

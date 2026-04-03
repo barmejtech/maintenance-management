@@ -11,6 +11,11 @@ public class MaintenanceRequest : BaseEntity
     public MaintenanceRequestStatus Status { get; set; } = MaintenanceRequestStatus.Pending;
     public string? Notes { get; set; }
 
+    // Review tracking
+    public string? ReviewedByUserId { get; set; }
+    public DateTime? ReviewedAt { get; set; }
+    public string? ReviewNotes { get; set; }
+
     public Guid ClientId { get; set; }
     public Client? Client { get; set; }
 
@@ -19,4 +24,6 @@ public class MaintenanceRequest : BaseEntity
 
     public Guid? InvoiceId { get; set; }
     public Invoice? Invoice { get; set; }
+
+    public ICollection<MaintenanceRequestAssignment> Assignments { get; set; } = new List<MaintenanceRequestAssignment>();
 }

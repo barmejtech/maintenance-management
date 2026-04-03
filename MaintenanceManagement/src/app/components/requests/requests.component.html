@@ -1,0 +1,428 @@
+<div class="container-fluid py-3">
+
+  <!-- ═══════════════════════════════════════════════════
+       LIST VIEW
+  ════════════════════════════════════════════════════ -->
+  @if (!showDetail()) {
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+      <h4 class="mb-0 fw-bold">
+        <i class="bi bi-inbox text-primary me-2"></i>Client Maintenance Requests
+      </h4>
+      <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+      </a>
+    </div>
+
+    <!-- Filters -->
+    <div class="card shadow-sm border-0 mb-3">
+      <div class="card-body py-2">
+        <div class="row g-2 align-items-end">
+          <div class="col-12 col-md-3">
+            <label class="form-label small mb-1">Status</label>
+            <select class="form-select form-select-sm" [(ngModel)]="filterStatus">
+              <option value="">All Statuses</option>
+              <option value="0">Pending</option>
+              <option value="1">Under Review</option>
+              <option value="2">Approved</option>
+              <option value="3">In Progress</option>
+              <option value="4">Completed</option>
+              <option value="5">Rejected</option>
+              <option value="6">Cancelled</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-3">
+            <label class="form-label small mb-1">Search</label>
+            <input type="text" class="form-control form-control-sm" placeholder="Title, client, or ID..."
+              [(ngModel)]="filterSearch" />
+          </div>
+          <div class="col-6 col-md-2">
+            <label class="form-label small mb-1">From</label>
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="filterFrom" />
+          </div>
+          <div class="col-6 col-md-2">
+            <label class="form-label small mb-1">To</label>
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="filterTo" />
+          </div>
+          <div class="col-12 col-md-2 d-flex gap-2">
+            <button class="btn btn-primary btn-sm flex-fill" (click)="applyFilters()">
+              <i class="bi bi-search me-1"></i>Search
+            </button>
+            <button class="btn btn-outline-secondary btn-sm" (click)="clearFilters()" title="Clear filters">
+              <i class="bi bi-x-circle"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @if (isLoading()) {
+      <div class="text-center py-5">
+        <span class="spinner-border text-primary me-2"></span>Loading requests...
+      </div>
+    } @else if (requests().length === 0) {
+      <div class="text-center py-5 text-muted">
+        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+        <p>No maintenance requests found.</p>
+      </div>
+    } @else {
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th><i class="bi bi-hash me-1"></i>Request</th>
+                  <th><i class="bi bi-person me-1"></i>Client</th>
+                  <th><i class="bi bi-calendar3 me-1"></i>Date</th>
+                  <th><i class="bi bi-flag me-1"></i>Status</th>
+                  <th><i class="bi bi-person-gear me-1"></i>Assigned</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (req of requests() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track req.id) {
+                  <tr class="req-row" (click)="viewDetail(req)" style="cursor:pointer">
+                    <td>
+                      <div class="fw-semibold text-truncate" style="max-width:220px" [title]="req.title">{{ req.title }}</div>
+                      <small class="text-muted font-monospace">{{ req.id.substring(0, 8) }}...</small>
+                    </td>
+                    <td>
+                      <span class="fw-medium">{{ req.clientName }}</span>
+                    </td>
+                    <td>
+                      <small>{{ req.requestDate | date:'MMM d, y' }}</small>
+                    </td>
+                    <td>
+                      <span class="badge rounded-pill px-2 py-1" [class]="getStatusClass(req.status)">
+                        {{ getStatusLabel(req.status) }}
+                      </span>
+                    </td>
+                    <td>
+                      @if (req.assignedTechnicians?.length) {
+                        <span class="badge bg-primary-subtle text-primary rounded-pill">
+                          <i class="bi bi-person-gear me-1"></i>{{ req.assignedTechnicians.length }}
+                        </span>
+                      } @else {
+                        <span class="text-muted small">—</span>
+                      }
+                    </td>
+                    <td class="text-end" (click)="$event.stopPropagation()">
+                      <div class="d-flex gap-1 justify-content-end flex-wrap">
+                        <button class="btn btn-sm btn-outline-primary" (click)="viewDetail(req)" title="View Details">
+                          <i class="bi bi-eye"></i>
+                        </button>
+                        @if (canApproveOrReject(req)) {
+                          <button class="btn btn-sm btn-success" (click)="openApprove(req)" title="Approve">
+                            <i class="bi bi-check-circle me-1"></i>Approve
+                          </button>
+                          <button class="btn btn-sm btn-danger" (click)="openReject(req)" title="Reject">
+                            <i class="bi bi-x-circle me-1"></i>Reject
+                          </button>
+                        }
+                        @if (canAssign(req)) {
+                          <button class="btn btn-sm btn-outline-info" (click)="openAssign(req)" title="Assign Technicians">
+                            <i class="bi bi-person-plus me-1"></i>Assign
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center mt-3">
+        <pagination-controls (pageChange)="currentPage.set($event)" previousLabel="Prev" nextLabel="Next"></pagination-controls>
+      </div>
+    }
+  }
+
+  <!-- ═══════════════════════════════════════════════════
+       DETAIL VIEW
+  ════════════════════════════════════════════════════ -->
+  @if (showDetail() && selectedRequest(); as req) {
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+        <button class="btn btn-outline-secondary btn-sm" (click)="closeDetail()">
+          <i class="bi bi-arrow-left me-1"></i>Back to List
+        </button>
+        <h4 class="mb-0 fw-bold">
+          <i class="bi bi-file-earmark-text text-primary me-2"></i>Request Detail
+        </h4>
+        <span class="badge rounded-pill px-2 py-1 ms-auto" [class]="getStatusClass(req.status)">
+          {{ getStatusLabel(req.status) }}
+        </span>
+      </div>
+
+      <div class="row g-3">
+        <!-- Left: Request Info -->
+        <div class="col-12 col-lg-7">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-transparent border-bottom fw-semibold">
+              <i class="bi bi-info-circle me-2 text-primary"></i>Request Information
+            </div>
+            <div class="card-body">
+              <dl class="row mb-0">
+                <dt class="col-sm-4 text-muted">Title</dt>
+                <dd class="col-sm-8 fw-semibold">{{ req.title }}</dd>
+
+                <dt class="col-sm-4 text-muted">Client</dt>
+                <dd class="col-sm-8">{{ req.clientName }}</dd>
+
+                <dt class="col-sm-4 text-muted">Request Date</dt>
+                <dd class="col-sm-8">{{ req.requestDate | date:'MMM d, y, h:mm a' }}</dd>
+
+                <dt class="col-sm-4 text-muted">Submitted</dt>
+                <dd class="col-sm-8">{{ req.createdAt | date:'MMM d, y, h:mm a' }}</dd>
+
+                @if (req.description) {
+                  <dt class="col-sm-4 text-muted">Description</dt>
+                  <dd class="col-sm-8">{{ req.description }}</dd>
+                }
+
+                @if (req.equipmentDescription) {
+                  <dt class="col-sm-4 text-muted">Equipment</dt>
+                  <dd class="col-sm-8">{{ req.equipmentDescription }}</dd>
+                }
+
+                @if (req.notes) {
+                  <dt class="col-sm-4 text-muted">Client Notes</dt>
+                  <dd class="col-sm-8">{{ req.notes }}</dd>
+                }
+              </dl>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Review & Assignment Info -->
+        <div class="col-12 col-lg-5 d-flex flex-column gap-3">
+          <!-- Review Info -->
+          <div class="card shadow-sm border-0">
+            <div class="card-header bg-transparent border-bottom fw-semibold">
+              <i class="bi bi-shield-check me-2 text-success"></i>Review Status
+            </div>
+            <div class="card-body">
+              @if (req.reviewedAt) {
+                <dl class="row mb-0">
+                  <dt class="col-5 text-muted">Reviewed</dt>
+                  <dd class="col-7">{{ req.reviewedAt | date:'MMM d, y, h:mm a' }}</dd>
+                  @if (req.reviewNotes) {
+                    <dt class="col-5 text-muted">Notes</dt>
+                    <dd class="col-7">{{ req.reviewNotes }}</dd>
+                  }
+                </dl>
+              } @else {
+                <p class="text-muted small mb-0">Not yet reviewed.</p>
+              }
+
+              <div class="d-flex gap-2 mt-3 flex-wrap">
+                @if (canApproveOrReject(req)) {
+                  <button class="btn btn-success btn-sm" (click)="openApprove(req)">
+                    <i class="bi bi-check-circle me-1"></i>Approve
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="openReject(req)">
+                    <i class="bi bi-x-circle me-1"></i>Reject
+                  </button>
+                }
+                @if (canAssign(req)) {
+                  <button class="btn btn-info btn-sm text-white" (click)="openAssign(req)">
+                    <i class="bi bi-person-plus me-1"></i>Assign Technicians
+                  </button>
+                }
+                <button class="btn btn-outline-secondary btn-sm" (click)="openAuditLog(req)">
+                  <i class="bi bi-journal-text me-1"></i>Audit Log
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Assigned Technicians -->
+          <div class="card shadow-sm border-0">
+            <div class="card-header bg-transparent border-bottom fw-semibold">
+              <i class="bi bi-people me-2 text-info"></i>Assigned Technicians
+            </div>
+            <div class="card-body p-0">
+              @if (req.assignedTechnicians?.length) {
+                <ul class="list-group list-group-flush">
+                  @for (t of req.assignedTechnicians; track t.technicianId) {
+                    <li class="list-group-item d-flex align-items-center gap-2 py-2">
+                      <span class="avatar-sm rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0">
+                        {{ t.fullName.charAt(0) }}
+                      </span>
+                      <div class="overflow-hidden">
+                        <div class="fw-semibold text-truncate">{{ t.fullName }}</div>
+                        <small class="text-muted">{{ t.specialization }}</small>
+                      </div>
+                      <small class="text-muted ms-auto flex-shrink-0">{{ t.assignedAt | date:'MMM d' }}</small>
+                    </li>
+                  }
+                </ul>
+              } @else {
+                <p class="text-muted small p-3 mb-0">No technicians assigned yet.</p>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════════════════
+       APPROVE MODAL
+  ════════════════════════════════════════════════════ -->
+  @if (showApproveModal()) {
+    <div class="modal-overlay" (click)="showApproveModal.set(false)">
+      <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+        <div class="card shadow-lg border-0">
+          <div class="card-header bg-success text-white fw-semibold">
+            <i class="bi bi-check-circle me-2"></i>Approve Request
+          </div>
+          <div class="card-body">
+            <p class="text-muted small">Optionally add notes before approving.</p>
+            <label class="form-label">Review Notes</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="reviewNotes" placeholder="Optional notes..."></textarea>
+          </div>
+          <div class="card-footer d-flex justify-content-end gap-2">
+            <button class="btn btn-outline-secondary btn-sm" (click)="showApproveModal.set(false)">Cancel</button>
+            <button class="btn btn-success btn-sm" (click)="confirmApprove()" [disabled]="isProcessing()">
+              @if (isProcessing()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+              Approve
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════════════════
+       REJECT MODAL
+  ════════════════════════════════════════════════════ -->
+  @if (showRejectModal()) {
+    <div class="modal-overlay" (click)="showRejectModal.set(false)">
+      <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+        <div class="card shadow-lg border-0">
+          <div class="card-header bg-danger text-white fw-semibold">
+            <i class="bi bi-x-circle me-2"></i>Reject Request
+          </div>
+          <div class="card-body">
+            <p class="text-muted small">Please provide a reason for rejection.</p>
+            <label class="form-label">Reason / Notes</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="reviewNotes" placeholder="Reason for rejection..."></textarea>
+          </div>
+          <div class="card-footer d-flex justify-content-end gap-2">
+            <button class="btn btn-outline-secondary btn-sm" (click)="showRejectModal.set(false)">Cancel</button>
+            <button class="btn btn-danger btn-sm" (click)="confirmReject()" [disabled]="isProcessing()">
+              @if (isProcessing()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+              Reject
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════════════════
+       ASSIGN TECHNICIANS MODAL
+  ════════════════════════════════════════════════════ -->
+  @if (showAssignModal()) {
+    <div class="modal-overlay" (click)="showAssignModal.set(false)">
+      <div class="modal-dialog-custom modal-lg-custom" (click)="$event.stopPropagation()">
+        <div class="card shadow-lg border-0">
+          <div class="card-header bg-info text-white fw-semibold d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-person-plus me-2"></i>Assign Available Technicians</span>
+            <button class="btn btn-sm btn-outline-light" (click)="showAssignModal.set(false)">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <div class="card-body" style="max-height:60vh;overflow-y:auto">
+            @if (availableTechnicians().length === 0) {
+              <div class="text-center text-muted py-4">
+                <i class="bi bi-person-x fs-2 d-block mb-2"></i>
+                No available technicians found.
+              </div>
+            } @else {
+              <div class="row g-2">
+                @for (tech of availableTechnicians(); track tech.id) {
+                  <div class="col-12 col-sm-6">
+                    <div class="tech-select-card p-2 rounded border d-flex align-items-center gap-2"
+                      [class.selected]="isTechnicianSelected(tech.id)"
+                      (click)="toggleTechnicianSelection(tech.id)"
+                      style="cursor:pointer">
+                      <input type="checkbox" class="form-check-input flex-shrink-0"
+                        [checked]="isTechnicianSelected(tech.id)"
+                        (click)="$event.stopPropagation(); toggleTechnicianSelection(tech.id)" />
+                      <div class="avatar-sm rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0">
+                        {{ tech.firstName.charAt(0) }}
+                      </div>
+                      <div class="overflow-hidden">
+                        <div class="fw-semibold text-truncate">{{ tech.fullName }}</div>
+                        <small class="text-muted">{{ tech.specialization }}</small>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="card-footer d-flex justify-content-between align-items-center">
+            <small class="text-muted">{{ selectedTechnicianIds().size }} technician(s) selected</small>
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-secondary btn-sm" (click)="showAssignModal.set(false)">Cancel</button>
+              <button class="btn btn-info text-white btn-sm" (click)="confirmAssign()" [disabled]="isProcessing() || selectedTechnicianIds().size === 0">
+                @if (isProcessing()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+                Assign
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ═══════════════════════════════════════════════════
+       AUDIT LOG MODAL
+  ════════════════════════════════════════════════════ -->
+  @if (showAuditModal()) {
+    <div class="modal-overlay" (click)="showAuditModal.set(false)">
+      <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+        <div class="card shadow-lg border-0">
+          <div class="card-header bg-dark text-white fw-semibold d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-journal-text me-2"></i>Audit Log</span>
+            <button class="btn btn-sm btn-outline-light" (click)="showAuditModal.set(false)">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <div class="card-body p-0" style="max-height:60vh;overflow-y:auto">
+            @if (auditLog().length === 0) {
+              <div class="text-center text-muted py-4">
+                <i class="bi bi-journal fs-2 d-block mb-2"></i>
+                No audit entries found.
+              </div>
+            } @else {
+              <ul class="list-group list-group-flush">
+                @for (entry of auditLog(); track entry.id) {
+                  <li class="list-group-item py-2">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                      <span [class]="getActionBadge(entry.action)">{{ getActionLabel(entry.action) }}</span>
+                      <small class="text-muted">by {{ entry.performedByName }}</small>
+                      <small class="text-muted ms-auto">{{ entry.createdAt | date:'MMM d, y, h:mm a' }}</small>
+                    </div>
+                    @if (entry.details) {
+                      <small class="text-muted d-block">{{ entry.details }}</small>
+                    }
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+          <div class="card-footer text-end">
+            <button class="btn btn-outline-secondary btn-sm" (click)="showAuditModal.set(false)">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

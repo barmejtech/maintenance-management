@@ -98,6 +98,7 @@ export class NotificationService {
       case 'SparePart':           return '/spare-parts';
       case 'Technician':          return '/technicians';
       case 'Equipment':           return '/equipment';
+      case 'MaintenanceRequest':  return '/requests';
       default:                    return null;
     }
   }
