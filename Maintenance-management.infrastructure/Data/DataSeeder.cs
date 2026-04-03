@@ -44,8 +44,8 @@ public static class DataSeeder
             {
                 UserName = adminEmail,
                 Email = adminEmail,
-                FirstName = "System",
-                LastName = "Admin",
+                FirstName = "عبدالله",
+                LastName = "الغامدي",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -73,8 +73,8 @@ public static class DataSeeder
             {
                 UserName = managerEmail,
                 Email = managerEmail,
-                FirstName = "Maintenance",
-                LastName = "Manager",
+                FirstName = "فهد",
+                LastName = "القحطاني",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -102,8 +102,8 @@ public static class DataSeeder
             {
                 UserName = techEmail,
                 Email = techEmail,
-                FirstName = "Demo",
-                LastName = "Technician",
+                FirstName = "خالد",
+                LastName = "الشهري",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -131,8 +131,8 @@ public static class DataSeeder
             {
                 UserName = dataEntryEmail,
                 Email = dataEntryEmail,
-                FirstName = "Data",
-                LastName = "Entry",
+                FirstName = "سعود",
+                LastName = "الدوسري",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -160,8 +160,8 @@ public static class DataSeeder
             {
                 UserName = supportEmail,
                 Email = supportEmail,
-                FirstName = "Support",
-                LastName = "Agent",
+                FirstName = "ياسر",
+                LastName = "العتيبي",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -203,11 +203,14 @@ public static class DataSeeder
             {
                 Id = tech1Id,
                 UserId = techUser.Id,
-                FirstName = "Demo",
-                LastName = "Technician",
+                FirstName = "خالد",
+                LastName = "الشهري",
                 Email = techEmail,
-                Phone = "555-0100",
-                Specialization = "HVAC Systems",
+                Phone = "+966 55 123 4567",
+                Specialization = "أنظمة التكييف",
+                Address = "حي النسيم، الرياض",
+                Latitude = 24.7136,
+                Longitude = 46.6753,
                 Status = TechnicianStatus.Available,
                 CreatedAt = DateTime.UtcNow
             });
@@ -220,11 +223,14 @@ public static class DataSeeder
             {
                 Id = tech2Id,
                 UserId = managerUser.Id,
-                FirstName = "Maintenance",
-                LastName = "Manager",
+                FirstName = "فهد",
+                LastName = "القحطاني",
                 Email = managerEmail,
-                Phone = "555-0200",
-                Specialization = "General Maintenance",
+                Phone = "+966 55 234 5678",
+                Specialization = "الصيانة العامة",
+                Address = "حي العليا، الرياض",
+                Latitude = 24.6877,
+                Longitude = 46.6854,
                 Status = TechnicianStatus.Available,
                 CreatedAt = DateTime.UtcNow
             });
@@ -242,11 +248,11 @@ public static class DataSeeder
             {
                 Id = manager1Id,
                 UserId = managerUser.Id,
-                FirstName = "Maintenance",
-                LastName = "Manager",
+                FirstName = "فهد",
+                LastName = "القحطاني",
                 Email = managerEmail,
-                Phone = "555-0200",
-                Department = "Facilities Management",
+                Phone = "+966 55 234 5678",
+                Department = "إدارة المرافق",
                 CreatedAt = DateTime.UtcNow
             });
             logger.LogInformation("Seeding Manager record.");
@@ -263,11 +269,11 @@ public static class DataSeeder
             {
                 Id = dataEntry1Id,
                 UserId = dataEntryUser.Id,
-                FirstName = "Data",
-                LastName = "Entry",
+                FirstName = "سعود",
+                LastName = "الدوسري",
                 Email = dataEntryEmail,
-                Phone = "555-0500",
-                Section = "Operations",
+                Phone = "+966 55 345 6789",
+                Section = "العمليات",
                 CreatedAt = DateTime.UtcNow
             });
             logger.LogInformation("Seeding DataEntry record.");
@@ -284,8 +290,8 @@ public static class DataSeeder
             context.TechnicianGroups.Add(new TechnicianGroup
             {
                 Id = group1Id,
-                Name = "HVAC Team",
-                Description = "Handles all HVAC maintenance and repairs",
+                Name = "فريق تكييف الرياض",
+                Description = "فريق متخصص في صيانة أنظمة التكييف في منطقة الرياض",
                 LeaderUserId = techUser?.Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -296,8 +302,8 @@ public static class DataSeeder
             context.TechnicianGroups.Add(new TechnicianGroup
             {
                 Id = group2Id,
-                Name = "Electrical Team",
-                Description = "Handles electrical systems and inspections",
+                Name = "فريق الصيانة العامة",
+                Description = "فريق متخصص في أعمال الصيانة العامة والطوارئ",
                 LeaderUserId = managerUser?.Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -314,12 +320,12 @@ public static class DataSeeder
             context.Clients.Add(new Client
             {
                 Id = client1Id,
-                Name = "John Smith",
-                CompanyName = "Acme Corporation",
-                Email = "john.smith@acme.com",
-                Phone = "555-0300",
-                Address = "123 Business Ave, New York, NY 10001",
-                Notes = "Primary client for HVAC services",
+                Name = "محمد العمري",
+                CompanyName = "شركة الرياض للتطوير",
+                Email = "mohammed@riyadhdev.sa",
+                Phone = "+966 11 456 7890",
+                Address = "طريق الملك فهد، حي العليا، الرياض 12211",
+                Notes = "عميل رئيسي لخدمات التكييف",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -329,12 +335,12 @@ public static class DataSeeder
             context.Clients.Add(new Client
             {
                 Id = client2Id,
-                Name = "Sarah Johnson",
-                CompanyName = "TechCorp Inc.",
-                Email = "sarah.johnson@techcorp.com",
-                Phone = "555-0400",
-                Address = "456 Tech Street, San Francisco, CA 94105",
-                Notes = "Annual maintenance contract client",
+                Name = "أحمد الزهراني",
+                CompanyName = "مجموعة جدة التجارية",
+                Email = "ahmed@jcg.sa",
+                Phone = "+966 12 567 8901",
+                Address = "شارع التحلية، حي الروضة، جدة 23434",
+                Notes = "عميل خدمات الصيانة الوقائية",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -350,17 +356,17 @@ public static class DataSeeder
             context.Equipments.Add(new Equipment
             {
                 Id = eq1Id,
-                Name = "Air Handler Unit #1",
-                SerialNumber = "AHU-2023-001",
-                Model = "AHU-500",
-                Manufacturer = "Carrier",
-                Location = "Building A - Rooftop",
+                Name = "وحدة مناولة هواء - المبنى أ",
+                SerialNumber = "AHU-RUH-2024-001",
+                Model = "يورك YAL",
+                Manufacturer = "يورك",
+                Location = "الدور الأول، المبنى أ، مجمع الرياض التجاري",
                 InstallationDate = new DateTime(2020, 6, 15),
                 LastMaintenanceDate = new DateTime(2024, 1, 10),
                 NextMaintenanceDate = new DateTime(2024, 7, 10),
                 Status = EquipmentStatus.Operational,
-                Notes = "Primary air handler for Building A",
-                QrCode = "2020-06-15 Air Handler Unit AHU-2023-001",
+                Notes = "صيانة دورية كل 3 أشهر",
+                QrCode = "2020-06-15 وحدة مناولة هواء AHU-RUH-2024-001",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -370,17 +376,17 @@ public static class DataSeeder
             context.Equipments.Add(new Equipment
             {
                 Id = eq2Id,
-                Name = "Chiller Unit #2",
-                SerialNumber = "CHU-2022-002",
-                Model = "CH-800",
-                Manufacturer = "Trane",
-                Location = "Mechanical Room B",
+                Name = "وحدة تبريد مركزية - المبنى ب",
+                SerialNumber = "CH-RUH-2024-002",
+                Model = "ترين RTAC",
+                Manufacturer = "ترين",
+                Location = "سطح المبنى ب، مجمع الرياض التجاري",
                 InstallationDate = new DateTime(2019, 3, 22),
                 LastMaintenanceDate = new DateTime(2023, 11, 5),
                 NextMaintenanceDate = new DateTime(2024, 5, 5),
                 Status = EquipmentStatus.UnderMaintenance,
-                Notes = "Cooling unit for floors 2-5",
-                QrCode = "2019-03-22 Chiller Unit #2 CHU-2022-002",
+                Notes = "وحدة تبريد 500 طن",
+                QrCode = "2019-03-22 وحدة تبريد مركزية CH-RUH-2024-002",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -396,18 +402,18 @@ public static class DataSeeder
             context.HVACSystems.Add(new HVACSystem
             {
                 Id = hvac1Id,
-                Name = "Central AC System A",
-                SystemType = "Central Air Conditioning",
-                Brand = "Carrier",
-                Model = "38AKS024-3",
-                Capacity = 24m,
-                CapacityUnit = "kW",
+                Name = "نظام تكييف مركزي - المبنى أ",
+                SystemType = "مركزي",
+                Brand = "يورك",
+                Model = "YAL-300",
+                Capacity = 300m,
+                CapacityUnit = "طن تبريد",
                 RefrigerantType = "R-410A",
-                Location = "Building A",
+                Location = "مجمع الرياض التجاري، المبنى أ",
                 InstallationDate = new DateTime(2020, 6, 15),
                 LastInspectionDate = new DateTime(2024, 1, 10),
                 NextInspectionDate = new DateTime(2024, 7, 10),
-                Notes = "Main cooling system for Building A",
+                Notes = "النظام الرئيسي للتبريد في المبنى أ",
                 EquipmentId = eq1Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -418,18 +424,18 @@ public static class DataSeeder
             context.HVACSystems.Add(new HVACSystem
             {
                 Id = hvac2Id,
-                Name = "Chiller System B",
-                SystemType = "Chiller",
-                Brand = "Trane",
-                Model = "CGAM-025",
-                Capacity = 50m,
-                CapacityUnit = "Tons",
+                Name = "نظام تبريد - المبنى ب",
+                SystemType = "وحدة تبريد مركزية",
+                Brand = "ترين",
+                Model = "RTAC-500",
+                Capacity = 500m,
+                CapacityUnit = "طن تبريد",
                 RefrigerantType = "R-134a",
-                Location = "Building B",
+                Location = "مجمع الرياض التجاري، المبنى ب",
                 InstallationDate = new DateTime(2019, 3, 22),
                 LastInspectionDate = new DateTime(2023, 11, 5),
                 NextInspectionDate = new DateTime(2024, 5, 5),
-                Notes = "Chiller system serving floors 2-5",
+                Notes = "نظام التبريد للأدوار من 2 إلى 5",
                 EquipmentId = eq2Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -446,17 +452,19 @@ public static class DataSeeder
             context.TaskOrders.Add(new TaskOrder
             {
                 Id = task1Id,
-                Title = "Quarterly HVAC Inspection",
-                Description = "Perform quarterly inspection of all HVAC units in Building A",
+                Title = "فحص دوري لنظام التكييف - الربع الأول",
+                Description = "إجراء الفحص الدوري الربع سنوي لجميع وحدات التكييف في المبنى أ بمجمع الرياض التجاري",
                 Status = TaskStatus.InProgress,
                 Priority = TaskPriority.High,
                 MaintenanceType = MaintenanceType.Inspection,
                 ScheduledDate = DateTime.UtcNow.AddDays(-7),
                 DueDate = DateTime.UtcNow.AddDays(7),
-                Notes = "Inspect filters, belts, and refrigerant levels",
+                Notes = "فحص الفلاتر والأحزمة ومستويات غاز التبريد",
                 CreatedByUserId = adminUserId,
                 TechnicianId = tech1Id,
                 EquipmentId = eq1Id,
+                ArrivalLatitude = 24.7136,
+                ArrivalLongitude = 46.6753,
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -466,17 +474,19 @@ public static class DataSeeder
             context.TaskOrders.Add(new TaskOrder
             {
                 Id = task2Id,
-                Title = "Chiller Preventive Maintenance",
-                Description = "Annual preventive maintenance for Chiller Unit #2",
+                Title = "إصلاح طارئ لوحدة التبريد",
+                Description = "إصلاح طارئ لوحدة التبريد المركزية في المبنى ب بمجمع الرياض التجاري",
                 Status = TaskStatus.Pending,
                 Priority = TaskPriority.Medium,
                 MaintenanceType = MaintenanceType.Preventive,
                 ScheduledDate = DateTime.UtcNow.AddDays(14),
                 DueDate = DateTime.UtcNow.AddDays(30),
-                Notes = "Include oil change and vibration analysis",
+                Notes = "يشمل تغيير الزيت وتحليل الاهتزاز",
                 CreatedByUserId = adminUserId,
                 GroupId = group1Id,
                 EquipmentId = eq2Id,
+                ArrivalLatitude = 24.7136,
+                ArrivalLongitude = 46.6753,
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -492,18 +502,18 @@ public static class DataSeeder
             context.Invoices.Add(new Invoice
             {
                 Id = inv1Id,
-                InvoiceNumber = "INV-2024-001",
-                ClientName = "Acme Corporation",
-                ClientEmail = "billing@acme.com",
-                ClientAddress = "123 Business Ave, New York, NY 10001",
+                InvoiceNumber = "INV-2024-SA-001",
+                ClientName = "شركة الرياض للتطوير",
+                ClientEmail = "billing@riyadhdev.sa",
+                ClientAddress = "طريق الملك فهد، حي العليا، الرياض 12211",
                 IssueDate = DateTime.UtcNow.AddDays(-30),
                 DueDate = DateTime.UtcNow,
                 SubTotal = 1500m,
-                TaxRate = 10m,
-                TaxAmount = 150m,
-                TotalAmount = 1650m,
+                TaxRate = 15m,
+                TaxAmount = 225m,
+                TotalAmount = 1725m,
                 Status = InvoiceStatus.Sent,
-                Notes = "HVAC inspection services",
+                Notes = "خدمات فحص أنظمة التكييف",
                 CreatedByUserId = adminUserId,
                 TaskOrderId = task1Id,
                 ClientId = client1Id,
@@ -516,18 +526,18 @@ public static class DataSeeder
             context.Invoices.Add(new Invoice
             {
                 Id = inv2Id,
-                InvoiceNumber = "INV-2024-002",
-                ClientName = "TechCorp Inc.",
-                ClientEmail = "accounts@techcorp.com",
-                ClientAddress = "456 Tech Street, San Francisco, CA 94105",
+                InvoiceNumber = "INV-2024-SA-002",
+                ClientName = "مجموعة جدة التجارية",
+                ClientEmail = "accounts@jcg.sa",
+                ClientAddress = "شارع التحلية، حي الروضة، جدة 23434",
                 IssueDate = DateTime.UtcNow,
                 DueDate = DateTime.UtcNow.AddDays(30),
                 SubTotal = 3200m,
-                TaxRate = 10m,
-                TaxAmount = 320m,
-                TotalAmount = 3520m,
+                TaxRate = 15m,
+                TaxAmount = 480m,
+                TotalAmount = 3680m,
                 Status = InvoiceStatus.Draft,
-                Notes = "Annual chiller maintenance",
+                Notes = "صيانة سنوية لوحدة التبريد المركزية",
                 CreatedByUserId = adminUserId,
                 ClientId = client2Id,
                 CreatedAt = DateTime.UtcNow
@@ -546,7 +556,7 @@ public static class DataSeeder
             context.InvoiceLineItems.Add(new InvoiceLineItem
             {
                 Id = li1Id,
-                Description = "HVAC Inspection Labor",
+                Description = "عمالة فحص أنظمة التكييف",
                 Quantity = 8m,
                 UnitPrice = 150m,
                 Total = 1200m,
@@ -560,7 +570,7 @@ public static class DataSeeder
             context.InvoiceLineItems.Add(new InvoiceLineItem
             {
                 Id = li2Id,
-                Description = "Filter Replacement Parts",
+                Description = "قطع غيار استبدال الفلاتر",
                 Quantity = 3m,
                 UnitPrice = 100m,
                 Total = 300m,
@@ -574,7 +584,7 @@ public static class DataSeeder
             context.InvoiceLineItems.Add(new InvoiceLineItem
             {
                 Id = li3Id,
-                Description = "Chiller Preventive Maintenance",
+                Description = "صيانة وقائية لوحدة التبريد المركزية",
                 Quantity = 16m,
                 UnitPrice = 200m,
                 Total = 3200m,
@@ -588,21 +598,21 @@ public static class DataSeeder
         // ── MaintenanceReports ───────────────────────────────────────────────────
         var report1Id = new Guid("00000000-0000-0000-0002-000000000002");
         var report2Id = new Guid("00000000-0000-0000-0003-000000000003");
-        var techFullName = techUser is not null ? "Demo Technician" : "Unknown Technician";
+        var techFullName = techUser is not null ? "خالد الشهري" : "فني غير معروف";
 
         if (!await context.MaintenanceReports.AnyAsync(r => r.Id == report1Id))
         {
             context.MaintenanceReports.Add(new MaintenanceReport
             {
                 Id = report1Id,
-                Title = "HVAC Q1 Inspection Report",
-                Content = "Completed quarterly HVAC inspection of Building A. All filters replaced. Refrigerant levels are within acceptable range. Belt tension adjusted on AHU #1. No major issues found.",
+                Title = "تقرير فحص التكييف - الربع الأول",
+                Content = "تم إجراء الفحص الدوري الربع سنوي لأنظمة التكييف في المبنى أ بمجمع الرياض التجاري. تم استبدال جميع الفلاتر. مستويات غاز التبريد ضمن النطاق المقبول. تم ضبط توتر الحزام في وحدة مناولة الهواء. لم يتم اكتشاف أي مشاكل رئيسية.",
                 TechnicianName = techFullName,
                 CreatedByUserId = adminUserId,
                 ReportDate = DateTime.UtcNow.AddDays(-5),
                 LaborHours = 8m,
                 MaterialCost = 300m,
-                Recommendations = "Schedule annual deep cleaning for next quarter.",
+                Recommendations = "جدولة تنظيف عميق سنوي في الربع القادم.",
                 TaskOrderId = task1Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -613,14 +623,14 @@ public static class DataSeeder
             context.MaintenanceReports.Add(new MaintenanceReport
             {
                 Id = report2Id,
-                Title = "Chiller System Assessment",
-                Content = "Pre-maintenance assessment of Chiller Unit #2. Found minor oil leak at pump seal. Vibration levels slightly elevated. Unit still operational but preventive maintenance is critical.",
+                Title = "تقييم نظام التبريد المركزي",
+                Content = "تقييم ما قبل الصيانة لوحدة التبريد المركزية في المبنى ب. تم رصد تسرب طفيف في زيت ختم المضخة. مستويات الاهتزاز مرتفعة قليلاً. الوحدة لا تزال تعمل لكن الصيانة الوقائية ضرورية.",
                 TechnicianName = techFullName,
                 CreatedByUserId = adminUserId,
                 ReportDate = DateTime.UtcNow.AddDays(-2),
                 LaborHours = 4m,
                 MaterialCost = 50m,
-                Recommendations = "Replace pump seal during scheduled maintenance. Order R-134a refrigerant.",
+                Recommendations = "استبدال ختم المضخة خلال الصيانة المجدولة. طلب غاز التبريد R-134a.",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -746,10 +756,10 @@ public static class DataSeeder
                 context.ChatMessages.Add(new ChatMessage
                 {
                     Id = msg1Id,
-                    SenderId = techUser.Id,
-                    SenderName = "Demo Technician",
-                    ReceiverId = managerUser.Id,
-                    Content = "The HVAC inspection in Building A is complete. All filters have been replaced.",
+                    SenderId = managerUser.Id,
+                    SenderName = "فهد القحطاني",
+                    ReceiverId = techUser.Id,
+                    Content = "مرحبا، تم تعيين مهمة الفحص الدوري لك. يرجى البدء بالمبنى أ في مجمع الرياض التجاري.",
                     MessageType = MessageType.Text,
                     CreatedAt = DateTime.UtcNow.AddHours(-2)
                 });
@@ -760,10 +770,10 @@ public static class DataSeeder
                 context.ChatMessages.Add(new ChatMessage
                 {
                     Id = msg2Id,
-                    SenderId = managerUser.Id,
-                    SenderName = "Maintenance Manager",
-                    ReceiverId = techUser.Id,
-                    Content = "Great work! Please proceed with the chiller assessment next.",
+                    SenderId = techUser.Id,
+                    SenderName = "خالد الشهري",
+                    ReceiverId = managerUser.Id,
+                    Content = "تم الاستلام، سأبدأ العمل صباح الغد. هل هناك أي تعليمات خاصة لفحص وحدة التبريد؟",
                     MessageType = MessageType.Text,
                     CreatedAt = DateTime.UtcNow.AddHours(-1)
                 });
@@ -783,8 +793,8 @@ public static class DataSeeder
             {
                 Id = notif1Id,
                 UserId = techUser.Id,
-                Title = "New Task Assigned",
-                Message = "You have been assigned a new task: Quarterly HVAC Inspection.",
+                Title = "مهمة جديدة",
+                Message = "تم تعيين مهمة فحص دوري لنظام التكييف لك في مجمع الرياض التجاري.",
                 Type = NotificationType.Info,
                 IsRead = false,
                 RelatedEntityId = task1Id.ToString(),
@@ -799,8 +809,8 @@ public static class DataSeeder
             {
                 Id = notif2Id,
                 UserId = managerUser.Id,
-                Title = "Task Completed",
-                Message = "HVAC Q1 Inspection has been completed successfully.",
+                Title = "اكتملت المهمة",
+                Message = "تم إكمال مهمة فحص التكييف - الربع الأول بنجاح.",
                 Type = NotificationType.Success,
                 IsRead = true,
                 RelatedEntityId = task1Id.ToString(),
@@ -815,8 +825,8 @@ public static class DataSeeder
             {
                 Id = notif3Id,
                 UserId = adminUserId,
-                Title = "Invoice Overdue",
-                Message = "Invoice INV-2024-001 is approaching its due date.",
+                Title = "فاتورة متأخرة",
+                Message = "الفاتورة INV-2024-SA-001 تقترب من تاريخ استحقاقها.",
                 Type = NotificationType.Warning,
                 IsRead = false,
                 RelatedEntityId = inv1Id.ToString(),
@@ -839,7 +849,7 @@ public static class DataSeeder
                 EquipmentId = eq1Id,
                 PredictedFailureDate = DateTime.UtcNow.AddMonths(8),
                 FailureProbability = 0.15,
-                Recommendation = "Schedule filter replacement and belt inspection at next quarterly service.",
+                Recommendation = "جدولة استبدال الفلاتر وفحص الحزام في الخدمة الربع سنوية القادمة.",
                 TotalInterventions = 5,
                 AverageDaysBetweenFailures = 365,
                 AverageDaysBetweenMaintenance = 90,
@@ -856,7 +866,7 @@ public static class DataSeeder
                 EquipmentId = eq2Id,
                 PredictedFailureDate = DateTime.UtcNow.AddMonths(2),
                 FailureProbability = 0.65,
-                Recommendation = "Immediate pump seal replacement required. Schedule emergency maintenance.",
+                Recommendation = "مطلوب استبدال ختم المضخة فوراً. جدولة صيانة طارئة.",
                 TotalInterventions = 8,
                 AverageDaysBetweenFailures = 180,
                 AverageDaysBetweenMaintenance = 120,
@@ -882,9 +892,9 @@ public static class DataSeeder
                 PerformanceScore = 91.0,
                 TemperatureCelsius = 18.5,
                 UsageHours = 14600,
-                LastKnownIssue = "Minor belt wear detected during last inspection",
+                LastKnownIssue = "تآكل طفيف في الحزام لوحظ خلال آخر فحص",
                 LastSyncedAt = DateTime.UtcNow,
-                SimulationNotes = "Operating within normal parameters",
+                SimulationNotes = "يعمل ضمن المعايير الطبيعية",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -900,9 +910,9 @@ public static class DataSeeder
                 PerformanceScore = 63.5,
                 TemperatureCelsius = 7.2,
                 UsageHours = 21900,
-                LastKnownIssue = "Pump seal oil leak; elevated vibration levels",
+                LastKnownIssue = "تسرب زيت في ختم المضخة؛ مستويات اهتزاز مرتفعة",
                 LastSyncedAt = DateTime.UtcNow,
-                SimulationNotes = "Immediate maintenance required to prevent failure",
+                SimulationNotes = "مطلوب صيانة فورية لمنع العطل",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -961,17 +971,17 @@ public static class DataSeeder
             context.SpareParts.Add(new SparePart
             {
                 Id = part1Id,
-                Name = "HVAC Air Filter",
-                PartNumber = "AF-MERV11-16",
-                Description = "MERV-11 rated 16x20x1 air filter for HVAC systems",
-                Unit = "pcs",
+                Name = "فلتر هواء MERV-13",
+                PartNumber = "AF-MERV13-2024",
+                Description = "فلتر هواء عالي الكفاءة لأنظمة التكييف المركزية",
+                Unit = "قطعة",
                 QuantityInStock = 24,
                 MinimumStockLevel = 10,
                 UnitPrice = 18.50m,
-                Supplier = "FilterPro Supplies",
-                StorageLocation = "Warehouse A - Shelf 3",
-                Notes = "Replace every 3 months",
-                QrCode = "HVAC Air Filter AF-MERV11-16",
+                Supplier = "شركة التوريدات السعودية للتكييف",
+                StorageLocation = "مستودع الرياض - رف أ3",
+                Notes = "يُستبدل كل 3 أشهر",
+                QrCode = "فلتر هواء MERV-13 AF-MERV13-2024",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -981,17 +991,17 @@ public static class DataSeeder
             context.SpareParts.Add(new SparePart
             {
                 Id = part2Id,
-                Name = "Refrigerant R-410A",
-                PartNumber = "REF-R410A-25LB",
-                Description = "25-lb cylinder of R-410A refrigerant",
-                Unit = "cylinder",
+                Name = "حزام مروحة V-Belt B68",
+                PartNumber = "VB-B68-2024",
+                Description = "حزام مروحة لوحدات مناولة الهواء",
+                Unit = "قطعة",
                 QuantityInStock = 4,
                 MinimumStockLevel = 5,
                 UnitPrice = 145.00m,
-                Supplier = "CoolTech Refrigerants",
-                StorageLocation = "Warehouse B - Refrigerant Bay",
-                Notes = "Low stock — reorder immediately",
-                QrCode = "Refrigerant R-410A REF-R410A-25LB",
+                Supplier = "مؤسسة قطع الغيار الوطنية",
+                StorageLocation = "مستودع الرياض - رف ب7",
+                Notes = "مخزون منخفض — يُطلب فوراً",
+                QrCode = "حزام مروحة V-Belt B68 VB-B68-2024",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1001,17 +1011,17 @@ public static class DataSeeder
             context.SpareParts.Add(new SparePart
             {
                 Id = part3Id,
-                Name = "Pump Seal Kit",
-                PartNumber = "PSK-CH800-STD",
-                Description = "Standard pump seal kit for Trane CH-800 chiller",
-                Unit = "kit",
+                Name = "طقم ختم مضخة ترين",
+                PartNumber = "PSK-RTAC-STD",
+                Description = "طقم ختم مضخة قياسي لوحدة التبريد ترين RTAC",
+                Unit = "طقم",
                 QuantityInStock = 2,
                 MinimumStockLevel = 2,
                 UnitPrice = 89.00m,
-                Supplier = "Trane Parts Direct",
-                StorageLocation = "Warehouse A - Shelf 7",
-                Notes = "Compatible with Chiller Unit #2",
-                QrCode = "Pump Seal Kit PSK-CH800-STD",
+                Supplier = "شركة التوريدات السعودية للتكييف",
+                StorageLocation = "مستودع الرياض - رف ج5",
+                Notes = "متوافق مع وحدة التبريد المركزية بالمبنى ب",
+                QrCode = "طقم ختم مضخة PSK-RTAC-STD",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1031,7 +1041,7 @@ public static class DataSeeder
                 SparePartId = part1Id,
                 TaskOrderId = task1Id,
                 QuantityUsed = 3,
-                Notes = "Replaced filters in Building A AHU units",
+                Notes = "تم تغيير الفلاتر في وحدات مناولة الهواء بالمبنى أ",
                 UsedAt = DateTime.UtcNow.AddDays(-7),
                 UsedByUserId = adminUserId,
                 CreatedAt = DateTime.UtcNow
@@ -1047,7 +1057,7 @@ public static class DataSeeder
                 SparePartId = part2Id,
                 TaskOrderId = task1Id,
                 QuantityUsed = 1,
-                Notes = "Topped up refrigerant in Central AC System A",
+                Notes = "تم استبدال حزام المروحة في وحدة مناولة الهواء الرئيسية بالمبنى أ",
                 UsedAt = DateTime.UtcNow.AddDays(-7),
                 UsedByUserId = adminUserId,
                 CreatedAt = DateTime.UtcNow
@@ -1066,15 +1076,15 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched1Id,
-                Name = "Quarterly HVAC Filter Replacement",
-                Description = "Replace all HVAC air filters and inspect belt tension every quarter",
+                Name = "صيانة وقائية شهرية - المبنى أ",
+                Description = "استبدال فلاتر التكييف وفحص توتر الحزام كل ربع سنة في مجمع الرياض التجاري",
                 MaintenanceType = MaintenanceType.Preventive,
                 Frequency = ScheduleFrequency.Quarterly,
                 FrequencyValue = 1,
                 LastExecutedAt = DateTime.UtcNow.AddDays(-7),
                 NextDueAt = DateTime.UtcNow.AddDays(83),
                 IsActive = true,
-                Notes = "Use MERV-11 filters only",
+                Notes = "استخدام فلاتر MERV-13 فقط",
                 CreatedByUserId = adminUserId,
                 EquipmentId = eq1Id,
                 AssignedTechnicianId = tech1Id,
@@ -1087,15 +1097,15 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched2Id,
-                Name = "Annual Chiller Overhaul",
-                Description = "Complete preventive maintenance including oil change, seal inspection, and vibration analysis",
+                Name = "صيانة ربع سنوية - المبنى ب",
+                Description = "صيانة وقائية شاملة تشمل تغيير الزيت وفحص الختم وتحليل الاهتزاز لوحدة التبريد",
                 MaintenanceType = MaintenanceType.Preventive,
                 Frequency = ScheduleFrequency.Annual,
                 FrequencyValue = 1,
                 LastExecutedAt = DateTime.UtcNow.AddMonths(-11),
                 NextDueAt = DateTime.UtcNow.AddDays(30),
                 IsActive = true,
-                Notes = "Coordinate with Trane service team",
+                Notes = "التنسيق مع فريق خدمة ترين السعودية",
                 CreatedByUserId = adminUserId,
                 EquipmentId = eq2Id,
                 AssignedGroupId = group1Id,
@@ -1108,15 +1118,15 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched3Id,
-                Name = "Monthly HVAC System Inspection",
-                Description = "Visual inspection of all HVAC components and performance verification",
+                Name = "فحص شهري لأنظمة التكييف",
+                Description = "الفحص البصري لجميع مكونات التكييف والتحقق من الأداء في مجمع الرياض التجاري",
                 MaintenanceType = MaintenanceType.Inspection,
                 Frequency = ScheduleFrequency.Monthly,
                 FrequencyValue = 1,
                 LastExecutedAt = DateTime.UtcNow.AddDays(-35),
                 NextDueAt = DateTime.UtcNow.AddDays(-5),
                 IsActive = true,
-                Notes = "Overdue — schedule immediately",
+                Notes = "متأخر — يُجدول فوراً",
                 CreatedByUserId = adminUserId,
                 AssignedTechnicianId = tech1Id,
                 CreatedAt = DateTime.UtcNow
@@ -1134,14 +1144,14 @@ public static class DataSeeder
             context.PremiumServices.Add(new PremiumService
             {
                 Id = premService1Id,
-                Name = "Emergency HVAC Response",
-                Description = "24/7 emergency response for critical HVAC system failures",
+                Name = "استجابة طوارئ التكييف",
+                Description = "استجابة طارئة على مدار الساعة لحالات أعطال أنظمة التكييف الحرجة",
                 ServiceType = PremiumServiceType.Emergency,
                 Price = 499.00m,
                 DurationHours = 4,
                 PriorityLevel = TaskPriority.Critical,
                 IsActive = true,
-                Features = "Same-day response, priority technician dispatch, parts included",
+                Features = "استجابة في نفس اليوم، إرسال فني متميز بالأولوية، قطع الغيار مشمولة",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1151,14 +1161,14 @@ public static class DataSeeder
             context.PremiumServices.Add(new PremiumService
             {
                 Id = premService2Id,
-                Name = "Annual Full System Overhaul",
-                Description = "Complete annual maintenance and overhaul of all HVAC systems",
+                Name = "صيانة شاملة سنوية لجميع الأنظمة",
+                Description = "صيانة وإصلاح شامل سنوي لجميع أنظمة التكييف",
                 ServiceType = PremiumServiceType.FullOverhaul,
                 Price = 1200.00m,
                 DurationHours = 16,
                 PriorityLevel = TaskPriority.High,
                 IsActive = true,
-                Features = "Comprehensive inspection, parts replacement, performance optimization",
+                Features = "فحص شامل، استبدال القطع، تحسين الأداء",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1181,8 +1191,8 @@ public static class DataSeeder
                 Status = PremiumMaintenanceStatus.Completed,
                 RequestDate = DateTime.UtcNow.AddDays(-20),
                 ScheduledDate = DateTime.UtcNow.AddDays(-18),
-                Notes = "Emergency fix for AHU failure in Building A",
-                Address = "123 Business Ave, New York, NY 10001",
+                Notes = "إصلاح طارئ لعطل وحدة مناولة الهواء في المبنى أ بمجمع الرياض التجاري",
+                Address = "طريق الملك فهد، حي العليا، الرياض 12211",
                 CreatedAt = DateTime.UtcNow.AddDays(-20)
             });
         }
@@ -1199,8 +1209,8 @@ public static class DataSeeder
                 Status = PremiumMaintenanceStatus.PaymentPending,
                 RequestDate = DateTime.UtcNow.AddDays(-5),
                 ScheduledDate = DateTime.UtcNow.AddDays(25),
-                Notes = "Annual overhaul for all HVAC systems",
-                Address = "456 Tech Street, San Francisco, CA 94105",
+                Notes = "صيانة شاملة سنوية لجميع أنظمة التكييف",
+                Address = "شارع التحلية، حي الروضة، جدة 23434",
                 CreatedAt = DateTime.UtcNow.AddDays(-5)
             });
         }
@@ -1220,9 +1230,9 @@ public static class DataSeeder
                 Amount = 499.00m,
                 Status = PaymentStatus.Completed,
                 PaymentMethod = PaymentMethod.CreditCard,
-                TransactionId = "TXN-2024-001-ACME",
+                TransactionId = "TXN-2024-SA-001-RDC",
                 PaymentDate = DateTime.UtcNow.AddDays(-20),
-                Notes = "Payment for emergency HVAC response service",
+                Notes = "دفعة خدمة استجابة طوارئ التكييف",
                 CreatedAt = DateTime.UtcNow.AddDays(-20)
             });
         }
@@ -1239,12 +1249,12 @@ public static class DataSeeder
             context.MaintenanceRequests.Add(new MaintenanceRequest
             {
                 Id = req1Id,
-                Title = "Air Handler Unit Not Cooling",
-                Description = "The air handler unit in Building A is not producing cold air. Temperature in office spaces is rising.",
-                EquipmentDescription = "Air Handler Unit #1, located on the rooftop of Building A",
+                Title = "وحدة مناولة الهواء لا تبرد",
+                Description = "وحدة مناولة الهواء في المبنى أ بمجمع الرياض التجاري لا تنتج هواء بارد. ترتفع درجة الحرارة في مساحات المكاتب.",
+                EquipmentDescription = "وحدة مناولة هواء - المبنى أ، الدور الأول، مجمع الرياض التجاري",
                 RequestDate = DateTime.UtcNow.AddDays(-10),
                 Status = MaintenanceRequestStatus.Completed,
-                Notes = "Resolved during Q1 inspection — refrigerant topped up",
+                Notes = "تم الحل خلال الفحص الربع سنوي — تم تعبئة غاز التبريد",
                 ClientId = client1Id,
                 TaskOrderId = task1Id,
                 InvoiceId = inv1Id,
@@ -1258,14 +1268,135 @@ public static class DataSeeder
             context.MaintenanceRequests.Add(new MaintenanceRequest
             {
                 Id = req2Id,
-                Title = "Chiller Making Unusual Noise",
-                Description = "Chiller Unit #2 in Mechanical Room B is making a grinding noise and has elevated vibration.",
-                EquipmentDescription = "Chiller Unit #2, Trane CH-800, located in Mechanical Room B",
+                Title = "وحدة التبريد تصدر ضوضاء غير اعتيادية",
+                Description = "وحدة التبريد المركزية في المبنى ب بمجمع الرياض التجاري تصدر صوت طحن ومستويات اهتزاز مرتفعة.",
+                EquipmentDescription = "وحدة تبريد مركزية ترين RTAC، سطح المبنى ب، مجمع الرياض التجاري",
                 RequestDate = DateTime.UtcNow.AddDays(-3),
                 Status = MaintenanceRequestStatus.InProgress,
-                Notes = "Pump seal replacement scheduled",
+                Notes = "تم جدولة استبدال ختم المضخة",
                 ClientId = client2Id,
                 TaskOrderId = task2Id,
+                CreatedAt = DateTime.UtcNow.AddDays(-3)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── TechnicianGpsLogs ─────────────────────────────────────────────────────
+        var gps1Id = new Guid("00000000-0000-0000-0042-000000000042");
+        var gps2Id = new Guid("00000000-0000-0000-0043-000000000043");
+        var gps3Id = new Guid("00000000-0000-0000-0044-000000000044");
+
+        if (!await context.TechnicianGpsLogs.AnyAsync(g => g.Id == gps1Id)
+            && await context.Technicians.AnyAsync(t => t.Id == tech1Id))
+        {
+            context.TechnicianGpsLogs.Add(new TechnicianGpsLog
+            {
+                Id = gps1Id,
+                TechnicianId = tech1Id,
+                Latitude = 24.7136,
+                Longitude = 46.6753,
+                RecordedAt = DateTime.UtcNow.AddHours(-1),
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.TechnicianGpsLogs.AnyAsync(g => g.Id == gps2Id)
+            && await context.Technicians.AnyAsync(t => t.Id == tech1Id))
+        {
+            context.TechnicianGpsLogs.Add(new TechnicianGpsLog
+            {
+                Id = gps2Id,
+                TechnicianId = tech1Id,
+                Latitude = 24.7200,
+                Longitude = 46.6800,
+                RecordedAt = DateTime.UtcNow.AddMinutes(-30),
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.TechnicianGpsLogs.AnyAsync(g => g.Id == gps3Id)
+            && await context.Technicians.AnyAsync(t => t.Id == tech2Id))
+        {
+            context.TechnicianGpsLogs.Add(new TechnicianGpsLog
+            {
+                Id = gps3Id,
+                TechnicianId = tech2Id,
+                Latitude = 21.5433,
+                Longitude = 39.1728,
+                RecordedAt = DateTime.UtcNow.AddHours(-2),
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── AuditLogs ─────────────────────────────────────────────────────────────
+        var audit1Id = new Guid("00000000-0000-0000-0045-000000000045");
+        var audit2Id = new Guid("00000000-0000-0000-0046-000000000046");
+
+        if (!await context.AuditLogs.AnyAsync(a => a.Id == audit1Id))
+        {
+            context.AuditLogs.Add(new AuditLog
+            {
+                Id = audit1Id,
+                EntityType = "TaskOrder",
+                EntityId = task1Id.ToString(),
+                Action = "تم الإنشاء",
+                PerformedByUserId = adminUserId,
+                PerformedByName = "عبدالله الغامدي",
+                Details = "تم إنشاء أمر عمل جديد لفحص التكييف",
+                CreatedAt = DateTime.UtcNow.AddDays(-7)
+            });
+        }
+
+        if (!await context.AuditLogs.AnyAsync(a => a.Id == audit2Id))
+        {
+            context.AuditLogs.Add(new AuditLog
+            {
+                Id = audit2Id,
+                EntityType = "Equipment",
+                EntityId = eq1Id.ToString(),
+                Action = "تم التحديث",
+                PerformedByUserId = adminUserId,
+                PerformedByName = "عبدالله الغامدي",
+                Details = "تم تحديث حالة المعدات",
+                CreatedAt = DateTime.UtcNow.AddDays(-5)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── MaintenanceRequestAssignments ─────────────────────────────────────────
+        var assign1Id = new Guid("00000000-0000-0000-0047-000000000047");
+        var assign2Id = new Guid("00000000-0000-0000-0048-000000000048");
+
+        if (!await context.MaintenanceRequestAssignments.AnyAsync(a => a.Id == assign1Id)
+            && await context.MaintenanceRequests.AnyAsync(r => r.Id == req1Id)
+            && await context.Technicians.AnyAsync(t => t.Id == tech1Id))
+        {
+            context.MaintenanceRequestAssignments.Add(new MaintenanceRequestAssignment
+            {
+                Id = assign1Id,
+                MaintenanceRequestId = req1Id,
+                TechnicianId = tech1Id,
+                AssignedByUserId = adminUserId,
+                AssignedAt = DateTime.UtcNow.AddDays(-10),
+                CreatedAt = DateTime.UtcNow.AddDays(-10)
+            });
+        }
+
+        if (!await context.MaintenanceRequestAssignments.AnyAsync(a => a.Id == assign2Id)
+            && await context.MaintenanceRequests.AnyAsync(r => r.Id == req2Id)
+            && await context.Technicians.AnyAsync(t => t.Id == tech2Id))
+        {
+            context.MaintenanceRequestAssignments.Add(new MaintenanceRequestAssignment
+            {
+                Id = assign2Id,
+                MaintenanceRequestId = req2Id,
+                TechnicianId = tech2Id,
+                AssignedByUserId = adminUserId,
+                AssignedAt = DateTime.UtcNow.AddDays(-3),
                 CreatedAt = DateTime.UtcNow.AddDays(-3)
             });
         }
