@@ -307,22 +307,29 @@
                       }
 
                       @if (getTravelEstimate(key); as est) {
-                        <div class="row g-2">
-                          <div class="col-6">
-                            <div class="travel-stat rounded p-2 text-center">
-                              <i class="bi bi-signpost-2 fs-5 text-warning d-block mb-1"></i>
-                              <div class="fw-bold">{{ est.formattedDistance }}</div>
-                              <small class="text-muted">Distance</small>
+                        @if (!est.technicianHasLocation) {
+                          <div class="alert alert-info py-1 px-2 mb-1 small">
+                            <i class="bi bi-geo-alt me-1"></i>Technician GPS location not registered — distance cannot be calculated.
+                          </div>
+                        }
+                        @if (est.formattedDistance) {
+                          <div class="row g-2">
+                            <div class="col-6">
+                              <div class="travel-stat rounded p-2 text-center">
+                                <i class="bi bi-signpost-2 fs-5 text-warning d-block mb-1"></i>
+                                <div class="fw-bold">{{ est.formattedDistance }}</div>
+                                <small class="text-muted">Distance</small>
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div class="travel-stat rounded p-2 text-center">
+                                <i class="bi bi-clock fs-5 text-success d-block mb-1"></i>
+                                <div class="fw-bold">{{ est.formattedDuration }}</div>
+                                <small class="text-muted">Est. Travel Time</small>
+                              </div>
                             </div>
                           </div>
-                          <div class="col-6">
-                            <div class="travel-stat rounded p-2 text-center">
-                              <i class="bi bi-clock fs-5 text-success d-block mb-1"></i>
-                              <div class="fw-bold">{{ est.formattedDuration }}</div>
-                              <small class="text-muted">Est. Travel Time</small>
-                            </div>
-                          </div>
-                        </div>
+                        }
                         @if (est.clientAddress) {
                           <div class="mt-2">
                             <small class="text-muted"><i class="bi bi-pin-map me-1"></i>{{ est.clientAddress }}</small>

@@ -101,11 +101,11 @@ export class TechniciansComponent implements OnInit {
         lastName: this.form.lastName,
         phone: this.form.phone,
         specialization: this.form.specialization,
-        status: this.form.status,
+        status: Number(this.form.status) as TechnicianStatus,
         profilePhotoUrl: this.form.profilePhotoUrl || undefined
       };
       this.service.update(this.editingId, dto).subscribe({
-        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+        next: () => { this.isSaving.set(false); this.isEditing.set(false); this.showModal.set(false); this.load(); this.toast.success('messages.updated'); },
         error: () => { this.isSaving.set(false); this.toast.error(); }
       });
     } else {
@@ -118,7 +118,7 @@ export class TechniciansComponent implements OnInit {
         password: this.form.password
       };
       this.service.create(dto).subscribe({
-        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success(this.isEditing() ? 'messages.updated' : 'messages.created'); },
+        next: () => { this.isSaving.set(false); this.showModal.set(false); this.load(); this.toast.success('messages.created'); },
         error: () => { this.isSaving.set(false); this.toast.error(); }
       });
     }
