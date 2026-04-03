@@ -187,9 +187,9 @@ builder.Services.AddSwaggerGen(options =>
         BearerFormat = "JWT"
     });
 
-    options.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
+    options.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
     {
-        [new OpenApiSecuritySchemeReference(swaggerSchemeId)] = []
+        [new OpenApiSecuritySchemeReference(swaggerSchemeId, doc)] = []
     });
 });
 
