@@ -219,7 +219,10 @@ public class MaintenanceRequestsController : ControllerBase
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (userId is null) return Unauthorized();
 
-        var result = await _service.AssignTechniciansAsync(id, dto.TechnicianIds, userId);
+        var user = await _userManager.FindByIdAsync(userId);
+        var userName = user is not null ? $"{user.FirstName} {user.LastName}" : userId;
+
+        var result = await _service.AssignTechniciansAsync(id, dto.TechnicianIds, userId, userName);
         if (result is null) return NotFound();
 
         // Notify each assigned technician in real-time

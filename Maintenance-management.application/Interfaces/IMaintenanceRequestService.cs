@@ -20,7 +20,7 @@ public interface IMaintenanceRequestService
     Task<MaintenanceRequestDto?> RejectAsync(Guid id, string reviewedByUserId, string reviewedByName, string? reviewNotes);
 
     /// <summary>Assigns one or more technicians to an approved request.</summary>
-    Task<MaintenanceRequestDto?> AssignTechniciansAsync(Guid id, List<Guid> technicianIds, string assignedByUserId);
+    Task<MaintenanceRequestDto?> AssignTechniciansAsync(Guid id, List<Guid> technicianIds, string assignedByUserId, string assignedByName);
 
     /// <summary>Returns the audit log for a specific request.</summary>
     Task<IEnumerable<AuditLogDto>> GetAuditLogAsync(Guid id);

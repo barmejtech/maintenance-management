@@ -148,7 +148,7 @@ public class MaintenanceRequestService : IMaintenanceRequestService
         return MapToDto(updated ?? item);
     }
 
-    public async Task<MaintenanceRequestDto?> AssignTechniciansAsync(Guid id, List<Guid> technicianIds, string assignedByUserId)
+    public async Task<MaintenanceRequestDto?> AssignTechniciansAsync(Guid id, List<Guid> technicianIds, string assignedByUserId, string assignedByName)
     {
         var item = await _repo.GetWithDetailsAsync(id);
         if (item is null || item.IsDeleted) return null;
@@ -183,7 +183,7 @@ public class MaintenanceRequestService : IMaintenanceRequestService
             EntityId = id.ToString(),
             Action = "TechniciansAssigned",
             PerformedByUserId = assignedByUserId,
-            PerformedByName = assignedByUserId,
+            PerformedByName = assignedByName,
             Details = $"Assigned {technicianIds.Count} technician(s): {string.Join(", ", technicianIds)}"
         });
 
