@@ -5,6 +5,6 @@ namespace Maintenance_management.application.Interfaces;
 public interface IAccountService
 {
     Task<AccountProfileDto> GetProfileAsync(string userId);
-    Task<AccountProfileDto> UpdateProfileAsync(string userId, UpdateProfileDto dto);
+    Task<AccountProfileDto> UpdateProfileAsync(string userId, UpdateAccountProfileDto dto);
     Task ChangePasswordAsync(string userId, ChangePasswordDto dto);
 }
