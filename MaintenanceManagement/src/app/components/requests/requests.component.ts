@@ -213,8 +213,11 @@ export class RequestsComponent implements OnInit {
     this.travelService.estimate(technicianId, clientId).subscribe({
       next: (res) => {
         this.travelEstimateLoading.update(s => ({ ...s, [key]: false }));
-        if (res.success) {
+        if (res.data) {
           this.travelEstimates.update(s => ({ ...s, [key]: res.data }));
+          if (!res.success) {
+            this.travelEstimateError.update(s => ({ ...s, [key]: res.message ?? 'Unable to calculate route.' }));
+          }
         } else {
           this.travelEstimateError.update(s => ({ ...s, [key]: res.message ?? 'Unable to calculate route.' }));
         }
