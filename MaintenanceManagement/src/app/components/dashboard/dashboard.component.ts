@@ -11,9 +11,12 @@ import { ReportService } from '../../services/report.service';
 import { SparePartService } from '../../services/spare-part.service';
 import { MaintenanceScheduleService } from '../../services/maintenance-schedule.service';
 import { ManagerService } from '../../services/manager.service';
+import { ClientService } from '../../services/client.service';
+import { GroupService } from '../../services/group.service';
+import { MaintenanceRequestService } from '../../services/maintenance-request.service';
 import { TranslationService } from '../../services/translate.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
-import { TaskStatus, EquipmentStatus, TechnicianStatus, TaskPriority, InvoiceStatus, TaskOrder } from '../../models';
+import { TaskStatus, EquipmentStatus, TechnicianStatus, TaskPriority, InvoiceStatus, TaskOrder, MaintenanceRequestStatus } from '../../models';
 import {
   Chart, ArcElement, DoughnutController, BarController, BarElement,
   CategoryScale, LinearScale, Tooltip, Legend,
@@ -86,6 +89,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   overdueSchedulesCount = signal(0);
   completionRate = signal(0);
   avgCompletionTime = signal(0);
+
+  // Admin / Manager extra signals
+  clientCount = signal(0);
+  groupCount = signal(0);
+  clientRequestCount = signal(0);
+  pendingClientRequestCount = signal(0);
   
   // Technician signals
   myTaskCount = signal(0);
@@ -142,7 +151,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private reportService: ReportService,
     private sparePartService: SparePartService,
     private scheduleService: MaintenanceScheduleService,
-    private managerService: ManagerService
+    private managerService: ManagerService,
+    private clientService: ClientService,
+    private groupService: GroupService,
+    private maintenanceRequestService: MaintenanceRequestService
   ) {}
 
   ngOnInit() {
@@ -395,6 +407,26 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           error: () => {}
         });
       }
+
+      this.clientService.getAll().subscribe({
+        next: clients => this.clientCount.set(clients.length),
+        error: () => {}
+      });
+
+      this.groupService.getAll().subscribe({
+        next: groups => this.groupCount.set(groups.length),
+        error: () => {}
+      });
+
+      this.maintenanceRequestService.getAll().subscribe({
+        next: requests => {
+          this.clientRequestCount.set(requests.length);
+          this.pendingClientRequestCount.set(
+            requests.filter(r => r.status === MaintenanceRequestStatus.Pending).length
+          );
+        },
+        error: () => {}
+      });
     }
 
     if (this.isDataEntryRole()) {
