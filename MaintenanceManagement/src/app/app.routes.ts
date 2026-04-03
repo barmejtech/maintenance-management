@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard, adminGuard, managerGuard, clientGuard } from './guards/auth.guard';
+import { authGuard, guestGuard, adminGuard, managerGuard, clientGuard, nonClientGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -53,7 +53,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./components/shell/shell.component').then(m => m.ShellComponent),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonClientGuard],
     children: [
       {
         path: 'register',

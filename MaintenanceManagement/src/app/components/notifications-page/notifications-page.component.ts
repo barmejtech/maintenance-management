@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../services/notification.service';
+import { AuthService } from '../../services/auth.service';
 import { AppNotification, NotificationType } from '../../models';
 
 type FilterStatus = 'all' | 'unread' | 'read';
@@ -43,7 +44,7 @@ export class NotificationsPageComponent implements OnInit {
 
   readonly unreadFiltered = computed(() => this.filtered().filter(n => !n.isRead).length);
 
-  constructor(public notifService: NotificationService) {}
+  constructor(public notifService: NotificationService, public auth: AuthService) {}
 
   ngOnInit() {
     this.isLoading.set(true);
@@ -83,6 +84,10 @@ export class NotificationsPageComponent implements OnInit {
   }
 
   getEntityRoute(relatedEntityType?: string): string | null {
+    // For client users, MaintenanceRequest links go to their own portal view
+    if (this.auth.isClient() && relatedEntityType === 'MaintenanceRequest') {
+      return '/client-portal/my-requests';
+    }
     return this.notifService.getEntityRoute(relatedEntityType);
   }
 

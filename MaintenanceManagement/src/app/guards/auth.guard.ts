@@ -53,3 +53,12 @@ export const clientGuard: CanActivateFn = () => {
   if (auth.isClient()) return true;
   return router.createUrlTree(['/dashboard']);
 };
+
+/** Prevents client users from accessing the internal portal — redirects them to the client portal. */
+export const nonClientGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  if (auth.isClient()) return router.createUrlTree(['/client-portal']);
+  return true;
+};
