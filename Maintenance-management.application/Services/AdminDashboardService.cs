@@ -59,7 +59,7 @@ public class AdminDashboardService : IAdminDashboardService
 
             var earliest = completedDates.Min();
             var latest   = completedDates.Max();
-            var totalWeeks = Math.Max(1, ((latest - earliest).TotalDays + 7) / 7.0);
+            var totalWeeks = Math.Max(1, (latest - earliest).TotalDays / 7.0);
             weeklyAverage = completedRequests.Count() / totalWeeks;
         }
 

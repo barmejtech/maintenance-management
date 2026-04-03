@@ -70,7 +70,7 @@
     </div>
     <div class="filter-group">
       <label>{{ 'adminDashboard.filter.status' | translate }}</label>
-      <select [(ngModel)]="filterStatus" class="filter-select">
+      <select [ngModel]="filterStatus" (ngModelChange)="filterStatus = $event === '' ? null : +$event" class="filter-select">
         <option value="">{{ 'adminDashboard.filter.allStatuses' | translate }}</option>
         <option value="0">{{ 'adminDashboard.status.pending' | translate }}</option>
         <option value="1">{{ 'adminDashboard.status.underReview' | translate }}</option>
@@ -81,7 +81,7 @@
         <option value="6">{{ 'adminDashboard.status.cancelled' | translate }}</option>
       </select>
     </div>
-    <button class="btn-clear" (click)="filterStatus=''; filterSearch=''">
+    <button class="btn-clear" (click)="filterStatus=null; filterSearch=''">
       <i class="bi bi-x-circle"></i> {{ 'adminDashboard.filter.clear' | translate }}
     </button>
     <button class="btn-refresh" (click)="load()">

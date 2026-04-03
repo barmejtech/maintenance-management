@@ -16,7 +16,7 @@ import { MaintenanceRequestStatus } from '../../models';
 export class AdminDashboardComponent implements OnInit {
   data = signal<AdminDashboardData | null>(null);
   isLoading = signal(true);
-  filterStatus = '';
+  filterStatus: number | null = null;
   filterSearch = '';
 
   MaintenanceRequestStatus = MaintenanceRequestStatus;
@@ -40,8 +40,8 @@ export class AdminDashboardComponent implements OnInit {
 
   get filteredRows(): AdminDashboardRow[] {
     let rows = this.data()?.rows ?? [];
-    if (this.filterStatus !== '') {
-      rows = rows.filter(r => r.status === +this.filterStatus);
+    if (this.filterStatus !== null) {
+      rows = rows.filter(r => r.status === this.filterStatus);
     }
     if (this.filterSearch.trim()) {
       const q = this.filterSearch.trim().toLowerCase();
