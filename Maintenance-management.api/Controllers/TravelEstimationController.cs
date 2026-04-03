@@ -34,7 +34,7 @@ public class TravelEstimationController : ControllerBase
         if (!result.TechnicianHasLocation)
             return Ok(new
             {
-                success = false,
+                success = true,
                 message = "Technician does not have a registered GPS location.",
                 data = result
             });

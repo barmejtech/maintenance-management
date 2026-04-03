@@ -9,6 +9,12 @@ public class ClientRepository : Repository<Client>, IClientRepository
 {
     public ClientRepository(ApplicationDbContext context) : base(context) { }
 
+    public override async Task<IEnumerable<Client>> GetAllAsync()
+        => await _dbSet
+            .Include(c => c.MaintenanceRequests.Where(r => !r.IsDeleted))
+            .Where(c => !c.IsDeleted)
+            .ToListAsync();
+
     public async Task<Client?> GetWithRequestsAsync(Guid id)
         => await _dbSet
             .Include(c => c.MaintenanceRequests.Where(r => !r.IsDeleted))
