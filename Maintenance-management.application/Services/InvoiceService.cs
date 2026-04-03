@@ -36,6 +36,12 @@ public class InvoiceService : IInvoiceService
         return items.Where(i => !i.IsDeleted).Select(MapToDto);
     }
 
+    public async Task<IEnumerable<InvoiceDto>> GetByMaintenanceReportIdAsync(Guid reportId)
+    {
+        var items = await _repo.GetByMaintenanceReportIdAsync(reportId);
+        return items.Where(i => !i.IsDeleted).Select(MapToDto);
+    }
+
     public async Task<InvoiceDto> CreateAsync(CreateInvoiceDto dto, string createdByUserId)
     {
         var lineItems = dto.LineItems.Select(li => new InvoiceLineItem
@@ -63,6 +69,7 @@ public class InvoiceService : IInvoiceService
             Notes = dto.Notes,
             TaskOrderId = dto.TaskOrderId,
             ClientId = dto.ClientId,
+            MaintenanceReportId = dto.MaintenanceReportId,
             CreatedByUserId = createdByUserId,
             LineItems = lineItems
         };
@@ -84,6 +91,7 @@ public class InvoiceService : IInvoiceService
         item.Status = dto.Status;
         item.TaskOrderId = dto.TaskOrderId;
         item.ClientId = dto.ClientId;
+        item.MaintenanceReportId = dto.MaintenanceReportId;
         item.UpdatedAt = DateTime.UtcNow;
 
         if (dto.Status == InvoiceStatus.Paid && item.PaidDate is null)
@@ -127,6 +135,8 @@ public class InvoiceService : IInvoiceService
         TaskTitle = inv.TaskOrder?.Title,
         ClientId = inv.ClientId,
         ClientCompany = inv.Client?.CompanyName ?? inv.Client?.Name,
+        MaintenanceReportId = inv.MaintenanceReportId,
+        MaintenanceReportTitle = inv.MaintenanceReport?.Title,
         LineItems = inv.LineItems.Select(li => new InvoiceLineItemDto
         {
             Id = li.Id,

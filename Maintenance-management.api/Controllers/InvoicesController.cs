@@ -30,6 +30,10 @@ public class InvoicesController : ControllerBase
     public async Task<IActionResult> GetByStatus(InvoiceStatus status)
         => Ok(await _service.GetByStatusAsync(status));
 
+    [HttpGet("report/{reportId:guid}")]
+    public async Task<IActionResult> GetByReport(Guid reportId)
+        => Ok(await _service.GetByMaintenanceReportIdAsync(reportId));
+
     [HttpPost]
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Create([FromBody] CreateInvoiceDto dto)

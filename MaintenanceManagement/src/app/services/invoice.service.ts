@@ -11,6 +11,7 @@ export class InvoiceService {
 
   getAll(): Observable<Invoice[]> { return this.http.get<Invoice[]>(this.base); }
   getById(id: string): Observable<Invoice> { return this.http.get<Invoice>(`${this.base}/${id}`); }
+  getByReport(reportId: string): Observable<Invoice[]> { return this.http.get<Invoice[]>(`${this.base}/report/${reportId}`); }
   create(dto: any): Observable<Invoice> { return this.http.post<Invoice>(this.base, dto); }
   update(id: string, dto: any): Observable<Invoice> { return this.http.put<Invoice>(`${this.base}/${id}`, dto); }
   delete(id: string): Observable<void> { return this.http.delete<void>(`${this.base}/${id}`); }

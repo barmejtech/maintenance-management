@@ -153,6 +153,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .WithOne(t => t.Invoice)
                 .HasForeignKey<Invoice>(i => i.TaskOrderId)
                 .OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(i => i.MaintenanceReport)
+                .WithMany(r => r.Invoices)
+                .HasForeignKey(i => i.MaintenanceReportId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         builder.Entity<InvoiceLineItem>(e =>

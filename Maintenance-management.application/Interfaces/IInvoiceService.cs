@@ -12,4 +12,5 @@ public interface IInvoiceService
     Task<bool> DeleteAsync(Guid id);
     Task<IEnumerable<InvoiceDto>> GetByStatusAsync(InvoiceStatus status);
     Task<IEnumerable<InvoiceDto>> GetByClientIdAsync(Guid clientId);
+    Task<IEnumerable<InvoiceDto>> GetByMaintenanceReportIdAsync(Guid reportId);
 }
