@@ -1,20 +1,227 @@
-.font-monospace {
-  font-family: monospace;
+/* ============================================================
+   GPS Tracking Component — Modern Design
+   ============================================================ */
+
+:host {
+  --gps-primary: #0d6efd;
+  --gps-success: #198754;
+  --gps-info: #0dcaf0;
+  --gps-warning: #ffc107;
+  --gps-danger: #dc3545;
+  --gps-card-radius: 0.75rem;
+  --gps-transition: 0.2s ease;
 }
 
-.card-header {
+/* ── Page wrapper ── */
+.gps-page {
+  background: transparent;
+}
+
+/* ── Gradient header ── */
+.gps-header {
+  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 60%, #084298 100%);
+  border-radius: var(--gps-card-radius);
+  padding: 1.5rem 2rem;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(13, 110, 253, 0.35);
+}
+
+.gps-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.gps-subtitle {
+  opacity: 0.85;
+  font-size: 0.95rem;
+}
+
+/* ── Cards ── */
+.gps-card {
+  border: none;
+  border-radius: var(--gps-card-radius);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: box-shadow var(--gps-transition), transform var(--gps-transition);
+  overflow: hidden;
+}
+
+.gps-card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.14);
+  transform: translateY(-2px);
+}
+
+.gps-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   background-color: transparent;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0.85rem 1.25rem;
+  font-size: 0.95rem;
+}
+
+/* ── Form controls ── */
+.gps-select,
+.gps-input {
+  border-radius: 0.5rem;
+  border: 1px solid #dee2e6;
+  transition: border-color var(--gps-transition), box-shadow var(--gps-transition);
+}
+
+.gps-select:focus,
+.gps-input:focus {
+  border-color: var(--gps-primary);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.2);
+}
+
+/* ── Calculate button ── */
+.gps-btn-calculate {
+  background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  transition: opacity var(--gps-transition), box-shadow var(--gps-transition), transform var(--gps-transition);
+}
+
+.gps-btn-calculate:hover:not(:disabled) {
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(25, 135, 84, 0.4);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.gps-btn-calculate:disabled {
+  opacity: 0.55;
+}
+
+/* ── Distance result block ── */
+.distance-result {
+  background: linear-gradient(135deg, #198754 0%, #0a6640 100%);
+  border-radius: 0.6rem;
+  padding: 1rem 1.25rem;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(25, 135, 84, 0.3);
+}
+
+.distance-value-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.distance-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.distance-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.distance-detail-item {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 0.4rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.detail-label {
+  font-size: 0.72rem;
+  opacity: 0.75;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.1rem;
+}
+
+.detail-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+/* ── Map section ── */
+.map-section {
+  margin-top: 0.25rem;
+}
+
+.map-section-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.map-container {
+  height: 400px;
+  width: 100%;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* ── Stale location alert (pulse) ── */
+.stale-alert {
+  animation: pulse-warning 2s ease-in-out infinite;
+}
+
+@keyframes pulse-warning {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+/* ── History table ── */
+.gps-table thead tr {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
+
+.gps-table thead th {
+  border-bottom: 2px solid #dee2e6;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6c757d;
   padding: 0.75rem 1rem;
 }
 
-.card {
-  border-radius: 0.5rem;
+.gps-table tbody tr {
+  transition: background-color var(--gps-transition);
 }
 
+.gps-table tbody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.gps-table tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.06);
+}
+
+.gps-table tbody td {
+  padding: 0.65rem 1rem;
+  vertical-align: middle;
+  font-size: 0.875rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* ── Badge ── */
+.gps-badge {
+  background: linear-gradient(135deg, #6c757d, #495057);
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  padding: 0.3em 0.65em;
+}
+
+/* ── Definition list ── */
 dl.row dt {
   font-weight: 600;
-  color: var(--bs-secondary-color, #6c757d);
+  color: #6c757d;
   font-size: 0.875rem;
 }
 
@@ -22,6 +229,57 @@ dl.row dd {
   font-size: 0.875rem;
 }
 
-.bg-light {
-  background-color: var(--bs-light, #f8f9fa) !important;
+.font-monospace {
+  font-family: monospace;
+}
+
+/* ── Custom map marker icons ── */
+.map-marker-tech,
+.map-marker-service {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  color: #fff;
+}
+
+.map-marker-tech {
+  background: linear-gradient(135deg, #0d6efd, #0a58ca);
+}
+
+.map-marker-service {
+  background: linear-gradient(135deg, #dc3545, #b02a37);
+}
+
+.map-marker-tech i,
+.map-marker-service i {
+  transform: rotate(45deg);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .gps-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .gps-title {
+    font-size: 1.3rem;
+  }
+
+  .distance-details {
+    grid-template-columns: 1fr;
+  }
+
+  .distance-value {
+    font-size: 1.4rem;
+  }
+
+  .map-container {
+    height: 280px;
+  }
 }

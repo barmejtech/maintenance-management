@@ -64,6 +64,7 @@ public class GpsTrackingService : IGpsTrackingService
         {
             TechnicianId = technician.Id,
             TechnicianName = $"{technician.FirstName} {technician.LastName}",
+            TechnicianAddress = technician.Address,
             TechnicianLatitude = technician.Latitude.Value,
             TechnicianLongitude = technician.Longitude.Value,
             ServiceLatitude = serviceLatitude,

@@ -1469,6 +1469,11 @@
     "technicianLocation": "موقع الفني",
     "serviceLocation": "موقع الخدمة",
     "failedLoadTechnicians": "فشل تحميل قائمة الفنيين",
-    "failedCalculateDistance": "فشل حساب المسافة"
+    "failedCalculateDistance": "فشل حساب المسافة",
+    "mapView": "عرض الخريطة",
+    "technicianAddress": "عنوان الفني",
+    "routeMap": "خريطة المسار",
+    "technicianMarker": "الفني",
+    "serviceMarker": "موقع الخدمة"
   }
 }

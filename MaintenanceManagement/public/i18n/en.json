@@ -1440,6 +1440,11 @@
     "technicianLocation": "Technician Location",
     "serviceLocation": "Service Location",
     "failedLoadTechnicians": "Failed to load technicians",
-    "failedCalculateDistance": "Failed to calculate distance"
+    "failedCalculateDistance": "Failed to calculate distance",
+    "mapView": "Map View",
+    "technicianAddress": "Technician Address",
+    "routeMap": "Route Map",
+    "technicianMarker": "Technician",
+    "serviceMarker": "Service Location"
   }
 }
