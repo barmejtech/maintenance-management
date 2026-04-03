@@ -4,6 +4,7 @@ public class TechnicianDistanceDto
 {
     public Guid TechnicianId { get; set; }
     public string TechnicianName { get; set; } = string.Empty;
+    public string? TechnicianAddress { get; set; }
     public double TechnicianLatitude { get; set; }
     public double TechnicianLongitude { get; set; }
     public double ServiceLatitude { get; set; }

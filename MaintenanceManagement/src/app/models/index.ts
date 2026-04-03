@@ -934,6 +934,7 @@ export interface TechnicianGpsLog {
 export interface TechnicianDistance {
   technicianId: string;
   technicianName: string;
+  technicianAddress?: string;
   technicianLatitude: number;
   technicianLongitude: number;
   serviceLatitude: number;

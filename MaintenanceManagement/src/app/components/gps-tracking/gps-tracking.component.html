@@ -1,17 +1,17 @@
-<div class="container-fluid py-4">
+<div class="gps-page container-fluid py-4">
   <!-- Header -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h2 class="mb-1"><i class="bi bi-geo-alt-fill me-2 text-primary"></i>{{ 'gpsTracking.title' | translate }}</h2>
-      <p class="text-muted mb-0">{{ 'gpsTracking.subtitle' | translate }}</p>
+  <div class="gps-header mb-4">
+    <div class="gps-header-content">
+      <h2 class="gps-title"><i class="bi bi-geo-alt-fill me-2"></i>{{ 'gpsTracking.title' | translate }}</h2>
+      <p class="gps-subtitle mb-0">{{ 'gpsTracking.subtitle' | translate }}</p>
     </div>
   </div>
 
   <!-- Technician Selector -->
-  <div class="card shadow-sm mb-4">
+  <div class="card gps-card mb-4">
     <div class="card-body">
       <label class="form-label fw-semibold">{{ 'gpsTracking.selectTechnician' | translate }}</label>
-      <select class="form-select" [(ngModel)]="selectedTechnicianId" (ngModelChange)="onTechnicianChange()">
+      <select class="form-select gps-select" [(ngModel)]="selectedTechnicianId" (ngModelChange)="onTechnicianChange()">
         <option value="">{{ 'gpsTracking.selectTechnicianPlaceholder' | translate }}</option>
         @for (tech of technicians(); track tech.id) {
           <option [value]="tech.id">{{ tech.fullName }} — {{ tech.specialization }}</option>
@@ -25,8 +25,8 @@
 
       <!-- Latest Location Card -->
       <div class="col-lg-6">
-        <div class="card shadow-sm h-100">
-          <div class="card-header d-flex align-items-center gap-2">
+        <div class="card gps-card h-100">
+          <div class="card-header gps-card-header">
             <i class="bi bi-pin-map text-primary"></i>
             <span class="fw-semibold">{{ 'gpsTracking.latestLocation' | translate }}</span>
           </div>
@@ -45,11 +45,19 @@
                 <dd class="col-sm-7">{{ latestLocation()!.recordedAt | date:'medium' }}</dd>
               </dl>
               @if (isStale(latestLocation()!.recordedAt)) {
-                <div class="alert alert-warning py-2 mb-0 d-flex align-items-center gap-2">
+                <div class="alert alert-warning py-2 mb-3 d-flex align-items-center gap-2 stale-alert">
                   <i class="bi bi-exclamation-triangle-fill"></i>
                   <small>{{ 'gpsTracking.staleLocation' | translate }}</small>
                 </div>
               }
+              <!-- Latest Location Map -->
+              <div class="map-section">
+                <div class="map-section-title">
+                  <i class="bi bi-map me-1 text-primary"></i>
+                  {{ 'gpsTracking.mapView' | translate }}
+                </div>
+                <div id="latest-map" class="map-container"></div>
+              </div>
             } @else {
               <p class="text-muted mb-0">{{ 'gpsTracking.noLocation' | translate }}</p>
             }
@@ -59,21 +67,21 @@
 
       <!-- Distance Calculator -->
       <div class="col-lg-6">
-        <div class="card shadow-sm h-100">
-          <div class="card-header d-flex align-items-center gap-2">
+        <div class="card gps-card h-100">
+          <div class="card-header gps-card-header">
             <i class="bi bi-rulers text-success"></i>
             <span class="fw-semibold">{{ 'gpsTracking.distanceCalculator' | translate }}</span>
           </div>
           <div class="card-body">
             <div class="mb-3">
               <label class="form-label">{{ 'gpsTracking.serviceLatitude' | translate }}</label>
-              <input type="number" class="form-control" [(ngModel)]="serviceLatitude" step="0.000001" [placeholder]="'gpsTracking.serviceLatitude' | translate" />
+              <input type="number" class="form-control gps-input" [(ngModel)]="serviceLatitude" step="0.000001" [placeholder]="'gpsTracking.serviceLatitude' | translate" />
             </div>
             <div class="mb-3">
               <label class="form-label">{{ 'gpsTracking.serviceLongitude' | translate }}</label>
-              <input type="number" class="form-control" [(ngModel)]="serviceLongitude" step="0.000001" [placeholder]="'gpsTracking.serviceLongitude' | translate" />
+              <input type="number" class="form-control gps-input" [(ngModel)]="serviceLongitude" step="0.000001" [placeholder]="'gpsTracking.serviceLongitude' | translate" />
             </div>
-            <button class="btn btn-success w-100" (click)="calculateDistance()" [disabled]="isCalculatingDistance() || serviceLatitude == null || serviceLongitude == null">
+            <button class="btn gps-btn-calculate w-100" (click)="calculateDistance()" [disabled]="isCalculatingDistance() || serviceLatitude == null || serviceLongitude == null">
               @if (isCalculatingDistance()) {
                 <span class="spinner-border spinner-border-sm me-1"></span>
               } @else {
@@ -83,25 +91,39 @@
             </button>
 
             @if (distanceResult()) {
-              <div class="mt-3 p-3 bg-light rounded">
-                <div class="d-flex align-items-center mb-2 gap-2">
-                  <i class="bi bi-geo text-success fs-5"></i>
-                  <span class="fs-4 fw-bold text-success">{{ distanceResult()!.distanceKm | number:'1.2-2' }} {{ 'gpsTracking.km' | translate }}</span>
+              <div class="distance-result mt-3">
+                <div class="distance-value-row">
+                  <i class="bi bi-geo text-white fs-5"></i>
+                  <span class="distance-value">{{ distanceResult()!.distanceKm | number:'1.2-2' }} {{ 'gpsTracking.km' | translate }}</span>
                 </div>
-                <div class="row g-2 small text-muted">
-                  <div class="col-6">
-                    <div class="fw-semibold text-body">{{ 'gpsTracking.technicianName' | translate }}</div>
-                    <div>{{ distanceResult()!.technicianName }}</div>
+                <div class="distance-details">
+                  <div class="distance-detail-item">
+                    <div class="detail-label">{{ 'gpsTracking.technicianName' | translate }}</div>
+                    <div class="detail-value">{{ distanceResult()!.technicianName }}</div>
                   </div>
-                  <div class="col-6">
-                    <div class="fw-semibold text-body">{{ 'gpsTracking.technicianLocation' | translate }}</div>
-                    <div>{{ distanceResult()!.technicianLatitude | number:'1.4-4' }}, {{ distanceResult()!.technicianLongitude | number:'1.4-4' }}</div>
+                  @if (distanceResult()!.technicianAddress) {
+                    <div class="distance-detail-item">
+                      <div class="detail-label">{{ 'gpsTracking.technicianAddress' | translate }}</div>
+                      <div class="detail-value">{{ distanceResult()!.technicianAddress }}</div>
+                    </div>
+                  }
+                  <div class="distance-detail-item">
+                    <div class="detail-label">{{ 'gpsTracking.technicianLocation' | translate }}</div>
+                    <div class="detail-value font-monospace">{{ distanceResult()!.technicianLatitude | number:'1.4-4' }}, {{ distanceResult()!.technicianLongitude | number:'1.4-4' }}</div>
                   </div>
-                  <div class="col-6">
-                    <div class="fw-semibold text-body">{{ 'gpsTracking.serviceLocation' | translate }}</div>
-                    <div>{{ distanceResult()!.serviceLatitude | number:'1.4-4' }}, {{ distanceResult()!.serviceLongitude | number:'1.4-4' }}</div>
+                  <div class="distance-detail-item">
+                    <div class="detail-label">{{ 'gpsTracking.serviceLocation' | translate }}</div>
+                    <div class="detail-value font-monospace">{{ distanceResult()!.serviceLatitude | number:'1.4-4' }}, {{ distanceResult()!.serviceLongitude | number:'1.4-4' }}</div>
                   </div>
                 </div>
+              </div>
+              <!-- Route Map -->
+              <div class="map-section mt-3">
+                <div class="map-section-title">
+                  <i class="bi bi-map me-1 text-primary"></i>
+                  {{ 'gpsTracking.routeMap' | translate }}
+                </div>
+                <div id="distance-map" class="map-container"></div>
               </div>
             }
           </div>
@@ -110,12 +132,12 @@
 
       <!-- Location History Table -->
       <div class="col-12">
-        <div class="card shadow-sm">
-          <div class="card-header d-flex align-items-center gap-2">
+        <div class="card gps-card">
+          <div class="card-header gps-card-header">
             <i class="bi bi-clock-history text-info"></i>
             <span class="fw-semibold">{{ 'gpsTracking.locationHistory' | translate }}</span>
             @if (!isLoadingHistory()) {
-              <span class="badge bg-secondary ms-auto">{{ history().length }}</span>
+              <span class="badge gps-badge ms-auto">{{ history().length }}</span>
             }
           </div>
           <div class="card-body p-0">
@@ -127,8 +149,8 @@
               <p class="text-muted text-center py-4 mb-0">{{ 'gpsTracking.noHistory' | translate }}</p>
             } @else {
               <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                  <thead class="table-light">
+                <table class="table gps-table mb-0">
+                  <thead>
                     <tr>
                       <th>#</th>
                       <th>{{ 'gpsTracking.dateTime' | translate }}</th>
