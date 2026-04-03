@@ -12,6 +12,7 @@ public class Technician : BaseEntity
     public string Specialization { get; set; } = string.Empty;
     public string? ProfilePhotoUrl { get; set; }
     public TechnicianStatus Status { get; set; } = TechnicianStatus.Available;
+    public string? Address { get; set; }
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
     public DateTime? LastLocationUpdate { get; set; }

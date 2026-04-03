@@ -122,6 +122,7 @@ builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IAuditLogRep
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPremiumServiceRepository, Maintenance_management.infrastructure.Repositories.PremiumServiceRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPremiumMaintenanceRequestRepository, Maintenance_management.infrastructure.Repositories.PremiumMaintenanceRequestRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPaymentRepository, Maintenance_management.infrastructure.Repositories.PaymentRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITechnicianGpsLogRepository, Maintenance_management.infrastructure.Repositories.TechnicianGpsLogRepository>();
 
 // Application services
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAuthService, Maintenance_management.infrastructure.Services.AuthService>();
@@ -150,12 +151,17 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPremiu
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPaymentService, Maintenance_management.application.Services.PaymentService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAdminDashboardService, Maintenance_management.application.Services.AdminDashboardService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITravelEstimationService, Maintenance_management.api.Services.TravelEstimationService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.ISmsService, Maintenance_management.infrastructure.Services.SmsService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IGpsTrackingService, Maintenance_management.application.Services.GpsTrackingService>();
 
 // Notification service (SignalR-based)
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.INotificationService, Maintenance_management.api.Services.HubNotificationService>();
 
 // Background service: sends notifications for maintenance schedules due today
 builder.Services.AddHostedService<Maintenance_management.api.Services.ScheduleTodayNotificationService>();
+
+// Background service: checks technician GPS reporting every 4 hours
+builder.Services.AddHostedService<Maintenance_management.api.Services.GpsPollingBackgroundService>();
 
 // ===================== SERVICES =====================
 

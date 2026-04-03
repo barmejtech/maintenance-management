@@ -37,6 +37,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<PremiumService> PremiumServices => Set<PremiumService>();
     public DbSet<PremiumMaintenanceRequest> PremiumMaintenanceRequests => Set<PremiumMaintenanceRequest>();
     public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<TechnicianGpsLog> TechnicianGpsLogs => Set<TechnicianGpsLog>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -416,6 +417,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.Property(p => p.TransactionId).HasMaxLength(500);
             e.Property(p => p.Notes).HasMaxLength(1000);
             e.Property(p => p.FailureReason).HasMaxLength(1000);
+        });
+
+        builder.Entity<TechnicianGpsLog>(e =>
+        {
+            e.HasKey(l => l.Id);
+            e.HasOne(l => l.Technician)
+                .WithMany()
+                .HasForeignKey(l => l.TechnicianId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasIndex(l => new { l.TechnicianId, l.RecordedAt });
         });
     }
 }

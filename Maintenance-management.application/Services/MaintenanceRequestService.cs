@@ -10,11 +10,13 @@ public class MaintenanceRequestService : IMaintenanceRequestService
 {
     private readonly IMaintenanceRequestRepository _repo;
     private readonly IAuditLogRepository _auditRepo;
+    private readonly ISmsService _smsService;
 
-    public MaintenanceRequestService(IMaintenanceRequestRepository repo, IAuditLogRepository auditRepo)
+    public MaintenanceRequestService(IMaintenanceRequestRepository repo, IAuditLogRepository auditRepo, ISmsService smsService)
     {
         _repo = repo;
         _auditRepo = auditRepo;
+        _smsService = smsService;
     }
 
     public async Task<IEnumerable<MaintenanceRequestDto>> GetAllAsync()
@@ -65,6 +67,8 @@ public class MaintenanceRequestService : IMaintenanceRequestService
         var item = await _repo.GetWithDetailsAsync(id);
         if (item is null || item.IsDeleted) return null;
 
+        var previousStatus = item.Status;
+
         item.Title = dto.Title;
         item.Description = dto.Description;
         item.EquipmentDescription = dto.EquipmentDescription;
@@ -76,6 +80,17 @@ public class MaintenanceRequestService : IMaintenanceRequestService
         item.UpdatedAt = DateTime.UtcNow;
 
         await _repo.UpdateAsync(item);
+
+        // Notify the client via SMS when the request is completed
+        if (previousStatus != MaintenanceRequestStatus.Completed &&
+            dto.Status == MaintenanceRequestStatus.Completed &&
+            item.Client is not null &&
+            !string.IsNullOrWhiteSpace(item.Client.Phone))
+        {
+            await _smsService.SendSmsAsync(
+                item.Client.Phone,
+                $"Your maintenance request \"{item.Title}\" has been completed. Thank you for choosing our service.");
+        }
 
         var updated = await _repo.GetWithDetailsAsync(id);
         return MapToDto(updated ?? item);
