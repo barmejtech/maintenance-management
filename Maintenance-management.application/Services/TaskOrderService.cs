@@ -10,15 +10,18 @@ public class TaskOrderService : ITaskOrderService
     private readonly ITaskOrderRepository _repo;
     private readonly ITechnicianRepository _technicianRepo;
     private readonly INotificationService _notificationService;
+    private readonly ISmsService _smsService;
 
     public TaskOrderService(
         ITaskOrderRepository repo,
         ITechnicianRepository technicianRepo,
-        INotificationService notificationService)
+        INotificationService notificationService,
+        ISmsService smsService)
     {
         _repo = repo;
         _technicianRepo = technicianRepo;
         _notificationService = notificationService;
+        _smsService = smsService;
     }
 
     public async Task<IEnumerable<TaskOrderDto>> GetAllAsync()
@@ -96,6 +99,13 @@ public class TaskOrderService : ITaskOrderService
                     "info",
                     created.Id.ToString(),
                     "TaskOrder");
+
+                if (!string.IsNullOrWhiteSpace(technician.Phone))
+                {
+                    await _smsService.SendSmsAsync(
+                        technician.Phone,
+                        $"New task assigned: \"{dto.Title}\". Please check the app for details.");
+                }
             }
         }
 
@@ -162,6 +172,13 @@ public class TaskOrderService : ITaskOrderService
                     "info",
                     task.Id.ToString(),
                     "TaskOrder");
+
+                if (!string.IsNullOrWhiteSpace(technician.Phone))
+                {
+                    await _smsService.SendSmsAsync(
+                        technician.Phone,
+                        $"New task assigned: \"{task.Title}\". Please check the app for details.");
+                }
             }
         }
 
