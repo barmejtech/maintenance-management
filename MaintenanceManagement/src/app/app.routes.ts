@@ -191,6 +191,11 @@ export const routes: Routes = [
       {
         path: 'premium-maintenance',
         loadComponent: () => import('./components/premium-maintenance/premium-maintenance.component').then(m => m.PremiumMaintenanceComponent)
+      },
+      {
+        path: 'gps-tracking',
+        loadComponent: () => import('./components/gps-tracking/gps-tracking.component').then(m => m.GpsTrackingComponent),
+        canActivate: [managerGuard]
       }
     ]
   },
