@@ -43,10 +43,20 @@
                   <tr>
                     <td>
                       <div class="d-flex align-items-center gap-2">
-                        <span class="client-avatar bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
-                          <i class="bi bi-person-fill"></i>
+                        <span class="client-avatar rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                          [ngClass]="client.companyName ? 'bg-warning-subtle text-warning' : 'bg-primary-subtle text-primary'">
+                          <i class="bi" [ngClass]="client.companyName ? 'bi-building-fill' : 'bi-person-fill'"></i>
                         </span>
-                        <strong>{{ client.name }}</strong>
+                        <div>
+                          <strong>{{ client.name }}</strong>
+                          <div>
+                            <small class="badge rounded-pill mt-1"
+                              [ngClass]="client.companyName ? 'bg-warning-subtle text-warning' : 'bg-primary-subtle text-primary'">
+                              <i class="bi me-1" [ngClass]="client.companyName ? 'bi-building' : 'bi-person'"></i>
+                              {{ (client.companyName ? 'clients.type.company' : 'clients.type.personal') | translate }}
+                            </small>
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td>{{ client.companyName || '—' }}</td>
@@ -91,7 +101,13 @@
           <i class="bi bi-arrow-left me-1"></i>{{ 'clients.backToList' | translate }}
         </button>
         <h4 class="d-inline-block mb-0 fw-bold">
-          <i class="bi bi-person-circle text-primary me-2"></i>{{ selectedClient()!.name }}
+          <i class="bi text-primary me-2"
+            [ngClass]="selectedClient()!.companyName ? 'bi-building-fill' : 'bi-person-circle'"></i>{{ selectedClient()!.name }}
+          <span class="badge rounded-pill ms-2 fw-normal fs-6"
+            [ngClass]="selectedClient()!.companyName ? 'bg-warning-subtle text-warning' : 'bg-primary-subtle text-primary'">
+            <i class="bi me-1" [ngClass]="selectedClient()!.companyName ? 'bi-building' : 'bi-person'"></i>
+            {{ (selectedClient()!.companyName ? 'clients.type.company' : 'clients.type.personal') | translate }}
+          </span>
           @if (selectedClient()!.companyName) {
             <small class="text-muted fw-normal ms-2">— {{ selectedClient()!.companyName }}</small>
           }
