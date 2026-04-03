@@ -5,6 +5,7 @@ using Maintenance_management.domain.Interfaces;
 using Maintenance_management.infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Maintenance_management.infrastructure.Services;
 
@@ -14,13 +15,17 @@ public class AuthService : IAuthService
     private readonly IJwtService _jwtService;
     private readonly IConfiguration _config;
     private readonly IClientRepository _clientRepository;
+    private readonly IEmailService _emailService;
+    private readonly ILogger<AuthService> _logger;
 
-    public AuthService(UserManager<ApplicationUser> userManager, IJwtService jwtService, IConfiguration config, IClientRepository clientRepository)
+    public AuthService(UserManager<ApplicationUser> userManager, IJwtService jwtService, IConfiguration config, IClientRepository clientRepository, IEmailService emailService, ILogger<AuthService> logger)
     {
         _userManager = userManager;
         _jwtService = jwtService;
         _config = config;
         _clientRepository = clientRepository;
+        _emailService = emailService;
+        _logger = logger;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
@@ -139,6 +144,38 @@ public class AuthService : IAuthService
             user.RefreshToken = null;
             user.RefreshTokenExpiryTime = null;
             await _userManager.UpdateAsync(user);
+        }
+    }
+
+    public async Task ForgotPasswordAsync(ForgotPasswordDto dto)
+    {
+        var user = await _userManager.FindByEmailAsync(dto.Email);
+        // Always succeed to prevent email enumeration attacks
+        if (user is null) return;
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var encodedToken = Uri.EscapeDataString(token);
+        var encodedEmail = Uri.EscapeDataString(dto.Email);
+
+        var frontendUrl = _config["FrontendUrl"] ?? "http://localhost:4200";
+        var resetLink = $"{frontendUrl}/reset-password?email={encodedEmail}&token={encodedToken}";
+
+        await _emailService.SendPasswordResetEmailAsync(dto.Email, resetLink);
+    }
+
+    public async Task ResetPasswordAsync(ResetPasswordDto dto)
+    {
+        if (dto.NewPassword != dto.ConfirmNewPassword)
+            throw new InvalidOperationException("Passwords do not match.");
+
+        var user = await _userManager.FindByEmailAsync(dto.Email)
+            ?? throw new KeyNotFoundException("User not found.");
+
+        var result = await _userManager.ResetPasswordAsync(user, dto.Token, dto.NewPassword);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"Password reset failed: {errors}");
         }
     }
 

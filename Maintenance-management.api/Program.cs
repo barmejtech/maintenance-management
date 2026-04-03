@@ -125,6 +125,7 @@ builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPaymentRepo
 
 // Application services
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAuthService, Maintenance_management.infrastructure.Services.AuthService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IEmailService, Maintenance_management.infrastructure.Services.EmailService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IJwtService, Maintenance_management.infrastructure.Services.JwtService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IIdentityService, Maintenance_management.infrastructure.Services.IdentityService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IManagerService, Maintenance_management.application.Services.ManagerService>();
