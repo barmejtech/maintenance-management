@@ -921,3 +921,22 @@ export interface PaymentCheckout {
   amount: number;
   currency: string;
 }
+
+// GPS Tracking models
+export interface TechnicianGpsLog {
+  id: string;
+  technicianId: string;
+  latitude: number;
+  longitude: number;
+  recordedAt: string;
+}
+
+export interface TechnicianDistance {
+  technicianId: string;
+  technicianName: string;
+  technicianLatitude: number;
+  technicianLongitude: number;
+  serviceLatitude: number;
+  serviceLongitude: number;
+  distanceKm: number;
+}

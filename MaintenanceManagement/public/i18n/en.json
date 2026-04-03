@@ -438,7 +438,8 @@
       "operations": "Operations",
       "assets": "Assets & Equipment",
       "userManagement": "User Management",
-      "premiumMaintenance": "Premium Maintenance"
+      "premiumMaintenance": "Premium Maintenance",
+      "gpsTracking": "GPS Tracking"
     },
     "hero": {
       "fullAccess": "Full Access",
@@ -1414,5 +1415,29 @@
     "redirecting": "Redirecting to login...",
     "backToLogin": "← Back to Login",
     "failed": "Password reset failed. The link may be invalid or expired."
+  },
+  "gpsTracking": {
+    "title": "GPS Tracking",
+    "subtitle": "Track technician locations and calculate distances",
+    "selectTechnician": "Select Technician",
+    "selectTechnicianPlaceholder": "Choose a technician...",
+    "latestLocation": "Latest Location",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "lastUpdated": "Last Updated",
+    "staleLocation": "Location data is stale (over 4 hours old)",
+    "noLocation": "No location data available",
+    "locationHistory": "Location History",
+    "dateTime": "Date/Time",
+    "noHistory": "No location history found",
+    "distanceCalculator": "Distance Calculator",
+    "serviceLatitude": "Service Latitude",
+    "serviceLongitude": "Service Longitude",
+    "calculate": "Calculate Distance",
+    "distanceResult": "Distance",
+    "km": "km",
+    "technicianName": "Technician",
+    "technicianLocation": "Technician Location",
+    "serviceLocation": "Service Location"
   }
 }

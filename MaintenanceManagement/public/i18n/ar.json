@@ -438,7 +438,8 @@
       "operations": "العمليات",
       "assets": "الأصول والمعدات",
       "userManagement": "إدارة المستخدمين",
-      "premiumMaintenance": "الصيانة المميزة"
+      "premiumMaintenance": "الصيانة المميزة",
+      "gpsTracking": "تتبع GPS"
     },
     "hero": {
       "fullAccess": "صلاحية كاملة",
@@ -1443,5 +1444,29 @@
     "redirecting": "جارٍ التوجيه إلى صفحة تسجيل الدخول...",
     "backToLogin": "→ العودة إلى تسجيل الدخول",
     "failed": "فشلت عملية إعادة تعيين كلمة المرور. قد يكون الرابط غير صالح أو منتهي الصلاحية."
+  },
+  "gpsTracking": {
+    "title": "تتبع GPS",
+    "subtitle": "تتبع مواقع الفنيين وحساب المسافات",
+    "selectTechnician": "اختر الفني",
+    "selectTechnicianPlaceholder": "اختر فنياً...",
+    "latestLocation": "آخر موقع",
+    "latitude": "خط العرض",
+    "longitude": "خط الطول",
+    "lastUpdated": "آخر تحديث",
+    "staleLocation": "بيانات الموقع قديمة (أكثر من 4 ساعات)",
+    "noLocation": "لا تتوفر بيانات موقع",
+    "locationHistory": "سجل المواقع",
+    "dateTime": "التاريخ والوقت",
+    "noHistory": "لا يوجد سجل مواقع",
+    "distanceCalculator": "حاسبة المسافة",
+    "serviceLatitude": "خط عرض الخدمة",
+    "serviceLongitude": "خط طول الخدمة",
+    "calculate": "احسب المسافة",
+    "distanceResult": "المسافة",
+    "km": "كم",
+    "technicianName": "الفني",
+    "technicianLocation": "موقع الفني",
+    "serviceLocation": "موقع الخدمة"
   }
 }
