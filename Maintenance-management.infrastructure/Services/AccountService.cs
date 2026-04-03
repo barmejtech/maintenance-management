@@ -20,7 +20,7 @@ public class AccountService : IAccountService
         return MapToDto(user, roles);
     }
 
-    public async Task<AccountProfileDto> UpdateProfileAsync(string userId, UpdateProfileDto dto)
+    public async Task<AccountProfileDto> UpdateProfileAsync(string userId, UpdateAccountProfileDto dto)
     {
         var user = await _userManager.FindByIdAsync(userId)
             ?? throw new KeyNotFoundException("User not found.");
