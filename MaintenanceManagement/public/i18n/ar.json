@@ -463,7 +463,10 @@
             "activeSchedules": "الجداول النشطة",
             "overdue": "متأخر",
             "managers": "المدراء",
-            "urgent": "عاجل"
+            "urgent": "عاجل",
+            "clients": "العملاء",
+            "groups": "المجموعات",
+            "clientRequests": "طلبات العملاء"
         },
         "charts": {
             "workOrdersByStatus": "أوامر العمل حسب الحالة",

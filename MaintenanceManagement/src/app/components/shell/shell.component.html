@@ -35,8 +35,11 @@
     </a>
 
     <!-- ===== OPERATIONS ===== -->
+    @if (isManagerOrAdmin() || isTechnicianRole() || isSupportRole()) {
     <div class="sidebar-divider"></div>
     <div class="sidebar-section-label">{{ 'dashboard.sidebar.operations' | translate }}</div>
+    }
+    @if (isManagerOrAdmin() || isTechnicianRole()) {
     <a routerLink="/tasks" routerLinkActive="active" class="nav-item">
       <i class="bi bi-clipboard-check"></i> {{ 'dashboard.sidebar.workOrders' | translate }}
     </a>
@@ -46,6 +49,8 @@
     <a routerLink="/availability" routerLinkActive="active" class="nav-item">
       <i class="bi bi-calendar-check"></i> {{ 'dashboard.sidebar.availability' | translate }}
     </a>
+    }
+    @if (isManagerOrAdmin() || isTechnicianRole() || isSupportRole()) {
     <a routerLink="/chat" routerLinkActive="active" class="nav-item">
       <i class="bi bi-chat-dots"></i> {{ 'dashboard.sidebar.chat' | translate }}
     </a>
@@ -55,23 +60,31 @@
         <span class="nav-notif-count">{{ notifService.unreadCount() > 99 ? '99+' : notifService.unreadCount() }}</span>
       }
     </a>
+    }
 
     <!-- ===== ASSETS & EQUIPMENT ===== -->
+    @if (isManagerOrAdmin() || isDataEntryRole() || isTechnicianRole()) {
     <div class="sidebar-divider"></div>
     <div class="sidebar-section-label">{{ 'dashboard.sidebar.assets' | translate }}</div>
     <a routerLink="/equipment" routerLinkActive="active" class="nav-item">
       <i class="bi bi-cpu"></i> {{ 'dashboard.sidebar.equipment' | translate }}
     </a>
+    }
+    @if (isManagerOrAdmin() || isDataEntryRole()) {
     <a routerLink="/hvac" routerLinkActive="active" class="nav-item">
       <i class="bi bi-thermometer-half"></i> {{ 'dashboard.sidebar.hvac' | translate }}
     </a>
     <a routerLink="/spare-parts" routerLinkActive="active" class="nav-item">
       <i class="bi bi-wrench-adjustable"></i> {{ 'dashboard.sidebar.spareParts' | translate }}
     </a>
+    }
 
     <!-- ===== INTELLIGENCE ===== -->
+    @if (isManagerOrAdmin() || isDataEntryRole() || isTechnicianRole()) {
     <div class="sidebar-divider"></div>
     <div class="sidebar-section-label">{{ 'dashboard.sidebar.intelligence' | translate }}</div>
+    }
+    @if (isManagerOrAdmin()) {
     <a routerLink="/reports" routerLinkActive="active" class="nav-item">
       <i class="bi bi-file-earmark-bar-graph"></i> {{ 'dashboard.sidebar.reports' | translate }}
     </a>
@@ -81,18 +94,27 @@
     <a routerLink="/equipment-digital-twin" routerLinkActive="active" class="nav-item">
       <i class="bi bi-building"></i> {{ 'dashboard.sidebar.digitalTwin' | translate }}
     </a>
+    }
+    @if (isManagerOrAdmin() || isDataEntryRole()) {
     <a routerLink="/maintenance-schedules" routerLinkActive="active" class="nav-item">
       <i class="bi bi-clipboard"></i> {{ 'dashboard.sidebar.maintenanceSchedules' | translate }}
     </a>
+    }
+    @if (isManagerOrAdmin()) {
     <a routerLink="/equipment-timeline" routerLinkActive="active" class="nav-item">
       <i class="bi bi-clock-history"></i> {{ 'dashboard.sidebar.equipmentTimeline' | translate }}
     </a>
+    }
+    @if (isManagerOrAdmin() || isTechnicianRole()) {
     <a routerLink="/mobile-workflow" routerLinkActive="active" class="nav-item">
       <i class="bi bi-phone"></i> {{ 'dashboard.sidebar.mobileWorkflow' | translate }}
     </a>
+    }
+    @if (isManagerOrAdmin()) {
     <a routerLink="/power-bi" routerLinkActive="active" class="nav-item">
       <i class="bi bi-bar-chart-line"></i> {{ 'dashboard.sidebar.powerBi' | translate }}
     </a>
+    }
 
     <!-- ===== MANAGEMENT ===== -->
     @if (isManagerOrAdmin()) {

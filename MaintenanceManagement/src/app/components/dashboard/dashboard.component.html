@@ -185,6 +185,42 @@
         }
       </div>
     </div>
+
+    <div class="stat-card stat-card--clients" (click)="navigateTo('clients')">
+      <div class="stat-icon-box">
+        <i class="bi bi-briefcase stat-icon"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ clientCount() }}</div>
+        <div class="stat-label">{{ 'dashboard.stats.clients' | translate }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card--groups" (click)="navigateTo('groups')">
+      <div class="stat-icon-box">
+        <i class="bi bi-people stat-icon"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ groupCount() }}</div>
+        <div class="stat-label">{{ 'dashboard.stats.groups' | translate }}</div>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card--clientrequests" (click)="navigateTo('requests')">
+      <div class="stat-icon-box">
+        <i class="bi bi-inbox stat-icon"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ clientRequestCount() }}</div>
+        <div class="stat-label">{{ 'dashboard.stats.clientRequests' | translate }}</div>
+        @if (pendingClientRequestCount() > 0) {
+        <div class="stat-badge">
+          <i class="bi bi-hourglass-split badge-icon"></i>
+          {{ pendingClientRequestCount() }} {{ 'dashboard.stats.pending' | translate }}
+        </div>
+        }
+      </div>
+    </div>
   </div>
 
   <!-- Charts Grid -->
