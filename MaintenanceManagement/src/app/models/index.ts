@@ -351,6 +351,8 @@ export interface Invoice {
   notes?: string;
   taskOrderId?: string;
   taskTitle?: string;
+  maintenanceReportId?: string;
+  maintenanceReportTitle?: string;
   lineItems: InvoiceLineItem[];
   createdAt: string;
 }

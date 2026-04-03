@@ -26,6 +26,7 @@ public class InvoiceRepository : Repository<Invoice>, IInvoiceRepository
             .Include(i => i.LineItems)
             .Include(i => i.TaskOrder)
             .Include(i => i.Client)
+            .Include(i => i.MaintenanceReport)
             .FirstOrDefaultAsync(i => i.Id == id && !i.IsDeleted);
 
     public async Task<IEnumerable<Invoice>> GetByClientIdAsync(Guid clientId)
@@ -33,5 +34,12 @@ public class InvoiceRepository : Repository<Invoice>, IInvoiceRepository
             .Include(i => i.LineItems)
             .Include(i => i.Client)
             .Where(i => i.ClientId == clientId && !i.IsDeleted)
+            .ToListAsync();
+
+    public async Task<IEnumerable<Invoice>> GetByMaintenanceReportIdAsync(Guid reportId)
+        => await _dbSet
+            .Include(i => i.LineItems)
+            .Include(i => i.MaintenanceReport)
+            .Where(i => i.MaintenanceReportId == reportId && !i.IsDeleted)
             .ToListAsync();
 }
