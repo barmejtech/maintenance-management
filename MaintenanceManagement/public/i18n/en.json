@@ -463,7 +463,10 @@
             "activeSchedules": "Active Schedules",
             "overdue": "overdue",
             "managers": "Managers",
-            "urgent": "Urgent"
+            "urgent": "Urgent",
+            "clients": "Clients",
+            "groups": "Groups",
+            "clientRequests": "Client Requests"
         },
         "charts": {
             "workOrdersByStatus": "Work Orders by Status",
