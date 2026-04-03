@@ -1623,7 +1623,7 @@ public static class DataSeeder
                 EquipmentId = eq4Id,
                 PredictedFailureDate = DateTime.UtcNow.AddMonths(4),
                 FailureProbability = 0.42,
-                Recommendation = "استبدال مجموعة الأختام خلال الشهر القادم. فحص المحرب الكهربائي وقياس العزل.",
+                Recommendation = "استبدال مجموعة الأختام خلال الشهر القادم. فحص المحرك الكهربائي وقياس العزل.",
                 TotalInterventions = 6,
                 AverageDaysBetweenFailures = 270,
                 AverageDaysBetweenMaintenance = 150,
