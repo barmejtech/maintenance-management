@@ -1438,6 +1438,8 @@
     "km": "km",
     "technicianName": "Technician",
     "technicianLocation": "Technician Location",
-    "serviceLocation": "Service Location"
+    "serviceLocation": "Service Location",
+    "failedLoadTechnicians": "Failed to load technicians",
+    "failedCalculateDistance": "Failed to calculate distance"
   }
 }

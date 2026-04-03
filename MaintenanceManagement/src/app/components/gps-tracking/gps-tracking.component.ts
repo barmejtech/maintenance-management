@@ -43,7 +43,7 @@ export class GpsTrackingComponent implements OnInit {
   ngOnInit() {
     this.technicianService.getAll().subscribe({
       next: techs => this.technicians.set(techs),
-      error: () => this.toast.show('Failed to load technicians', 'error')
+      error: () => this.toast.show(this.translation.translate('gpsTracking.failedLoadTechnicians'), 'error')
     });
   }
 
@@ -84,7 +84,7 @@ export class GpsTrackingComponent implements OnInit {
     this.gpsService.getDistance(id, this.serviceLatitude, this.serviceLongitude).subscribe({
       next: result => { this.distanceResult.set(result); this.isCalculatingDistance.set(false); },
       error: () => {
-        this.toast.show('Failed to calculate distance', 'error');
+        this.toast.show(this.translation.translate('gpsTracking.failedCalculateDistance'), 'error');
         this.isCalculatingDistance.set(false);
       }
     });

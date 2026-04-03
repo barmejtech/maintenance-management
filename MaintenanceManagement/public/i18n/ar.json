@@ -1467,6 +1467,8 @@
     "km": "كم",
     "technicianName": "الفني",
     "technicianLocation": "موقع الفني",
-    "serviceLocation": "موقع الخدمة"
+    "serviceLocation": "موقع الخدمة",
+    "failedLoadTechnicians": "فشل تحميل قائمة الفنيين",
+    "failedCalculateDistance": "فشل حساب المسافة"
   }
 }
