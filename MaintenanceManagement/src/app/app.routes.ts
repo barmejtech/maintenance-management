@@ -169,6 +169,11 @@ export const routes: Routes = [
         loadComponent: () => import('./components/account/account.component').then(m => m.AccountComponent)
       },
       {
+        path: 'requests',
+        loadComponent: () => import('./components/requests/requests.component').then(m => m.RequestsComponent),
+        canActivate: [managerGuard]
+      },
+      {
         path: 'premium-maintenance',
         loadComponent: () => import('./components/premium-maintenance/premium-maintenance.component').then(m => m.PremiumMaintenanceComponent)
       }

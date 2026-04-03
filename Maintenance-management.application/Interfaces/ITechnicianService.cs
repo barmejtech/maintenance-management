@@ -11,4 +11,7 @@ public interface ITechnicianService
     Task<bool> DeleteAsync(Guid id);
     Task<bool> UpdateLocationAsync(Guid id, UpdateLocationDto dto);
     Task<TechnicianDto?> GetByUserIdAsync(string userId);
+
+    /// <summary>Returns technicians whose status is Available.</summary>
+    Task<IEnumerable<TechnicianDto>> GetAvailableAsync();
 }

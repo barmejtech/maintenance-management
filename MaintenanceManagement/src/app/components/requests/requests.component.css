@@ -1,0 +1,43 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-dialog-custom {
+  width: 100%;
+  max-width: 520px;
+}
+
+.modal-lg-custom {
+  max-width: 700px;
+}
+
+.req-row:hover {
+  background-color: var(--bs-primary-bg-subtle, #cfe2ff);
+}
+
+.avatar-sm {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  font-size: 0.85rem;
+}
+
+.tech-select-card {
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.tech-select-card.selected {
+  background: var(--bs-primary-bg-subtle, #cfe2ff);
+  border-color: var(--bs-primary, #0d6efd) !important;
+}
+
+.tech-select-card:hover {
+  background: var(--bs-light, #f8f9fa);
+}

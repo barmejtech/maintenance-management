@@ -89,4 +89,9 @@ public class TechniciansController : ControllerBase
         var result = await _service.GetByUserIdAsync(userId);
         return result is null ? NotFound() : Ok(result);
     }
+
+    [HttpGet("available")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> GetAvailable()
+        => Ok(await _service.GetAvailableAsync());
 }
