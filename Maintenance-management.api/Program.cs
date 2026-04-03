@@ -147,6 +147,7 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IMainte
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPremiumServiceService, Maintenance_management.application.Services.PremiumServiceService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPremiumMaintenanceRequestService, Maintenance_management.application.Services.PremiumMaintenanceRequestService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPaymentService, Maintenance_management.application.Services.PaymentService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITravelEstimationService, Maintenance_management.api.Services.TravelEstimationService>();
 
 // Notification service (SignalR-based)
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.INotificationService, Maintenance_management.api.Services.HubNotificationService>();
@@ -158,6 +159,16 @@ builder.Services.AddHostedService<Maintenance_management.api.Services.ScheduleTo
 
 // Add SignalR services
 builder.Services.AddSignalR();
+
+// HTTP client for external APIs (geocoding + routing)
+builder.Services.AddHttpClient("TravelEstimation", client =>
+{
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("MaintenanceManagement/1.0");
+    client.Timeout = TimeSpan.FromSeconds(15);
+});
+
+// In-memory cache for travel estimates
+builder.Services.AddMemoryCache();
 
 
 //builder.Services.AddAutoMapper(typeof(MappingProfile));
