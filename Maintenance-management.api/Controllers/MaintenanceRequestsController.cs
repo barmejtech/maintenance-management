@@ -14,17 +14,52 @@ namespace Maintenance_management.api.Controllers;
 public class MaintenanceRequestsController : ControllerBase
 {
     private readonly IMaintenanceRequestService _service;
+    private readonly ITechnicianService _technicianService;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly INotificationService _notificationService;
 
-    public MaintenanceRequestsController(IMaintenanceRequestService service, UserManager<ApplicationUser> userManager)
+    public MaintenanceRequestsController(
+        IMaintenanceRequestService service,
+        ITechnicianService technicianService,
+        UserManager<ApplicationUser> userManager,
+        INotificationService notificationService)
     {
         _service = service;
+        _technicianService = technicianService;
         _userManager = userManager;
+        _notificationService = notificationService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
-        => Ok(await _service.GetAllAsync());
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> GetAll(
+        [FromQuery] MaintenanceRequestStatus? status = null,
+        [FromQuery] string? search = null,
+        [FromQuery] DateTime? from = null,
+        [FromQuery] DateTime? to = null)
+    {
+        var all = await _service.GetAllAsync();
+
+        if (status.HasValue)
+            all = all.Where(r => r.Status == status.Value);
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var q = search.Trim().ToLower();
+            all = all.Where(r =>
+                r.Title.ToLower().Contains(q) ||
+                r.ClientName.ToLower().Contains(q) ||
+                r.Id.ToString().StartsWith(q, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (from.HasValue)
+            all = all.Where(r => r.RequestDate >= from.Value);
+
+        if (to.HasValue)
+            all = all.Where(r => r.RequestDate <= to.Value.AddDays(1));
+
+        return Ok(all);
+    }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
@@ -32,6 +67,11 @@ public class MaintenanceRequestsController : ControllerBase
         var result = await _service.GetByIdAsync(id);
         return result is null ? NotFound() : Ok(result);
     }
+
+    [HttpGet("{id:guid}/audit")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> GetAuditLog(Guid id)
+        => Ok(await _service.GetAuditLogAsync(id));
 
     [HttpGet("client/{clientId:guid}")]
     public async Task<IActionResult> GetByClient(Guid clientId)
@@ -88,7 +128,118 @@ public class MaintenanceRequestsController : ControllerBase
         };
 
         var result = await _service.CreateAsync(createDto);
+
+        // Notify admins and managers in real-time
+        var clientName = $"{user.FirstName} {user.LastName}";
+        await _notificationService.SendToRoleAsync("Admin",
+            "New Maintenance Request",
+            $"Client \"{clientName}\" submitted a new request: \"{result.Title}\"",
+            "info", result.Id.ToString(), "MaintenanceRequest");
+        await _notificationService.SendToRoleAsync("Manager",
+            "New Maintenance Request",
+            $"Client \"{clientName}\" submitted a new request: \"{result.Title}\"",
+            "info", result.Id.ToString(), "MaintenanceRequest");
+
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+    }
+
+    /// <summary>Approves a pending maintenance request.</summary>
+    [HttpPut("{id:guid}/approve")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> Approve(Guid id, [FromBody] ApproveMaintenanceRequestDto dto)
+    {
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (userId is null) return Unauthorized();
+
+        var user = await _userManager.FindByIdAsync(userId);
+        var userName = user is not null ? $"{user.FirstName} {user.LastName}" : userId;
+
+        var result = await _service.ApproveAsync(id, userId, userName, dto.ReviewNotes);
+        if (result is null) return NotFound();
+
+        // Notify the client
+        var clientRequest = await _service.GetByIdAsync(id);
+        if (clientRequest != null)
+        {
+            // Find the client user
+            var clientUsers = await _userManager.GetUsersInRoleAsync("Client");
+            var clientUser = clientUsers.FirstOrDefault(u => u.ClientRecordId == clientRequest.ClientId);
+            if (clientUser != null)
+            {
+                await _notificationService.SendToUserAsync(clientUser.Id,
+                    "Request Approved",
+                    $"Your maintenance request \"{result.Title}\" has been approved.",
+                    "success", id.ToString(), "MaintenanceRequest");
+            }
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>Rejects a pending maintenance request.</summary>
+    [HttpPut("{id:guid}/reject")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> Reject(Guid id, [FromBody] RejectMaintenanceRequestDto dto)
+    {
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (userId is null) return Unauthorized();
+
+        var user = await _userManager.FindByIdAsync(userId);
+        var userName = user is not null ? $"{user.FirstName} {user.LastName}" : userId;
+
+        var result = await _service.RejectAsync(id, userId, userName, dto.ReviewNotes);
+        if (result is null) return NotFound();
+
+        // Notify the client
+        var clientRequest = await _service.GetByIdAsync(id);
+        if (clientRequest != null)
+        {
+            var clientUsers = await _userManager.GetUsersInRoleAsync("Client");
+            var clientUser = clientUsers.FirstOrDefault(u => u.ClientRecordId == clientRequest.ClientId);
+            if (clientUser != null)
+            {
+                await _notificationService.SendToUserAsync(clientUser.Id,
+                    "Request Rejected",
+                    $"Your maintenance request \"{result.Title}\" has been rejected. Reason: {dto.ReviewNotes ?? "No reason provided."}",
+                    "error", id.ToString(), "MaintenanceRequest");
+            }
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>Assigns one or more available technicians to an approved request.</summary>
+    [HttpPost("{id:guid}/assign")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> AssignTechnicians(Guid id, [FromBody] AssignTechniciansDto dto)
+    {
+        if (dto.TechnicianIds == null || dto.TechnicianIds.Count == 0)
+            return BadRequest(new { message = "At least one technician must be selected." });
+
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (userId is null) return Unauthorized();
+
+        var result = await _service.AssignTechniciansAsync(id, dto.TechnicianIds, userId);
+        if (result is null) return NotFound();
+
+        // Notify each assigned technician in real-time
+        foreach (var techId in dto.TechnicianIds)
+        {
+            var tech = await _technicianService.GetByIdAsync(techId);
+            if (tech is not null)
+            {
+                var techUser = await _userManager.FindByIdAsync(tech.UserId);
+                if (techUser != null)
+                {
+                    await _notificationService.SendToUserAsync(techUser.Id,
+                        "New Assignment",
+                        $"You have been assigned to maintenance request: \"{result.Title}\"",
+                        "info", id.ToString(), "MaintenanceRequest");
+                }
+            }
+        }
+
+        return Ok(result);
     }
 
     [HttpPut("{id:guid}")]

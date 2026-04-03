@@ -15,6 +15,7 @@ public class MaintenanceRequestRepository : Repository<MaintenanceRequest>, IMai
             .Include(r => r.Client)
             .Include(r => r.TaskOrder)
             .Include(r => r.Invoice)
+            .Include(r => r.Assignments).ThenInclude(a => a.Technician)
             .Where(r => r.ClientId == clientId && !r.IsDeleted)
             .OrderByDescending(r => r.RequestDate)
             .ToListAsync();
@@ -24,6 +25,7 @@ public class MaintenanceRequestRepository : Repository<MaintenanceRequest>, IMai
             .Include(r => r.Client)
             .Include(r => r.TaskOrder)
             .Include(r => r.Invoice)
+            .Include(r => r.Assignments).ThenInclude(a => a.Technician)
             .Where(r => r.Status == status && !r.IsDeleted)
             .OrderByDescending(r => r.RequestDate)
             .ToListAsync();
@@ -33,6 +35,7 @@ public class MaintenanceRequestRepository : Repository<MaintenanceRequest>, IMai
             .Include(r => r.Client)
             .Include(r => r.TaskOrder)
             .Include(r => r.Invoice)
+            .Include(r => r.Assignments).ThenInclude(a => a.Technician)
             .FirstOrDefaultAsync(r => r.Id == id && !r.IsDeleted);
 
     public override async Task<IEnumerable<MaintenanceRequest>> GetAllAsync()
@@ -40,7 +43,22 @@ public class MaintenanceRequestRepository : Repository<MaintenanceRequest>, IMai
             .Include(r => r.Client)
             .Include(r => r.TaskOrder)
             .Include(r => r.Invoice)
+            .Include(r => r.Assignments).ThenInclude(a => a.Technician)
             .Where(r => !r.IsDeleted)
             .OrderByDescending(r => r.RequestDate)
             .ToListAsync();
+
+    public async Task AddAssignmentAsync(MaintenanceRequestAssignment assignment)
+    {
+        await _context.Set<MaintenanceRequestAssignment>().AddAsync(assignment);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task RemoveAssignmentsAsync(Guid requestId)
+    {
+        var existing = _context.Set<MaintenanceRequestAssignment>()
+            .Where(a => a.MaintenanceRequestId == requestId);
+        _context.Set<MaintenanceRequestAssignment>().RemoveRange(existing);
+        await _context.SaveChangesAsync();
+    }
 }

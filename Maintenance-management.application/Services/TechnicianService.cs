@@ -95,6 +95,12 @@ public class TechnicianService : ITechnicianService
         return true;
     }
 
+    public async Task<IEnumerable<TechnicianDto>> GetAvailableAsync()
+    {
+        var technicians = await _repo.GetAvailableTechniciansAsync();
+        return technicians.Where(t => !t.IsDeleted).Select(MapToDto);
+    }
+
     private static TechnicianDto MapToDto(Technician t) => new()
     {
         Id = t.Id,

@@ -12,6 +12,7 @@ export class TechnicianService {
   getAll(): Observable<Technician[]> { return this.http.get<Technician[]>(this.base); }
   getById(id: string): Observable<Technician> { return this.http.get<Technician>(`${this.base}/${id}`); }
   getMe(): Observable<Technician> { return this.http.get<Technician>(`${this.base}/me`); }
+  getAvailable(): Observable<Technician[]> { return this.http.get<Technician[]>(`${this.base}/available`); }
   create(dto: CreateTechnicianRequest): Observable<Technician> { return this.http.post<Technician>(this.base, dto); }
   update(id: string, dto: UpdateTechnicianRequest): Observable<Technician> { return this.http.put<Technician>(`${this.base}/${id}`, dto); }
   delete(id: string): Observable<void> { return this.http.delete<void>(`${this.base}/${id}`); }

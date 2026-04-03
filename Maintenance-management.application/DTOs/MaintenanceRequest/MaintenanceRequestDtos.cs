@@ -18,6 +18,32 @@ public class MaintenanceRequestDto
     public Guid? InvoiceId { get; set; }
     public string? InvoiceNumber { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    // Review info
+    public string? ReviewedByUserId { get; set; }
+    public DateTime? ReviewedAt { get; set; }
+    public string? ReviewNotes { get; set; }
+
+    // Assignment info
+    public List<AssignedTechnicianDto> AssignedTechnicians { get; set; } = new();
+}
+
+public class AssignedTechnicianDto
+{
+    public Guid TechnicianId { get; set; }
+    public string FullName { get; set; } = string.Empty;
+    public string Specialization { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public DateTime AssignedAt { get; set; }
+}
+
+public class AuditLogDto
+{
+    public Guid Id { get; set; }
+    public string Action { get; set; } = string.Empty;
+    public string PerformedByName { get; set; } = string.Empty;
+    public string? Details { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
 
 public class CreateMaintenanceRequestDto
@@ -50,4 +76,19 @@ public class UpdateMaintenanceRequestDto
     public string? Notes { get; set; }
     public Guid? TaskOrderId { get; set; }
     public Guid? InvoiceId { get; set; }
+}
+
+public class ApproveMaintenanceRequestDto
+{
+    public string? ReviewNotes { get; set; }
+}
+
+public class RejectMaintenanceRequestDto
+{
+    public string? ReviewNotes { get; set; }
+}
+
+public class AssignTechniciansDto
+{
+    public List<Guid> TechnicianIds { get; set; } = new();
 }
