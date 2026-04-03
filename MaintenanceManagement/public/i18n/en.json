@@ -428,6 +428,7 @@
             "mobileWorkflow": "Mobile Workflow",
             "registerUser": "Register User",
             "manageManagers": "Manage Managers",
+            "adminDashboard": "Admin Dashboard",
             "myAccount": "My Account",
             "notifications": "Notifications",
             "powerBi": "Power BI",
@@ -1337,6 +1338,53 @@
             "amount": "Total Amount",
             "confirm": "Confirm Payment",
             "secure": "Secured by 256-bit SSL encryption"
+        }
+    },
+    "adminDashboard": {
+        "title": "Admin Dashboard",
+        "subtitle": "Comprehensive overview of all maintenance operations",
+        "loading": "Loading dashboard...",
+        "noData": "No requests found.",
+        "cards": {
+            "totalRequests": "Total Requests",
+            "completed": "Completed",
+            "totalRevenue": "Total Revenue",
+            "weeklyAverage": "Weekly Avg (tasks)",
+            "paidInvoices": "Paid Invoices"
+        },
+        "dailyStats": {
+            "title": "Completed Tasks – Last 30 Days"
+        },
+        "filter": {
+            "search": "Search",
+            "searchPlaceholder": "Client or technician...",
+            "status": "Status",
+            "allStatuses": "All Statuses",
+            "clear": "Clear",
+            "refresh": "Refresh"
+        },
+        "table": {
+            "client": "Client",
+            "dateRequest": "Date Request",
+            "technician": "Technician",
+            "dateOfTask": "Date of Task",
+            "status": "Status",
+            "price": "Price",
+            "paymentStatus": "Payment Status",
+            "datePay": "Date Paid"
+        },
+        "status": {
+            "pending": "Pending",
+            "underReview": "Under Review",
+            "approved": "Approved",
+            "inProgress": "In Progress",
+            "completed": "Completed",
+            "rejected": "Rejected",
+            "cancelled": "Cancelled"
+        },
+        "payment": {
+            "paid": "Paid",
+            "unpaid": "Unpaid"
         }
     }
 }

@@ -176,6 +176,11 @@ export const routes: Routes = [
       {
         path: 'premium-maintenance',
         loadComponent: () => import('./components/premium-maintenance/premium-maintenance.component').then(m => m.PremiumMaintenanceComponent)
+      },
+      {
+        path: 'admin-dashboard',
+        loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
+        canActivate: [adminGuard]
       }
     ]
   },
