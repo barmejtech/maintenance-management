@@ -1,0 +1,465 @@
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-file-earmark-text text-primary me-2"></i>{{ 'quotations.title' | translate }}</h4>
+    <div class="d-flex gap-2">
+      @if (auth.isManager()) {
+      <button class="btn btn-primary btn-sm" (click)="openAdd()">
+        <i class="bi bi-plus-circle me-1"></i>{{ 'quotations.newButton' | translate }}
+      </button>
+      }
+      <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>{{ 'quotations.backToDashboard' | translate }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Summary Stats -->
+  @if (quotations().length > 0) {
+    <div class="row g-3 mb-3">
+      <div class="col-6 col-md-3">
+        <div class="stat-card card border-0 shadow-sm text-center p-3">
+          <div class="stat-icon bg-primary-subtle text-primary mx-auto mb-2">
+            <i class="bi bi-file-earmark-text"></i>
+          </div>
+          <div class="stat-value fw-bold fs-4">{{ getTotalCount() }}</div>
+          <div class="stat-label text-muted small">{{ 'quotations.stats.total' | translate }}</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card card border-0 shadow-sm text-center p-3">
+          <div class="stat-icon bg-info-subtle text-info mx-auto mb-2">
+            <i class="bi bi-send"></i>
+          </div>
+          <div class="stat-value fw-bold fs-4 text-info">{{ getSentCount() }}</div>
+          <div class="stat-label text-muted small">{{ 'quotations.stats.sent' | translate }}</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card card border-0 shadow-sm text-center p-3">
+          <div class="stat-icon bg-success-subtle text-success mx-auto mb-2">
+            <i class="bi bi-check-circle"></i>
+          </div>
+          <div class="stat-value fw-bold fs-4 text-success">{{ getAcceptedCount() }}</div>
+          <div class="stat-label text-muted small">{{ 'quotations.stats.accepted' | translate }}</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card card border-0 shadow-sm text-center p-3">
+          <div class="stat-icon bg-warning-subtle text-warning mx-auto mb-2">
+            <i class="bi bi-cash-stack"></i>
+          </div>
+          <div class="stat-value fw-bold fs-5 text-warning">${{ getTotalValue() | number:'1.2-2' }}</div>
+          <div class="stat-label text-muted small">{{ 'quotations.stats.totalValue' | translate }}</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Quotations Table -->
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th><i class="bi bi-hash me-1"></i>{{ 'quotations.table.number' | translate }}</th>
+              <th><i class="bi bi-person me-1"></i>{{ 'quotations.table.client' | translate }}</th>
+              <th><i class="bi bi-calendar-plus me-1"></i>{{ 'quotations.table.issueDate' | translate }}</th>
+              <th><i class="bi bi-calendar-check me-1"></i>{{ 'quotations.table.validUntil' | translate }}</th>
+              <th><i class="bi bi-clock me-1"></i>{{ 'quotations.table.duration' | translate }}</th>
+              <th><i class="bi bi-cash-stack me-1"></i>{{ 'quotations.table.total' | translate }}</th>
+              <th><i class="bi bi-activity me-1"></i>{{ 'quotations.table.status' | translate }}</th>
+              <th class="text-end">{{ 'quotations.table.actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (q of quotations() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track q.id) {
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="quotation-icon bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                      <i class="bi bi-file-earmark-text"></i>
+                    </span>
+                    <strong>{{ q.quotationNumber }}</strong>
+                  </div>
+                </td>
+                <td>
+                  <div class="fw-semibold">{{ q.clientName }}</div>
+                  @if (q.clientEmail) {
+                    <small class="text-muted"><i class="bi bi-envelope me-1"></i>{{ q.clientEmail }}</small>
+                  }
+                </td>
+                <td><i class="bi bi-calendar3 me-1 text-muted"></i>{{ q.issueDate | date:'mediumDate' }}</td>
+                <td>
+                  <span [class.text-danger]="isExpired(q)" [class.fw-bold]="isExpired(q)">
+                    <i class="bi bi-calendar-event me-1" [class.text-danger]="isExpired(q)" [class.text-muted]="!isExpired(q)"></i>
+                    {{ q.validUntil | date:'mediumDate' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge bg-light text-dark border">
+                    <i class="bi bi-clock me-1"></i>{{ q.estimatedDurationDays }} {{ 'quotations.days' | translate }}
+                  </span>
+                </td>
+                <td>
+                  <span class="fw-bold text-success">${{ q.totalAmount.toFixed(2) }}</span>
+                  @if (q.taxRate) {
+                    <br><small class="text-muted">{{ 'quotations.table.tax' | translate }}: {{ q.taxRate }}%</small>
+                  }
+                </td>
+                <td>
+                  <span class="badge rounded-pill" [class]="getStatusClass(q.status)">
+                    <i class="bi me-1" [class]="getStatusIcon(q.status)"></i>{{ getStatusLabel(q.status) }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <div class="d-flex justify-content-end gap-1">
+                    <button class="btn btn-sm btn-outline-info" (click)="viewDetail(q)" [title]="'buttons.view' | translate">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    @if (auth.isManager()) {
+                    <button class="btn btn-sm btn-outline-primary" (click)="openEdit(q)" [title]="'buttons.edit' | translate">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-success" (click)="sendEmail(q)"
+                            [title]="'quotations.sendEmail' | translate" [disabled]="isSending()[q.id]">
+                      @if (isSending()[q.id]) {
+                        <span class="spinner-border spinner-border-sm"></span>
+                      } @else {
+                        <i class="bi bi-envelope-arrow-up"></i>
+                      }
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" (click)="delete(q.id)" [title]="'buttons.delete' | translate">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+            @if (quotations().length === 0) {
+              <tr>
+                <td colspan="8" class="text-center text-muted py-5">
+                  <i class="bi bi-file-earmark-text fs-1 d-block mb-2 opacity-50"></i>
+                  <span class="fw-medium">{{ 'quotations.empty' | translate }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center mt-3">
+    <pagination-controls [autoHide]="true" (pageChange)="currentPage.set($event)" previousLabel="" nextLabel=""></pagination-controls>
+  </div>
+</div>
+
+<!-- Create / Edit Modal -->
+@if (showModal()) {
+  <div class="modal-backdrop-custom" (click)="closeModal()">
+    <div class="modal-dialog-custom modal-lg" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-file-earmark-text me-2"></i>{{ isEditing() ? ('quotations.editTitle' | translate) : ('quotations.newTitle' | translate) }}
+          </h5>
+          <button type="button" class="btn-close-custom" (click)="closeModal()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Client Selection -->
+            <div class="col-12">
+              <label class="form-label fw-semibold"><i class="bi bi-person-circle me-1 text-primary"></i>{{ 'quotations.form.selectClient' | translate }}</label>
+              <select class="form-select" [(ngModel)]="form.clientId" (ngModelChange)="onClientSelect()">
+                <option value="">{{ 'quotations.form.selectClientPlaceholder' | translate }}</option>
+                @for (client of clients(); track client.id) {
+                  <option [value]="client.id">{{ client.name }}@if (client.companyName) { — {{ client.companyName }}}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'quotations.form.clientName' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.clientName" [placeholder]="'quotations.form.clientNamePlaceholder' | translate" [readonly]="!!form.clientId" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'quotations.form.clientEmail' | translate }}</label>
+              <input type="email" class="form-control" [(ngModel)]="form.clientEmail" [placeholder]="'quotations.form.clientEmailPlaceholder' | translate" [readonly]="!!form.clientId" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'quotations.form.clientPhone' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.clientPhone" [placeholder]="'quotations.form.clientPhonePlaceholder' | translate" [readonly]="!!form.clientId" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'quotations.form.clientAddress' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.clientAddress" [placeholder]="'quotations.form.clientAddressPlaceholder' | translate" [readonly]="!!form.clientId" />
+            </div>
+
+            <!-- Maintenance Request Link -->
+            <div class="col-12">
+              <label class="form-label fw-semibold"><i class="bi bi-clipboard-check me-1 text-primary"></i>{{ 'quotations.form.maintenanceRequest' | translate }}</label>
+              <select class="form-select" [(ngModel)]="form.maintenanceRequestId">
+                <option value="">{{ 'quotations.form.selectRequestPlaceholder' | translate }}</option>
+                @for (req of maintenanceRequests(); track req.id) {
+                  <option [value]="req.id">{{ req.title }} — {{ req.clientName }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Dates and Duration -->
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">{{ 'quotations.form.validUntil' | translate }}</label>
+              <input type="date" class="form-control" [(ngModel)]="form.validUntil" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">{{ 'quotations.form.estimatedDuration' | translate }}</label>
+              <div class="input-group">
+                <input type="number" class="form-control" [(ngModel)]="form.estimatedDurationDays" min="1" />
+                <span class="input-group-text">{{ 'quotations.days' | translate }}</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">{{ 'quotations.form.taxRate' | translate }}</label>
+              <div class="input-group">
+                <input type="number" class="form-control" [(ngModel)]="form.taxRate" min="0" max="100" step="0.01" />
+                <span class="input-group-text">%</span>
+              </div>
+            </div>
+
+            @if (isEditing()) {
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">{{ 'quotations.form.status' | translate }}</label>
+              <select class="form-select" [(ngModel)]="form.status">
+                <option [value]="QuotationStatus.Draft">{{ 'quotations.statuses.draft' | translate }}</option>
+                <option [value]="QuotationStatus.Sent">{{ 'quotations.statuses.sent' | translate }}</option>
+                <option [value]="QuotationStatus.Accepted">{{ 'quotations.statuses.accepted' | translate }}</option>
+                <option [value]="QuotationStatus.Rejected">{{ 'quotations.statuses.rejected' | translate }}</option>
+                <option [value]="QuotationStatus.Expired">{{ 'quotations.statuses.expired' | translate }}</option>
+                <option [value]="QuotationStatus.Cancelled">{{ 'quotations.statuses.cancelled' | translate }}</option>
+              </select>
+            </div>
+            }
+
+            <!-- Line Items -->
+            <div class="col-12">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <label class="form-label fw-semibold mb-0"><i class="bi bi-list-check me-1 text-primary"></i>{{ 'quotations.form.lineItems' | translate }}</label>
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="addLineItem()">
+                  <i class="bi bi-plus-circle me-1"></i>{{ 'quotations.form.addItem' | translate }}
+                </button>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width:45%">{{ 'quotations.form.description' | translate }}</th>
+                      <th style="width:15%" class="text-center">{{ 'quotations.form.quantity' | translate }}</th>
+                      <th style="width:20%" class="text-end">{{ 'quotations.form.unitPrice' | translate }}</th>
+                      <th style="width:15%" class="text-end">{{ 'quotations.form.total' | translate }}</th>
+                      <th style="width:5%"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (item of lineItems(); track $index; let i = $index) {
+                      <tr>
+                        <td>
+                          <input class="form-control form-control-sm" [(ngModel)]="item.description" [placeholder]="'quotations.form.descriptionPlaceholder' | translate" />
+                        </td>
+                        <td>
+                          <input type="number" class="form-control form-control-sm text-center" [(ngModel)]="item.quantity" min="0" step="0.01" />
+                        </td>
+                        <td>
+                          <input type="number" class="form-control form-control-sm text-end" [(ngModel)]="item.unitPrice" min="0" step="0.01" />
+                        </td>
+                        <td class="text-end align-middle fw-semibold">
+                          ${{ getLineItemTotal(item).toFixed(2) }}
+                        </td>
+                        <td class="text-center align-middle">
+                          @if (lineItems().length > 1) {
+                            <button type="button" class="btn btn-sm btn-outline-danger border-0" (click)="removeLineItem(i)">
+                              <i class="bi bi-x"></i>
+                            </button>
+                          }
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                  <tfoot class="table-light">
+                    <tr>
+                      <td colspan="3" class="text-end fw-semibold">{{ 'quotations.form.subtotal' | translate }}</td>
+                      <td class="text-end fw-semibold">${{ getSubTotal().toFixed(2) }}</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td colspan="3" class="text-end text-muted">{{ 'quotations.form.taxAmount' | translate }} ({{ form.taxRate }}%)</td>
+                      <td class="text-end text-muted">${{ getTaxAmount().toFixed(2) }}</td>
+                      <td></td>
+                    </tr>
+                    <tr class="fw-bold">
+                      <td colspan="3" class="text-end text-primary">{{ 'quotations.form.grandTotal' | translate }}</td>
+                      <td class="text-end text-primary fs-5">${{ getGrandTotal().toFixed(2) }}</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="col-12">
+              <label class="form-label fw-semibold">{{ 'quotations.form.notes' | translate }}</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="form.notes" [placeholder]="'quotations.form.notesPlaceholder' | translate"></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">{{ 'quotations.form.termsAndConditions' | translate }}</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="form.termsAndConditions" [placeholder]="'quotations.form.termsPlaceholder' | translate"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer gap-2">
+          <button type="button" class="btn btn-secondary px-4" (click)="closeModal()">{{ 'quotations.cancel' | translate }}</button>
+          <button type="button" class="btn btn-primary px-4" (click)="save()"
+                  [disabled]="isSaving() || !form.clientName || lineItems().length === 0">
+            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            {{ isEditing() ? ('quotations.update' | translate) : ('quotations.create' | translate) }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Detail Modal -->
+@if (showDetailModal() && selectedQuotation()) {
+  <div class="modal-backdrop-custom" (click)="closeDetailModal()">
+    <div class="modal-dialog-custom modal-lg" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient-detail">
+          <h5 class="modal-title">
+            <i class="bi bi-file-earmark-text me-2"></i>{{ selectedQuotation()!.quotationNumber }}
+          </h5>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge rounded-pill" [class]="getStatusClass(selectedQuotation()!.status)">
+              <i class="bi me-1" [class]="getStatusIcon(selectedQuotation()!.status)"></i>{{ getStatusLabel(selectedQuotation()!.status) }}
+            </span>
+            <button type="button" class="btn-close-custom" (click)="closeDetailModal()"><i class="bi bi-x-lg"></i></button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <!-- Client Info -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="detail-section">
+                <h6 class="detail-section-title"><i class="bi bi-person-circle me-1"></i>{{ 'quotations.detail.clientInfo' | translate }}</h6>
+                <p class="mb-1 fw-semibold">{{ selectedQuotation()!.clientName }}</p>
+                @if (selectedQuotation()!.clientCompany) {
+                  <p class="mb-1 text-muted"><i class="bi bi-building me-1"></i>{{ selectedQuotation()!.clientCompany }}</p>
+                }
+                @if (selectedQuotation()!.clientEmail) {
+                  <p class="mb-1 text-muted"><i class="bi bi-envelope me-1"></i>{{ selectedQuotation()!.clientEmail }}</p>
+                }
+                @if (selectedQuotation()!.clientPhone) {
+                  <p class="mb-1 text-muted"><i class="bi bi-telephone me-1"></i>{{ selectedQuotation()!.clientPhone }}</p>
+                }
+                @if (selectedQuotation()!.clientAddress) {
+                  <p class="mb-0 text-muted"><i class="bi bi-geo-alt me-1"></i>{{ selectedQuotation()!.clientAddress }}</p>
+                }
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="detail-section">
+                <h6 class="detail-section-title"><i class="bi bi-info-circle me-1"></i>{{ 'quotations.detail.quotationInfo' | translate }}</h6>
+                <div class="detail-grid">
+                  <div class="detail-item">
+                    <span class="detail-label">{{ 'quotations.detail.issueDate' | translate }}</span>
+                    <span class="detail-value">{{ selectedQuotation()!.issueDate | date:'mediumDate' }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">{{ 'quotations.detail.validUntil' | translate }}</span>
+                    <span class="detail-value" [class.text-danger]="isExpired(selectedQuotation()!)">{{ selectedQuotation()!.validUntil | date:'mediumDate' }}</span>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label">{{ 'quotations.detail.estimatedDuration' | translate }}</span>
+                    <span class="detail-value">{{ selectedQuotation()!.estimatedDurationDays }} {{ 'quotations.days' | translate }}</span>
+                  </div>
+                  @if (selectedQuotation()!.maintenanceRequestTitle) {
+                  <div class="detail-item">
+                    <span class="detail-label">{{ 'quotations.detail.relatedRequest' | translate }}</span>
+                    <span class="detail-value text-primary">{{ selectedQuotation()!.maintenanceRequestTitle }}</span>
+                  </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Line Items -->
+          <div class="detail-section mb-4">
+            <h6 class="detail-section-title"><i class="bi bi-list-check me-1"></i>{{ 'quotations.detail.lineItems' | translate }}</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>#</th>
+                    <th>{{ 'quotations.form.description' | translate }}</th>
+                    <th class="text-center">{{ 'quotations.form.quantity' | translate }}</th>
+                    <th class="text-end">{{ 'quotations.form.unitPrice' | translate }}</th>
+                    <th class="text-end">{{ 'quotations.form.total' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (li of selectedQuotation()!.lineItems; track li.id; let i = $index) {
+                    <tr>
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ li.description }}</td>
+                      <td class="text-center">{{ li.quantity }}</td>
+                      <td class="text-end">${{ li.unitPrice.toFixed(2) }}</td>
+                      <td class="text-end fw-semibold">${{ li.total.toFixed(2) }}</td>
+                    </tr>
+                  }
+                </tbody>
+                <tfoot class="table-light">
+                  <tr>
+                    <td colspan="4" class="text-end fw-semibold">{{ 'quotations.form.subtotal' | translate }}</td>
+                    <td class="text-end fw-semibold">${{ selectedQuotation()!.subTotal.toFixed(2) }}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="4" class="text-end text-muted">{{ 'quotations.form.taxAmount' | translate }} ({{ selectedQuotation()!.taxRate }}%)</td>
+                    <td class="text-end text-muted">${{ selectedQuotation()!.taxAmount.toFixed(2) }}</td>
+                  </tr>
+                  <tr class="fw-bold">
+                    <td colspan="4" class="text-end text-primary">{{ 'quotations.form.grandTotal' | translate }}</td>
+                    <td class="text-end text-primary fs-5">${{ selectedQuotation()!.totalAmount.toFixed(2) }}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          <!-- Notes & Terms -->
+          @if (selectedQuotation()!.notes) {
+            <div class="detail-section mb-3">
+              <h6 class="detail-section-title"><i class="bi bi-sticky me-1"></i>{{ 'quotations.form.notes' | translate }}</h6>
+              <p class="mb-0 text-muted">{{ selectedQuotation()!.notes }}</p>
+            </div>
+          }
+          @if (selectedQuotation()!.termsAndConditions) {
+            <div class="detail-section">
+              <h6 class="detail-section-title"><i class="bi bi-shield-check me-1"></i>{{ 'quotations.form.termsAndConditions' | translate }}</h6>
+              <p class="mb-0 text-muted">{{ selectedQuotation()!.termsAndConditions }}</p>
+            </div>
+          }
+        </div>
+        <div class="modal-footer gap-2">
+          @if (auth.isManager() && selectedQuotation()!.clientEmail) {
+            <button type="button" class="btn btn-success px-4" (click)="sendEmail(selectedQuotation()!); closeDetailModal()"
+                    [disabled]="isSending()[selectedQuotation()!.id]">
+              <i class="bi bi-envelope-arrow-up me-1"></i>{{ 'quotations.sendEmail' | translate }}
+            </button>
+          }
+          <button type="button" class="btn btn-secondary px-4" (click)="closeDetailModal()">{{ 'quotations.close' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

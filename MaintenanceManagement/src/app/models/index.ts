@@ -941,3 +941,71 @@ export interface TechnicianDistance {
   serviceLongitude: number;
   distanceKm: number;
 }
+
+// Quotation models
+export enum QuotationStatus {
+  Draft = 0,
+  Sent = 1,
+  Accepted = 2,
+  Rejected = 3,
+  Expired = 4,
+  Cancelled = 5
+}
+
+export interface Quotation {
+  id: string;
+  quotationNumber: string;
+  clientName: string;
+  clientEmail?: string;
+  clientAddress?: string;
+  clientPhone?: string;
+  issueDate: string;
+  validUntil: string;
+  estimatedDurationDays: number;
+  subTotal: number;
+  taxRate: number;
+  taxAmount: number;
+  totalAmount: number;
+  status: QuotationStatus;
+  notes?: string;
+  termsAndConditions?: string;
+  maintenanceRequestId?: string;
+  maintenanceRequestTitle?: string;
+  clientId?: string;
+  clientCompany?: string;
+  lineItems: QuotationLineItem[];
+  createdAt: string;
+}
+
+export interface QuotationLineItem {
+  id: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+}
+
+export interface CreateQuotationRequest {
+  clientName: string;
+  clientEmail?: string;
+  clientAddress?: string;
+  clientPhone?: string;
+  validUntil?: string;
+  estimatedDurationDays: number;
+  taxRate: number;
+  notes?: string;
+  termsAndConditions?: string;
+  maintenanceRequestId?: string;
+  clientId?: string;
+  lineItems: CreateQuotationLineItemRequest[];
+}
+
+export interface CreateQuotationLineItemRequest {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+}
+
+export interface UpdateQuotationRequest extends CreateQuotationRequest {
+  status: QuotationStatus;
+}
