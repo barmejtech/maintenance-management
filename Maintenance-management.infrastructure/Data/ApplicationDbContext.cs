@@ -38,6 +38,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<PremiumMaintenanceRequest> PremiumMaintenanceRequests => Set<PremiumMaintenanceRequest>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<TechnicianGpsLog> TechnicianGpsLogs => Set<TechnicianGpsLog>();
+    public DbSet<Quotation> Quotations => Set<Quotation>();
+    public DbSet<QuotationLineItem> QuotationLineItems => Set<QuotationLineItem>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -427,6 +429,44 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .HasForeignKey(l => l.TechnicianId)
                 .OnDelete(DeleteBehavior.Cascade);
             e.HasIndex(l => new { l.TechnicianId, l.RecordedAt });
+        });
+
+        builder.Entity<Quotation>(e =>
+        {
+            e.HasKey(q => q.Id);
+            e.Property(q => q.QuotationNumber).IsRequired().HasMaxLength(50);
+            e.Property(q => q.ClientName).IsRequired().HasMaxLength(200);
+            e.Property(q => q.ClientEmail).HasMaxLength(256);
+            e.Property(q => q.ClientAddress).HasMaxLength(500);
+            e.Property(q => q.ClientPhone).HasMaxLength(50);
+            e.Property(q => q.SubTotal).HasColumnType("decimal(18,2)");
+            e.Property(q => q.TaxRate).HasColumnType("decimal(5,2)");
+            e.Property(q => q.TaxAmount).HasColumnType("decimal(18,2)");
+            e.Property(q => q.TotalAmount).HasColumnType("decimal(18,2)");
+            e.Property(q => q.Notes).HasMaxLength(2000);
+            e.Property(q => q.TermsAndConditions).HasMaxLength(4000);
+            e.Property(q => q.CreatedByUserId).IsRequired().HasMaxLength(450);
+            e.HasOne(q => q.MaintenanceRequest)
+                .WithMany()
+                .HasForeignKey(q => q.MaintenanceRequestId)
+                .OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(q => q.Client)
+                .WithMany()
+                .HasForeignKey(q => q.ClientId)
+                .OnDelete(DeleteBehavior.SetNull);
+            e.HasMany(q => q.LineItems)
+                .WithOne(li => li.Quotation)
+                .HasForeignKey(li => li.QuotationId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<QuotationLineItem>(e =>
+        {
+            e.HasKey(li => li.Id);
+            e.Property(li => li.Description).IsRequired().HasMaxLength(500);
+            e.Property(li => li.Quantity).HasColumnType("decimal(10,2)");
+            e.Property(li => li.UnitPrice).HasColumnType("decimal(18,2)");
+            e.Property(li => li.Total).HasColumnType("decimal(18,2)");
         });
     }
 }
