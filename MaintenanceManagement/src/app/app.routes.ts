@@ -196,6 +196,11 @@ export const routes: Routes = [
         path: 'gps-tracking',
         loadComponent: () => import('./components/gps-tracking/gps-tracking.component').then(m => m.GpsTrackingComponent),
         canActivate: [managerGuard]
+      },
+      {
+        path: 'quotations',
+        loadComponent: () => import('./components/quotations/quotations.component').then(m => m.QuotationsComponent),
+        canActivate: [managerGuard]
       }
     ]
   },

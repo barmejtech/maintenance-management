@@ -123,6 +123,7 @@ builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPremiumServ
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPremiumMaintenanceRequestRepository, Maintenance_management.infrastructure.Repositories.PremiumMaintenanceRequestRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPaymentRepository, Maintenance_management.infrastructure.Repositories.PaymentRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITechnicianGpsLogRepository, Maintenance_management.infrastructure.Repositories.TechnicianGpsLogRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IQuotationRepository, Maintenance_management.infrastructure.Repositories.QuotationRepository>();
 
 // Application services
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAuthService, Maintenance_management.infrastructure.Services.AuthService>();
@@ -153,6 +154,7 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAdminD
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITravelEstimationService, Maintenance_management.api.Services.TravelEstimationService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.ISmsService, Maintenance_management.infrastructure.Services.SmsService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IGpsTrackingService, Maintenance_management.application.Services.GpsTrackingService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IQuotationService, Maintenance_management.application.Services.QuotationService>();
 
 // Notification service (SignalR-based)
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.INotificationService, Maintenance_management.api.Services.HubNotificationService>();

@@ -1,0 +1,147 @@
+/* Stat summary cards */
+.stat-card {
+  border-radius: 12px;
+  transition: transform 0.15s;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+/* Quotation icon in table */
+.quotation-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* Modal styles */
+.modal-backdrop-custom {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-dialog-custom {
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 1rem !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modal-slide-in 0.2s ease;
+  background-color: #fff;
+}
+
+.modal-dialog-custom.modal-lg {
+  max-width: 860px;
+}
+
+@keyframes modal-slide-in {
+  from { opacity: 0; transform: translateY(-20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-dialog-custom .modal-header {
+  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+  color: #fff;
+  border-radius: 1rem 1rem 0 0;
+  padding: 1.25rem 1.5rem;
+  border-bottom: none;
+}
+
+.modal-dialog-custom .modal-header.bg-gradient-detail {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+}
+
+.modal-dialog-custom .modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+
+.modal-dialog-custom .btn-close-custom {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.modal-dialog-custom .btn-close-custom:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
+}
+
+.modal-dialog-custom .modal-body {
+  padding: 1.5rem;
+}
+
+.modal-dialog-custom .modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e9ecef;
+}
+
+/* Detail sections */
+.detail-section {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.detail-section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1e40af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.detail-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111827;
+}

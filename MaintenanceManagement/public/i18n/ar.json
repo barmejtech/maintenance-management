@@ -10,7 +10,8 @@
     "settings": "الإعدادات",
     "dashboard": "لوحة التحكم",
     "login": "تسجيل الدخول",
-    "register": "إنشاء حساب"
+    "register": "إنشاء حساب",
+    "quotations": "عروض الأسعار"
   },
   "home": {
     "brand": "MaintenancePro",
@@ -439,7 +440,8 @@
       "assets": "الأصول والمعدات",
       "userManagement": "إدارة المستخدمين",
       "premiumMaintenance": "الصيانة المميزة",
-      "gpsTracking": "تتبع GPS"
+      "gpsTracking": "تتبع GPS",
+      "quotations": "عروض الأسعار"
     },
     "hero": {
       "fullAccess": "صلاحية كاملة",
@@ -1475,5 +1477,88 @@
     "routeMap": "خريطة المسار",
     "technicianMarker": "الفني",
     "serviceMarker": "موقع الخدمة"
+  },
+  "quotations": {
+    "title": "عروض الأسعار",
+    "newButton": "عرض سعر جديد",
+    "backToDashboard": "لوحة التحكم",
+    "editTitle": "تعديل عرض السعر",
+    "newTitle": "عرض سعر جديد",
+    "empty": "لا توجد عروض أسعار",
+    "deleteConfirm": "هل أنت متأكد من حذف عرض السعر هذا؟",
+    "cancel": "إلغاء",
+    "create": "إنشاء عرض سعر",
+    "update": "تحديث عرض السعر",
+    "close": "إغلاق",
+    "sendEmail": "إرسال بالبريد الإلكتروني",
+    "emailSent": "تم إرسال عرض السعر بالبريد الإلكتروني بنجاح!",
+    "noEmailError": "البريد الإلكتروني للعميل مطلوب لإرسال عرض السعر.",
+    "days": "أيام",
+    "stats": {
+      "total": "إجمالي العروض",
+      "sent": "مرسلة",
+      "accepted": "مقبولة",
+      "totalValue": "القيمة الإجمالية"
+    },
+    "statuses": {
+      "draft": "مسودة",
+      "sent": "مرسل",
+      "accepted": "مقبول",
+      "rejected": "مرفوض",
+      "expired": "منتهي الصلاحية",
+      "cancelled": "ملغى"
+    },
+    "table": {
+      "number": "رقم العرض",
+      "client": "العميل",
+      "issueDate": "تاريخ الإصدار",
+      "validUntil": "صالح حتى",
+      "duration": "المدة",
+      "total": "المجموع",
+      "status": "الحالة",
+      "actions": "إجراءات",
+      "tax": "ضريبة"
+    },
+    "form": {
+      "selectClient": "اختر عميل",
+      "selectClientPlaceholder": "اختر عميلاً...",
+      "clientName": "اسم العميل",
+      "clientNamePlaceholder": "أدخل اسم العميل",
+      "clientEmail": "بريد العميل",
+      "clientEmailPlaceholder": "client@example.com",
+      "clientPhone": "هاتف العميل",
+      "clientPhonePlaceholder": "أدخل رقم الهاتف",
+      "clientAddress": "عنوان العميل",
+      "clientAddressPlaceholder": "أدخل العنوان",
+      "maintenanceRequest": "طلب الصيانة المرتبط",
+      "selectRequestPlaceholder": "ربط بطلب صيانة (اختياري)...",
+      "validUntil": "صالح حتى",
+      "estimatedDuration": "المدة المقدرة",
+      "taxRate": "نسبة الضريبة",
+      "status": "الحالة",
+      "lineItems": "بنود العرض",
+      "addItem": "إضافة بند",
+      "description": "الوصف",
+      "descriptionPlaceholder": "وصف الخدمة أو البند",
+      "quantity": "الكمية",
+      "unitPrice": "سعر الوحدة",
+      "total": "المجموع",
+      "subtotal": "المجموع الفرعي",
+      "taxAmount": "الضريبة",
+      "grandTotal": "المجموع الكلي",
+      "notes": "ملاحظات",
+      "notesPlaceholder": "ملاحظات إضافية...",
+      "termsAndConditions": "الشروط والأحكام",
+      "termsPlaceholder": "شروط الدفع والأحكام..."
+    },
+    "detail": {
+      "clientInfo": "معلومات العميل",
+      "quotationInfo": "تفاصيل عرض السعر",
+      "issueDate": "تاريخ الإصدار",
+      "validUntil": "صالح حتى",
+      "estimatedDuration": "المدة المقدرة",
+      "relatedRequest": "الطلب المرتبط",
+      "lineItems": "البنود والتسعير"
+    }
   }
 }
