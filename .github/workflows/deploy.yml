@@ -1,0 +1,21 @@
+name: Deploy to Contabo
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.CONTABO_HOST }}
+          username: ${{ secrets.CONTABO_SSH_USER }}
+          key: ${{ secrets.CONTABO_SSH_KEY }}
+          script: |
+            cd /opt/maintenance-management
+            git pull origin main
+            bash deploy.sh

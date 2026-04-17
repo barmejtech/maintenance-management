@@ -1,0 +1,17 @@
+[Unit]
+Description=Maintenance Management API
+After=network.target
+
+[Service]
+WorkingDirectory=/var/www/maintenance-management-api
+ExecStart=/usr/bin/dotnet Maintenance-management.api.dll
+Restart=always
+RestartSec=10
+SyslogIdentifier=maintenance-api
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://localhost:5000
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
