@@ -1,0 +1,15 @@
+[Unit]
+Description=Maintenance Management API
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/maintenance-api
+ExecStart=/root/.dotnet/dotnet /opt/maintenance-api/MaintenanceManagement.Api.dll
+Restart=always
+RestartSec=10
+User=root
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://0.0.0.0:5002
+
+[Install]
+WantedBy=multi-user.target
