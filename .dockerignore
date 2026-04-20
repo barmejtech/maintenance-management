@@ -1,0 +1,28 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Build artifacts
+**/bin/
+**/obj/
+**/dist/
+**/out-tsc/
+**/node_modules/
+**/.angular/
+
+# Logs and temp files
+**/*.log
+**/tmp/
+**/coverage/
+**/test-results/
+
+# Environment files
+.env
+.env.*
