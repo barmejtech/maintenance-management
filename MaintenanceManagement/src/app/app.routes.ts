@@ -113,6 +113,10 @@ export const routes: Routes = [
         loadComponent: () => import('./components/equipment/equipment.component').then(m => m.EquipmentComponent)
       },
       {
+        path: 'vehicles',
+        loadComponent: () => import('./components/vehicles/vehicles.component').then(m => m.VehiclesComponent)
+      },
+      {
         path: 'hvac',
         loadComponent: () => import('./components/hvac/hvac.component').then(m => m.HVACComponent)
       },

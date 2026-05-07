@@ -17,6 +17,9 @@ public class MaintenanceScheduleDto
     public string CreatedByUserId { get; set; } = string.Empty;
     public Guid? EquipmentId { get; set; }
     public string? EquipmentName { get; set; }
+    public Guid? VehicleId { get; set; }
+    public string? VehicleName { get; set; }
+    public int? MileageInterval { get; set; }
     public Guid? AssignedTechnicianId { get; set; }
     public string? AssignedTechnicianName { get; set; }
     public Guid? AssignedGroupId { get; set; }
@@ -35,6 +38,8 @@ public class CreateMaintenanceScheduleDto
     public bool IsActive { get; set; } = true;
     public string? Notes { get; set; }
     public Guid? EquipmentId { get; set; }
+    public Guid? VehicleId { get; set; }
+    public int? MileageInterval { get; set; }
     public Guid? AssignedTechnicianId { get; set; }
     public Guid? AssignedGroupId { get; set; }
 }
@@ -51,6 +56,8 @@ public class UpdateMaintenanceScheduleDto
     public bool IsActive { get; set; }
     public string? Notes { get; set; }
     public Guid? EquipmentId { get; set; }
+    public Guid? VehicleId { get; set; }
+    public int? MileageInterval { get; set; }
     public Guid? AssignedTechnicianId { get; set; }
     public Guid? AssignedGroupId { get; set; }
 }

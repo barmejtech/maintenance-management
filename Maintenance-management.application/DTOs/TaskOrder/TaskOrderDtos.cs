@@ -21,6 +21,10 @@ public class TaskOrderDto
     public string? GroupName { get; set; }
     public Guid? EquipmentId { get; set; }
     public string? EquipmentName { get; set; }
+    public Guid? VehicleId { get; set; }
+    public string? VehicleName { get; set; }
+    public int? MileageAtService { get; set; }
+    public ServiceType? ServiceType { get; set; }
     public DateTime CreatedAt { get; set; }
     public double? ArrivalLatitude { get; set; }
     public double? ArrivalLongitude { get; set; }
@@ -43,6 +47,9 @@ public class CreateTaskOrderDto
     public Guid? TechnicianId { get; set; }
     public Guid? GroupId { get; set; }
     public Guid? EquipmentId { get; set; }
+    public Guid? VehicleId { get; set; }
+    public int? MileageAtService { get; set; }
+    public ServiceType? ServiceType { get; set; }
 }
 
 public class UpdateTaskOrderDto
@@ -58,4 +65,7 @@ public class UpdateTaskOrderDto
     public Guid? TechnicianId { get; set; }
     public Guid? GroupId { get; set; }
     public Guid? EquipmentId { get; set; }
+    public Guid? VehicleId { get; set; }
+    public int? MileageAtService { get; set; }
+    public ServiceType? ServiceType { get; set; }
 }

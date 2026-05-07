@@ -8,6 +8,7 @@ public interface IUnitOfWork : IDisposable
     ITechnicianRepository Technicians { get; }
     ITaskOrderRepository TaskOrders { get; }
     IEquipmentRepository Equipment { get; }
+    IVehicleRepository Vehicles { get; }
     IGroupRepository Groups { get; }
     IHVACSystemRepository HVACSystems { get; }
     IInvoiceRepository Invoices { get; }

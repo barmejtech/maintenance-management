@@ -18,6 +18,9 @@ public class Document : BaseEntity
     public Guid? EquipmentId { get; set; }
     public Equipment? Equipment { get; set; }
 
+    public Guid? VehicleId { get; set; }
+    public Vehicle? Vehicle { get; set; }
+
     public Guid? MaintenanceReportId { get; set; }
     public MaintenanceReport? MaintenanceReport { get; set; }
 

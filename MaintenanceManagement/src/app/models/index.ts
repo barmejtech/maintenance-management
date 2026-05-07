@@ -187,6 +187,10 @@ export interface TaskOrder {
   groupName?: string;
   equipmentId?: string;
   equipmentName?: string;
+  vehicleId?: string;
+  vehicleName?: string;
+  mileageAtService?: number;
+  serviceType?: ServiceType;
   createdAt: string;
   arrivalLatitude?: number;
   arrivalLongitude?: number;
@@ -208,6 +212,9 @@ export interface CreateTaskOrderRequest {
   technicianId?: string;
   groupId?: string;
   equipmentId?: string;
+  vehicleId?: string;
+  mileageAtService?: number;
+  serviceType?: ServiceType;
 }
 
 export enum TaskStatus {
@@ -278,6 +285,124 @@ export enum EquipmentStatus {
   UnderMaintenance = 1,
   OutOfService = 2,
   Decommissioned = 3
+}
+
+// Vehicle models
+export interface Vehicle {
+  id: string;
+  vin: string;
+  make: string;
+  model: string;
+  year: number;
+  licensePlate: string;
+  color?: string;
+  mileage?: number;
+  engineType?: string;
+  transmissionType?: TransmissionType;
+  fuelType: FuelType;
+  ownerName: string;
+  ownerPhone?: string;
+  ownerEmail?: string;
+  purchaseDate?: string;
+  lastServiceDate?: string;
+  nextServiceDate?: string;
+  lastServiceMileage?: number;
+  nextServiceMileage?: number;
+  status: VehicleStatus;
+  notes?: string;
+  vehiclePhotoUrl?: string;
+  photo2Url?: string;
+  photo3Url?: string;
+  photo4Url?: string;
+  qrCode?: string;
+  createdAt: string;
+}
+
+export interface CreateVehicleRequest {
+  vin: string;
+  make: string;
+  model: string;
+  year: number;
+  licensePlate: string;
+  color?: string;
+  mileage?: number;
+  engineType?: string;
+  transmissionType?: TransmissionType;
+  fuelType: FuelType;
+  ownerName: string;
+  ownerPhone?: string;
+  ownerEmail?: string;
+  purchaseDate?: string;
+  nextServiceDate?: string;
+  nextServiceMileage?: number;
+  notes?: string;
+  vehiclePhotoUrl?: string;
+  photo2Url?: string;
+  photo3Url?: string;
+  photo4Url?: string;
+}
+
+export interface UpdateVehicleRequest {
+  vin: string;
+  make: string;
+  model: string;
+  year: number;
+  licensePlate: string;
+  color?: string;
+  mileage?: number;
+  engineType?: string;
+  transmissionType?: TransmissionType;
+  fuelType: FuelType;
+  ownerName: string;
+  ownerPhone?: string;
+  ownerEmail?: string;
+  purchaseDate?: string;
+  lastServiceDate?: string;
+  nextServiceDate?: string;
+  lastServiceMileage?: number;
+  nextServiceMileage?: number;
+  status: VehicleStatus;
+  notes?: string;
+  vehiclePhotoUrl?: string;
+  photo2Url?: string;
+  photo3Url?: string;
+  photo4Url?: string;
+}
+
+export enum VehicleStatus {
+  Active = 0,
+  InService = 1,
+  Inactive = 2,
+  Retired = 3
+}
+
+export enum FuelType {
+  Gasoline = 0,
+  Diesel = 1,
+  Electric = 2,
+  Hybrid = 3,
+  PlugInHybrid = 4
+}
+
+export enum TransmissionType {
+  Automatic = 0,
+  Manual = 1,
+  CVT = 2,
+  SemiAutomatic = 3
+}
+
+export enum ServiceType {
+  OilChange = 0,
+  TireRotation = 1,
+  BrakeService = 2,
+  Inspection = 3,
+  EngineDiagnostic = 4,
+  TransmissionService = 5,
+  Alignment = 6,
+  BatteryReplacement = 7,
+  GeneralRepair = 8,
+  Recall = 9,
+  Other = 10
 }
 
 // HVAC models
@@ -627,6 +752,9 @@ export interface MaintenanceSchedule {
   createdByUserId: string;
   equipmentId?: string;
   equipmentName?: string;
+  vehicleId?: string;
+  vehicleName?: string;
+  mileageInterval?: number;
   assignedTechnicianId?: string;
   assignedTechnicianName?: string;
   assignedGroupId?: string;
@@ -644,6 +772,8 @@ export interface CreateMaintenanceScheduleRequest {
   isActive: boolean;
   notes?: string;
   equipmentId?: string;
+  vehicleId?: string;
+  mileageInterval?: number;
   assignedTechnicianId?: string;
   assignedGroupId?: string;
 }
@@ -659,6 +789,8 @@ export interface UpdateMaintenanceScheduleRequest {
   isActive: boolean;
   notes?: string;
   equipmentId?: string;
+  vehicleId?: string;
+  mileageInterval?: number;
   assignedTechnicianId?: string;
   assignedGroupId?: string;
 }
