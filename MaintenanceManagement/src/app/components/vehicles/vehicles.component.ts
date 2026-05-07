@@ -33,6 +33,7 @@ export class VehiclesComponent implements OnInit {
   VehicleStatus = VehicleStatus;
   FuelType = FuelType;
   TransmissionType = TransmissionType;
+  readonly currentYear = new Date().getFullYear();
 
   form = {
     vin: '',
@@ -76,7 +77,10 @@ export class VehiclesComponent implements OnInit {
   }
 
   load() {
-    this.service.getAll().subscribe({ next: d => this.vehicles.set(d), error: () => {} });
+    this.service.getAll().subscribe({
+      next: d => this.vehicles.set(d),
+      error: () => this.toast.error()
+    });
   }
 
   openAdd() {
