@@ -105,6 +105,7 @@ builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IDataEntryRe
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITechnicianRepository, Maintenance_management.infrastructure.Repositories.TechnicianRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITaskOrderRepository, Maintenance_management.infrastructure.Repositories.TaskOrderRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IEquipmentRepository, Maintenance_management.infrastructure.Repositories.EquipmentRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IVehicleRepository, Maintenance_management.infrastructure.Repositories.VehicleRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IGroupRepository, Maintenance_management.infrastructure.Repositories.GroupRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IHVACSystemRepository, Maintenance_management.infrastructure.Repositories.HVACSystemRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IInvoiceRepository, Maintenance_management.infrastructure.Repositories.InvoiceRepository>();
@@ -136,6 +137,7 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITechni
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITaskOrderService, Maintenance_management.application.Services.TaskOrderService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IGroupService, Maintenance_management.application.Services.GroupService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IEquipmentService, Maintenance_management.application.Services.EquipmentService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IVehicleService, Maintenance_management.application.Services.VehicleService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IHVACService, Maintenance_management.application.Services.HVACService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IReportService, Maintenance_management.application.Services.ReportService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IInvoiceService, Maintenance_management.application.Services.InvoiceService>();

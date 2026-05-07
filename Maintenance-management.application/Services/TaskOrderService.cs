@@ -81,6 +81,9 @@ public class TaskOrderService : ITaskOrderService
             TechnicianId = dto.TechnicianId,
             GroupId = dto.GroupId,
             EquipmentId = dto.EquipmentId,
+            VehicleId = dto.VehicleId,
+            MileageAtService = dto.MileageAtService,
+            ServiceType = dto.ServiceType,
             CreatedByUserId = createdByUserId
         };
 
@@ -131,6 +134,9 @@ public class TaskOrderService : ITaskOrderService
         task.TechnicianId = dto.TechnicianId;
         task.GroupId = dto.GroupId;
         task.EquipmentId = dto.EquipmentId;
+        task.VehicleId = dto.VehicleId;
+        task.MileageAtService = dto.MileageAtService;
+        task.ServiceType = dto.ServiceType;
         task.UpdatedAt = DateTime.UtcNow;
 
         if (dto.Status == domain.Enums.TaskStatus.Completed && task.CompletedDate is null)
@@ -241,6 +247,10 @@ public class TaskOrderService : ITaskOrderService
         GroupName = t.Group?.Name,
         EquipmentId = t.EquipmentId,
         EquipmentName = t.Equipment?.Name,
+        VehicleId = t.VehicleId,
+        VehicleName = t.Vehicle is not null ? $"{t.Vehicle.Year} {t.Vehicle.Make} {t.Vehicle.Model}" : null,
+        MileageAtService = t.MileageAtService,
+        ServiceType = t.ServiceType,
         CreatedAt = t.CreatedAt,
         ArrivalLatitude = t.ArrivalLatitude,
         ArrivalLongitude = t.ArrivalLongitude,

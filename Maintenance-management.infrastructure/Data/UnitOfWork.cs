@@ -15,6 +15,7 @@ public class UnitOfWork : IUnitOfWork
         ITechnicianRepository technicians,
         ITaskOrderRepository taskOrders,
         IEquipmentRepository equipment,
+        IVehicleRepository vehicles,
         IGroupRepository groups,
         IHVACSystemRepository hvacSystems,
         IInvoiceRepository invoices,
@@ -26,6 +27,7 @@ public class UnitOfWork : IUnitOfWork
         Technicians = technicians;
         TaskOrders = taskOrders;
         Equipment = equipment;
+        Vehicles = vehicles;
         Groups = groups;
         HVACSystems = hvacSystems;
         Invoices = invoices;
@@ -37,6 +39,7 @@ public class UnitOfWork : IUnitOfWork
     public ITechnicianRepository Technicians { get; }
     public ITaskOrderRepository TaskOrders { get; }
     public IEquipmentRepository Equipment { get; }
+    public IVehicleRepository Vehicles { get; }
     public IGroupRepository Groups { get; }
     public IHVACSystemRepository HVACSystems { get; }
     public IInvoiceRepository Invoices { get; }

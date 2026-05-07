@@ -40,6 +40,7 @@ public static class DependencyInjection
         services.AddScoped<ITaskOrderRepository, TaskOrderRepository>();
         services.AddScoped<IGroupRepository, GroupRepository>();
         services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+        services.AddScoped<IVehicleRepository, VehicleRepository>();
         services.AddScoped<IHVACSystemRepository, HVACSystemRepository>();
         services.AddScoped<IReportRepository, ReportRepository>();
         services.AddScoped<IInvoiceRepository, InvoiceRepository>();
@@ -64,6 +65,7 @@ public static class DependencyInjection
         services.AddScoped<ITaskOrderService, TaskOrderService>();
         services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<IEquipmentService, EquipmentService>();
+        services.AddScoped<IVehicleService, VehicleService>();
         services.AddScoped<IHVACService, HVACService>();
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IInvoiceService, InvoiceService>();
