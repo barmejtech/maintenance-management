@@ -67,18 +67,18 @@
     </a>
     }
 
-    <!-- ===== ASSETS & EQUIPMENT ===== -->
+    <!-- ===== ASSETS & VEHICLES ===== -->
     @if (isManagerOrAdmin() || isDataEntryRole() || isTechnicianRole()) {
     <div class="sidebar-divider"></div>
     <div class="sidebar-section-label">{{ 'dashboard.sidebar.assets' | translate }}</div>
+    <a routerLink="/vehicles" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-car-front"></i> Vehicles
+    </a>
     <a routerLink="/equipment" routerLinkActive="active" class="nav-item">
       <i class="bi bi-cpu"></i> {{ 'dashboard.sidebar.equipment' | translate }}
     </a>
     }
     @if (isManagerOrAdmin() || isDataEntryRole()) {
-    <a routerLink="/hvac" routerLinkActive="active" class="nav-item">
-      <i class="bi bi-thermometer-half"></i> {{ 'dashboard.sidebar.hvac' | translate }}
-    </a>
     <a routerLink="/spare-parts" routerLinkActive="active" class="nav-item">
       <i class="bi bi-wrench-adjustable"></i> {{ 'dashboard.sidebar.spareParts' | translate }}
     </a>

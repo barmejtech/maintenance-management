@@ -17,6 +17,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<TaskOrder> TaskOrders => Set<TaskOrder>();
     public DbSet<Equipment> Equipments => Set<Equipment>();
     public DbSet<HVACSystem> HVACSystems => Set<HVACSystem>();
+    public DbSet<Vehicle> Vehicles => Set<Vehicle>();
     public DbSet<MaintenanceReport> MaintenanceReports => Set<MaintenanceReport>();
     public DbSet<Invoice> Invoices => Set<Invoice>();
     public DbSet<InvoiceLineItem> InvoiceLineItems => Set<InvoiceLineItem>();
@@ -115,6 +116,25 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .WithMany(eq => eq.Tasks)
                 .HasForeignKey(t => t.EquipmentId)
                 .OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(t => t.Vehicle)
+                .WithMany(v => v.Tasks)
+                .HasForeignKey(t => t.VehicleId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        builder.Entity<Vehicle>(e =>
+        {
+            e.HasKey(v => v.Id);
+            e.Property(v => v.VIN).HasMaxLength(17);
+            e.Property(v => v.Make).IsRequired().HasMaxLength(100);
+            e.Property(v => v.Model).IsRequired().HasMaxLength(100);
+            e.Property(v => v.LicensePlate).HasMaxLength(20);
+            e.Property(v => v.OwnerName).IsRequired().HasMaxLength(200);
+            e.Property(v => v.OwnerPhone).HasMaxLength(50);
+            e.Property(v => v.OwnerEmail).HasMaxLength(256);
+            e.Property(v => v.Color).HasMaxLength(50);
+            e.Property(v => v.EngineType).HasMaxLength(100);
+            e.Property(v => v.Notes).HasMaxLength(2000);
         });
 
         builder.Entity<Equipment>(e =>
@@ -199,6 +219,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.HasOne(d => d.Equipment)
                 .WithMany(eq => eq.Documents)
                 .HasForeignKey(d => d.EquipmentId)
+                .OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(d => d.Vehicle)
+                .WithMany(v => v.Documents)
+                .HasForeignKey(d => d.VehicleId)
                 .OnDelete(DeleteBehavior.SetNull);
             e.HasOne(d => d.MaintenanceReport)
                 .WithMany(r => r.Documents)
@@ -304,6 +328,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.HasOne(s => s.Equipment)
                 .WithMany()
                 .HasForeignKey(s => s.EquipmentId)
+                .OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(s => s.Vehicle)
+                .WithMany(v => v.MaintenanceSchedules)
+                .HasForeignKey(s => s.VehicleId)
                 .OnDelete(DeleteBehavior.SetNull);
             e.HasOne(s => s.AssignedTechnician)
                 .WithMany()

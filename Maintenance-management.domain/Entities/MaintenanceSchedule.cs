@@ -18,6 +18,11 @@ public class MaintenanceSchedule : BaseEntity
     public Guid? EquipmentId { get; set; }
     public Equipment? Equipment { get; set; }
 
+    public Guid? VehicleId { get; set; }
+    public Vehicle? Vehicle { get; set; }
+
+    public int? MileageInterval { get; set; }
+
     public Guid? AssignedTechnicianId { get; set; }
     public Technician? AssignedTechnician { get; set; }
 

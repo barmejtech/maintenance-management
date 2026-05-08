@@ -32,6 +32,12 @@ public class TaskOrder : BaseEntity
     public Guid? EquipmentId { get; set; }
     public Equipment? Equipment { get; set; }
 
+    public Guid? VehicleId { get; set; }
+    public Vehicle? Vehicle { get; set; }
+
+    public int? MileageAtService { get; set; }
+    public Enums.ServiceType? ServiceType { get; set; }
+
     public ICollection<Document> Documents { get; set; } = new List<Document>();
     public ICollection<MaintenanceReport> Reports { get; set; } = new List<MaintenanceReport>();
     public Invoice? Invoice { get; set; }

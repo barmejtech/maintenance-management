@@ -1,0 +1,353 @@
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-car-front text-primary me-2"></i>Vehicles</h4>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-success btn-sm" (click)="exportToCsv()" title="Export CSV">
+        <i class="bi bi-download me-1"></i>Export CSV
+      </button>
+      @if (auth.canManageData()) {
+      <button class="btn btn-primary btn-sm" (click)="openAdd()">
+        <i class="bi bi-plus-circle me-1"></i>Add Vehicle
+      </button>
+      }
+      <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    @for (v of vehicles() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track v.id) {
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="card h-100 shadow-sm border-0 vehicle-card">
+          <!-- Photo Gallery -->
+          <div class="vehicle-photo-gallery">
+            @if (v.vehiclePhotoUrl || v.photo2Url || v.photo3Url || v.photo4Url) {
+              <div class="photo-grid">
+                @if (v.vehiclePhotoUrl) {
+                  <a [href]="v.vehiclePhotoUrl" target="_blank" class="photo-cell" title="Vehicle Photo">
+                    <img [src]="v.vehiclePhotoUrl" alt="Vehicle" />
+                    <span class="photo-label">Vehicle</span>
+                  </a>
+                }
+                @if (v.photo2Url) {
+                  <a [href]="v.photo2Url" target="_blank" class="photo-cell" title="Photo 2">
+                    <img [src]="v.photo2Url" alt="Photo 2" />
+                    <span class="photo-label">Photo 2</span>
+                  </a>
+                }
+                @if (v.photo3Url) {
+                  <a [href]="v.photo3Url" target="_blank" class="photo-cell" title="Photo 3">
+                    <img [src]="v.photo3Url" alt="Photo 3" />
+                    <span class="photo-label">Photo 3</span>
+                  </a>
+                }
+                @if (v.photo4Url) {
+                  <a [href]="v.photo4Url" target="_blank" class="photo-cell" title="Photo 4">
+                    <img [src]="v.photo4Url" alt="Photo 4" />
+                    <span class="photo-label">Photo 4</span>
+                  </a>
+                }
+              </div>
+            } @else {
+              <div class="photo-placeholder">
+                <i class="bi bi-car-front fs-1 text-primary opacity-50"></i>
+              </div>
+            }
+            <span class="status-overlay badge rounded-pill" [class]="getStatusClass(v.status)">
+              {{ getStatusLabel(v.status) }}
+            </span>
+          </div>
+
+          <!-- Card Body -->
+          <div class="card-body px-3 pt-3 pb-2">
+            <div class="d-flex align-items-start gap-2 mb-3">
+              <span class="vehicle-icon bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                <i class="bi bi-car-front"></i>
+              </span>
+              <div class="min-w-0">
+                <h6 class="card-title mb-0 fw-bold text-truncate">{{ v.year }} {{ v.make }} {{ v.model }}</h6>
+                @if (v.licensePlate) {
+                  <small class="text-muted"><i class="bi bi-card-text me-1"></i>{{ v.licensePlate }}</small>
+                }
+              </div>
+            </div>
+
+            <ul class="list-unstyled mb-0 v-details">
+              @if (v.vin) {
+                <li>
+                  <i class="bi bi-upc-scan text-secondary"></i>
+                  <code class="text-secondary">{{ v.vin }}</code>
+                </li>
+              }
+              @if (v.ownerName) {
+                <li>
+                  <i class="bi bi-person text-secondary"></i>
+                  <span>{{ v.ownerName }}</span>
+                </li>
+              }
+              @if (v.mileage != null) {
+                <li>
+                  <i class="bi bi-speedometer2 text-info"></i>
+                  <span>{{ v.mileage | number }} mi</span>
+                </li>
+              }
+              @if (v.fuelType != null) {
+                <li>
+                  <i class="bi bi-fuel-pump text-warning"></i>
+                  <span>{{ getFuelLabel(v.fuelType) }}</span>
+                </li>
+              }
+              @if (v.nextServiceDate) {
+                <li>
+                  <i class="bi bi-calendar-check text-danger"></i>
+                  <span class="text-danger fw-semibold">Next Service: {{ v.nextServiceDate | date:'mediumDate' }}</span>
+                </li>
+              }
+            </ul>
+
+            @if (v.qrCode) {
+              <div class="text-center mt-2">
+                <qrcode [qrdata]="v.qrCode" [width]="100" [errorCorrectionLevel]="'M'"></qrcode>
+                <small class="d-block text-muted text-truncate" style="max-width:100%;font-size:0.65rem;">{{ v.qrCode }}</small>
+              </div>
+            }
+          </div>
+
+          <div class="card-footer bg-transparent border-top d-flex justify-content-end gap-2 py-2 px-3">
+            @if (auth.canManageData()) {
+            <button class="btn btn-sm btn-outline-primary" (click)="openEdit(v)" title="Edit">
+              <i class="bi bi-pencil-square me-1"></i>Edit
+            </button>
+            }
+            @if (auth.canManageTasks()) {
+            <button class="btn btn-sm btn-outline-danger" (click)="delete(v.id)" title="Delete">
+              <i class="bi bi-trash3 me-1"></i>Delete
+            </button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (vehicles().length === 0) {
+      <div class="col-12">
+        <div class="card shadow-sm border-0">
+          <div class="card-body text-center py-5 text-muted">
+            <i class="bi bi-car-front fs-1 d-block mb-3 text-secondary opacity-50"></i>
+            <p class="fw-medium mb-0">No vehicles found. Add your first vehicle to get started.</p>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  <div class="d-flex justify-content-center mt-3">
+    <pagination-controls [autoHide]="true" (pageChange)="currentPage.set($event)" previousLabel="" nextLabel=""></pagination-controls>
+  </div>
+</div>
+
+@if (showModal()) {
+  <div class="modal-backdrop-custom" (click)="closeModal()">
+    <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-car-front me-2"></i>{{ isEditing() ? 'Edit Vehicle' : 'Add Vehicle' }}
+          </h5>
+          <button type="button" class="btn-close-custom" (click)="closeModal()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+
+            <!-- Vehicle Identity -->
+            <div class="col-12">
+              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-car-front me-1"></i>Vehicle Identity</p>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-upc-scan me-1 text-secondary"></i>VIN</label>
+              <input class="form-control" [(ngModel)]="form.vin" placeholder="e.g. 1HGBH41JXMN109186" maxlength="17" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-card-text me-1 text-secondary"></i>License Plate *</label>
+              <input class="form-control" [(ngModel)]="form.licensePlate" placeholder="e.g. ABC-1234" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-building me-1 text-secondary"></i>Make *</label>
+              <input class="form-control" [(ngModel)]="form.make" placeholder="e.g. Toyota" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-box me-1 text-secondary"></i>Model *</label>
+              <input class="form-control" [(ngModel)]="form.model" placeholder="e.g. Camry" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-calendar me-1 text-secondary"></i>Year *</label>
+              <input type="number" class="form-control" [(ngModel)]="form.year" placeholder="e.g. 2023" min="1900" [max]="currentYear + 2" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-palette me-1 text-secondary"></i>Color</label>
+              <input class="form-control" [(ngModel)]="form.color" placeholder="e.g. Silver" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-activity me-1 text-secondary"></i>Status</label>
+              <select class="form-select" [(ngModel)]="form.status">
+                <option [value]="VehicleStatus.Active">Active</option>
+                <option [value]="VehicleStatus.InService">In Service</option>
+                <option [value]="VehicleStatus.Inactive">Inactive</option>
+                <option [value]="VehicleStatus.Retired">Retired</option>
+              </select>
+            </div>
+
+            <!-- Mechanical Details -->
+            <div class="col-12 mt-2">
+              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-gear me-1"></i>Mechanical Details</p>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-fuel-pump me-1 text-warning"></i>Fuel Type</label>
+              <select class="form-select" [(ngModel)]="form.fuelType">
+                <option [value]="FuelType.Gasoline">Gasoline</option>
+                <option [value]="FuelType.Diesel">Diesel</option>
+                <option [value]="FuelType.Electric">Electric</option>
+                <option [value]="FuelType.Hybrid">Hybrid</option>
+                <option [value]="FuelType.PlugInHybrid">Plug-In Hybrid</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-gear-wide me-1 text-secondary"></i>Transmission</label>
+              <select class="form-select" [(ngModel)]="form.transmissionType">
+                <option [value]="null">Not specified</option>
+                <option [value]="TransmissionType.Automatic">Automatic</option>
+                <option [value]="TransmissionType.Manual">Manual</option>
+                <option [value]="TransmissionType.CVT">CVT</option>
+                <option [value]="TransmissionType.SemiAutomatic">Semi-Automatic</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-wrench me-1 text-secondary"></i>Engine Type</label>
+              <input class="form-control" [(ngModel)]="form.engineType" placeholder="e.g. V6, I4, Electric" />
+            </div>
+
+            <!-- Mileage & Service -->
+            <div class="col-12 mt-2">
+              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-speedometer2 me-1"></i>Mileage & Service</p>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-speedometer2 me-1 text-info"></i>Current Mileage</label>
+              <input type="number" class="form-control" [(ngModel)]="form.mileage" placeholder="e.g. 45000" min="0" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-speedometer me-1 text-secondary"></i>Last Service Mileage</label>
+              <input type="number" class="form-control" [(ngModel)]="form.lastServiceMileage" placeholder="e.g. 40000" min="0" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-speedometer me-1 text-danger"></i>Next Service Mileage</label>
+              <input type="number" class="form-control" [(ngModel)]="form.nextServiceMileage" placeholder="e.g. 50000" min="0" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-plus me-1 text-secondary"></i>Purchase Date</label>
+              <input type="date" class="form-control" [(ngModel)]="form.purchaseDate" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-check me-1 text-secondary"></i>Last Service Date</label>
+              <input type="date" class="form-control" [(ngModel)]="form.lastServiceDate" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-event me-1 text-danger"></i>Next Service Date</label>
+              <input type="date" class="form-control" [(ngModel)]="form.nextServiceDate" />
+            </div>
+
+            <!-- Owner Information -->
+            <div class="col-12 mt-2">
+              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-person me-1"></i>Owner Information</p>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-person me-1 text-secondary"></i>Owner Name *</label>
+              <input class="form-control" [(ngModel)]="form.ownerName" placeholder="Full name" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-telephone me-1 text-secondary"></i>Owner Phone</label>
+              <input class="form-control" [(ngModel)]="form.ownerPhone" placeholder="Phone number" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold"><i class="bi bi-envelope me-1 text-secondary"></i>Owner Email</label>
+              <input type="email" class="form-control" [(ngModel)]="form.ownerEmail" placeholder="Email address" />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold"><i class="bi bi-sticky me-1 text-secondary"></i>Notes</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="form.notes" placeholder="Additional notes..."></textarea>
+            </div>
+
+            <!-- Photos Section -->
+            <div class="col-12">
+              <div class="border-top pt-3 mt-1">
+                <p class="fw-semibold mb-2 text-primary"><i class="bi bi-images me-1"></i>Vehicle Photos</p>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold"><i class="bi bi-camera me-1 text-primary"></i>Main Photo</label>
+                    <input type="file" class="form-control" accept="image/*" (change)="uploadPhoto1($event)" />
+                    @if (isUploadingPhoto1()) {
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+                    }
+                    @if (form.vehiclePhotoUrl) {
+                      <div class="mt-2 position-relative photo-preview-wrap">
+                        <img [src]="form.vehiclePhotoUrl" alt="Photo 1 preview" class="photo-preview" />
+                        <span class="badge bg-primary photo-badge">1</span>
+                      </div>
+                    }
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold"><i class="bi bi-camera-fill me-1 text-success"></i>Photo 2</label>
+                    <input type="file" class="form-control" accept="image/*" (change)="uploadPhoto2($event)" />
+                    @if (isUploadingPhoto2()) {
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+                    }
+                    @if (form.photo2Url) {
+                      <div class="mt-2 position-relative photo-preview-wrap">
+                        <img [src]="form.photo2Url" alt="Photo 2 preview" class="photo-preview" />
+                        <span class="badge bg-success photo-badge">2</span>
+                      </div>
+                    }
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold"><i class="bi bi-image me-1 text-warning"></i>Photo 3</label>
+                    <input type="file" class="form-control" accept="image/*" (change)="uploadPhoto3($event)" />
+                    @if (isUploadingPhoto3()) {
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+                    }
+                    @if (form.photo3Url) {
+                      <div class="mt-2 position-relative photo-preview-wrap">
+                        <img [src]="form.photo3Url" alt="Photo 3 preview" class="photo-preview" />
+                        <span class="badge bg-warning text-dark photo-badge">3</span>
+                      </div>
+                    }
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold"><i class="bi bi-image-fill me-1 text-info"></i>Photo 4</label>
+                    <input type="file" class="form-control" accept="image/*" (change)="uploadPhoto4($event)" />
+                    @if (isUploadingPhoto4()) {
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+                    }
+                    @if (form.photo4Url) {
+                      <div class="mt-2 position-relative photo-preview-wrap">
+                        <img [src]="form.photo4Url" alt="Photo 4 preview" class="photo-preview" />
+                        <span class="badge bg-info text-dark photo-badge">4</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer gap-2">
+          <button type="button" class="btn btn-secondary px-4" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-primary px-4" (click)="save()"
+            [disabled]="isSaving() || !form.make || !form.model || !form.ownerName || isUploadingPhoto1() || isUploadingPhoto2() || isUploadingPhoto3() || isUploadingPhoto4()">
+            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            {{ isEditing() ? 'Update Vehicle' : 'Create Vehicle' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

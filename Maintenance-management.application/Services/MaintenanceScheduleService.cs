@@ -63,6 +63,8 @@ public class MaintenanceScheduleService : IMaintenanceScheduleService
             IsActive = dto.IsActive,
             Notes = dto.Notes,
             EquipmentId = dto.EquipmentId,
+            VehicleId = dto.VehicleId,
+            MileageInterval = dto.MileageInterval,
             AssignedTechnicianId = dto.AssignedTechnicianId,
             AssignedGroupId = dto.AssignedGroupId,
             CreatedByUserId = createdByUserId
@@ -87,6 +89,8 @@ public class MaintenanceScheduleService : IMaintenanceScheduleService
         schedule.IsActive = dto.IsActive;
         schedule.Notes = dto.Notes;
         schedule.EquipmentId = dto.EquipmentId;
+        schedule.VehicleId = dto.VehicleId;
+        schedule.MileageInterval = dto.MileageInterval;
         schedule.AssignedTechnicianId = dto.AssignedTechnicianId;
         schedule.AssignedGroupId = dto.AssignedGroupId;
         schedule.UpdatedAt = DateTime.UtcNow;
@@ -117,6 +121,9 @@ public class MaintenanceScheduleService : IMaintenanceScheduleService
         CreatedByUserId = s.CreatedByUserId,
         EquipmentId = s.EquipmentId,
         EquipmentName = s.Equipment?.Name,
+        VehicleId = s.VehicleId,
+        VehicleName = s.Vehicle is not null ? $"{s.Vehicle.Year} {s.Vehicle.Make} {s.Vehicle.Model}" : null,
+        MileageInterval = s.MileageInterval,
         AssignedTechnicianId = s.AssignedTechnicianId,
         AssignedTechnicianName = s.AssignedTechnician is not null
             ? $"{s.AssignedTechnician.FirstName} {s.AssignedTechnician.LastName}"
