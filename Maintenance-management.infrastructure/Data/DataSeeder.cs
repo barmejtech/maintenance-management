@@ -325,7 +325,7 @@ public static class DataSeeder
                 LastName = "الشهري",
                 Email = techEmail,
                 Phone = "+966 55 123 4567",
-                Specialization = "أنظمة التكييف",
+                Specialization = "ميكانيكا السيارات وتشخيص الأعطال",
                 Address = "حي النسيم، الرياض",
                 Latitude = 24.7136,
                 Longitude = 46.6753,
@@ -368,7 +368,7 @@ public static class DataSeeder
                 LastName = "الغامدي",
                 Email = tech2Email,
                 Phone = "+966 50 678 9012",
-                Specialization = "أنظمة التبريد والتهوية",
+                Specialization = "صيانة المحركات وناقل الحركة",
                 Address = "حي الروضة، جدة 23434",
                 Latitude = 21.5433,
                 Longitude = 39.1728,
@@ -388,7 +388,7 @@ public static class DataSeeder
                 LastName = "المطيري",
                 Email = tech3Email,
                 Phone = "+966 53 789 0123",
-                Specialization = "الكهرباء وأنظمة الطاقة",
+                Specialization = "كهرباء السيارات والبطاريات",
                 Address = "حي الفيصلية، الدمام 32234",
                 Latitude = 26.4207,
                 Longitude = 50.0888,
@@ -489,7 +489,7 @@ public static class DataSeeder
             {
                 Id = group1Id,
                 Name = "فريق منطقة الرياض",
-                Description = "فريق متخصص في صيانة أنظمة التكييف والمرافق في منطقة الرياض",
+                Description = "فريق متخصص في صيانة المركبات الخفيفة وخدمات الورش في منطقة الرياض",
                 LeaderUserId = techUser?.Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -513,7 +513,7 @@ public static class DataSeeder
             {
                 Id = group3Id,
                 Name = "فريق المنطقة الشرقية",
-                Description = "فريق متخصص في صيانة المنشآت الصناعية والتجارية في المنطقة الشرقية",
+                Description = "فريق متخصص في صيانة أساطيل النقل والشاحنات الخفيفة في المنطقة الشرقية",
                 LeaderUserId = tech3User?.Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -525,7 +525,7 @@ public static class DataSeeder
             {
                 Id = group4Id,
                 Name = "فريق منطقة مكة المكرمة",
-                Description = "فريق متخصص في صيانة المنشآت الفندقية والتجارية في مكة المكرمة",
+                Description = "فريق متخصص في صيانة مركبات الضيافة والنقل في مكة المكرمة",
                 LeaderUserId = manager2User?.Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -546,11 +546,11 @@ public static class DataSeeder
             {
                 Id = client1Id,
                 Name = "محمد العمري",
-                CompanyName = "شركة الرياض للتطوير العقاري",
+                CompanyName = "مالك مركبة فردي",
                 Email = "mohammed@riyadhdev.sa",
                 Phone = "+966 11 456 7890",
                 Address = "طريق الملك فهد، حي العليا، الرياض 12211",
-                Notes = "عميل رئيسي لخدمات التكييف والمرافق",
+                Notes = "عميل فردي لصيانة دورية وإصلاحات ميكانيكية لمركبته",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -561,11 +561,11 @@ public static class DataSeeder
             {
                 Id = client2Id,
                 Name = "أحمد الزهراني",
-                CompanyName = "مجموعة جدة التجارية",
-                Email = "ahmed@jcg.sa",
+                CompanyName = "شركة أسطول جدة للنقليات",
+                Email = "ahmed@jeddahfleet.sa",
                 Phone = "+966 12 567 8901",
                 Address = "شارع التحلية، حي الروضة، جدة 23434",
-                Notes = "عميل خدمات الصيانة الوقائية",
+                Notes = "عميل أساطيل يحتاج صيانة دورية لـ 45 مركبة",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -576,11 +576,11 @@ public static class DataSeeder
             {
                 Id = client3Id,
                 Name = "عبدالرحمن الشمري",
-                CompanyName = "شركة أرامكو للخدمات التقنية",
-                Email = "abdulrahman@ast.sa",
+                CompanyName = "شركة أرامكو للخدمات اللوجستية",
+                Email = "abdulrahman@aramcofleet.sa",
                 Phone = "+966 13 678 9012",
                 Address = "شارع الأمير محمد بن فهد، حي الفيصلية، الدمام 32234",
-                Notes = "عميل قطاع النفط والطاقة",
+                Notes = "عميل شركات بعقد صيانة لأسطول مركبات ميدانية",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -591,11 +591,11 @@ public static class DataSeeder
             {
                 Id = client4Id,
                 Name = "عبدالعزيز المالكي",
-                CompanyName = "فنادق مكة الدولية",
-                Email = "aziz@makkahhotels.sa",
+                CompanyName = "شركة مكة للتنقل الذكي",
+                Email = "aziz@makkahrides.sa",
                 Phone = "+966 12 789 0123",
                 Address = "شارع إبراهيم الخليل، المسفلة، مكة المكرمة 24231",
-                Notes = "عميل قطاع الضيافة والفنادق",
+                Notes = "عميل نقل تشاركي يحتاج صيانة سريعة لمركبات الخدمة",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -606,11 +606,11 @@ public static class DataSeeder
             {
                 Id = client5Id,
                 Name = "هند القرشي",
-                CompanyName = "مجمع المدينة الطبي",
+                CompanyName = "مجمع المدينة الطبي - أسطول النقل الطبي",
                 Email = "hind@mmc.sa",
                 Phone = "+966 14 890 1234",
                 Address = "شارع أبي ذر، حي العزيزية، المدينة المنورة 42313",
-                Notes = "عميل القطاع الصحي — صيانة أنظمة التبريد الطبية",
+                Notes = "عميل قطاع صحي لصيانة سيارات الإسعاف والنقل الطبي",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -627,17 +627,17 @@ public static class DataSeeder
             context.Equipments.Add(new Equipment
             {
                 Id = eq1Id,
-                Name = "وحدة مناولة هواء - المبنى أ",
-                SerialNumber = "AHU-RUH-2024-001",
-                Model = "يورك YAL",
-                Manufacturer = "يورك",
-                Location = "الدور الأول، المبنى أ، مجمع الرياض التجاري",
+                Name = "جهاز فحص أعطال وتشخيص محرك OBD-II",
+                SerialNumber = "OBD-RUH-2024-001",
+                Model = "Bosch KTS 560",
+                Manufacturer = "بوش",
+                Location = "ورشة الرياض الرئيسية - قسم التشخيص الإلكتروني",
                 InstallationDate = new DateTime(2020, 6, 15),
                 LastMaintenanceDate = new DateTime(2024, 1, 10),
                 NextMaintenanceDate = new DateTime(2024, 7, 10),
                 Status = EquipmentStatus.Operational,
-                Notes = "صيانة دورية كل 3 أشهر",
-                QrCode = "2020-06-15 وحدة مناولة هواء AHU-RUH-2024-001",
+                Notes = "يدعم فحص المحرك وناقل الحركة وأنظمة ABS ووسائد الهواء",
+                QrCode = "2020-06-15 جهاز تشخيص OBD-RUH-2024-001",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -647,17 +647,17 @@ public static class DataSeeder
             context.Equipments.Add(new Equipment
             {
                 Id = eq2Id,
-                Name = "وحدة تبريد مركزية - المبنى ب",
-                SerialNumber = "CH-RUH-2024-002",
-                Model = "ترين RTAC",
-                Manufacturer = "ترين",
-                Location = "سطح المبنى ب، مجمع الرياض التجاري",
+                Name = "رافعة هيدروليكية مع محطة تغيير زيت وخدمة فرامل",
+                SerialNumber = "LFT-RUH-2024-002",
+                Model = "Rotary SPOA10",
+                Manufacturer = "روتاري",
+                Location = "ورشة الرياض الرئيسية - المسار رقم 2",
                 InstallationDate = new DateTime(2019, 3, 22),
                 LastMaintenanceDate = new DateTime(2023, 11, 5),
                 NextMaintenanceDate = new DateTime(2024, 5, 5),
                 Status = EquipmentStatus.UnderMaintenance,
-                Notes = "وحدة تبريد 500 طن",
-                QrCode = "2019-03-22 وحدة تبريد مركزية CH-RUH-2024-002",
+                Notes = "تستخدم لخدمات تغيير الزيت وفحص الفرامل السريع",
+                QrCode = "2019-03-22 رافعة هيدروليكية LFT-RUH-2024-002",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -667,17 +667,17 @@ public static class DataSeeder
             context.Equipments.Add(new Equipment
             {
                 Id = eq3Id,
-                Name = "وحدة تكييف مركزية - برج جدة التجاري",
-                SerialNumber = "AC-JED-2023-003",
-                Model = "كاريير 30XA",
-                Manufacturer = "كاريير",
-                Location = "الدور الأرضي، برج جدة التجاري، حي البلد، جدة",
+                Name = "ماكينة تبديل الإطارات وترصيص وضبط زوايا",
+                SerialNumber = "TWA-JED-2023-003",
+                Model = "Hunter Hawkeye Elite",
+                Manufacturer = "هانتر",
+                Location = "مركز خدمة جدة - قسم الإطارات",
                 InstallationDate = new DateTime(2021, 9, 10),
                 LastMaintenanceDate = new DateTime(2024, 2, 20),
                 NextMaintenanceDate = new DateTime(2024, 8, 20),
                 Status = EquipmentStatus.Operational,
-                Notes = "نظام تبريد مركزي 400 طن — صيانة نصف سنوية",
-                QrCode = "2021-09-10 وحدة تكييف AC-JED-2023-003",
+                Notes = "تخدم تغيير الإطارات والترصيص وضبط زوايا المركبات",
+                QrCode = "2021-09-10 ماكينة إطارات TWA-JED-2023-003",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -687,17 +687,17 @@ public static class DataSeeder
             context.Equipments.Add(new Equipment
             {
                 Id = eq4Id,
-                Name = "مضخة مياه التبريد - مجمع الدمام الصناعي",
-                SerialNumber = "PMP-DAM-2022-004",
-                Model = "غرونفوس NK 65-160",
-                Manufacturer = "غرونفوس",
-                Location = "غرفة المعدات، مجمع الدمام الصناعي، حي الدانة، الدمام",
+                Name = "وحدة خدمة مكيف السيارات وفحص البطارية",
+                SerialNumber = "ACB-DAM-2022-004",
+                Model = "Robinair AC1234-7 + Midtronics DSS-5000",
+                Manufacturer = "روبيناير",
+                Location = "مركز صيانة الدمام - قسم الكهرباء والتكييف",
                 InstallationDate = new DateTime(2022, 3, 5),
                 LastMaintenanceDate = new DateTime(2024, 1, 15),
                 NextMaintenanceDate = new DateTime(2024, 7, 15),
                 Status = EquipmentStatus.Operational,
-                Notes = "مضخة مياه تبريد أساسية بقدرة 75 كيلوواط",
-                QrCode = "2022-03-05 مضخة مياه PMP-DAM-2022-004",
+                Notes = "تستخدم لشحن فريون R-1234yf واختبار البطاريات وبادئ التشغيل",
+                QrCode = "2022-03-05 وحدة خدمة مكيف ACB-DAM-2022-004",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -715,18 +715,18 @@ public static class DataSeeder
             context.HVACSystems.Add(new HVACSystem
             {
                 Id = hvac1Id,
-                Name = "نظام تكييف مركزي - المبنى أ",
-                SystemType = "مركزي",
-                Brand = "يورك",
-                Model = "YAL-300",
-                Capacity = 300m,
-                CapacityUnit = "طن تبريد",
-                RefrigerantType = "R-410A",
-                Location = "مجمع الرياض التجاري، المبنى أ",
+                Name = "منظومة خدمة تكييف سيارات - مركز الرياض",
+                SystemType = "خدمة تكييف سيارات",
+                Brand = "روبيناير",
+                Model = "AC1234-7",
+                Capacity = 30m,
+                CapacityUnit = "سيارة/يوم",
+                RefrigerantType = "R-1234yf",
+                Location = "ورشة الرياض الرئيسية",
                 InstallationDate = new DateTime(2020, 6, 15),
                 LastInspectionDate = new DateTime(2024, 1, 10),
                 NextInspectionDate = new DateTime(2024, 7, 10),
-                Notes = "النظام الرئيسي للتبريد في المبنى أ",
+                Notes = "منظومة شحن وفحص تسرب تكييف السيارات",
                 EquipmentId = eq1Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -737,18 +737,18 @@ public static class DataSeeder
             context.HVACSystems.Add(new HVACSystem
             {
                 Id = hvac2Id,
-                Name = "نظام تبريد - المبنى ب",
-                SystemType = "وحدة تبريد مركزية",
-                Brand = "ترين",
-                Model = "RTAC-500",
-                Capacity = 500m,
-                CapacityUnit = "طن تبريد",
-                RefrigerantType = "R-134a",
-                Location = "مجمع الرياض التجاري، المبنى ب",
+                Name = "منظومة تشخيص إلكتروني متعدد الأنظمة",
+                SystemType = "تشخيص إلكتروني",
+                Brand = "بوش",
+                Model = "KTS-560",
+                Capacity = 40m,
+                CapacityUnit = "فحص/يوم",
+                RefrigerantType = "غير مطبق",
+                Location = "ورشة الرياض - خط الصيانة السريعة",
                 InstallationDate = new DateTime(2019, 3, 22),
                 LastInspectionDate = new DateTime(2023, 11, 5),
                 NextInspectionDate = new DateTime(2024, 5, 5),
-                Notes = "نظام التبريد للأدوار من 2 إلى 5",
+                Notes = "تشخيص الأعطال الكهربائية والميكانيكية للمركبات",
                 EquipmentId = eq2Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -759,18 +759,18 @@ public static class DataSeeder
             context.HVACSystems.Add(new HVACSystem
             {
                 Id = hvac3Id,
-                Name = "نظام تكييف مركزي - برج جدة التجاري",
-                SystemType = "وحدة تبريد مائية",
-                Brand = "كاريير",
-                Model = "30XA-400",
-                Capacity = 400m,
-                CapacityUnit = "طن تبريد",
-                RefrigerantType = "R-410A",
-                Location = "برج جدة التجاري، حي البلد، جدة",
+                Name = "منظومة الإطارات والزوايا - مركز جدة",
+                SystemType = "خدمة إطارات",
+                Brand = "هانتر",
+                Model = "Hawkeye-Elite",
+                Capacity = 25m,
+                CapacityUnit = "سيارة/يوم",
+                RefrigerantType = "غير مطبق",
+                Location = "مركز خدمة جدة - المنطقة الغربية",
                 InstallationDate = new DateTime(2021, 9, 10),
                 LastInspectionDate = new DateTime(2024, 2, 20),
                 NextInspectionDate = new DateTime(2024, 8, 20),
-                Notes = "نظام تبريد رئيسي للبرج التجاري",
+                Notes = "منظومة تبديل الإطارات والترصيص وضبط الزوايا",
                 EquipmentId = eq3Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -781,18 +781,18 @@ public static class DataSeeder
             context.HVACSystems.Add(new HVACSystem
             {
                 Id = hvac4Id,
-                Name = "نظام ضخ المياه الباردة - مجمع الدمام الصناعي",
-                SystemType = "نظام ضخ المياه الباردة",
-                Brand = "غرونفوس",
-                Model = "NK-75KW",
-                Capacity = 250m,
-                CapacityUnit = "طن تبريد",
-                RefrigerantType = "مياه التبريد",
-                Location = "مجمع الدمام الصناعي، حي الدانة، الدمام",
+                Name = "منظومة كهرباء المركبات والبطاريات - الدمام",
+                SystemType = "خدمة كهرباء سيارات",
+                Brand = "ميدترونكس",
+                Model = "DSS-5000",
+                Capacity = 35m,
+                CapacityUnit = "فحص/يوم",
+                RefrigerantType = "غير مطبق",
+                Location = "مركز صيانة الدمام - المنطقة الشرقية",
                 InstallationDate = new DateTime(2022, 3, 5),
                 LastInspectionDate = new DateTime(2024, 1, 15),
                 NextInspectionDate = new DateTime(2024, 7, 15),
-                Notes = "نظام توزيع المياه الباردة للمجمع الصناعي",
+                Notes = "فحص البطارية والدينمو ونظام التشغيل للمركبات",
                 EquipmentId = eq4Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -812,14 +812,14 @@ public static class DataSeeder
             context.TaskOrders.Add(new TaskOrder
             {
                 Id = task1Id,
-                Title = "فحص دوري لنظام التكييف - الربع الأول",
-                Description = "إجراء الفحص الدوري الربع سنوي لجميع وحدات التكييف في المبنى أ بمجمع الرياض التجاري",
+                Title = "خدمة 30 ألف كم وتغيير زيت - مركز الرياض",
+                Description = "تنفيذ صيانة دورية 30 ألف كم تشمل تغيير زيت المحرك وفلتر الزيت وفحص الأنظمة الأساسية للمركبة",
                 Status = TaskStatus.InProgress,
                 Priority = TaskPriority.High,
                 MaintenanceType = MaintenanceType.Inspection,
                 ScheduledDate = DateTime.UtcNow.AddDays(-7),
                 DueDate = DateTime.UtcNow.AddDays(7),
-                Notes = "فحص الفلاتر والأحزمة ومستويات غاز التبريد",
+                Notes = "يشمل فحص زيت القير والفرامل والإطارات",
                 CreatedByUserId = adminUserId,
                 TechnicianId = tech1Id,
                 EquipmentId = eq1Id,
@@ -834,14 +834,14 @@ public static class DataSeeder
             context.TaskOrders.Add(new TaskOrder
             {
                 Id = task2Id,
-                Title = "إصلاح طارئ لوحدة التبريد",
-                Description = "إصلاح طارئ لوحدة التبريد المركزية في المبنى ب بمجمع الرياض التجاري",
+                Title = "فحص وإصلاح نظام الفرامل - حالة طارئة",
+                Description = "تنفيذ فحص عاجل لنظام الفرامل مع استبدال الأقمشة والهوبات حسب نتائج الفحص",
                 Status = TaskStatus.Pending,
                 Priority = TaskPriority.Medium,
                 MaintenanceType = MaintenanceType.Preventive,
                 ScheduledDate = DateTime.UtcNow.AddDays(14),
                 DueDate = DateTime.UtcNow.AddDays(30),
-                Notes = "يشمل تغيير الزيت وتحليل الاهتزاز",
+                Notes = "يتضمن اختبار أداء ABS ورسوم تشخيص إلكتروني",
                 CreatedByUserId = adminUserId,
                 GroupId = group1Id,
                 EquipmentId = eq2Id,
@@ -856,14 +856,14 @@ public static class DataSeeder
             context.TaskOrders.Add(new TaskOrder
             {
                 Id = task3Id,
-                Title = "صيانة وقائية لنظام التكييف - برج جدة التجاري",
-                Description = "إجراء الصيانة الوقائية الشاملة لنظام التبريد المركزي في برج جدة التجاري — فحص الأنابيب والتوصيلات وضبط منظومة التبريد",
+                Title = "تشخيص محرك وخدمة 60 ألف كم - مركز جدة",
+                Description = "تنفيذ صيانة 60 ألف كم تشمل فحص كمبيوتر المحرك وتنظيف البخاخات وخدمة ناقل الحركة",
                 Status = TaskStatus.Completed,
                 Priority = TaskPriority.Medium,
                 MaintenanceType = MaintenanceType.Preventive,
                 ScheduledDate = DateTime.UtcNow.AddDays(-14),
                 DueDate = DateTime.UtcNow.AddDays(-7),
-                Notes = "تم إنجاز الصيانة في الموعد المحدد",
+                Notes = "تم إنجاز الخدمة مع تحديث سجل الصيانة الإلكتروني",
                 CreatedByUserId = adminUserId,
                 TechnicianId = tech3Id,
                 EquipmentId = eq3Id,
@@ -878,14 +878,14 @@ public static class DataSeeder
             context.TaskOrders.Add(new TaskOrder
             {
                 Id = task4Id,
-                Title = "فحص مضخة مياه التبريد - مجمع الدمام الصناعي",
-                Description = "فحص شامل لمضخة مياه التبريد في المجمع الصناعي بالدمام — قياس الضغط والتدفق وفحص المحركات",
+                Title = "ضبط زوايا واستبدال إطارات - مركز الدمام",
+                Description = "فحص نظام التعليق وضبط زوايا العجلات واستبدال الإطارات المتآكلة مع الترصيص",
                 Status = TaskStatus.InProgress,
                 Priority = TaskPriority.High,
                 MaintenanceType = MaintenanceType.Inspection,
                 ScheduledDate = DateTime.UtcNow.AddDays(-2),
                 DueDate = DateTime.UtcNow.AddDays(5),
-                Notes = "يتطلب تحليل اهتزاز متخصص",
+                Notes = "يتطلب فحص اتزان العجلات واختبار طريق",
                 CreatedByUserId = adminUserId,
                 TechnicianId = tech4Id,
                 EquipmentId = eq4Id,
@@ -900,16 +900,17 @@ public static class DataSeeder
             context.TaskOrders.Add(new TaskOrder
             {
                 Id = task5Id,
-                Title = "تنظيف وفحص وحدات التكييف - فنادق مكة الدولية",
-                Description = "تنظيف شامل وفحص كامل لجميع وحدات التكييف في فنادق مكة الدولية — التنظيف العميق للمبخرات والمكثفات",
+                Title = "إصلاح تكييف سيارات واستبدال بطارية - أسطول مكة",
+                Description = "تنفيذ إصلاحات تكييف سيارات الأسطول مع فحص البطاريات واستبدال التالف قبل موسم الحج",
                 Status = TaskStatus.Pending,
                 Priority = TaskPriority.Medium,
                 MaintenanceType = MaintenanceType.Preventive,
                 ScheduledDate = DateTime.UtcNow.AddDays(10),
                 DueDate = DateTime.UtcNow.AddDays(20),
-                Notes = "جدولة التنفيذ بعد انتهاء موسم الحج",
+                Notes = "أولوية للأسطول التشغيلي خلال موسم الحج",
                 CreatedByUserId = adminUserId,
                 GroupId = group4Id,
+                EquipmentId = eq4Id,
                 ArrivalLatitude = 21.3891,
                 ArrivalLongitude = 39.8579,
                 CreatedAt = DateTime.UtcNow
@@ -930,8 +931,8 @@ public static class DataSeeder
             {
                 Id = inv1Id,
                 InvoiceNumber = "INV-2024-SA-001",
-                ClientName = "شركة الرياض للتطوير",
-                ClientEmail = "billing@riyadhdev.sa",
+                ClientName = "محمد العمري",
+                ClientEmail = "mohammed@riyadhdev.sa",
                 ClientAddress = "طريق الملك فهد، حي العليا، الرياض 12211",
                 IssueDate = DateTime.UtcNow.AddDays(-30),
                 DueDate = DateTime.UtcNow,
@@ -940,7 +941,7 @@ public static class DataSeeder
                 TaxAmount = 225m,
                 TotalAmount = 1725m,
                 Status = InvoiceStatus.Sent,
-                Notes = "خدمات فحص أنظمة التكييف",
+                Notes = "فاتورة خدمة 30 ألف كم وتغيير زيت وفلاتر",
                 CreatedByUserId = adminUserId,
                 TaskOrderId = task1Id,
                 ClientId = client1Id,
@@ -954,8 +955,8 @@ public static class DataSeeder
             {
                 Id = inv2Id,
                 InvoiceNumber = "INV-2024-SA-002",
-                ClientName = "مجموعة جدة التجارية",
-                ClientEmail = "accounts@jcg.sa",
+                ClientName = "شركة أسطول جدة للنقليات",
+                ClientEmail = "accounts@jeddahfleet.sa",
                 ClientAddress = "شارع التحلية، حي الروضة، جدة 23434",
                 IssueDate = DateTime.UtcNow,
                 DueDate = DateTime.UtcNow.AddDays(30),
@@ -964,8 +965,9 @@ public static class DataSeeder
                 TaxAmount = 480m,
                 TotalAmount = 3680m,
                 Status = InvoiceStatus.Draft,
-                Notes = "صيانة سنوية لوحدة التبريد المركزية",
+                Notes = "فاتورة صيانة 60 ألف كم وفحص ناقل الحركة",
                 CreatedByUserId = adminUserId,
+                TaskOrderId = task3Id,
                 ClientId = client2Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -977,17 +979,17 @@ public static class DataSeeder
             {
                 Id = inv3Id,
                 InvoiceNumber = "INV-2024-SA-003",
-                ClientName = "شركة أرامكو للخدمات التقنية",
-                ClientEmail = "billing@ast.sa",
+                ClientName = "شركة أرامكو للخدمات اللوجستية",
+                ClientEmail = "billing@aramcofleet.sa",
                 ClientAddress = "شارع الأمير محمد بن فهد، حي الفيصلية، الدمام 32234",
                 IssueDate = DateTime.UtcNow.AddDays(-10),
                 DueDate = DateTime.UtcNow.AddDays(20),
-                SubTotal = 5800m,
+                SubTotal = 4100m,
                 TaxRate = 15m,
-                TaxAmount = 870m,
-                TotalAmount = 6670m,
+                TaxAmount = 615m,
+                TotalAmount = 4715m,
                 Status = InvoiceStatus.Sent,
-                Notes = "فحص وصيانة منظومة ضخ المياه الباردة — مجمع الدمام الصناعي",
+                Notes = "فاتورة ضبط زوايا واستبدال إطارات وفحص منظومة التعليق",
                 CreatedByUserId = adminUserId,
                 TaskOrderId = task4Id,
                 ClientId = client3Id,
@@ -1001,8 +1003,8 @@ public static class DataSeeder
             {
                 Id = inv4Id,
                 InvoiceNumber = "INV-2024-SA-004",
-                ClientName = "فنادق مكة الدولية",
-                ClientEmail = "finance@makkahhotels.sa",
+                ClientName = "شركة مكة للتنقل الذكي",
+                ClientEmail = "finance@makkahrides.sa",
                 ClientAddress = "شارع إبراهيم الخليل، المسفلة، مكة المكرمة 24231",
                 IssueDate = DateTime.UtcNow.AddDays(-5),
                 DueDate = DateTime.UtcNow.AddDays(25),
@@ -1011,8 +1013,9 @@ public static class DataSeeder
                 TaxAmount = 360m,
                 TotalAmount = 2760m,
                 Status = InvoiceStatus.Draft,
-                Notes = "خدمات صيانة أنظمة التكييف للفندق",
+                Notes = "خدمات إصلاح تكييف السيارات واستبدال البطاريات",
                 CreatedByUserId = adminUserId,
+                TaskOrderId = task5Id,
                 ClientId = client4Id,
                 CreatedAt = DateTime.UtcNow.AddDays(-5)
             });
@@ -1033,10 +1036,10 @@ public static class DataSeeder
             context.InvoiceLineItems.Add(new InvoiceLineItem
             {
                 Id = li1Id,
-                Description = "عمالة فحص أنظمة التكييف",
+                Description = "أجور خدمة 30 ألف كم (تغيير زيت + فحص شامل)",
                 Quantity = 8m,
-                UnitPrice = 150m,
-                Total = 1200m,
+                UnitPrice = 120m,
+                Total = 960m,
                 InvoiceId = inv1Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -1047,10 +1050,10 @@ public static class DataSeeder
             context.InvoiceLineItems.Add(new InvoiceLineItem
             {
                 Id = li2Id,
-                Description = "قطع غيار استبدال الفلاتر",
+                Description = "مواد استهلاكية (زيت محرك، فلتر زيت، فلتر هواء)",
                 Quantity = 3m,
-                UnitPrice = 100m,
-                Total = 300m,
+                UnitPrice = 180m,
+                Total = 540m,
                 InvoiceId = inv1Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -1061,7 +1064,7 @@ public static class DataSeeder
             context.InvoiceLineItems.Add(new InvoiceLineItem
             {
                 Id = li3Id,
-                Description = "صيانة وقائية لوحدة التبريد المركزية",
+                Description = "خدمة 60 ألف كم تشمل فحص ناقل الحركة",
                 Quantity = 16m,
                 UnitPrice = 200m,
                 Total = 3200m,
@@ -1075,7 +1078,7 @@ public static class DataSeeder
             context.InvoiceLineItems.Add(new InvoiceLineItem
             {
                 Id = li4Id,
-                Description = "أعمال الفحص والقياس لمنظومة الضخ",
+                Description = "أعمال ضبط زوايا واستبدال إطارات",
                 Quantity = 12m,
                 UnitPrice = 200m,
                 Total = 2400m,
@@ -1089,7 +1092,7 @@ public static class DataSeeder
             context.InvoiceLineItems.Add(new InvoiceLineItem
             {
                 Id = li5Id,
-                Description = "استبدال مجموعة أختام المضخة",
+                Description = "قطع غيار نظام الفرامل (أقمشة + هوبات)",
                 Quantity = 2m,
                 UnitPrice = 850m,
                 Total = 1700m,
@@ -1103,9 +1106,9 @@ public static class DataSeeder
             context.InvoiceLineItems.Add(new InvoiceLineItem
             {
                 Id = li6Id,
-                Description = "خدمة تنظيف المبخرات والمكثفات",
-                Quantity = 8m,
-                UnitPrice = 300m,
+                Description = "رسوم تشخيص إلكتروني ورسوم التخلص البيئي",
+                Quantity = 1m,
+                UnitPrice = 2400m,
                 Total = 2400m,
                 InvoiceId = inv4Id,
                 CreatedAt = DateTime.UtcNow
@@ -1126,14 +1129,14 @@ public static class DataSeeder
             context.MaintenanceReports.Add(new MaintenanceReport
             {
                 Id = report1Id,
-                Title = "تقرير فحص التكييف - الربع الأول",
-                Content = "تم إجراء الفحص الدوري الربع سنوي لأنظمة التكييف في المبنى أ بمجمع الرياض التجاري. تم استبدال جميع الفلاتر. مستويات غاز التبريد ضمن النطاق المقبول. تم ضبط توتر الحزام في وحدة مناولة الهواء. لم يتم اكتشاف أي مشاكل رئيسية.",
+                Title = "تقرير صيانة 30 ألف كم - مركز الرياض",
+                Content = "تم تنفيذ خدمة 30 ألف كم للمركبة بنجاح. شملت الخدمة تغيير زيت المحرك وفلتر الزيت وفلتر الهواء وفحص نظام الفرامل والإطارات. لم تُرصد أعطال حرجة وتمت إعادة ضبط تذكير الصيانة.",
                 TechnicianName = techFullName,
                 CreatedByUserId = adminUserId,
                 ReportDate = DateTime.UtcNow.AddDays(-5),
                 LaborHours = 8m,
                 MaterialCost = 300m,
-                Recommendations = "جدولة تنظيف عميق سنوي في الربع القادم.",
+                Recommendations = "الالتزام بتغيير الزيت كل 5,000 كم ومراجعة ضغط الإطارات أسبوعياً.",
                 TaskOrderId = task1Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -1144,14 +1147,14 @@ public static class DataSeeder
             context.MaintenanceReports.Add(new MaintenanceReport
             {
                 Id = report2Id,
-                Title = "تقييم نظام التبريد المركزي",
-                Content = "تقييم ما قبل الصيانة لوحدة التبريد المركزية في المبنى ب. تم رصد تسرب طفيف في زيت ختم المضخة. مستويات الاهتزاز مرتفعة قليلاً. الوحدة لا تزال تعمل لكن الصيانة الوقائية ضرورية.",
+                Title = "تقرير تقييم نظام الفرامل",
+                Content = "أظهر الفحص المبدئي تآكلًا مرتفعًا في أقمشة الفرامل الأمامية مع تشقق بسيط في الهوبات. تم التوصية بالاستبدال الفوري لتفادي ارتفاع مسافة التوقف.",
                 TechnicianName = techFullName,
                 CreatedByUserId = adminUserId,
                 ReportDate = DateTime.UtcNow.AddDays(-2),
                 LaborHours = 4m,
-                MaterialCost = 50m,
-                Recommendations = "استبدال ختم المضخة خلال الصيانة المجدولة. طلب غاز التبريد R-134a.",
+                MaterialCost = 150m,
+                Recommendations = "استبدال أقمشة وهوبات الفرامل الأمامية وإعادة فحص نظام ABS.",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1161,14 +1164,14 @@ public static class DataSeeder
             context.MaintenanceReports.Add(new MaintenanceReport
             {
                 Id = report3Id,
-                Title = "تقرير صيانة نظام التكييف - برج جدة التجاري",
-                Content = "تمت الصيانة الوقائية الشاملة لنظام التبريد المركزي في برج جدة التجاري. تم تنظيف المبخرات والمكثفات. فحص جميع توصيلات الأنابيب ولم يرصد أي تسرب. تم ضبط ضغط غاز التبريد R-410A على القيم القياسية. الأداء العام ممتاز.",
+                Title = "تقرير صيانة 60 ألف كم - مركز جدة",
+                Content = "تمت خدمة 60 ألف كم بنجاح، وشملت فحص كمبيوتر المحرك وتنظيف البخاخات وتغيير شمعات الاحتراق وفحص ناقل الحركة. أداء المركبة تحسن بشكل ملحوظ بعد الصيانة.",
                 TechnicianName = "عمر الغامدي",
                 CreatedByUserId = adminUserId,
                 ReportDate = DateTime.UtcNow.AddDays(-7),
                 LaborHours = 6m,
-                MaterialCost = 150m,
-                Recommendations = "يُوصى بتغيير سائل التبريد خلال العام القادم. جدولة تنظيف عميق سنوي.",
+                MaterialCost = 320m,
+                Recommendations = "متابعة فحص ناقل الحركة بعد 10,000 كم ومراقبة استهلاك الوقود.",
                 TaskOrderId = task3Id,
                 CreatedAt = DateTime.UtcNow.AddDays(-7)
             });
@@ -1179,14 +1182,14 @@ public static class DataSeeder
             context.MaintenanceReports.Add(new MaintenanceReport
             {
                 Id = report4Id,
-                Title = "تقرير فحص مضخة مياه التبريد - مجمع الدمام الصناعي",
-                Content = "تم إجراء فحص شامل لمضخة مياه التبريد في مجمع الدمام الصناعي. قياسات الضغط تعمل ضمن النطاق المقبول (3.2 بار). مستوى الاهتزاز طبيعي. تم اكتشاف تآكل طفيف في مجموعة الأختام يستوجب الاستبدال في الزيارة القادمة.",
+                Title = "تقرير ضبط زوايا وإطارات - مركز الدمام",
+                Content = "تم تنفيذ ضبط زوايا العجلات الأربع وترصيص الإطارات بعد ملاحظة تآكل غير منتظم. نتائج جهاز القياس ضمن الحدود الموصى بها، وتم تحسين ثبات المركبة أثناء القيادة.",
                 TechnicianName = "سالم المطيري",
                 CreatedByUserId = adminUserId,
                 ReportDate = DateTime.UtcNow.AddDays(-1),
                 LaborHours = 5m,
                 MaterialCost = 200m,
-                Recommendations = "استبدال مجموعة أختام المضخة فور توفرها. جدولة فحص تفصيلي للمحرك الكهربائي.",
+                Recommendations = "تبديل الإطارات الأمامية خلال 8,000 كم وإعادة فحص ميزان الزوايا.",
                 TaskOrderId = task4Id,
                 CreatedAt = DateTime.UtcNow.AddDays(-1)
             });
@@ -1335,8 +1338,8 @@ public static class DataSeeder
             context.Documents.Add(new Document
             {
                 Id = doc1Id,
-                FileName = "hvac-inspection-checklist.pdf",
-                FileUrl = "/uploads/hvac-inspection-checklist.pdf",
+                FileName = "vehicle-30k-service-checklist.pdf",
+                FileUrl = "/uploads/vehicle-30k-service-checklist.pdf",
                 ContentType = "application/pdf",
                 FileSize = 204800,
                 DocumentType = "قائمة التحقق",
@@ -1351,8 +1354,8 @@ public static class DataSeeder
             context.Documents.Add(new Document
             {
                 Id = doc2Id,
-                FileName = "chiller-unit-manual.pdf",
-                FileUrl = "/uploads/chiller-unit-manual.pdf",
+                FileName = "diagnostic-scanner-manual.pdf",
+                FileUrl = "/uploads/diagnostic-scanner-manual.pdf",
                 ContentType = "application/pdf",
                 FileSize = 1048576,
                 DocumentType = "دليل الاستخدام",
@@ -1383,8 +1386,8 @@ public static class DataSeeder
             context.Documents.Add(new Document
             {
                 Id = doc4Id,
-                FileName = "pump-inspection-report-dammam.pdf",
-                FileUrl = "/uploads/pump-inspection-report-dammam.pdf",
+                FileName = "wheel-alignment-report-dammam.pdf",
+                FileUrl = "/uploads/wheel-alignment-report-dammam.pdf",
                 ContentType = "application/pdf",
                 FileSize = 307200,
                 DocumentType = "تقرير فحص",
@@ -1413,7 +1416,7 @@ public static class DataSeeder
                     SenderId = managerUser.Id,
                     SenderName = "فهد القحطاني",
                     ReceiverId = techUser.Id,
-                    Content = "مرحبا، تم تعيين مهمة الفحص الدوري لك. يرجى البدء بالمبنى أ في مجمع الرياض التجاري.",
+                    Content = "مرحباً، تم تعيين مهمة خدمة 30 ألف كم لك. يرجى البدء بالمركبة الأولى في مركز الرياض.",
                     MessageType = MessageType.Text,
                     CreatedAt = DateTime.UtcNow.AddHours(-2)
                 });
@@ -1427,7 +1430,7 @@ public static class DataSeeder
                     SenderId = techUser.Id,
                     SenderName = "خالد الشهري",
                     ReceiverId = managerUser.Id,
-                    Content = "تم الاستلام، سأبدأ العمل صباح الغد. هل هناك أي تعليمات خاصة لفحص وحدة التبريد؟",
+                    Content = "تم الاستلام، سأبدأ العمل صباح الغد. هل هناك أي تعليمات خاصة لفحص نظام الفرامل؟",
                     MessageType = MessageType.Text,
                     CreatedAt = DateTime.UtcNow.AddHours(-1)
                 });
@@ -1446,7 +1449,7 @@ public static class DataSeeder
                     SenderId = manager2User.Id,
                     SenderName = "نورة الحربي",
                     ReceiverId = tech2User.Id,
-                    Content = "عمر، تم تعيين مهمة صيانة برج جدة التجاري لك. يرجى التنسيق مع إدارة المبنى قبل البدء.",
+                    Content = "عمر، تم تعيين مهمة صيانة 60 ألف كم لمركبات أسطول جدة لك. يرجى التنسيق مع مشرف الأسطول قبل البدء.",
                     MessageType = MessageType.Text,
                     CreatedAt = DateTime.UtcNow.AddHours(-5)
                 });
@@ -1460,7 +1463,7 @@ public static class DataSeeder
                     SenderId = tech2User.Id,
                     SenderName = "عمر الغامدي",
                     ReceiverId = manager2User.Id,
-                    Content = "تم التواصل مع إدارة المبنى. سأبدأ الصيانة الوقائية يوم السبت القادم في الساعة السابعة صباحاً.",
+                    Content = "تم التواصل مع مشرف الأسطول. سأبدأ الصيانة يوم السبت القادم في الساعة السابعة صباحاً.",
                     MessageType = MessageType.Text,
                     CreatedAt = DateTime.UtcNow.AddHours(-4)
                 });
@@ -1483,7 +1486,7 @@ public static class DataSeeder
                 Id = notif1Id,
                 UserId = techUser.Id,
                 Title = "مهمة جديدة",
-                Message = "تم تعيين مهمة فحص دوري لنظام التكييف لك في مجمع الرياض التجاري.",
+                Message = "تم تعيين مهمة خدمة 30 ألف كم لك في مركز الرياض.",
                 Type = NotificationType.Info,
                 IsRead = false,
                 RelatedEntityId = task1Id.ToString(),
@@ -1499,7 +1502,7 @@ public static class DataSeeder
                 Id = notif2Id,
                 UserId = managerUser.Id,
                 Title = "اكتملت المهمة",
-                Message = "تم إكمال مهمة فحص التكييف - الربع الأول بنجاح.",
+                Message = "تم إكمال مهمة خدمة 30 ألف كم بنجاح.",
                 Type = NotificationType.Success,
                 IsRead = true,
                 RelatedEntityId = task1Id.ToString(),
@@ -1531,7 +1534,7 @@ public static class DataSeeder
                 Id = notif4Id,
                 UserId = tech2User.Id,
                 Title = "تم جدولة مهمة صيانة",
-                Message = "تم جدولة مهمة صيانة وقائية في برج جدة التجاري. الموعد: السبت القادم الساعة 7 صباحاً.",
+                Message = "تم جدولة مهمة صيانة 60 ألف كم لأسطول جدة. الموعد: السبت القادم الساعة 7 صباحاً.",
                 Type = NotificationType.Info,
                 IsRead = false,
                 RelatedEntityId = task3Id.ToString(),
@@ -1547,7 +1550,7 @@ public static class DataSeeder
                 Id = notif5Id,
                 UserId = adminUserId,
                 Title = "تنبيه صيانة عاجلة",
-                Message = "تم رصد ارتفاع في مستوى اهتزاز مضخة مياه التبريد في مجمع الدمام الصناعي. يُوصى بإجراء فحص فوري.",
+                Message = "تم رصد انحراف في نتائج جهاز ضبط الزوايا في مركز الدمام. يُوصى بإجراء فحص فوري.",
                 Type = NotificationType.Warning,
                 IsRead = false,
                 RelatedEntityId = eq4Id.ToString(),
@@ -1572,7 +1575,7 @@ public static class DataSeeder
                 EquipmentId = eq1Id,
                 PredictedFailureDate = DateTime.UtcNow.AddMonths(8),
                 FailureProbability = 0.15,
-                Recommendation = "جدولة استبدال الفلاتر وفحص الحزام في الخدمة الربع سنوية القادمة.",
+                Recommendation = "جدولة فحص دوري لوصلة جهاز التشخيص وتحديث البرنامج في الخدمة القادمة.",
                 TotalInterventions = 5,
                 AverageDaysBetweenFailures = 365,
                 AverageDaysBetweenMaintenance = 90,
@@ -1589,7 +1592,7 @@ public static class DataSeeder
                 EquipmentId = eq2Id,
                 PredictedFailureDate = DateTime.UtcNow.AddMonths(2),
                 FailureProbability = 0.65,
-                Recommendation = "مطلوب استبدال ختم المضخة فوراً. جدولة صيانة طارئة.",
+                Recommendation = "فحص منظومة الرفع الهيدروليكي وتغيير زيت النظام قبل التشغيل المكثف.",
                 TotalInterventions = 8,
                 AverageDaysBetweenFailures = 180,
                 AverageDaysBetweenMaintenance = 120,
@@ -1623,7 +1626,7 @@ public static class DataSeeder
                 EquipmentId = eq4Id,
                 PredictedFailureDate = DateTime.UtcNow.AddMonths(4),
                 FailureProbability = 0.42,
-                Recommendation = "استبدال مجموعة الأختام خلال الشهر القادم. فحص المحرك الكهربائي وقياس العزل.",
+                Recommendation = "إجراء معايرة لجهاز فحص البطاريات وتحديث البرنامج خلال الشهر القادم.",
                 TotalInterventions = 6,
                 AverageDaysBetweenFailures = 270,
                 AverageDaysBetweenMaintenance = 150,
@@ -1651,9 +1654,9 @@ public static class DataSeeder
                 PerformanceScore = 91.0,
                 TemperatureCelsius = 18.5,
                 UsageHours = 14600,
-                LastKnownIssue = "تآكل طفيف في الحزام لوحظ خلال آخر فحص",
+                LastKnownIssue = "انقطاع متقطع في كابل قراءة وحدة ECU",
                 LastSyncedAt = DateTime.UtcNow,
-                SimulationNotes = "يعمل ضمن المعايير الطبيعية — مجمع الرياض التجاري",
+                SimulationNotes = "يعمل ضمن المعايير الطبيعية — ورشة الرياض الرئيسية",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1669,9 +1672,9 @@ public static class DataSeeder
                 PerformanceScore = 63.5,
                 TemperatureCelsius = 7.2,
                 UsageHours = 21900,
-                LastKnownIssue = "تسرب زيت في ختم المضخة؛ مستويات اهتزاز مرتفعة",
+                LastKnownIssue = "انخفاض بسيط في ضغط النظام الهيدروليكي للرافعة",
                 LastSyncedAt = DateTime.UtcNow,
-                SimulationNotes = "مطلوب صيانة فورية لمنع العطل — مجمع الرياض التجاري",
+                SimulationNotes = "مطلوب صيانة وقائية للرافعة قبل ضغط العمل الموسمي",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1689,7 +1692,7 @@ public static class DataSeeder
                 UsageHours = 10200,
                 LastKnownIssue = "لا توجد مشاكل مرصودة",
                 LastSyncedAt = DateTime.UtcNow,
-                SimulationNotes = "أداء ممتاز — برج جدة التجاري",
+                SimulationNotes = "أداء ممتاز — مركز خدمة جدة",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1705,9 +1708,9 @@ public static class DataSeeder
                 PerformanceScore = 77.0,
                 TemperatureCelsius = 9.5,
                 UsageHours = 16800,
-                LastKnownIssue = "تآكل في مجموعة الأختام يستوجب الاستبدال قريباً",
+                LastKnownIssue = "تفاوت بسيط في قراءات اختبار البطارية لبعض المركبات",
                 LastSyncedAt = DateTime.UtcNow,
-                SimulationNotes = "يعمل بكفاءة مقبولة — مجمع الدمام الصناعي — متابعة مستمرة مطلوبة",
+                SimulationNotes = "يعمل بكفاءة مقبولة — مركز صيانة الدمام — متابعة مستمرة مطلوبة",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1806,17 +1809,17 @@ public static class DataSeeder
             context.SpareParts.Add(new SparePart
             {
                 Id = part1Id,
-                Name = "فلتر هواء MERV-13",
-                PartNumber = "AF-MERV13-2024",
-                Description = "فلتر هواء عالي الكفاءة لأنظمة التكييف المركزية",
+                Name = "فلتر زيت محرك",
+                PartNumber = "OF-5W30-2024",
+                Description = "فلتر زيت متوافق مع محركات البنزين رباعية الأسطوانات",
                 Unit = "قطعة",
                 QuantityInStock = 24,
                 MinimumStockLevel = 10,
-                UnitPrice = 18.50m,
-                Supplier = "شركة التوريدات السعودية للتكييف",
+                UnitPrice = 35.00m,
+                Supplier = "شركة قطع غيار السيارات السعودية",
                 StorageLocation = "مستودع الرياض - رف أ3",
-                Notes = "يُستبدل كل 3 أشهر",
-                QrCode = "فلتر هواء MERV-13 AF-MERV13-2024",
+                Notes = "يُستبدل مع كل خدمة تغيير زيت",
+                QrCode = "فلتر زيت محرك OF-5W30-2024",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1826,17 +1829,17 @@ public static class DataSeeder
             context.SpareParts.Add(new SparePart
             {
                 Id = part2Id,
-                Name = "حزام مروحة V-Belt B68",
-                PartNumber = "VB-B68-2024",
-                Description = "حزام مروحة لوحدات مناولة الهواء",
+                Name = "طقم أقمشة فرامل أمامية",
+                PartNumber = "BP-FRT-2024",
+                Description = "أقمشة فرامل أمامية عالية التحمل للسيارات المتوسطة",
                 Unit = "قطعة",
                 QuantityInStock = 4,
                 MinimumStockLevel = 5,
-                UnitPrice = 145.00m,
-                Supplier = "مؤسسة قطع الغيار الوطنية للتقنية",
+                UnitPrice = 280.00m,
+                Supplier = "مؤسسة فرامل الخليج للسيارات",
                 StorageLocation = "مستودع الرياض - رف ب7",
-                Notes = "مخزون منخفض — يُطلب فوراً",
-                QrCode = "حزام مروحة V-Belt B68 VB-B68-2024",
+                Notes = "مخزون منخفض — أولوية للتوريد",
+                QrCode = "أقمشة فرامل BP-FRT-2024",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1846,17 +1849,17 @@ public static class DataSeeder
             context.SpareParts.Add(new SparePart
             {
                 Id = part3Id,
-                Name = "طقم ختم مضخة ترين",
-                PartNumber = "PSK-RTAC-STD",
-                Description = "طقم ختم مضخة قياسي لوحدة التبريد ترين RTAC",
+                Name = "طقم شمعات احتراق",
+                PartNumber = "SPK-IR-SET4",
+                Description = "طقم 4 شمعات إيريديوم لمحركات البنزين",
                 Unit = "طقم",
                 QuantityInStock = 2,
                 MinimumStockLevel = 2,
-                UnitPrice = 89.00m,
-                Supplier = "شركة التوريدات السعودية للتكييف",
+                UnitPrice = 160.00m,
+                Supplier = "شركة الإمداد الذكي لقطع السيارات",
                 StorageLocation = "مستودع الرياض - رف ج5",
-                Notes = "متوافق مع وحدة التبريد المركزية بالمبنى ب",
-                QrCode = "طقم ختم مضخة PSK-RTAC-STD",
+                Notes = "يُستخدم ضمن خدمات 60 ألف كم",
+                QrCode = "شمعات احتراق SPK-IR-SET4",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1866,17 +1869,17 @@ public static class DataSeeder
             context.SpareParts.Add(new SparePart
             {
                 Id = part4Id,
-                Name = "مجموعة أختام غرونفوس NK",
-                PartNumber = "GF-NK-SEAL-75",
-                Description = "مجموعة أختام ميكانيكية لمضخة غرونفوس NK 65-160",
-                Unit = "طقم",
+                Name = "بطارية سيارة 70 أمبير",
+                PartNumber = "BAT-70AH-AGM",
+                Description = "بطارية AGM بقدرة تشغيل عالية للمركبات التجارية",
+                Unit = "قطعة",
                 QuantityInStock = 3,
                 MinimumStockLevel = 2,
-                UnitPrice = 320.00m,
-                Supplier = "مؤسسة الخليج للمضخات والأنظمة الهيدروليكية",
+                UnitPrice = 520.00m,
+                Supplier = "شركة الخليج لبطاريات السيارات",
                 StorageLocation = "مستودع الدمام - رف ب2",
-                Notes = "مناسب لمضخة التبريد في مجمع الدمام الصناعي",
-                QrCode = "أختام غرونفوس GF-NK-SEAL-75",
+                Notes = "مناسبة لأسطول النقل الخفيف وسيارات الخدمة",
+                QrCode = "بطارية سيارة BAT-70AH-AGM",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1886,17 +1889,17 @@ public static class DataSeeder
             context.SpareParts.Add(new SparePart
             {
                 Id = part5Id,
-                Name = "زيت تبريد شيل فريجوليا",
-                PartNumber = "SH-FRG-20L",
-                Description = "زيت تبريد اصطناعي عالي الأداء للضواغط التجارية",
+                Name = "سائل تبريد محرك طويل العمر",
+                PartNumber = "CLNT-LL-20L",
+                Description = "سائل تبريد جاهز للاستخدام لحماية المحرك في الأجواء الحارة",
                 Unit = "لتر",
                 QuantityInStock = 40,
                 MinimumStockLevel = 20,
-                UnitPrice = 45.00m,
-                Supplier = "شركة شيل للمواد التشحيمية — المملكة العربية السعودية",
+                UnitPrice = 32.00m,
+                Supplier = "شركة زيوت الخليج للمحركات",
                 StorageLocation = "مستودع جدة - رف أ1",
-                Notes = "متوافق مع غاز التبريد R-134a و R-410A",
-                QrCode = "زيت تبريد SH-FRG-20L",
+                Notes = "مخصص للمركبات العاملة في مناخ السعودية",
+                QrCode = "سائل تبريد CLNT-LL-20L",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1917,7 +1920,7 @@ public static class DataSeeder
                 SparePartId = part1Id,
                 TaskOrderId = task1Id,
                 QuantityUsed = 3,
-                Notes = "تم تغيير الفلاتر في وحدات مناولة الهواء بالمبنى أ",
+                Notes = "تم تغيير فلتر الزيت ضمن خدمة 30 ألف كم",
                 UsedAt = DateTime.UtcNow.AddDays(-7),
                 UsedByUserId = adminUserId,
                 CreatedAt = DateTime.UtcNow
@@ -1931,9 +1934,9 @@ public static class DataSeeder
             {
                 Id = usage2Id,
                 SparePartId = part2Id,
-                TaskOrderId = task1Id,
-                QuantityUsed = 1,
-                Notes = "تم استبدال حزام المروحة في وحدة مناولة الهواء الرئيسية بالمبنى أ",
+                TaskOrderId = task2Id,
+                QuantityUsed = 2,
+                Notes = "تم استبدال أقمشة الفرامل الأمامية ضمن الإصلاح الطارئ",
                 UsedAt = DateTime.UtcNow.AddDays(-7),
                 UsedByUserId = adminUserId,
                 CreatedAt = DateTime.UtcNow
@@ -1947,9 +1950,9 @@ public static class DataSeeder
             {
                 Id = usage3Id,
                 SparePartId = part4Id,
-                TaskOrderId = task4Id,
+                TaskOrderId = task5Id,
                 QuantityUsed = 1,
-                Notes = "استبدال مجموعة الأختام في مضخة مياه التبريد بمجمع الدمام الصناعي",
+                Notes = "تم استبدال بطارية مركبة خدمة ضمن أسطول مكة",
                 UsedAt = DateTime.UtcNow.AddDays(-1),
                 UsedByUserId = adminUserId,
                 CreatedAt = DateTime.UtcNow
@@ -1970,15 +1973,15 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched1Id,
-                Name = "صيانة وقائية ربع سنوية - مجمع الرياض التجاري",
-                Description = "استبدال فلاتر التكييف وفحص توتر الحزام كل ربع سنة في مجمع الرياض التجاري",
+                Name = "برنامج تغيير الزيت الدوري - مركز الرياض",
+                Description = "تغيير زيت المحرك وفلتر الزيت وفحص 20 نقطة سلامة بشكل ربع سنوي للمركبات المتعاقدة",
                 MaintenanceType = MaintenanceType.Preventive,
                 Frequency = ScheduleFrequency.Quarterly,
                 FrequencyValue = 1,
                 LastExecutedAt = DateTime.UtcNow.AddDays(-7),
                 NextDueAt = DateTime.UtcNow.AddDays(83),
                 IsActive = true,
-                Notes = "استخدام فلاتر MERV-13 فقط",
+                Notes = "استخدام زيت 5W-30 المعتمد فقط",
                 CreatedByUserId = adminUserId,
                 EquipmentId = eq1Id,
                 AssignedTechnicianId = tech1Id,
@@ -1991,15 +1994,15 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched2Id,
-                Name = "صيانة سنوية شاملة - وحدة التبريد المركزي",
-                Description = "صيانة وقائية شاملة تشمل تغيير الزيت وفحص الختم وتحليل الاهتزاز لوحدة التبريد المركزية",
+                Name = "خطة صيانة 60 ألف كم - أسطول جدة",
+                Description = "برنامج صيانة شامل يشمل فحص المحرك وناقل الحركة والفرامل والإطارات لأسطول الشركة",
                 MaintenanceType = MaintenanceType.Preventive,
                 Frequency = ScheduleFrequency.Annual,
                 FrequencyValue = 1,
                 LastExecutedAt = DateTime.UtcNow.AddMonths(-11),
                 NextDueAt = DateTime.UtcNow.AddDays(30),
                 IsActive = true,
-                Notes = "التنسيق مع فريق خدمة ترين السعودية",
+                Notes = "التنفيذ على دفعات وفق جدول المركبات التشغيلي",
                 CreatedByUserId = adminUserId,
                 EquipmentId = eq2Id,
                 AssignedGroupId = group1Id,
@@ -2012,15 +2015,15 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched3Id,
-                Name = "فحص شهري لأنظمة التكييف - مجمع الرياض",
-                Description = "الفحص البصري لجميع مكونات التكييف والتحقق من الأداء في مجمع الرياض التجاري",
+                Name = "فحص موسمي للمركبات قبل الصيف",
+                Description = "فحص تكييف المركبات والبطارية وسائل التبريد والإطارات قبل موسم الصيف",
                 MaintenanceType = MaintenanceType.Inspection,
                 Frequency = ScheduleFrequency.Monthly,
                 FrequencyValue = 1,
                 LastExecutedAt = DateTime.UtcNow.AddDays(-35),
                 NextDueAt = DateTime.UtcNow.AddDays(-5),
                 IsActive = true,
-                Notes = "متأخر — يُجدول فوراً",
+                Notes = "متأخر — أولوية للأسطول العامل في المدن الحارة",
                 CreatedByUserId = adminUserId,
                 AssignedTechnicianId = tech1Id,
                 CreatedAt = DateTime.UtcNow
@@ -2032,15 +2035,15 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched4Id,
-                Name = "صيانة نصف سنوية - برج جدة التجاري",
-                Description = "الصيانة الوقائية نصف السنوية لنظام التبريد المركزي في برج جدة التجاري شاملة تنظيف المبخرات والمكثفات",
+                Name = "عقد صيانة أسطول نصف سنوي - مكة",
+                Description = "خدمة نصف سنوية لأسطول النقل الذكي تشمل صيانة ميكانيكية وكهربائية وتقارير جاهزية",
                 MaintenanceType = MaintenanceType.Preventive,
                 Frequency = ScheduleFrequency.SemiAnnual,
                 FrequencyValue = 1,
                 LastExecutedAt = DateTime.UtcNow.AddDays(-14),
                 NextDueAt = DateTime.UtcNow.AddMonths(6),
                 IsActive = true,
-                Notes = "الفريق المختص: فريق منطقة جدة",
+                Notes = "يشمل مركبات الخدمة الموسمية في مكة",
                 CreatedByUserId = adminUserId,
                 EquipmentId = eq3Id,
                 AssignedGroupId = group2Id,
@@ -2053,15 +2056,15 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched5Id,
-                Name = "فحص دوري - مضخة مياه التبريد بالدمام",
-                Description = "الفحص الدوري لمضخة مياه التبريد في مجمع الدمام الصناعي — قياس الضغط والتدفق ومراقبة الاهتزاز",
+                Name = "خطة فحص الطوارئ والمساعدة على الطريق - الدمام",
+                Description = "فحص دوري لمعدات الطوارئ والبطاريات والإطارات للمركبات الميدانية في المنطقة الشرقية",
                 MaintenanceType = MaintenanceType.Inspection,
                 Frequency = ScheduleFrequency.Quarterly,
                 FrequencyValue = 1,
                 LastExecutedAt = DateTime.UtcNow.AddDays(-1),
                 NextDueAt = DateTime.UtcNow.AddDays(89),
                 IsActive = true,
-                Notes = "اهتمام خاص بمستويات الاهتزاز والأختام",
+                Notes = "تركيز على جاهزية البطاريات وإطارات المركبات للخدمات العاجلة",
                 CreatedByUserId = adminUserId,
                 EquipmentId = eq4Id,
                 AssignedTechnicianId = tech4Id,
@@ -2081,14 +2084,14 @@ public static class DataSeeder
             context.PremiumServices.Add(new PremiumService
             {
                 Id = premService1Id,
-                Name = "استجابة طوارئ التكييف — 24/7",
-                Description = "استجابة طارئة على مدار الساعة لحالات أعطال أنظمة التكييف الحرجة في جميع مناطق المملكة",
+                Name = "مساعدة طريق طارئة للمركبات — 24/7",
+                Description = "استجابة طارئة على مدار الساعة لأعطال المركبات مثل توقف البطارية أو أعطال التشغيل في جميع مناطق المملكة",
                 ServiceType = PremiumServiceType.Emergency,
                 Price = 499.00m,
                 DurationHours = 4,
                 PriorityLevel = TaskPriority.Critical,
                 IsActive = true,
-                Features = "استجابة في نفس اليوم، إرسال فني متميز بالأولوية، قطع الغيار مشمولة، ضمان سنوي",
+                Features = "وصول سريع، فحص بطارية وتشغيل فوري، قطر عند الحاجة، تقارير حادثة إلكترونية",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -2098,14 +2101,14 @@ public static class DataSeeder
             context.PremiumServices.Add(new PremiumService
             {
                 Id = premService2Id,
-                Name = "صيانة شاملة سنوية — عقد صيانة كامل",
-                Description = "صيانة وإصلاح شامل سنوي لجميع أنظمة التكييف والمرافق مع تقارير دورية ومتابعة مستمرة",
+                Name = "عقد صيانة أسطول سنوي شامل",
+                Description = "صيانة وإصلاح شامل سنوي لمركبات الأسطول مع تقارير أداء دورية وخطة قطع غيار استباقية",
                 ServiceType = PremiumServiceType.FullOverhaul,
                 Price = 1200.00m,
                 DurationHours = 16,
                 PriorityLevel = TaskPriority.High,
                 IsActive = true,
-                Features = "فحص شامل، استبدال القطع البالية، تحسين الأداء، تقرير سنوي تفصيلي",
+                Features = "صيانة دورية حسب الكيلومترات، إدارة أعطال، تقارير شهرية، أسعار تفضيلية للقطع",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -2115,14 +2118,14 @@ public static class DataSeeder
             context.PremiumServices.Add(new PremiumService
             {
                 Id = premService3Id,
-                Name = "مراقبة أنظمة التكييف عن بُعد",
-                Description = "خدمة مراقبة استباقية لأنظمة التكييف عبر أجهزة الاستشعار الذكية مع تنبيهات فورية عند أي خلل",
+                Name = "فحص مركبات قبل الشراء",
+                Description = "خدمة فحص احترافية قبل شراء المركبة تشمل المحرك والهيكل والإلكترونيات وإصدار تقرير معتمد",
                 ServiceType = PremiumServiceType.Inspection,
                 Price = 350.00m,
                 DurationHours = 2,
                 PriorityLevel = TaskPriority.Medium,
                 IsActive = true,
-                Features = "مراقبة مستمرة 24/7، تنبيهات فورية، تقارير أسبوعية، تدخل سريع عند الحاجة",
+                Features = "فحص شامل 120 نقطة، قراءة كمبيوتر، تقييم حالة الهيكل، تقرير موثق",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -2146,7 +2149,7 @@ public static class DataSeeder
                 Status = PremiumMaintenanceStatus.Completed,
                 RequestDate = DateTime.UtcNow.AddDays(-20),
                 ScheduledDate = DateTime.UtcNow.AddDays(-18),
-                Notes = "إصلاح طارئ لعطل وحدة مناولة الهواء في المبنى أ بمجمع الرياض التجاري",
+                Notes = "تنفيذ مساعدة طريق لمركبة متوقفة بسبب عطل بطارية في الرياض",
                 Address = "طريق الملك فهد، حي العليا، الرياض 12211",
                 CreatedAt = DateTime.UtcNow.AddDays(-20)
             });
@@ -2164,7 +2167,7 @@ public static class DataSeeder
                 Status = PremiumMaintenanceStatus.PaymentPending,
                 RequestDate = DateTime.UtcNow.AddDays(-5),
                 ScheduledDate = DateTime.UtcNow.AddDays(25),
-                Notes = "صيانة شاملة سنوية لجميع أنظمة التكييف",
+                Notes = "طلب عقد صيانة سنوي شامل لأسطول النقل التجاري",
                 Address = "شارع التحلية، حي الروضة، جدة 23434",
                 CreatedAt = DateTime.UtcNow.AddDays(-5)
             });
@@ -2182,7 +2185,7 @@ public static class DataSeeder
                 Status = PremiumMaintenanceStatus.Paid,
                 RequestDate = DateTime.UtcNow.AddDays(-8),
                 ScheduledDate = DateTime.UtcNow.AddDays(5),
-                Notes = "تفعيل خدمة المراقبة عن بُعد لمنظومة ضخ المياه الباردة في مجمع الدمام الصناعي",
+                Notes = "خدمة فحص مركبة قبل الشراء لعميل شركة بالدمام",
                 Address = "شارع الأمير محمد بن فهد، حي الفيصلية، الدمام 32234",
                 CreatedAt = DateTime.UtcNow.AddDays(-8)
             });
@@ -2206,7 +2209,7 @@ public static class DataSeeder
                 PaymentMethod = PaymentMethod.CreditCard,
                 TransactionId = "TXN-SA-RUH-2024-001",
                 PaymentDate = DateTime.UtcNow.AddDays(-20),
-                Notes = "دفعة خدمة استجابة طوارئ التكييف — الرياض",
+                Notes = "دفعة خدمة المساعدة الطارئة على الطريق — الرياض",
                 CreatedAt = DateTime.UtcNow.AddDays(-20)
             });
         }
@@ -2223,7 +2226,7 @@ public static class DataSeeder
                 PaymentMethod = PaymentMethod.BankTransfer,
                 TransactionId = "TXN-SA-DAM-2024-002",
                 PaymentDate = DateTime.UtcNow.AddDays(-7),
-                Notes = "دفعة خدمة المراقبة عن بُعد — الدمام",
+                Notes = "دفعة خدمة فحص مركبة قبل الشراء — الدمام",
                 CreatedAt = DateTime.UtcNow.AddDays(-7)
             });
         }
@@ -2242,12 +2245,12 @@ public static class DataSeeder
             context.MaintenanceRequests.Add(new MaintenanceRequest
             {
                 Id = req1Id,
-                Title = "وحدة مناولة الهواء لا تبرد",
-                Description = "وحدة مناولة الهواء في المبنى أ بمجمع الرياض التجاري لا تنتج هواء بارد. ترتفع درجة الحرارة في مساحات المكاتب.",
-                EquipmentDescription = "وحدة مناولة هواء - المبنى أ، الدور الأول، مجمع الرياض التجاري",
+                Title = "المركبة لا تستجيب عند التشغيل",
+                Description = "مركبة العميل في الرياض لا تعمل صباحاً مع ضعف واضح في البطارية وتأخر تشغيل المحرك.",
+                EquipmentDescription = "سيارة سيدان - فحص بطارية ونظام تشغيل",
                 RequestDate = DateTime.UtcNow.AddDays(-10),
                 Status = MaintenanceRequestStatus.Completed,
-                Notes = "تم الحل خلال الفحص الربع سنوي — تم تعبئة غاز التبريد",
+                Notes = "تم الحل باستبدال البطارية وتنظيف أقطاب التوصيل",
                 ClientId = client1Id,
                 TaskOrderId = task1Id,
                 InvoiceId = inv1Id,
@@ -2261,12 +2264,12 @@ public static class DataSeeder
             context.MaintenanceRequests.Add(new MaintenanceRequest
             {
                 Id = req2Id,
-                Title = "وحدة التبريد تصدر ضوضاء غير اعتيادية",
-                Description = "وحدة التبريد المركزية في المبنى ب بمجمع الرياض التجاري تصدر صوت طحن ومستويات اهتزاز مرتفعة.",
-                EquipmentDescription = "وحدة تبريد مركزية ترين RTAC، سطح المبنى ب، مجمع الرياض التجاري",
+                Title = "صوت احتكاك عند الفرملة",
+                Description = "تم الإبلاغ عن صوت احتكاك قوي عند الضغط على الفرامل الأمامية مع انخفاض كفاءة التوقف.",
+                EquipmentDescription = "مركبة أسطول - نظام فرامل أمامي",
                 RequestDate = DateTime.UtcNow.AddDays(-3),
                 Status = MaintenanceRequestStatus.InProgress,
-                Notes = "تم جدولة استبدال ختم المضخة",
+                Notes = "تم جدولة استبدال أقمشة وهوبات الفرامل",
                 ClientId = client2Id,
                 TaskOrderId = task2Id,
                 CreatedAt = DateTime.UtcNow.AddDays(-3)
@@ -2279,12 +2282,12 @@ public static class DataSeeder
             context.MaintenanceRequests.Add(new MaintenanceRequest
             {
                 Id = req3Id,
-                Title = "انخفاض في ضغط مياه التبريد",
-                Description = "رصد انخفاض ملحوظ في ضغط مياه التبريد في مجمع الدمام الصناعي. مستوى الضغط 2.1 بار بدلاً من 3.2 بار المعتاد.",
-                EquipmentDescription = "مضخة مياه التبريد - غرفة المعدات، مجمع الدمام الصناعي",
+                Title = "انحراف في مسار المركبة على السرعات العالية",
+                Description = "لوحظ انحراف المركبة إلى اليمين مع تآكل غير متساوٍ في الإطارات الأمامية أثناء القيادة.",
+                EquipmentDescription = "مركبة خدمة - فحص زوايا وترصيص",
                 RequestDate = DateTime.UtcNow.AddDays(-2),
                 Status = MaintenanceRequestStatus.InProgress,
-                Notes = "تم إرسال الفني سالم المطيري للفحص الفوري",
+                Notes = "تم إرسال الفني سالم المطيري لضبط الزوايا فوراً",
                 ClientId = client3Id,
                 TaskOrderId = task4Id,
                 InvoiceId = inv3Id,
@@ -2298,9 +2301,9 @@ public static class DataSeeder
             context.MaintenanceRequests.Add(new MaintenanceRequest
             {
                 Id = req4Id,
-                Title = "طلب صيانة أنظمة التكييف قبل موسم الحج",
-                Description = "الفندق يحتاج لصيانة شاملة لجميع وحدات التكييف استعداداً لموسم الحج. المطلوب التأكد من الكفاءة القصوى لجميع الأنظمة.",
-                EquipmentDescription = "وحدات تكييف فنادق مكة الدولية — جميع الطوابق",
+                Title = "طلب صيانة أسطول مركبات قبل موسم الحج",
+                Description = "شركة النقل تحتاج صيانة شاملة لمركبات الأسطول قبل موسم الحج لضمان الجاهزية التشغيلية الكاملة.",
+                EquipmentDescription = "أسطول مركبات شركة مكة للتنقل الذكي — جميع الفئات",
                 RequestDate = DateTime.UtcNow.AddDays(-1),
                 Status = MaintenanceRequestStatus.Pending,
                 Notes = "أولوية قصوى — موسم الحج خلال شهر",
@@ -2407,7 +2410,7 @@ public static class DataSeeder
                 Action = "تم الإنشاء",
                 PerformedByUserId = adminUserId,
                 PerformedByName = "عبدالله الغامدي",
-                Details = "تم إنشاء أمر عمل جديد لفحص التكييف الربع سنوي — مجمع الرياض التجاري",
+                Details = "تم إنشاء أمر عمل جديد لخدمة 30 ألف كم — مركز الرياض",
                 CreatedAt = DateTime.UtcNow.AddDays(-7)
             });
         }
@@ -2422,7 +2425,7 @@ public static class DataSeeder
                 Action = "تم التحديث",
                 PerformedByUserId = adminUserId,
                 PerformedByName = "عبدالله الغامدي",
-                Details = "تم تحديث حالة معدات وحدة مناولة الهواء بعد الصيانة",
+                Details = "تم تحديث حالة جهاز التشخيص الإلكتروني بعد الصيانة",
                 CreatedAt = DateTime.UtcNow.AddDays(-5)
             });
         }
@@ -2437,7 +2440,7 @@ public static class DataSeeder
                 Action = "تم التعيين",
                 PerformedByUserId = adminUserId,
                 PerformedByName = "عبدالله الغامدي",
-                Details = "تم تعيين الفني سالم المطيري لمعالجة انخفاض ضغط المياه في مجمع الدمام الصناعي",
+                Details = "تم تعيين الفني سالم المطيري لمعالجة انحراف الزوايا بمركز الدمام",
                 CreatedAt = DateTime.UtcNow.AddDays(-2)
             });
         }
@@ -2452,7 +2455,7 @@ public static class DataSeeder
                 Action = "تم الإرسال",
                 PerformedByUserId = adminUserId,
                 PerformedByName = "عبدالله الغامدي",
-                Details = "تم إرسال الفاتورة INV-2024-SA-003 إلى شركة أرامكو للخدمات التقنية",
+                Details = "تم إرسال الفاتورة INV-2024-SA-003 إلى شركة أرامكو للخدمات اللوجستية",
                 CreatedAt = DateTime.UtcNow.AddDays(-10)
             });
         }
