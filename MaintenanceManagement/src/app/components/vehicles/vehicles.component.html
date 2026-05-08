@@ -1,17 +1,17 @@
 <div class="container-fluid py-3">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0 fw-bold"><i class="bi bi-car-front text-primary me-2"></i>Vehicles</h4>
+    <h4 class="mb-0 fw-bold"><i class="bi bi-car-front text-primary me-2"></i>{{ 'vehicles.title' | translate }}</h4>
     <div class="d-flex gap-2">
-      <button class="btn btn-outline-success btn-sm" (click)="exportToCsv()" title="Export CSV">
-        <i class="bi bi-download me-1"></i>Export CSV
+      <button class="btn btn-outline-success btn-sm" (click)="exportToCsv()" [attr.title]="'vehicles.exportCsv' | translate">
+        <i class="bi bi-download me-1"></i>{{ 'vehicles.exportCsv' | translate }}
       </button>
       @if (auth.canManageData()) {
       <button class="btn btn-primary btn-sm" (click)="openAdd()">
-        <i class="bi bi-plus-circle me-1"></i>Add Vehicle
+        <i class="bi bi-plus-circle me-1"></i>{{ 'vehicles.addButton' | translate }}
       </button>
       }
       <a routerLink="/dashboard" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+        <i class="bi bi-arrow-left me-1"></i>{{ 'vehicles.backToDashboard' | translate }}
       </a>
     </div>
   </div>
@@ -25,27 +25,27 @@
             @if (v.vehiclePhotoUrl || v.photo2Url || v.photo3Url || v.photo4Url) {
               <div class="photo-grid">
                 @if (v.vehiclePhotoUrl) {
-                  <a [href]="v.vehiclePhotoUrl" target="_blank" class="photo-cell" title="Vehicle Photo">
-                    <img [src]="v.vehiclePhotoUrl" alt="Vehicle" />
-                    <span class="photo-label">Vehicle</span>
+                  <a [href]="v.vehiclePhotoUrl" target="_blank" class="photo-cell" [attr.title]="'vehicles.form.mainPhoto' | translate">
+                    <img [src]="v.vehiclePhotoUrl" [attr.alt]="'vehicles.card.vehicle' | translate" />
+                    <span class="photo-label">{{ 'vehicles.card.vehicle' | translate }}</span>
                   </a>
                 }
                 @if (v.photo2Url) {
-                  <a [href]="v.photo2Url" target="_blank" class="photo-cell" title="Photo 2">
-                    <img [src]="v.photo2Url" alt="Photo 2" />
-                    <span class="photo-label">Photo 2</span>
+                  <a [href]="v.photo2Url" target="_blank" class="photo-cell" [attr.title]="'vehicles.form.photo2' | translate">
+                    <img [src]="v.photo2Url" [attr.alt]="'vehicles.form.photo2' | translate" />
+                    <span class="photo-label">{{ 'vehicles.form.photo2' | translate }}</span>
                   </a>
                 }
                 @if (v.photo3Url) {
-                  <a [href]="v.photo3Url" target="_blank" class="photo-cell" title="Photo 3">
-                    <img [src]="v.photo3Url" alt="Photo 3" />
-                    <span class="photo-label">Photo 3</span>
+                  <a [href]="v.photo3Url" target="_blank" class="photo-cell" [attr.title]="'vehicles.form.photo3' | translate">
+                    <img [src]="v.photo3Url" [attr.alt]="'vehicles.form.photo3' | translate" />
+                    <span class="photo-label">{{ 'vehicles.form.photo3' | translate }}</span>
                   </a>
                 }
                 @if (v.photo4Url) {
-                  <a [href]="v.photo4Url" target="_blank" class="photo-cell" title="Photo 4">
-                    <img [src]="v.photo4Url" alt="Photo 4" />
-                    <span class="photo-label">Photo 4</span>
+                  <a [href]="v.photo4Url" target="_blank" class="photo-cell" [attr.title]="'vehicles.form.photo4' | translate">
+                    <img [src]="v.photo4Url" [attr.alt]="'vehicles.form.photo4' | translate" />
+                    <span class="photo-label">{{ 'vehicles.form.photo4' | translate }}</span>
                   </a>
                 }
               </div>
@@ -89,7 +89,7 @@
               @if (v.mileage != null) {
                 <li>
                   <i class="bi bi-speedometer2 text-info"></i>
-                  <span>{{ v.mileage | number }} mi</span>
+                  <span>{{ v.mileage | number }}</span>
                 </li>
               }
               @if (v.fuelType != null) {
@@ -101,7 +101,7 @@
               @if (v.nextServiceDate) {
                 <li>
                   <i class="bi bi-calendar-check text-danger"></i>
-                  <span class="text-danger fw-semibold">Next Service: {{ v.nextServiceDate | date:'mediumDate' }}</span>
+                  <span class="text-danger fw-semibold">{{ 'vehicles.card.nextService' | translate }}: {{ v.nextServiceDate | date:'mediumDate' }}</span>
                 </li>
               }
             </ul>
@@ -116,13 +116,13 @@
 
           <div class="card-footer bg-transparent border-top d-flex justify-content-end gap-2 py-2 px-3">
             @if (auth.canManageData()) {
-            <button class="btn btn-sm btn-outline-primary" (click)="openEdit(v)" title="Edit">
-              <i class="bi bi-pencil-square me-1"></i>Edit
+            <button class="btn btn-sm btn-outline-primary" (click)="openEdit(v)" [attr.title]="'buttons.edit' | translate">
+              <i class="bi bi-pencil-square me-1"></i>{{ 'buttons.edit' | translate }}
             </button>
             }
             @if (auth.canManageTasks()) {
-            <button class="btn btn-sm btn-outline-danger" (click)="delete(v.id)" title="Delete">
-              <i class="bi bi-trash3 me-1"></i>Delete
+            <button class="btn btn-sm btn-outline-danger" (click)="delete(v.id)" [attr.title]="'buttons.delete' | translate">
+              <i class="bi bi-trash3 me-1"></i>{{ 'buttons.delete' | translate }}
             </button>
             }
           </div>
@@ -135,7 +135,7 @@
         <div class="card shadow-sm border-0">
           <div class="card-body text-center py-5 text-muted">
             <i class="bi bi-car-front fs-1 d-block mb-3 text-secondary opacity-50"></i>
-            <p class="fw-medium mb-0">No vehicles found. Add your first vehicle to get started.</p>
+            <p class="fw-medium mb-0">{{ 'vehicles.empty' | translate }}</p>
           </div>
         </div>
       </div>
@@ -152,7 +152,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">
-            <i class="bi bi-car-front me-2"></i>{{ isEditing() ? 'Edit Vehicle' : 'Add Vehicle' }}
+            <i class="bi bi-car-front me-2"></i>{{ isEditing() ? ('vehicles.form.editTitle' | translate) : ('vehicles.form.addTitle' | translate) }}
           </h5>
           <button type="button" class="btn-close-custom" (click)="closeModal()"><i class="bi bi-x-lg"></i></button>
         </div>
@@ -161,175 +161,175 @@
 
             <!-- Vehicle Identity -->
             <div class="col-12">
-              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-car-front me-1"></i>Vehicle Identity</p>
+              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-car-front me-1"></i>{{ 'vehicles.form.vehicleIdentity' | translate }}</p>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold"><i class="bi bi-upc-scan me-1 text-secondary"></i>VIN</label>
-              <input class="form-control" [(ngModel)]="form.vin" placeholder="e.g. 1HGBH41JXMN109186" maxlength="17" />
+              <label class="form-label fw-semibold"><i class="bi bi-upc-scan me-1 text-secondary"></i>{{ 'vehicles.form.vin' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.vin" [attr.placeholder]="'vehicles.form.vinPlaceholder' | translate" maxlength="17" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold"><i class="bi bi-card-text me-1 text-secondary"></i>License Plate *</label>
-              <input class="form-control" [(ngModel)]="form.licensePlate" placeholder="e.g. ABC-1234" />
+              <label class="form-label fw-semibold"><i class="bi bi-card-text me-1 text-secondary"></i>{{ 'vehicles.form.licensePlate' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.licensePlate" [attr.placeholder]="'vehicles.form.licensePlatePlaceholder' | translate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-building me-1 text-secondary"></i>Make *</label>
-              <input class="form-control" [(ngModel)]="form.make" placeholder="e.g. Toyota" />
+              <label class="form-label fw-semibold"><i class="bi bi-building me-1 text-secondary"></i>{{ 'vehicles.form.make' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.make" [attr.placeholder]="'vehicles.form.makePlaceholder' | translate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-box me-1 text-secondary"></i>Model *</label>
-              <input class="form-control" [(ngModel)]="form.model" placeholder="e.g. Camry" />
+              <label class="form-label fw-semibold"><i class="bi bi-box me-1 text-secondary"></i>{{ 'vehicles.form.model' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.model" [attr.placeholder]="'vehicles.form.modelPlaceholder' | translate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-calendar me-1 text-secondary"></i>Year *</label>
-              <input type="number" class="form-control" [(ngModel)]="form.year" placeholder="e.g. 2023" min="1900" [max]="currentYear + 2" />
+              <label class="form-label fw-semibold"><i class="bi bi-calendar me-1 text-secondary"></i>{{ 'vehicles.form.year' | translate }}</label>
+              <input type="number" class="form-control" [(ngModel)]="form.year" [attr.placeholder]="'vehicles.form.yearPlaceholder' | translate" min="1900" [max]="currentYear + 2" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold"><i class="bi bi-palette me-1 text-secondary"></i>Color</label>
-              <input class="form-control" [(ngModel)]="form.color" placeholder="e.g. Silver" />
+              <label class="form-label fw-semibold"><i class="bi bi-palette me-1 text-secondary"></i>{{ 'vehicles.form.color' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.color" [attr.placeholder]="'vehicles.form.colorPlaceholder' | translate" />
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold"><i class="bi bi-activity me-1 text-secondary"></i>Status</label>
+              <label class="form-label fw-semibold"><i class="bi bi-activity me-1 text-secondary"></i>{{ 'vehicles.form.status' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.status">
-                <option [value]="VehicleStatus.Active">Active</option>
-                <option [value]="VehicleStatus.InService">In Service</option>
-                <option [value]="VehicleStatus.Inactive">Inactive</option>
-                <option [value]="VehicleStatus.Retired">Retired</option>
+                <option [value]="VehicleStatus.Active">{{ 'vehicles.status.active' | translate }}</option>
+                <option [value]="VehicleStatus.InService">{{ 'vehicles.status.inService' | translate }}</option>
+                <option [value]="VehicleStatus.Inactive">{{ 'vehicles.status.inactive' | translate }}</option>
+                <option [value]="VehicleStatus.Retired">{{ 'vehicles.status.retired' | translate }}</option>
               </select>
             </div>
 
             <!-- Mechanical Details -->
             <div class="col-12 mt-2">
-              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-gear me-1"></i>Mechanical Details</p>
+              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-gear me-1"></i>{{ 'vehicles.form.mechanicalDetails' | translate }}</p>
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-fuel-pump me-1 text-warning"></i>Fuel Type</label>
+              <label class="form-label fw-semibold"><i class="bi bi-fuel-pump me-1 text-warning"></i>{{ 'vehicles.form.fuelType' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.fuelType">
-                <option [value]="FuelType.Gasoline">Gasoline</option>
-                <option [value]="FuelType.Diesel">Diesel</option>
-                <option [value]="FuelType.Electric">Electric</option>
-                <option [value]="FuelType.Hybrid">Hybrid</option>
-                <option [value]="FuelType.PlugInHybrid">Plug-In Hybrid</option>
+                <option [value]="FuelType.Gasoline">{{ 'vehicles.fuelType.gasoline' | translate }}</option>
+                <option [value]="FuelType.Diesel">{{ 'vehicles.fuelType.diesel' | translate }}</option>
+                <option [value]="FuelType.Electric">{{ 'vehicles.fuelType.electric' | translate }}</option>
+                <option [value]="FuelType.Hybrid">{{ 'vehicles.fuelType.hybrid' | translate }}</option>
+                <option [value]="FuelType.PlugInHybrid">{{ 'vehicles.fuelType.plugInHybrid' | translate }}</option>
               </select>
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-gear-wide me-1 text-secondary"></i>Transmission</label>
+              <label class="form-label fw-semibold"><i class="bi bi-gear-wide me-1 text-secondary"></i>{{ 'vehicles.form.transmission' | translate }}</label>
               <select class="form-select" [(ngModel)]="form.transmissionType">
-                <option [value]="null">Not specified</option>
-                <option [value]="TransmissionType.Automatic">Automatic</option>
-                <option [value]="TransmissionType.Manual">Manual</option>
-                <option [value]="TransmissionType.CVT">CVT</option>
-                <option [value]="TransmissionType.SemiAutomatic">Semi-Automatic</option>
+                <option [value]="null">{{ 'vehicles.form.notSpecified' | translate }}</option>
+                <option [value]="TransmissionType.Automatic">{{ 'vehicles.transmissionType.automatic' | translate }}</option>
+                <option [value]="TransmissionType.Manual">{{ 'vehicles.transmissionType.manual' | translate }}</option>
+                <option [value]="TransmissionType.CVT">{{ 'vehicles.transmissionType.cvt' | translate }}</option>
+                <option [value]="TransmissionType.SemiAutomatic">{{ 'vehicles.transmissionType.semiAutomatic' | translate }}</option>
               </select>
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-wrench me-1 text-secondary"></i>Engine Type</label>
-              <input class="form-control" [(ngModel)]="form.engineType" placeholder="e.g. V6, I4, Electric" />
+              <label class="form-label fw-semibold"><i class="bi bi-wrench me-1 text-secondary"></i>{{ 'vehicles.form.engineType' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.engineType" [attr.placeholder]="'vehicles.form.engineTypePlaceholder' | translate" />
             </div>
 
             <!-- Mileage & Service -->
             <div class="col-12 mt-2">
-              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-speedometer2 me-1"></i>Mileage & Service</p>
+              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-speedometer2 me-1"></i>{{ 'vehicles.form.mileageService' | translate }}</p>
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-speedometer2 me-1 text-info"></i>Current Mileage</label>
-              <input type="number" class="form-control" [(ngModel)]="form.mileage" placeholder="e.g. 45000" min="0" />
+              <label class="form-label fw-semibold"><i class="bi bi-speedometer2 me-1 text-info"></i>{{ 'vehicles.form.currentMileage' | translate }}</label>
+              <input type="number" class="form-control" [(ngModel)]="form.mileage" [attr.placeholder]="'vehicles.form.currentMileagePlaceholder' | translate" min="0" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-speedometer me-1 text-secondary"></i>Last Service Mileage</label>
-              <input type="number" class="form-control" [(ngModel)]="form.lastServiceMileage" placeholder="e.g. 40000" min="0" />
+              <label class="form-label fw-semibold"><i class="bi bi-speedometer me-1 text-secondary"></i>{{ 'vehicles.form.lastServiceMileage' | translate }}</label>
+              <input type="number" class="form-control" [(ngModel)]="form.lastServiceMileage" [attr.placeholder]="'vehicles.form.lastServiceMileagePlaceholder' | translate" min="0" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-speedometer me-1 text-danger"></i>Next Service Mileage</label>
-              <input type="number" class="form-control" [(ngModel)]="form.nextServiceMileage" placeholder="e.g. 50000" min="0" />
+              <label class="form-label fw-semibold"><i class="bi bi-speedometer me-1 text-danger"></i>{{ 'vehicles.form.nextServiceMileage' | translate }}</label>
+              <input type="number" class="form-control" [(ngModel)]="form.nextServiceMileage" [attr.placeholder]="'vehicles.form.nextServiceMileagePlaceholder' | translate" min="0" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-calendar-plus me-1 text-secondary"></i>Purchase Date</label>
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-plus me-1 text-secondary"></i>{{ 'vehicles.form.purchaseDate' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.purchaseDate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-calendar-check me-1 text-secondary"></i>Last Service Date</label>
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-check me-1 text-secondary"></i>{{ 'vehicles.form.lastServiceDate' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.lastServiceDate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-calendar-event me-1 text-danger"></i>Next Service Date</label>
+              <label class="form-label fw-semibold"><i class="bi bi-calendar-event me-1 text-danger"></i>{{ 'vehicles.form.nextServiceDate' | translate }}</label>
               <input type="date" class="form-control" [(ngModel)]="form.nextServiceDate" />
             </div>
 
             <!-- Owner Information -->
             <div class="col-12 mt-2">
-              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-person me-1"></i>Owner Information</p>
+              <p class="fw-semibold mb-2 text-primary"><i class="bi bi-person me-1"></i>{{ 'vehicles.form.ownerInformation' | translate }}</p>
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-person me-1 text-secondary"></i>Owner Name *</label>
-              <input class="form-control" [(ngModel)]="form.ownerName" placeholder="Full name" />
+              <label class="form-label fw-semibold"><i class="bi bi-person me-1 text-secondary"></i>{{ 'vehicles.form.ownerName' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.ownerName" [attr.placeholder]="'vehicles.form.ownerNamePlaceholder' | translate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-telephone me-1 text-secondary"></i>Owner Phone</label>
-              <input class="form-control" [(ngModel)]="form.ownerPhone" placeholder="Phone number" />
+              <label class="form-label fw-semibold"><i class="bi bi-telephone me-1 text-secondary"></i>{{ 'vehicles.form.ownerPhone' | translate }}</label>
+              <input class="form-control" [(ngModel)]="form.ownerPhone" [attr.placeholder]="'vehicles.form.ownerPhonePlaceholder' | translate" />
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold"><i class="bi bi-envelope me-1 text-secondary"></i>Owner Email</label>
-              <input type="email" class="form-control" [(ngModel)]="form.ownerEmail" placeholder="Email address" />
+              <label class="form-label fw-semibold"><i class="bi bi-envelope me-1 text-secondary"></i>{{ 'vehicles.form.ownerEmail' | translate }}</label>
+              <input type="email" class="form-control" [(ngModel)]="form.ownerEmail" [attr.placeholder]="'vehicles.form.ownerEmailPlaceholder' | translate" />
             </div>
 
             <div class="col-12">
-              <label class="form-label fw-semibold"><i class="bi bi-sticky me-1 text-secondary"></i>Notes</label>
-              <textarea class="form-control" rows="2" [(ngModel)]="form.notes" placeholder="Additional notes..."></textarea>
+              <label class="form-label fw-semibold"><i class="bi bi-sticky me-1 text-secondary"></i>{{ 'vehicles.form.notes' | translate }}</label>
+              <textarea class="form-control" rows="2" [(ngModel)]="form.notes" [attr.placeholder]="'vehicles.form.notesPlaceholder' | translate"></textarea>
             </div>
 
             <!-- Photos Section -->
             <div class="col-12">
               <div class="border-top pt-3 mt-1">
-                <p class="fw-semibold mb-2 text-primary"><i class="bi bi-images me-1"></i>Vehicle Photos</p>
+                <p class="fw-semibold mb-2 text-primary"><i class="bi bi-images me-1"></i>{{ 'vehicles.form.vehiclePhotos' | translate }}</p>
                 <div class="row g-3">
                   <div class="col-md-6">
-                    <label class="form-label fw-semibold"><i class="bi bi-camera me-1 text-primary"></i>Main Photo</label>
+                    <label class="form-label fw-semibold"><i class="bi bi-camera me-1 text-primary"></i>{{ 'vehicles.form.mainPhoto' | translate }}</label>
                     <input type="file" class="form-control" accept="image/*" (change)="uploadPhoto1($event)" />
                     @if (isUploadingPhoto1()) {
-                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'vehicles.form.uploading' | translate }}</div>
                     }
                     @if (form.vehiclePhotoUrl) {
                       <div class="mt-2 position-relative photo-preview-wrap">
-                        <img [src]="form.vehiclePhotoUrl" alt="Photo 1 preview" class="photo-preview" />
+                        <img [src]="form.vehiclePhotoUrl" [attr.alt]="'vehicles.form.mainPhoto' | translate" class="photo-preview" />
                         <span class="badge bg-primary photo-badge">1</span>
                       </div>
                     }
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label fw-semibold"><i class="bi bi-camera-fill me-1 text-success"></i>Photo 2</label>
+                    <label class="form-label fw-semibold"><i class="bi bi-camera-fill me-1 text-success"></i>{{ 'vehicles.form.photo2' | translate }}</label>
                     <input type="file" class="form-control" accept="image/*" (change)="uploadPhoto2($event)" />
                     @if (isUploadingPhoto2()) {
-                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'vehicles.form.uploading' | translate }}</div>
                     }
                     @if (form.photo2Url) {
                       <div class="mt-2 position-relative photo-preview-wrap">
-                        <img [src]="form.photo2Url" alt="Photo 2 preview" class="photo-preview" />
+                        <img [src]="form.photo2Url" [attr.alt]="'vehicles.form.photo2' | translate" class="photo-preview" />
                         <span class="badge bg-success photo-badge">2</span>
                       </div>
                     }
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label fw-semibold"><i class="bi bi-image me-1 text-warning"></i>Photo 3</label>
+                    <label class="form-label fw-semibold"><i class="bi bi-image me-1 text-warning"></i>{{ 'vehicles.form.photo3' | translate }}</label>
                     <input type="file" class="form-control" accept="image/*" (change)="uploadPhoto3($event)" />
                     @if (isUploadingPhoto3()) {
-                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'vehicles.form.uploading' | translate }}</div>
                     }
                     @if (form.photo3Url) {
                       <div class="mt-2 position-relative photo-preview-wrap">
-                        <img [src]="form.photo3Url" alt="Photo 3 preview" class="photo-preview" />
+                        <img [src]="form.photo3Url" [attr.alt]="'vehicles.form.photo3' | translate" class="photo-preview" />
                         <span class="badge bg-warning text-dark photo-badge">3</span>
                       </div>
                     }
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label fw-semibold"><i class="bi bi-image-fill me-1 text-info"></i>Photo 4</label>
+                    <label class="form-label fw-semibold"><i class="bi bi-image-fill me-1 text-info"></i>{{ 'vehicles.form.photo4' | translate }}</label>
                     <input type="file" class="form-control" accept="image/*" (change)="uploadPhoto4($event)" />
                     @if (isUploadingPhoto4()) {
-                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Uploading...</div>
+                      <div class="mt-1 text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>{{ 'vehicles.form.uploading' | translate }}</div>
                     }
                     @if (form.photo4Url) {
                       <div class="mt-2 position-relative photo-preview-wrap">
-                        <img [src]="form.photo4Url" alt="Photo 4 preview" class="photo-preview" />
+                        <img [src]="form.photo4Url" [attr.alt]="'vehicles.form.photo4' | translate" class="photo-preview" />
                         <span class="badge bg-info text-dark photo-badge">4</span>
                       </div>
                     }
@@ -340,11 +340,11 @@
           </div>
         </div>
         <div class="modal-footer gap-2">
-          <button type="button" class="btn btn-secondary px-4" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-secondary px-4" (click)="closeModal()">{{ 'vehicles.form.cancel' | translate }}</button>
           <button type="button" class="btn btn-primary px-4" (click)="save()"
             [disabled]="isSaving() || !form.make || !form.model || !form.ownerName || isUploadingPhoto1() || isUploadingPhoto2() || isUploadingPhoto3() || isUploadingPhoto4()">
-            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
-            {{ isEditing() ? 'Update Vehicle' : 'Create Vehicle' }}
+            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span>{{ 'vehicles.form.saving' | translate }} }
+            @else { {{ isEditing() ? ('vehicles.form.update' | translate) : ('vehicles.form.create' | translate) }} }
           </button>
         </div>
       </div>
