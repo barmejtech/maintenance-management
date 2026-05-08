@@ -298,7 +298,8 @@
     },
     "card": {
       "vehicle": "المركبة",
-      "nextService": "الصيانة القادمة"
+      "nextService": "الصيانة القادمة",
+      "mileageUnit": "ميل"
     }
   },
   "tasks": {

@@ -298,7 +298,8 @@
     },
     "card": {
       "vehicle": "Vehicle",
-      "nextService": "Next Service"
+      "nextService": "Next Service",
+      "mileageUnit": "mi"
     }
   },
   "tasks": {

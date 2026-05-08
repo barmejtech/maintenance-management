@@ -89,7 +89,7 @@
               @if (v.mileage != null) {
                 <li>
                   <i class="bi bi-speedometer2 text-info"></i>
-                  <span>{{ v.mileage | number }}</span>
+                  <span>{{ v.mileage | number }} {{ 'vehicles.card.mileageUnit' | translate }}</span>
                 </li>
               }
               @if (v.fuelType != null) {
