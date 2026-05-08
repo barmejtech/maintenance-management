@@ -9,13 +9,14 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { AuthService } from '../../services/auth.service';
 import { TranslationService } from '../../services/translate.service';
 import { CsvExportService } from '../../services/csv-export.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { Vehicle, VehicleStatus, FuelType, TransmissionType } from '../../models';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-vehicles',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, NgxPaginationModule, QRCodeComponent],
+  imports: [CommonModule, FormsModule, RouterLink, TranslatePipe, NgxPaginationModule, QRCodeComponent],
   templateUrl: './vehicles.component.html',
   styleUrls: ['./vehicles.component.css']
 })
@@ -210,12 +211,12 @@ export class VehiclesComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm(this.translation.translate('vehicle.deleteConfirm'))) return;
+    if (!confirm(this.translation.translate('vehicles.deleteConfirm'))) return;
     this.service.delete(id).subscribe({ next: () => { this.load(); this.toast.success('messages.deleted'); }, error: () => this.toast.error() });
   }
 
   getStatusLabel(s: VehicleStatus): string {
-    const keys = ['vehicle.status.active', 'vehicle.status.inService', 'vehicle.status.inactive', 'vehicle.status.retired'];
+    const keys = ['vehicles.status.active', 'vehicles.status.inService', 'vehicles.status.inactive', 'vehicles.status.retired'];
     return this.translation.translate(keys[s] ?? keys[0]);
   }
 
@@ -224,18 +225,15 @@ export class VehiclesComponent implements OnInit {
   }
 
   getFuelLabel(f: FuelType): string {
-    const labels: Record<number, string> = {
-      0: 'Gasoline', 1: 'Diesel', 2: 'Electric', 3: 'Hybrid', 4: 'Plug-In Hybrid'
-    };
-    return labels[f] ?? 'Unknown';
+    const keys = ['vehicles.fuelType.gasoline', 'vehicles.fuelType.diesel', 'vehicles.fuelType.electric', 'vehicles.fuelType.hybrid', 'vehicles.fuelType.plugInHybrid'];
+    return this.translation.translate(keys[f] ?? keys[0]);
   }
 
   getTransmissionLabel(t: TransmissionType | null | undefined): string {
     if (t === null || t === undefined) return '';
-    const labels: Record<number, string> = {
-      0: 'Automatic', 1: 'Manual', 2: 'CVT', 3: 'Semi-Auto'
-    };
-    return labels[t] ?? '';
+    const keys = ['vehicles.transmissionType.automatic', 'vehicles.transmissionType.manual', 'vehicles.transmissionType.cvt', 'vehicles.transmissionType.semiAutomatic'];
+    const key = keys[t];
+    return key ? this.translation.translate(key) : '';
   }
 
   exportToCsv(): void {
