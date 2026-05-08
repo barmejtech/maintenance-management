@@ -616,6 +616,160 @@ public static class DataSeeder
         }
         await context.SaveChangesAsync();
 
+        // ── Vehicles ─────────────────────────────────────────────────────────────
+        var veh1Id = new Guid("AA000001-0000-0000-0000-000000000001");
+        var veh2Id = new Guid("AA000002-0000-0000-0000-000000000002");
+        var veh3Id = new Guid("AA000003-0000-0000-0000-000000000003");
+        var veh4Id = new Guid("AA000004-0000-0000-0000-000000000004");
+        var veh5Id = new Guid("AA000005-0000-0000-0000-000000000005");
+
+        if (!await context.Vehicles.AnyAsync(v => v.Id == veh1Id))
+        {
+            context.Vehicles.Add(new Vehicle
+            {
+                Id = veh1Id,
+                VIN = "1HGBH41JXMN109186",
+                Make = "Toyota",
+                Model = "Camry",
+                Year = 2022,
+                LicensePlate = "ABC-1234",
+                Color = "أبيض",
+                Mileage = 32000,
+                EngineType = "2.5L 4-Cylinder",
+                TransmissionType = TransmissionType.Automatic,
+                FuelType = FuelType.Gasoline,
+                OwnerName = "أحمد الشمري",
+                OwnerPhone = "+966 50 111 2222",
+                OwnerEmail = "ahmed.shamri@email.sa",
+                PurchaseDate = new DateTime(2022, 3, 15),
+                LastServiceDate = new DateTime(2024, 9, 10),
+                NextServiceDate = new DateTime(2025, 3, 10),
+                LastServiceMileage = 28000,
+                NextServiceMileage = 38000,
+                Status = VehicleStatus.Active,
+                Notes = "سيارة سيدان للاستخدام العائلي، صيانة منتظمة",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.Vehicles.AnyAsync(v => v.Id == veh2Id))
+        {
+            context.Vehicles.Add(new Vehicle
+            {
+                Id = veh2Id,
+                VIN = "2T1BURHE0JC056984",
+                Make = "Toyota",
+                Model = "Corolla",
+                Year = 2021,
+                LicensePlate = "DEF-5678",
+                Color = "فضي",
+                Mileage = 51000,
+                EngineType = "1.8L 4-Cylinder",
+                TransmissionType = TransmissionType.Automatic,
+                FuelType = FuelType.Gasoline,
+                OwnerName = "سارة القحطاني",
+                OwnerPhone = "+966 55 333 4444",
+                OwnerEmail = "sara.q@email.sa",
+                PurchaseDate = new DateTime(2021, 7, 20),
+                LastServiceDate = new DateTime(2024, 11, 5),
+                NextServiceDate = new DateTime(2025, 5, 5),
+                LastServiceMileage = 46000,
+                NextServiceMileage = 56000,
+                Status = VehicleStatus.Active,
+                Notes = "استخدام يومي للتنقل، يحتاج فحص الإطارات في الخدمة القادمة",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.Vehicles.AnyAsync(v => v.Id == veh3Id))
+        {
+            context.Vehicles.Add(new Vehicle
+            {
+                Id = veh3Id,
+                VIN = "WBA3A5C51CF256651",
+                Make = "BMW",
+                Model = "320i",
+                Year = 2023,
+                LicensePlate = "GHI-9012",
+                Color = "أسود",
+                Mileage = 15000,
+                EngineType = "2.0L TwinPower Turbo",
+                TransmissionType = TransmissionType.Automatic,
+                FuelType = FuelType.Gasoline,
+                OwnerName = "فيصل العتيبي",
+                OwnerPhone = "+966 56 555 6666",
+                OwnerEmail = "faisal.otaibi@email.sa",
+                PurchaseDate = new DateTime(2023, 1, 10),
+                LastServiceDate = new DateTime(2024, 8, 20),
+                NextServiceDate = new DateTime(2025, 2, 20),
+                LastServiceMileage = 10000,
+                NextServiceMileage = 20000,
+                Status = VehicleStatus.InService,
+                Notes = "سيارة فاخرة، تحت الصيانة الدورية في ورشة الرياض",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.Vehicles.AnyAsync(v => v.Id == veh4Id))
+        {
+            context.Vehicles.Add(new Vehicle
+            {
+                Id = veh4Id,
+                VIN = "5XYKT3A19CG225876",
+                Make = "Hyundai",
+                Model = "Tucson",
+                Year = 2020,
+                LicensePlate = "JKL-3456",
+                Color = "رمادي",
+                Mileage = 78000,
+                EngineType = "2.0L 4-Cylinder",
+                TransmissionType = TransmissionType.Automatic,
+                FuelType = FuelType.Diesel,
+                OwnerName = "محمد الغامدي",
+                OwnerPhone = "+966 59 777 8888",
+                OwnerEmail = "m.alghamdi@email.sa",
+                PurchaseDate = new DateTime(2020, 5, 25),
+                LastServiceDate = new DateTime(2024, 7, 15),
+                NextServiceDate = new DateTime(2025, 1, 15),
+                LastServiceMileage = 70000,
+                NextServiceMileage = 80000,
+                Status = VehicleStatus.Active,
+                Notes = "سيارة دفع رباعي للاستخدام التجاري الخفيف",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.Vehicles.AnyAsync(v => v.Id == veh5Id))
+        {
+            context.Vehicles.Add(new Vehicle
+            {
+                Id = veh5Id,
+                VIN = "JTDKARFU7H3544068",
+                Make = "Toyota",
+                Model = "Prius",
+                Year = 2023,
+                LicensePlate = "MNO-7890",
+                Color = "أزرق",
+                Mileage = 22000,
+                EngineType = "1.8L Hybrid",
+                TransmissionType = TransmissionType.CVT,
+                FuelType = FuelType.Hybrid,
+                OwnerName = "نورة الدوسري",
+                OwnerPhone = "+966 54 999 0000",
+                OwnerEmail = "noura.dosari@email.sa",
+                PurchaseDate = new DateTime(2023, 4, 5),
+                LastServiceDate = new DateTime(2024, 10, 1),
+                NextServiceDate = new DateTime(2025, 4, 1),
+                LastServiceMileage = 18000,
+                NextServiceMileage = 28000,
+                Status = VehicleStatus.Active,
+                Notes = "سيارة هجينة موفرة للوقود، خدمة ممتازة ومنتظمة",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
         // ── Equipment ────────────────────────────────────────────────────────────
         var eq1Id = new Guid("55555555-5555-5555-5555-555555555555");
         var eq2Id = new Guid("66666666-6666-6666-6666-666666666666");
