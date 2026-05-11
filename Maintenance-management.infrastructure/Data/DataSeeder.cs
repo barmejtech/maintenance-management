@@ -311,6 +311,206 @@ public static class DataSeeder
         }
         var adminUserId = adminUser.Id;
 
+        // ── Property Management Core (UnitTypes / Units / Owners / Tenants) ─────
+        var unitTypeSeeds = new List<UnitType>
+        {
+            new()
+            {
+                Id = new Guid("10000000-0000-0000-0000-000000000001"),
+                Name = "Studio",
+                Description = "وحدة استوديو مناسبة للأفراد | Studio unit suitable for singles",
+                DefaultSizeSqm = 42m,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                Id = new Guid("10000000-0000-0000-0000-000000000002"),
+                Name = "1BR",
+                Description = "شقة غرفة وصالة | One-bedroom apartment",
+                DefaultSizeSqm = 68m,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                Id = new Guid("10000000-0000-0000-0000-000000000003"),
+                Name = "2BR",
+                Description = "شقة غرفتين وصالة | Two-bedroom apartment",
+                DefaultSizeSqm = 102m,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                Id = new Guid("10000000-0000-0000-0000-000000000004"),
+                Name = "3BR",
+                Description = "شقة ثلاث غرف وصالة | Three-bedroom apartment",
+                DefaultSizeSqm = 138m,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                Id = new Guid("10000000-0000-0000-0000-000000000005"),
+                Name = "Penthouse",
+                Description = "بنتهاوس فاخر بإطلالة كاملة | Luxury penthouse with panoramic view",
+                DefaultSizeSqm = 245m,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            }
+        };
+
+        var unitSeeds = new List<Unit>
+        {
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000001"), UnitNumber = "A-101", Floor = 1, SizeSqm = 41m, Status = UnitStatus.Occupied, ShareValue = 0.92m, UnitTypeId = unitTypeSeeds[0].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000002"), UnitNumber = "A-102", Floor = 1, SizeSqm = 43m, Status = UnitStatus.Vacant, ShareValue = 0.95m, UnitTypeId = unitTypeSeeds[0].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000003"), UnitNumber = "A-103", Floor = 1, SizeSqm = 44m, Status = UnitStatus.Occupied, ShareValue = 0.97m, UnitTypeId = unitTypeSeeds[0].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000004"), UnitNumber = "A-201", Floor = 2, SizeSqm = 67m, Status = UnitStatus.Occupied, ShareValue = 1.11m, UnitTypeId = unitTypeSeeds[1].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000005"), UnitNumber = "A-202", Floor = 2, SizeSqm = 69m, Status = UnitStatus.UnderMaintenance, ShareValue = 1.13m, UnitTypeId = unitTypeSeeds[1].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000006"), UnitNumber = "A-203", Floor = 2, SizeSqm = 70m, Status = UnitStatus.Occupied, ShareValue = 1.14m, UnitTypeId = unitTypeSeeds[1].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000007"), UnitNumber = "B-301", Floor = 3, SizeSqm = 101m, Status = UnitStatus.Occupied, ShareValue = 1.41m, UnitTypeId = unitTypeSeeds[2].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000008"), UnitNumber = "B-302", Floor = 3, SizeSqm = 103m, Status = UnitStatus.Occupied, ShareValue = 1.43m, UnitTypeId = unitTypeSeeds[2].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000009"), UnitNumber = "B-303", Floor = 3, SizeSqm = 105m, Status = UnitStatus.Vacant, ShareValue = 1.45m, UnitTypeId = unitTypeSeeds[2].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000010"), UnitNumber = "B-304", Floor = 3, SizeSqm = 106m, Status = UnitStatus.Occupied, ShareValue = 1.47m, UnitTypeId = unitTypeSeeds[2].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000011"), UnitNumber = "C-401", Floor = 4, SizeSqm = 137m, Status = UnitStatus.Occupied, ShareValue = 1.79m, UnitTypeId = unitTypeSeeds[3].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000012"), UnitNumber = "C-402", Floor = 4, SizeSqm = 139m, Status = UnitStatus.Occupied, ShareValue = 1.82m, UnitTypeId = unitTypeSeeds[3].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000013"), UnitNumber = "C-403", Floor = 4, SizeSqm = 141m, Status = UnitStatus.Reserved, ShareValue = 1.85m, UnitTypeId = unitTypeSeeds[3].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000014"), UnitNumber = "C-404", Floor = 4, SizeSqm = 142m, Status = UnitStatus.Occupied, ShareValue = 1.87m, UnitTypeId = unitTypeSeeds[3].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000015"), UnitNumber = "D-501", Floor = 5, SizeSqm = 245m, Status = UnitStatus.Occupied, ShareValue = 2.33m, UnitTypeId = unitTypeSeeds[4].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000016"), UnitNumber = "D-502", Floor = 5, SizeSqm = 247m, Status = UnitStatus.Occupied, ShareValue = 2.36m, UnitTypeId = unitTypeSeeds[4].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000017"), UnitNumber = "D-503", Floor = 5, SizeSqm = 249m, Status = UnitStatus.Vacant, ShareValue = 2.39m, UnitTypeId = unitTypeSeeds[4].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000018"), UnitNumber = "E-601", Floor = 6, SizeSqm = 102m, Status = UnitStatus.Occupied, ShareValue = 1.46m, UnitTypeId = unitTypeSeeds[2].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000019"), UnitNumber = "E-602", Floor = 6, SizeSqm = 138m, Status = UnitStatus.Occupied, ShareValue = 1.83m, UnitTypeId = unitTypeSeeds[3].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0001-000000000020"), UnitNumber = "E-603", Floor = 6, SizeSqm = 69m, Status = UnitStatus.Occupied, ShareValue = 1.12m, UnitTypeId = unitTypeSeeds[1].Id, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+        };
+
+        var ownerSeeds = new List<Owner>
+        {
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000001"), FullName = "أحمد بن صالح العتيبي", Email = "ahmad.otaibi@property.sa", Phone = "+966501110101", Address = "حي الياسمين، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000002"), FullName = "سارة محمد القحطاني", Email = "sarah.qahtani@property.sa", Phone = "+966501110102", Address = "حي الروضة، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000003"), FullName = "Faisal Al-Harbi", Email = "faisal.harbi@property.sa", Phone = "+966501110103", Address = "حي الشاطئ، الدمام", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000004"), FullName = "نورة عبدالله الغامدي", Email = "noura.ghamdi@property.sa", Phone = "+966501110104", Address = "حي العوالي، مكة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000005"), FullName = "محمد سعد الدوسري", Email = "m.dosari@property.sa", Phone = "+966501110105", Address = "حي الملك فهد، المدينة المنورة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000006"), FullName = "Hind Al-Shehri", Email = "hind.shehri@property.sa", Phone = "+966501110106", Address = "حي السليمانية، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000007"), FullName = "تركي فهد المطيري", Email = "turki.mutairi@property.sa", Phone = "+966501110107", Address = "حي النهضة، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000008"), FullName = "Mona Al-Zahrani", Email = "mona.zahrani@property.sa", Phone = "+966501110108", Address = "حي النزهة، الدمام", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000009"), FullName = "راشد علي الشمري", Email = "rashed.shammari@property.sa", Phone = "+966501110109", Address = "حي الحمراء، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000010"), FullName = "Laila Al-Otaibi", Email = "laila.otaibi@property.sa", Phone = "+966501110110", Address = "حي الزهراء، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000011"), FullName = "عبدالعزيز ناصر العنزي", Email = "abdulaziz.enezi@property.sa", Phone = "+966501110111", Address = "حي الفيصلية، الدمام", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000012"), FullName = "Hessa Al-Qahtani", Email = "hessa.q@property.sa", Phone = "+966501110112", Address = "حي الندى، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000013"), FullName = "عبدالرحمن الزهراني", Email = "abdurrahman.zahrani@property.sa", Phone = "+966501110113", Address = "حي الأندلس، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000014"), FullName = "Yousef Al-Ghamdi", Email = "yousef.ghamdi@property.sa", Phone = "+966501110114", Address = "حي المريكبات، الخبر", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000015"), FullName = "ريم خالد الحربي", Email = "reem.harbi@property.sa", Phone = "+966501110115", Address = "حي النرجس، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000016"), FullName = "Ibrahim Al-Subaie", Email = "ibrahim.subaie@property.sa", Phone = "+966501110116", Address = "حي الفيحاء، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000017"), FullName = "هند سليمان البلوي", Email = "hind.balawi@property.sa", Phone = "+966501110117", Address = "حي الحزام الذهبي، الخبر", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000018"), FullName = "Khaled Al-Dossary", Email = "khaled.dossary@property.sa", Phone = "+966501110118", Address = "حي الروابي، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000019"), FullName = "أمل فهد العتيبي", Email = "amal.otaibi@property.sa", Phone = "+966501110119", Address = "حي مشرفة، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000020"), FullName = "Saleh Al-Mutairi", Email = "saleh.mutairi@property.sa", Phone = "+966501110120", Address = "حي أحد، الدمام", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000021"), FullName = "منة الله الشريف", Email = "manna.sharif@property.sa", Phone = "+966501110121", Address = "حي جبل النور، مكة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000022"), FullName = "Ziad Al-Qahtani", Email = "ziad.qahtani@property.sa", Phone = "+966501110122", Address = "حي العزيزية، المدينة المنورة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+        };
+
+        var ownershipSeeds = new List<UnitOwnership>
+        {
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000001"), UnitId = unitSeeds[0].Id, OwnerId = ownerSeeds[0].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2020, 1, 5), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000002"), UnitId = unitSeeds[1].Id, OwnerId = ownerSeeds[1].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2020, 3, 11), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000003"), UnitId = unitSeeds[2].Id, OwnerId = ownerSeeds[2].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2019, 8, 24), SaleDate = new DateTime(2024, 2, 15), IsActive = false, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000004"), UnitId = unitSeeds[2].Id, OwnerId = ownerSeeds[3].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2024, 2, 16), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000005"), UnitId = unitSeeds[3].Id, OwnerId = ownerSeeds[4].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2021, 6, 20), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000006"), UnitId = unitSeeds[4].Id, OwnerId = ownerSeeds[5].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2023, 9, 10), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000007"), UnitId = unitSeeds[5].Id, OwnerId = ownerSeeds[6].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2021, 11, 12), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000008"), UnitId = unitSeeds[6].Id, OwnerId = ownerSeeds[7].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2020, 5, 8), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000009"), UnitId = unitSeeds[7].Id, OwnerId = ownerSeeds[8].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2022, 4, 19), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000010"), UnitId = unitSeeds[8].Id, OwnerId = ownerSeeds[9].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2023, 2, 22), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000011"), UnitId = unitSeeds[9].Id, OwnerId = ownerSeeds[10].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2020, 7, 4), SaleDate = new DateTime(2025, 1, 5), IsActive = false, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000012"), UnitId = unitSeeds[9].Id, OwnerId = ownerSeeds[11].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2025, 1, 6), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000013"), UnitId = unitSeeds[10].Id, OwnerId = ownerSeeds[12].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2019, 12, 30), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000014"), UnitId = unitSeeds[11].Id, OwnerId = ownerSeeds[13].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2022, 8, 13), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000015"), UnitId = unitSeeds[12].Id, OwnerId = ownerSeeds[14].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2023, 10, 23), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000016"), UnitId = unitSeeds[13].Id, OwnerId = ownerSeeds[15].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2021, 1, 17), SaleDate = new DateTime(2024, 9, 30), IsActive = false, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000017"), UnitId = unitSeeds[13].Id, OwnerId = ownerSeeds[16].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2024, 10, 1), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000018"), UnitId = unitSeeds[14].Id, OwnerId = ownerSeeds[17].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2020, 10, 9), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000019"), UnitId = unitSeeds[15].Id, OwnerId = ownerSeeds[18].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2021, 9, 3), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000020"), UnitId = unitSeeds[16].Id, OwnerId = ownerSeeds[19].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2025, 3, 27), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000021"), UnitId = unitSeeds[17].Id, OwnerId = ownerSeeds[20].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2022, 2, 14), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000022"), UnitId = unitSeeds[18].Id, OwnerId = ownerSeeds[21].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2021, 4, 2), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0003-000000000023"), UnitId = unitSeeds[19].Id, OwnerId = ownerSeeds[0].Id, OwnershipPercentage = 100m, PurchaseDate = new DateTime(2020, 6, 18), IsActive = true, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+        };
+
+        var tenantSeeds = new List<Tenant>
+        {
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000001"), UnitId = unitSeeds[0].Id, FullName = "Omar Al-Qarni", Email = "tenant.omar1@email.sa", Phone = "+966551000201", EmergencyContactName = "منى القرني", EmergencyContactPhone = "+966551900201", LeaseStartDate = new DateTime(2025, 1, 1), LeaseEndDate = new DateTime(2025, 12, 31), RentalAmount = 3200m, DepositAmount = 3200m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000002"), UnitId = unitSeeds[3].Id, FullName = "ريم سعيد الشهراني", Email = "tenant.reem2@email.sa", Phone = "+966551000202", EmergencyContactName = "سعيد الشهراني", EmergencyContactPhone = "+966551900202", LeaseStartDate = new DateTime(2025, 2, 1), LeaseEndDate = new DateTime(2026, 1, 31), RentalAmount = 4500m, DepositAmount = 4500m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000003"), UnitId = unitSeeds[5].Id, FullName = "Mariam Al-Hazmi", Email = "tenant.mariam3@email.sa", Phone = "+966551000203", EmergencyContactName = "خالد الحازمي", EmergencyContactPhone = "+966551900203", LeaseStartDate = new DateTime(2025, 1, 15), LeaseEndDate = new DateTime(2026, 1, 14), RentalAmount = 4700m, DepositAmount = 4700m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000004"), UnitId = unitSeeds[6].Id, FullName = "ناصر عبدالله المطيري", Email = "tenant.nasser4@email.sa", Phone = "+966551000204", EmergencyContactName = "عبدالله المطيري", EmergencyContactPhone = "+966551900204", LeaseStartDate = new DateTime(2025, 3, 1), LeaseEndDate = new DateTime(2026, 2, 28), RentalAmount = 6200m, DepositAmount = 6200m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000005"), UnitId = unitSeeds[7].Id, FullName = "Lina Al-Qahtani", Email = "tenant.lina5@email.sa", Phone = "+966551000205", EmergencyContactName = "سالم القحطاني", EmergencyContactPhone = "+966551900205", LeaseStartDate = new DateTime(2025, 4, 1), LeaseEndDate = new DateTime(2026, 3, 31), RentalAmount = 6400m, DepositAmount = 6400m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000006"), UnitId = unitSeeds[9].Id, FullName = "عبدالعزيز العمري", Email = "tenant.aziz6@email.sa", Phone = "+966551000206", EmergencyContactName = "نوال العمري", EmergencyContactPhone = "+966551900206", LeaseStartDate = new DateTime(2025, 2, 20), LeaseEndDate = new DateTime(2026, 2, 19), RentalAmount = 6600m, DepositAmount = 6600m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000007"), UnitId = unitSeeds[10].Id, FullName = "Hamad Al-Shammari", Email = "tenant.hamad7@email.sa", Phone = "+966551000207", EmergencyContactName = "راشد الشمري", EmergencyContactPhone = "+966551900207", LeaseStartDate = new DateTime(2025, 1, 10), LeaseEndDate = new DateTime(2026, 1, 9), RentalAmount = 7900m, DepositAmount = 7900m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000008"), UnitId = unitSeeds[11].Id, FullName = "ميساء فهد الحربي", Email = "tenant.maisa8@email.sa", Phone = "+966551000208", EmergencyContactName = "فهد الحربي", EmergencyContactPhone = "+966551900208", LeaseStartDate = new DateTime(2025, 2, 5), LeaseEndDate = new DateTime(2026, 2, 4), RentalAmount = 8100m, DepositAmount = 8100m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000009"), UnitId = unitSeeds[14].Id, FullName = "Norah Al-Ghamdi", Email = "tenant.norah9@email.sa", Phone = "+966551000209", EmergencyContactName = "علي الغامدي", EmergencyContactPhone = "+966551900209", LeaseStartDate = new DateTime(2025, 1, 1), LeaseEndDate = new DateTime(2025, 12, 31), RentalAmount = 13500m, DepositAmount = 13500m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000010"), UnitId = unitSeeds[15].Id, FullName = "عبدالله عبدالرحمن الشهري", Email = "tenant.abdullah10@email.sa", Phone = "+966551000210", EmergencyContactName = "عبدالرحمن الشهري", EmergencyContactPhone = "+966551900210", LeaseStartDate = new DateTime(2025, 3, 12), LeaseEndDate = new DateTime(2026, 3, 11), RentalAmount = 13800m, DepositAmount = 13800m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000011"), UnitId = unitSeeds[18].Id, FullName = "Yara Al-Mutairi", Email = "tenant.yara11@email.sa", Phone = "+966551000211", EmergencyContactName = "هند المطيري", EmergencyContactPhone = "+966551900211", LeaseStartDate = new DateTime(2025, 4, 10), LeaseEndDate = new DateTime(2026, 4, 9), RentalAmount = 8600m, DepositAmount = 8600m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000012"), UnitId = unitSeeds[19].Id, FullName = "يوسف أحمد الدوسري", Email = "tenant.yousef12@email.sa", Phone = "+966551000212", EmergencyContactName = "أحمد الدوسري", EmergencyContactPhone = "+966551900212", LeaseStartDate = new DateTime(2025, 1, 25), LeaseEndDate = new DateTime(2026, 1, 24), RentalAmount = 4900m, DepositAmount = 4900m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+        };
+
+        var seededUnitTypes = 0;
+        foreach (var unitType in unitTypeSeeds)
+        {
+            if (!await context.UnitTypes.AnyAsync(ut => ut.Id == unitType.Id))
+            {
+                context.UnitTypes.Add(unitType);
+                seededUnitTypes++;
+            }
+        }
+
+        var seededUnits = 0;
+        foreach (var unit in unitSeeds)
+        {
+            if (!await context.Units.AnyAsync(u => u.Id == unit.Id))
+            {
+                context.Units.Add(unit);
+                seededUnits++;
+            }
+        }
+
+        var seededOwners = 0;
+        foreach (var owner in ownerSeeds)
+        {
+            if (!await context.Owners.AnyAsync(o => o.Id == owner.Id))
+            {
+                context.Owners.Add(owner);
+                seededOwners++;
+            }
+        }
+
+        await context.SaveChangesAsync();
+
+        var seededOwnerships = 0;
+        foreach (var ownership in ownershipSeeds)
+        {
+            if (!await context.UnitOwnerships.AnyAsync(uo => uo.Id == ownership.Id))
+            {
+                context.UnitOwnerships.Add(ownership);
+                seededOwnerships++;
+            }
+        }
+
+        var seededTenants = 0;
+        foreach (var tenant in tenantSeeds)
+        {
+            if (!await context.Tenants.AnyAsync(t => t.Id == tenant.Id))
+            {
+                context.Tenants.Add(tenant);
+                seededTenants++;
+            }
+        }
+
+        await context.SaveChangesAsync();
+        logger.LogInformation(
+            "Property management seed complete. Added UnitTypes={UnitTypes}, Units={Units}, Owners={Owners}, OwnershipHistory={Ownerships}, Tenants={Tenants}.",
+            seededUnitTypes, seededUnits, seededOwners, seededOwnerships, seededTenants);
+
         // ── Technicians ──────────────────────────────────────────────────────────
         var tech1Id = new Guid("11111111-1111-1111-1111-111111111111");
         var tech2Id = new Guid("22222222-2222-2222-2222-222222222222");
