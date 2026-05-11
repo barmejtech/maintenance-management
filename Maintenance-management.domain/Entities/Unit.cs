@@ -5,7 +5,10 @@ public enum UnitStatus
     Vacant = 0,
     Occupied = 1,
     UnderMaintenance = 2,
-    Reserved = 3
+    Reserved = 3,
+    UnderRenovation = 4,
+    OwnerOccupied = 5,
+    Rented = 6
 }
 
 public class Unit : BaseEntity
