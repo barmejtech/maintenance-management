@@ -69,12 +69,19 @@ export class TenantListComponent implements OnInit {
 
   isExpiringSoon(t: TenantDto): boolean {
     const end = new Date(t.leaseEndDate);
-    const diff = (end.getTime() - Date.now()) / (1000 * 60 * 60 * 24);
+    end.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const diff = (end.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
     return diff >= 0 && diff <= 30;
   }
 
   isExpired(t: TenantDto): boolean {
-    return new Date(t.leaseEndDate) < new Date();
+    const end = new Date(t.leaseEndDate);
+    end.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return end < today;
   }
 
   openAdd() {

@@ -127,6 +127,7 @@
               <label class="form-label fw-semibold">Lease End Date <span class="text-danger">*</span></label>
               <input class="form-control" type="date" [(ngModel)]="form.leaseEndDate" [min]="form.leaseStartDate" />
               @if (form.leaseStartDate && form.leaseEndDate && form.leaseEndDate <= form.leaseStartDate) {
+                <!-- ISO date strings (YYYY-MM-DD) are lexicographically comparable -->
                 <div class="text-danger small mt-1">End date must be after start date.</div>
               }
             </div>
