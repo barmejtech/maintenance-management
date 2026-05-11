@@ -125,6 +125,11 @@ builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPremiumMain
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPaymentRepository, Maintenance_management.infrastructure.Repositories.PaymentRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITechnicianGpsLogRepository, Maintenance_management.infrastructure.Repositories.TechnicianGpsLogRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IQuotationRepository, Maintenance_management.infrastructure.Repositories.QuotationRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IUnitTypeRepository, Maintenance_management.infrastructure.Repositories.UnitTypeRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IUnitRepository, Maintenance_management.infrastructure.Repositories.UnitRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IOwnerRepository, Maintenance_management.infrastructure.Repositories.OwnerRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IUnitOwnershipRepository, Maintenance_management.infrastructure.Repositories.UnitOwnershipRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITenantRepository, Maintenance_management.infrastructure.Repositories.TenantRepository>();
 
 // Application services
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAuthService, Maintenance_management.infrastructure.Services.AuthService>();
@@ -157,6 +162,10 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITravel
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.ISmsService, Maintenance_management.infrastructure.Services.SmsService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IGpsTrackingService, Maintenance_management.application.Services.GpsTrackingService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IQuotationService, Maintenance_management.application.Services.QuotationService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IUnitTypeService, Maintenance_management.application.Services.UnitTypeService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IUnitService, Maintenance_management.application.Services.UnitService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IOwnerService, Maintenance_management.application.Services.OwnerService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITenantService, Maintenance_management.application.Services.TenantService>();
 
 // Notification service (SignalR-based)
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.INotificationService, Maintenance_management.api.Services.HubNotificationService>();

@@ -41,6 +41,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<TechnicianGpsLog> TechnicianGpsLogs => Set<TechnicianGpsLog>();
     public DbSet<Quotation> Quotations => Set<Quotation>();
     public DbSet<QuotationLineItem> QuotationLineItems => Set<QuotationLineItem>();
+    public DbSet<UnitType> UnitTypes => Set<UnitType>();
+    public DbSet<Unit> Units => Set<Unit>();
+    public DbSet<Owner> Owners => Set<Owner>();
+    public DbSet<UnitOwnership> UnitOwnerships => Set<UnitOwnership>();
+    public DbSet<Tenant> Tenants => Set<Tenant>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -495,6 +500,68 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             e.Property(li => li.Quantity).HasColumnType("decimal(10,2)");
             e.Property(li => li.UnitPrice).HasColumnType("decimal(18,2)");
             e.Property(li => li.Total).HasColumnType("decimal(18,2)");
+        });
+
+        builder.Entity<UnitType>(e =>
+        {
+            e.HasKey(ut => ut.Id);
+            e.Property(ut => ut.Name).IsRequired().HasMaxLength(100);
+            e.Property(ut => ut.Description).HasMaxLength(500);
+            e.Property(ut => ut.DefaultSizeSqm).HasColumnType("decimal(10,2)");
+            e.HasIndex(ut => ut.Name).IsUnique();
+        });
+
+        builder.Entity<Unit>(e =>
+        {
+            e.HasKey(u => u.Id);
+            e.Property(u => u.UnitNumber).IsRequired().HasMaxLength(50);
+            e.Property(u => u.SizeSqm).HasColumnType("decimal(10,2)");
+            e.Property(u => u.ShareValue).HasColumnType("decimal(10,2)");
+            e.HasIndex(u => u.UnitNumber).IsUnique();
+            e.HasOne(u => u.UnitType)
+                .WithMany(ut => ut.Units)
+                .HasForeignKey(u => u.UnitTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<Owner>(e =>
+        {
+            e.HasKey(o => o.Id);
+            e.Property(o => o.FullName).IsRequired().HasMaxLength(200);
+            e.Property(o => o.Email).IsRequired().HasMaxLength(256);
+            e.Property(o => o.Phone).HasMaxLength(50);
+            e.Property(o => o.Address).HasMaxLength(500);
+        });
+
+        builder.Entity<UnitOwnership>(e =>
+        {
+            e.HasKey(h => h.Id);
+            e.Property(h => h.OwnershipPercentage).HasColumnType("decimal(5,2)");
+            e.HasOne(h => h.Unit)
+                .WithMany(u => u.OwnershipHistory)
+                .HasForeignKey(h => h.UnitId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(h => h.Owner)
+                .WithMany(o => o.UnitOwnerships)
+                .HasForeignKey(h => h.OwnerId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasIndex(h => new { h.UnitId, h.IsActive });
+        });
+
+        builder.Entity<Tenant>(e =>
+        {
+            e.HasKey(t => t.Id);
+            e.Property(t => t.FullName).IsRequired().HasMaxLength(200);
+            e.Property(t => t.Email).IsRequired().HasMaxLength(256);
+            e.Property(t => t.Phone).HasMaxLength(50);
+            e.Property(t => t.EmergencyContactName).HasMaxLength(200);
+            e.Property(t => t.EmergencyContactPhone).HasMaxLength(50);
+            e.Property(t => t.RentalAmount).HasColumnType("decimal(18,2)");
+            e.Property(t => t.DepositAmount).HasColumnType("decimal(18,2)");
+            e.HasOne(t => t.Unit)
+                .WithMany(u => u.Tenants)
+                .HasForeignKey(t => t.UnitId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }
