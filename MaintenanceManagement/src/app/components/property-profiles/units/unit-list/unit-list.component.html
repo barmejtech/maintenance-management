@@ -1,0 +1,262 @@
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-door-open text-primary me-2"></i>Units</h4>
+    <div class="d-flex gap-2 flex-wrap">
+      @if (selectedIds().size > 0 && auth.canManageData()) {
+        <button class="btn btn-warning btn-sm" (click)="openMassUpdate()">
+          <i class="bi bi-lightning me-1"></i>Mass Update ({{ selectedIds().size }})
+        </button>
+      }
+      @if (auth.canManageData()) {
+        <button class="btn btn-primary btn-sm" (click)="openAdd()">
+          <i class="bi bi-plus-circle me-1"></i>Add Unit
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="row g-2 mb-3">
+    <div class="col-12 col-md-4">
+      <input class="form-control form-control-sm" type="text" placeholder="Search unit number or type..."
+        [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
+    </div>
+    <div class="col-6 col-md-3">
+      <select class="form-select form-select-sm" [ngModel]="filterStatus()" (ngModelChange)="filterStatus.set($event)">
+        <option value="">All Statuses</option>
+        <option value="0">Vacant</option>
+        <option value="1">Occupied</option>
+        <option value="2">Under Maintenance</option>
+        <option value="3">Reserved</option>
+      </select>
+    </div>
+    <div class="col-6 col-md-3">
+      <select class="form-select form-select-sm" [ngModel]="filterUnitType()" (ngModelChange)="filterUnitType.set($event)">
+        <option value="">All Types</option>
+        @for (t of unitTypes(); track t.id) {
+          <option [value]="t.id">{{ t.name }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            @if (auth.canManageData()) {
+              <th><input type="checkbox" class="form-check-input" [checked]="allSelected" (change)="toggleAll()" /></th>
+            }
+            <th>Unit No.</th>
+            <th>Type</th>
+            <th>Floor</th>
+            <th>Size (sqm)</th>
+            <th>Status</th>
+            <th>Current Owner</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of filtered | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track u.id) {
+            <tr [class.table-active]="isSelected(u.id)">
+              @if (auth.canManageData()) {
+                <td><input type="checkbox" class="form-check-input" [checked]="isSelected(u.id)" (change)="toggleSelect(u.id)" /></td>
+              }
+              <td>
+                <span class="fw-semibold text-primary" style="cursor:pointer" (click)="viewDetail(u)">{{ u.unitNumber }}</span>
+              </td>
+              <td>{{ u.unitTypeName }}</td>
+              <td>{{ u.floor != null ? u.floor : '—' }}</td>
+              <td>{{ u.sizeSqm != null ? (u.sizeSqm + ' sqm') : '—' }}</td>
+              <td><span class="badge rounded-pill" [class]="getStatusClass(u.status)">{{ getStatusLabel(u.status) }}</span></td>
+              <td>{{ getCurrentOwner(u) }}</td>
+              <td class="text-end">
+                @if (auth.canManageData()) {
+                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(u)"><i class="bi bi-pencil"></i></button>
+                }
+                @if (auth.canManageTasks()) {
+                  <button class="btn btn-sm btn-outline-danger" (click)="delete(u.id)"><i class="bi bi-trash"></i></button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td [attr.colspan]="auth.canManageData() ? 8 : 7" class="text-center text-muted py-4">No units found.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <pagination-controls (pageChange)="currentPage.set($event)" [autoHide]="true"></pagination-controls>
+  }
+</div>
+
+<!-- Unit Form Modal -->
+@if (showModal()) {
+  <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isEditing() ? 'Edit Unit' : 'Add Unit' }}</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Unit Number <span class="text-danger">*</span></label>
+              <input class="form-control" [(ngModel)]="form.unitNumber" placeholder="e.g. A-101" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Unit Type <span class="text-danger">*</span></label>
+              <select class="form-select" [(ngModel)]="form.unitTypeId">
+                <option value="">Select type...</option>
+                @for (t of unitTypes(); track t.id) {
+                  <option [value]="t.id">{{ t.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Floor</label>
+              <input class="form-control" type="number" [(ngModel)]="form.floor" placeholder="Floor number" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Size (sqm)</label>
+              <input class="form-control" type="number" step="0.01" [(ngModel)]="form.sizeSqm" placeholder="e.g. 85.5" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Share Value</label>
+              <input class="form-control" type="number" step="0.01" [(ngModel)]="form.shareValue" placeholder="Share value" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
+              <select class="form-select" [(ngModel)]="form.status">
+                <option [ngValue]="UnitStatus.Vacant">Vacant</option>
+                <option [ngValue]="UnitStatus.Occupied">Occupied</option>
+                <option [ngValue]="UnitStatus.UnderMaintenance">Under Maintenance</option>
+                <option [ngValue]="UnitStatus.Reserved">Reserved</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.unitNumber.trim() || !form.unitTypeId">
+            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            {{ isEditing() ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Mass Update Modal -->
+@if (showMassUpdateModal()) {
+  <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-lightning me-2"></i>Mass Update {{ selectedIds().size }} Units</h5>
+          <button type="button" class="btn-close" (click)="closeMassUpdate()"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small">Leave fields empty to keep existing values.</p>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Status</label>
+            <select class="form-select" [(ngModel)]="massUpdateForm.status">
+              <option value="">Keep existing</option>
+              <option value="0">Vacant</option>
+              <option value="1">Occupied</option>
+              <option value="2">Under Maintenance</option>
+              <option value="3">Reserved</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Floor</label>
+            <input class="form-control" type="number" [(ngModel)]="massUpdateForm.floor" placeholder="Leave empty to keep existing" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeMassUpdate()">Cancel</button>
+          <button class="btn btn-warning" (click)="doMassUpdate()" [disabled]="isMassUpdating() || (!massUpdateForm.status && massUpdateForm.floor === null)">
+            @if (isMassUpdating()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            Update All
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Unit Detail / Ownership History Panel -->
+@if (selectedUnit() && !showModal()) {
+  <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-door-open me-2"></i>Unit {{ selectedUnit()!.unitNumber }}</h5>
+          <button type="button" class="btn-close" (click)="closeDetail()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+              <div class="text-muted small">Type</div>
+              <div class="fw-semibold">{{ selectedUnit()!.unitTypeName }}</div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="text-muted small">Floor</div>
+              <div class="fw-semibold">{{ selectedUnit()!.floor != null ? selectedUnit()!.floor : '—' }}</div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="text-muted small">Size</div>
+              <div class="fw-semibold">{{ selectedUnit()!.sizeSqm != null ? (selectedUnit()!.sizeSqm + ' sqm') : '—' }}</div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="text-muted small">Status</div>
+              <span class="badge rounded-pill" [class]="getStatusClass(selectedUnit()!.status)">{{ getStatusLabel(selectedUnit()!.status) }}</span>
+            </div>
+          </div>
+          <h6 class="fw-bold mb-3"><i class="bi bi-clock-history me-2"></i>Ownership History</h6>
+          @if (selectedUnit()!.ownershipHistory?.length) {
+            <div class="table-responsive">
+              <table class="table table-sm align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Owner</th>
+                    <th>Ownership %</th>
+                    <th>Purchase Date</th>
+                    <th>Sale Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (h of selectedUnit()!.ownershipHistory; track h.id) {
+                    <tr [class.table-success]="h.isActive">
+                      <td class="fw-semibold">{{ h.ownerName }}</td>
+                      <td>{{ h.ownershipPercentage }}%</td>
+                      <td>{{ h.purchaseDate | date:'mediumDate' }}</td>
+                      <td>{{ h.saleDate ? (h.saleDate | date:'mediumDate') : '—' }}</td>
+                      <td>
+                        @if (h.isActive) {
+                          <span class="badge bg-success">Active</span>
+                        } @else {
+                          <span class="badge bg-secondary">Inactive</span>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <p class="text-muted">No ownership history recorded.</p>
+          }
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeDetail()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

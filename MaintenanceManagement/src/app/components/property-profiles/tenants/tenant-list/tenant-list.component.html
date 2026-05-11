@@ -1,0 +1,154 @@
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-people text-primary me-2"></i>Tenants</h4>
+    <div class="d-flex gap-2">
+      @if (auth.canManageData()) {
+        <button class="btn btn-primary btn-sm" (click)="openAdd()">
+          <i class="bi bi-plus-circle me-1"></i>Add Tenant
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="row g-2 mb-3">
+    <div class="col-12 col-md-5">
+      <input class="form-control form-control-sm" type="text" placeholder="Search by name, email, or unit..."
+        [ngModel]="search()" (ngModelChange)="search.set($event)" />
+    </div>
+    <div class="col-6 col-md-4">
+      <select class="form-select form-select-sm" [ngModel]="filterUnit()" (ngModelChange)="filterUnit.set($event)">
+        <option value="">All Units</option>
+        @for (u of units(); track u.id) {
+          <option [value]="u.id">{{ u.unitNumber }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Full Name</th>
+            <th>Unit</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Lease Start</th>
+            <th>Lease End</th>
+            <th>Rental Amount</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (t of filtered | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track t.id) {
+            <tr [class.table-warning]="isExpiringSoon(t)" [class.table-danger]="isExpired(t)">
+              <td class="fw-semibold">{{ t.fullName }}</td>
+              <td>{{ t.unitNumber }}</td>
+              <td>{{ t.email }}</td>
+              <td>{{ t.phone || '—' }}</td>
+              <td>{{ t.leaseStartDate | date:'mediumDate' }}</td>
+              <td>
+                {{ t.leaseEndDate | date:'mediumDate' }}
+                @if (isExpired(t)) {
+                  <span class="badge bg-danger ms-1">Expired</span>
+                } @else if (isExpiringSoon(t)) {
+                  <span class="badge bg-warning text-dark ms-1">Expiring Soon</span>
+                }
+              </td>
+              <td>{{ t.rentalAmount | number:'1.2-2' }}</td>
+              <td class="text-end">
+                @if (auth.canManageData()) {
+                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(t)"><i class="bi bi-pencil"></i></button>
+                }
+                @if (auth.canManageTasks()) {
+                  <button class="btn btn-sm btn-outline-danger" (click)="delete(t.id)"><i class="bi bi-trash"></i></button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="8" class="text-center text-muted py-4">No tenants found.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <pagination-controls (pageChange)="currentPage.set($event)" [autoHide]="true"></pagination-controls>
+  }
+</div>
+
+<!-- Tenant Form Modal -->
+@if (showModal()) {
+  <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isEditing() ? 'Edit Tenant' : 'Add Tenant' }}</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Unit <span class="text-danger">*</span></label>
+              <select class="form-select" [(ngModel)]="form.unitId">
+                <option value="">Select unit...</option>
+                @for (u of units(); track u.id) {
+                  <option [value]="u.id">{{ u.unitNumber }} ({{ u.unitTypeName }})</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+              <input class="form-control" [(ngModel)]="form.fullName" placeholder="Full name" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+              <input class="form-control" type="email" [(ngModel)]="form.email" placeholder="Email address" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Phone</label>
+              <input class="form-control" [(ngModel)]="form.phone" placeholder="Phone number" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Emergency Contact Name</label>
+              <input class="form-control" [(ngModel)]="form.emergencyContactName" placeholder="Emergency contact" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Emergency Contact Phone</label>
+              <input class="form-control" [(ngModel)]="form.emergencyContactPhone" placeholder="Emergency phone" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Lease Start Date <span class="text-danger">*</span></label>
+              <input class="form-control" type="date" [(ngModel)]="form.leaseStartDate" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Lease End Date <span class="text-danger">*</span></label>
+              <input class="form-control" type="date" [(ngModel)]="form.leaseEndDate" [min]="form.leaseStartDate" />
+              @if (form.leaseStartDate && form.leaseEndDate && form.leaseEndDate <= form.leaseStartDate) {
+                <!-- ISO date strings (YYYY-MM-DD) are lexicographically comparable -->
+                <div class="text-danger small mt-1">End date must be after start date.</div>
+              }
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Rental Amount <span class="text-danger">*</span></label>
+              <input class="form-control" type="number" step="0.01" min="0" [(ngModel)]="form.rentalAmount" placeholder="Monthly rental" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Deposit Amount</label>
+              <input class="form-control" type="number" step="0.01" min="0" [(ngModel)]="form.depositAmount" placeholder="Security deposit" />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !isFormValid()">
+            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            {{ isEditing() ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

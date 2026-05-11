@@ -84,6 +84,24 @@
     </a>
     }
 
+    <!-- ===== PROPERTY PROFILES ===== -->
+    @if (isManagerOrAdmin() || isDataEntryRole()) {
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-label">Property Profiles</div>
+    <a routerLink="/property-profiles/unit-types" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-building"></i> Unit Types
+    </a>
+    <a routerLink="/property-profiles/units" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-door-open"></i> Units
+    </a>
+    <a routerLink="/property-profiles/owners" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-person-badge"></i> Owners
+    </a>
+    <a routerLink="/property-profiles/tenants" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-people"></i> Tenants
+    </a>
+    }
+
     <!-- ===== INTELLIGENCE ===== -->
     @if (isManagerOrAdmin() || isDataEntryRole() || isTechnicianRole()) {
     <div class="sidebar-divider"></div>

@@ -205,6 +205,22 @@ export const routes: Routes = [
         path: 'quotations',
         loadComponent: () => import('./components/quotations/quotations.component').then(m => m.QuotationsComponent),
         canActivate: [managerGuard]
+      },
+      {
+        path: 'property-profiles/unit-types',
+        loadComponent: () => import('./components/property-profiles/unit-types/unit-type-list/unit-type-list.component').then(m => m.UnitTypeListComponent)
+      },
+      {
+        path: 'property-profiles/units',
+        loadComponent: () => import('./components/property-profiles/units/unit-list/unit-list.component').then(m => m.UnitListComponent)
+      },
+      {
+        path: 'property-profiles/owners',
+        loadComponent: () => import('./components/property-profiles/owners/owner-list/owner-list.component').then(m => m.OwnerListComponent)
+      },
+      {
+        path: 'property-profiles/tenants',
+        loadComponent: () => import('./components/property-profiles/tenants/tenant-list/tenant-list.component').then(m => m.TenantListComponent)
       }
     ]
   },
