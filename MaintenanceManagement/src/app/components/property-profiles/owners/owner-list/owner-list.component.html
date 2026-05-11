@@ -1,0 +1,211 @@
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-person-badge text-primary me-2"></i>Owners</h4>
+    <div class="d-flex gap-2">
+      @if (auth.canManageData()) {
+        <button class="btn btn-primary btn-sm" (click)="openAdd()">
+          <i class="bi bi-plus-circle me-1"></i>Add Owner
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <input class="form-control" type="text" placeholder="Search by name or email..."
+      [ngModel]="search()" (ngModelChange)="search.set($event)" />
+  </div>
+
+  @if (isLoading()) {
+    <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Active Units</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (o of filtered | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track o.id) {
+            <tr>
+              <td>
+                <span class="fw-semibold text-primary" style="cursor:pointer" (click)="viewDetail(o)">{{ o.fullName }}</span>
+              </td>
+              <td>{{ o.email }}</td>
+              <td>{{ o.phone || '—' }}</td>
+              <td><span class="badge bg-primary-subtle text-primary">{{ getActiveUnitsCount(o) }}</span></td>
+              <td class="text-end">
+                @if (auth.canManageTasks()) {
+                  <button class="btn btn-sm btn-outline-success me-1" (click)="openTransfer(o.id)" title="Transfer Ownership">
+                    <i class="bi bi-arrow-left-right"></i>
+                  </button>
+                }
+                @if (auth.canManageData()) {
+                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(o)"><i class="bi bi-pencil"></i></button>
+                }
+                @if (auth.canManageTasks()) {
+                  <button class="btn btn-sm btn-outline-danger" (click)="delete(o.id)"><i class="bi bi-trash"></i></button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="text-center text-muted py-4">No owners found.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <pagination-controls (pageChange)="currentPage.set($event)" [autoHide]="true"></pagination-controls>
+  }
+</div>
+
+<!-- Owner Form Modal -->
+@if (showModal()) {
+  <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isEditing() ? 'Edit Owner' : 'Add Owner' }}</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+            <input class="form-control" [(ngModel)]="form.fullName" placeholder="Full name" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+            <input class="form-control" type="email" [(ngModel)]="form.email" placeholder="Email address" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Phone</label>
+            <input class="form-control" [(ngModel)]="form.phone" placeholder="Phone number" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Address</label>
+            <textarea class="form-control" [(ngModel)]="form.address" rows="3" placeholder="Address"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.fullName.trim() || !form.email.trim()">
+            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            {{ isEditing() ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Transfer Ownership Modal -->
+@if (showTransferModal()) {
+  <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-arrow-left-right me-2"></i>Transfer Ownership</h5>
+          <button type="button" class="btn-close" (click)="closeTransfer()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-warning small"><i class="bi bi-exclamation-triangle me-1"></i>Any existing active ownership for this unit will be closed upon transfer.</div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Unit <span class="text-danger">*</span></label>
+            <select class="form-select" [(ngModel)]="transferForm.unitId">
+              <option value="">Select unit...</option>
+              @for (u of units(); track u.id) {
+                <option [value]="u.id">{{ u.unitNumber }} ({{ u.unitTypeName }})</option>
+              }
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Ownership % <span class="text-danger">*</span></label>
+            <input class="form-control" type="number" min="1" max="100" [(ngModel)]="transferForm.ownershipPercentage" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Purchase Date <span class="text-danger">*</span></label>
+            <input class="form-control" type="date" [(ngModel)]="transferForm.purchaseDate" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeTransfer()">Cancel</button>
+          <button class="btn btn-success" (click)="doTransfer()" [disabled]="isTransferring() || !transferForm.unitId">
+            @if (isTransferring()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            Transfer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Owner Detail Modal -->
+@if (selectedOwner()) {
+  <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-person-badge me-2"></i>{{ selectedOwner()!.fullName }}</h5>
+          <button type="button" class="btn-close" (click)="closeDetail()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+              <div class="text-muted small">Email</div>
+              <div class="fw-semibold">{{ selectedOwner()!.email }}</div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="text-muted small">Phone</div>
+              <div class="fw-semibold">{{ selectedOwner()!.phone || '—' }}</div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="text-muted small">Address</div>
+              <div class="fw-semibold">{{ selectedOwner()!.address || '—' }}</div>
+            </div>
+          </div>
+          <h6 class="fw-bold mb-3"><i class="bi bi-clock-history me-2"></i>Ownership History</h6>
+          @if (selectedOwner()!.ownershipHistory?.length) {
+            <div class="table-responsive">
+              <table class="table table-sm align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Unit</th>
+                    <th>Ownership %</th>
+                    <th>Purchase Date</th>
+                    <th>Sale Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (h of selectedOwner()!.ownershipHistory; track h.unitId) {
+                    <tr [class.table-success]="h.isActive">
+                      <td class="fw-semibold">{{ h.unitNumber }}</td>
+                      <td>{{ h.ownershipPercentage }}%</td>
+                      <td>{{ h.purchaseDate | date:'mediumDate' }}</td>
+                      <td>{{ h.saleDate ? (h.saleDate | date:'mediumDate') : '—' }}</td>
+                      <td>
+                        @if (h.isActive) {
+                          <span class="badge bg-success">Active</span>
+                        } @else {
+                          <span class="badge bg-secondary">Inactive</span>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <p class="text-muted">No ownership history recorded.</p>
+          }
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeDetail()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

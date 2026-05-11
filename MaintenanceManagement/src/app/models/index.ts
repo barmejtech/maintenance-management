@@ -1141,3 +1141,160 @@ export interface CreateQuotationLineItemRequest {
 export interface UpdateQuotationRequest extends CreateQuotationRequest {
   status: QuotationStatus;
 }
+
+// ── Property Profile models ──────────────────────────────────────────────────
+
+export enum UnitStatus {
+  Vacant = 0,
+  Occupied = 1,
+  UnderMaintenance = 2,
+  Reserved = 3
+}
+
+export interface UnitTypeDto {
+  id: string;
+  name: string;
+  description?: string;
+  defaultSizeSqm?: number;
+  createdAt: string;
+}
+
+export interface CreateUnitTypeDto {
+  name: string;
+  description?: string;
+  defaultSizeSqm?: number;
+}
+
+export interface UpdateUnitTypeDto {
+  name: string;
+  description?: string;
+  defaultSizeSqm?: number;
+}
+
+export interface UnitOwnershipHistoryDto {
+  id: string;
+  ownerId: string;
+  ownerName: string;
+  ownershipPercentage: number;
+  purchaseDate: string;
+  saleDate?: string;
+  isActive: boolean;
+}
+
+export interface UnitDto {
+  id: string;
+  unitNumber: string;
+  floor?: number;
+  sizeSqm?: number;
+  status: UnitStatus;
+  shareValue?: number;
+  unitTypeId: string;
+  unitTypeName: string;
+  createdAt: string;
+  ownershipHistory: UnitOwnershipHistoryDto[];
+}
+
+export interface CreateUnitDto {
+  unitNumber: string;
+  floor?: number;
+  sizeSqm?: number;
+  status: UnitStatus;
+  shareValue?: number;
+  unitTypeId: string;
+}
+
+export interface UpdateUnitDto {
+  unitNumber: string;
+  floor?: number;
+  sizeSqm?: number;
+  status: UnitStatus;
+  shareValue?: number;
+  unitTypeId: string;
+}
+
+export interface UnitMassUpdateDto {
+  unitIds: string[];
+  status?: UnitStatus;
+  floor?: number;
+}
+
+export interface OwnerUnitHistoryDto {
+  unitId: string;
+  unitNumber: string;
+  ownershipPercentage: number;
+  purchaseDate: string;
+  saleDate?: string;
+  isActive: boolean;
+}
+
+export interface OwnerDto {
+  id: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  createdAt: string;
+  ownershipHistory: OwnerUnitHistoryDto[];
+}
+
+export interface CreateOwnerDto {
+  fullName: string;
+  email: string;
+  phone?: string;
+  address?: string;
+}
+
+export interface UpdateOwnerDto {
+  fullName: string;
+  email: string;
+  phone?: string;
+  address?: string;
+}
+
+export interface TransferOwnershipDto {
+  unitId: string;
+  ownershipPercentage: number;
+  purchaseDate: string;
+}
+
+export interface TenantDto {
+  id: string;
+  unitId: string;
+  unitNumber: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  leaseStartDate: string;
+  leaseEndDate: string;
+  rentalAmount: number;
+  depositAmount?: number;
+  createdAt: string;
+}
+
+export interface CreateTenantDto {
+  unitId: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  leaseStartDate: string;
+  leaseEndDate: string;
+  rentalAmount: number;
+  depositAmount?: number;
+}
+
+export interface UpdateTenantDto {
+  unitId: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  leaseStartDate: string;
+  leaseEndDate: string;
+  rentalAmount: number;
+  depositAmount?: number;
+}
