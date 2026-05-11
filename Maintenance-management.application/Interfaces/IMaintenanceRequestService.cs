@@ -24,4 +24,7 @@ public interface IMaintenanceRequestService
 
     /// <summary>Returns the audit log for a specific request.</summary>
     Task<IEnumerable<AuditLogDto>> GetAuditLogAsync(Guid id);
+    Task<IEnumerable<MaintenanceRequestDto>> GetByUnitIdAsync(Guid unitId);
+    Task<IEnumerable<MaintenanceRequestDto>> GetByTenantIdAsync(Guid tenantId);
+    Task<IEnumerable<MaintenanceRequestDto>> GetByOwnerIdAsync(Guid ownerId);
 }

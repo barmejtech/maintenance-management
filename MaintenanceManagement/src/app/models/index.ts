@@ -1298,3 +1298,500 @@ export interface UpdateTenantDto {
   rentalAmount: number;
   depositAmount?: number;
 }
+// ==================== METER READING MODELS ====================
+
+export enum MeterType {
+  Electricity = 0,
+  Water = 1,
+  Gas = 2,
+  Solar = 3
+}
+
+export interface MeterReading {
+  id: string;
+  unitId: string;
+  unitNumber: string;
+  equipmentId?: string;
+  equipmentName?: string;
+  type: MeterType;
+  readingValue: number;
+  previousReadingValue?: number;
+  consumption?: number;
+  readingDate: string;
+  photoUrl?: string;
+  readByUserId: string;
+  readByName?: string;
+  notes?: string;
+  unitPrice?: number;
+  calculatedAmount?: number;
+  generatedInvoiceId?: string;
+  createdAt: string;
+}
+
+export interface CreateMeterReadingRequest {
+  unitId: string;
+  equipmentId?: string;
+  type: MeterType;
+  readingValue: number;
+  readingDate: string;
+  photoUrl?: string;
+  notes?: string;
+  unitPrice?: number;
+}
+
+export interface UpdateMeterReadingRequest {
+  readingValue: number;
+  photoUrl?: string;
+  notes?: string;
+}
+
+export interface BulkMeterReadingRequest {
+  type: MeterType;
+  readingDate: string;
+  unitPrice?: number;
+  readings: UnitMeterReading[];
+}
+
+export interface UnitMeterReading {
+  unitId: string;
+  readingValue: number;
+}
+
+export interface BulkMeterReadingResult {
+  successCount: number;
+  failedCount: number;
+  successfullyCreated: MeterReading[];
+  errors: BulkMeterReadingError[];
+}
+
+export interface BulkMeterReadingError {
+  unitId?: string;
+  unitNumber?: string;
+  errorMessage: string;
+}
+
+export interface MeterReadingChartData {
+  label: string;
+  readings: MeterReadingPoint[];
+}
+
+export interface MeterReadingPoint {
+  date: string;
+  value: number;
+  consumption: number;
+  amount: number;
+}
+
+// ==================== RENOVATION MODELS ====================
+
+export enum RenovationStatus {
+  Planned = 0,
+  InProgress = 1,
+  Completed = 2,
+  Cancelled = 3,
+  OnHold = 4
+}
+
+export interface Renovation {
+  id: string;
+  unitId: string;
+  unitNumber: string;
+  title: string;
+  description?: string;
+  startDate: string;
+  endDate?: string;
+  status: RenovationStatus;
+  budget: number;
+  actualCost: number;
+  contractorName?: string;
+  contractorPhone?: string;
+  approvedByUserId?: string;
+  approvedAt?: string;
+  notes?: string;
+  createdAt: string;
+}
+
+export interface CreateRenovationRequest {
+  unitId: string;
+  title: string;
+  description?: string;
+  startDate: string;
+  endDate?: string;
+  budget: number;
+  contractorName?: string;
+  contractorPhone?: string;
+  notes?: string;
+}
+
+export interface UpdateRenovationRequest {
+  title: string;
+  description?: string;
+  startDate: string;
+  endDate?: string;
+  status: RenovationStatus;
+  budget: number;
+  actualCost: number;
+  contractorName?: string;
+  contractorPhone?: string;
+  notes?: string;
+}
+
+// ==================== ACCOUNT (GL) MODELS ====================
+
+export enum AccountType {
+  Asset = 0,
+  Liability = 1,
+  Equity = 2,
+  Revenue = 3,
+  Expense = 4
+}
+
+export interface Account {
+  id: string;
+  accountCode: string;
+  name: string;
+  type: AccountType;
+  balance: number;
+  openingBalance?: number;
+  openingBalanceDate?: string;
+  parentAccountId?: string;
+  parentAccountName?: string;
+  isActive: boolean;
+  description?: string;
+  childAccounts?: Account[];
+  createdAt: string;
+}
+
+export interface CreateAccountRequest {
+  accountCode: string;
+  name: string;
+  type: AccountType;
+  openingBalance?: number;
+  openingBalanceDate?: string;
+  parentAccountId?: string;
+  description?: string;
+}
+
+export interface UpdateAccountRequest {
+  name: string;
+  isActive: boolean;
+  description?: string;
+}
+
+// ==================== JOURNAL ENTRY MODELS ====================
+
+export interface JournalLineItem {
+  id: string;
+  accountId: string;
+  accountCode: string;
+  accountName: string;
+  debit: number;
+  credit: number;
+  description?: string;
+}
+
+export interface JournalEntry {
+  id: string;
+  entryNumber: string;
+  entryDate: string;
+  description?: string;
+  isPosted: boolean;
+  postedDate?: string;
+  createdByUserId: string;
+  createdByName?: string;
+  approvedByUserId?: string;
+  approvedAt?: string;
+  lineItems: JournalLineItem[];
+  createdAt: string;
+}
+
+export interface CreateJournalLineItemRequest {
+  accountId: string;
+  debit: number;
+  credit: number;
+  description?: string;
+}
+
+export interface CreateJournalEntryRequest {
+  entryDate: string;
+  description?: string;
+  lineItems: CreateJournalLineItemRequest[];
+}
+
+// ==================== VENDOR MODELS ====================
+
+export interface Vendor {
+  id: string;
+  name: string;
+  companyName?: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  taxNumber?: string;
+  bankName?: string;
+  bankAccountNumber?: string;
+  notes?: string;
+  isActive: boolean;
+  totalPurchased?: number;
+  totalPaid?: number;
+  balanceDue?: number;
+  createdAt: string;
+}
+
+export interface CreateVendorRequest {
+  name: string;
+  companyName?: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  taxNumber?: string;
+  bankName?: string;
+  bankAccountNumber?: string;
+  notes?: string;
+}
+
+export interface UpdateVendorRequest {
+  name: string;
+  companyName?: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  taxNumber?: string;
+  bankName?: string;
+  bankAccountNumber?: string;
+  notes?: string;
+  isActive: boolean;
+}
+
+// ==================== EXPENSE MODELS ====================
+
+export enum ExpenseStatus {
+  Draft = 0,
+  Approved = 1,
+  Paid = 2,
+  Cancelled = 3,
+  Overdue = 4
+}
+
+export interface Expense {
+  id: string;
+  expenseNumber: string;
+  vendorId: string;
+  vendorName: string;
+  amount: number;
+  taxAmount?: number;
+  totalAmount: number;
+  expenseDate: string;
+  dueDate?: string;
+  paidDate?: string;
+  status: ExpenseStatus;
+  description?: string;
+  invoiceNumber?: string;
+  renovationId?: string;
+  renovationTitle?: string;
+  sparePartId?: string;
+  sparePartName?: string;
+  createdAt: string;
+}
+
+export interface CreateExpenseRequest {
+  vendorId: string;
+  amount: number;
+  taxAmount?: number;
+  expenseDate: string;
+  dueDate?: string;
+  description?: string;
+  invoiceNumber?: string;
+  renovationId?: string;
+  sparePartId?: string;
+}
+
+export interface UpdateExpenseRequest {
+  amount: number;
+  taxAmount?: number;
+  expenseDate: string;
+  dueDate?: string;
+  status: ExpenseStatus;
+  description?: string;
+  invoiceNumber?: string;
+}
+
+// ==================== PAYMENT VOUCHER MODELS ====================
+
+export interface PaymentVoucher {
+  id: string;
+  voucherNumber: string;
+  voucherDate: string;
+  amount: number;
+  paymentMethod: PaymentMethod;
+  chequeNumber?: string;
+  bankName?: string;
+  chequeDate?: string;
+  expenseId?: string;
+  expenseNumber?: string;
+  vendorName?: string;
+  invoiceId?: string;
+  invoiceNumber?: string;
+  clientName?: string;
+  ownerId?: string;
+  ownerName?: string;
+  payeeName?: string;
+  description?: string;
+  isPrinted: boolean;
+  printedAt?: string;
+  printedByUserId?: string;
+  createdAt: string;
+}
+
+export interface CreatePaymentVoucherRequest {
+  amount: number;
+  paymentMethod: PaymentMethod;
+  chequeNumber?: string;
+  bankName?: string;
+  chequeDate?: string;
+  expenseId?: string;
+  invoiceId?: string;
+  ownerId?: string;
+  payeeName?: string;
+  description?: string;
+}
+
+export interface UpdatePaymentVoucherRequest {
+  paymentMethod: PaymentMethod;
+  chequeNumber?: string;
+  bankName?: string;
+  chequeDate?: string;
+  description?: string;
+}
+
+// ==================== BANK RECONCILIATION MODELS ====================
+
+export interface ReconciliationEntry {
+  id: string;
+  transactionType: string;
+  transactionId?: string;
+  transactionDate: string;
+  amount: number;
+  isMatched: boolean;
+  notes?: string;
+}
+
+export interface BankReconciliation {
+  id: string;
+  bankAccountName: string;
+  bankAccountNumber: string;
+  statementDate: string;
+  statementStartDate: string;
+  statementEndDate: string;
+  statementOpeningBalance: number;
+  statementClosingBalance: number;
+  systemOpeningBalance: number;
+  systemClosingBalance: number;
+  difference: number;
+  isReconciled: boolean;
+  reconciledAt?: string;
+  reconciledByUserId?: string;
+  notes?: string;
+  entries: ReconciliationEntry[];
+  createdAt: string;
+}
+
+export interface CreateBankReconciliationRequest {
+  bankAccountName: string;
+  bankAccountNumber: string;
+  statementDate: string;
+  statementStartDate: string;
+  statementEndDate: string;
+  statementOpeningBalance: number;
+  statementClosingBalance: number;
+  notes?: string;
+}
+
+export interface CompleteReconciliationRequest {
+  notes?: string;
+}
+
+// ==================== FINANCIAL REPORT MODELS ====================
+
+export interface TrialBalanceAccount {
+  accountCode: string;
+  accountName: string;
+  debit: number;
+  credit: number;
+}
+
+export interface TrialBalance {
+  accounts: TrialBalanceAccount[];
+  totalDebit: number;
+  totalCredit: number;
+}
+
+export interface ProfitLoss {
+  totalRevenue: number;
+  totalExpenses: number;
+  netProfit: number;
+  revenueAccounts: AccountBalance[];
+  expenseAccounts: AccountBalance[];
+  startDate: string;
+  endDate: string;
+}
+
+export interface AccountBalance {
+  accountId: string;
+  accountCode: string;
+  accountName: string;
+  netBalance: number;
+}
+
+export interface BalanceSheet {
+  totalAssets: number;
+  totalLiabilities: number;
+  totalEquity: number;
+  assets: AccountBalance[];
+  liabilities: AccountBalance[];
+  equity: AccountBalance[];
+  asOfDate: string;
+}
+
+export interface CashFlowItem {
+  description: string;
+  amount: number;
+  date: string;
+}
+
+export interface CashFlow {
+  operatingCashFlow: number;
+  investingCashFlow: number;
+  financingCashFlow: number;
+  netCashFlow: number;
+  beginningCashBalance: number;
+  endingCashBalance: number;
+  operatingItems: CashFlowItem[];
+  investingItems: CashFlowItem[];
+  financingItems: CashFlowItem[];
+}
+
+export interface AgingItem {
+  id: string;
+  name: string;
+  documentNumber: string;
+  dueDate: string;
+  amount: number;
+  daysOverdue: number;
+  agingBucket: string;
+}
+
+export interface AgingReport {
+  current: number;
+  days1To30: number;
+  days31To60: number;
+  days61To90: number;
+  days90Plus: number;
+  total: number;
+  currentItems: AgingItem[];
+  days1To30Items: AgingItem[];
+  days31To60Items: AgingItem[];
+  days61To90Items: AgingItem[];
+  days90PlusItems: AgingItem[];
+  items: AgingItem[];
+}

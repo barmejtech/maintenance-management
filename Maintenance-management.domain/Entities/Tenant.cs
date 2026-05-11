@@ -15,4 +15,7 @@ public class Tenant : BaseEntity
     public DateTime LeaseEndDate { get; set; }
     public decimal RentalAmount { get; set; }
     public decimal? DepositAmount { get; set; }
+
+    public ICollection<MaintenanceRequest> MaintenanceRequests { get; set; } = new List<MaintenanceRequest>();
+    public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

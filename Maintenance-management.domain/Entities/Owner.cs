@@ -8,4 +8,7 @@ public class Owner : BaseEntity
     public string? Address { get; set; }
 
     public ICollection<UnitOwnership> UnitOwnerships { get; set; } = new List<UnitOwnership>();
+
+    public ICollection<MaintenanceRequest> MaintenanceRequests { get; set; } = new List<MaintenanceRequest>();
+    public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

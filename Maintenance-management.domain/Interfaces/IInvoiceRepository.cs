@@ -9,4 +9,9 @@ public interface IInvoiceRepository : IRepository<Invoice>
     Task<Invoice?> GetWithLineItemsAsync(Guid id);
     Task<IEnumerable<Invoice>> GetByClientIdAsync(Guid clientId);
     Task<IEnumerable<Invoice>> GetByMaintenanceReportIdAsync(Guid reportId);
+    Task<IEnumerable<Invoice>> GetByUnitIdAsync(Guid unitId);
+    Task<IEnumerable<Invoice>> GetByTenantIdAsync(Guid tenantId);
+    Task<IEnumerable<Invoice>> GetByUnitOwnershipIdAsync(Guid unitOwnershipId);
+    Task<IEnumerable<Invoice>> GetUnpaidInvoicesAsync(DateTime asOfDate);
+
 }

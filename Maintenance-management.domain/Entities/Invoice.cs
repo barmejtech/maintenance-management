@@ -19,14 +19,30 @@ public class Invoice : BaseEntity
     public string? Notes { get; set; }
     public string CreatedByUserId { get; set; } = string.Empty;
 
+    // EXISTING
     public Guid? TaskOrderId { get; set; }
     public TaskOrder? TaskOrder { get; set; }
 
     public Guid? ClientId { get; set; }
     public Client? Client { get; set; }
+    public decimal? PaidAmount { get; set; }
 
     public Guid? MaintenanceReportId { get; set; }
     public MaintenanceReport? MaintenanceReport { get; set; }
 
+
+    // Bill to specific unit (for strata fees)
+    public Guid? UnitId { get; set; }
+    public Unit? Unit { get; set; }
+
+    // Bill to specific owner
+    public Guid? UnitOwnershipId { get; set; }
+    public UnitOwnership? UnitOwnership { get; set; }
+
+    // Bill to tenant
+    public Guid? TenantId { get; set; }
+    public Tenant? Tenant { get; set; }
+
+    // EXISTING
     public ICollection<InvoiceLineItem> LineItems { get; set; } = new List<InvoiceLineItem>();
 }

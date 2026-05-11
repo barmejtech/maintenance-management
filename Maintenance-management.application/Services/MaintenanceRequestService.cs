@@ -53,7 +53,10 @@ public class MaintenanceRequestService : IMaintenanceRequestService
             RequestDate = dto.RequestDate ?? DateTime.UtcNow,
             ClientId = dto.ClientId,
             Notes = dto.Notes,
-            Status = MaintenanceRequestStatus.Pending
+            Status = MaintenanceRequestStatus.Pending,
+            UnitId = dto.UnitId,
+            TenantId = dto.TenantId,
+            OwnerId = dto.OwnerId
         };
 
         var created = await _repo.AddAsync(entity);
@@ -249,4 +252,22 @@ public class MaintenanceRequestService : IMaintenanceRequestService
                 AssignedAt = a.AssignedAt
             }).ToList()
     };
+
+    public async Task<IEnumerable<MaintenanceRequestDto>> GetByUnitIdAsync(Guid unitId)
+    {
+        var items = await _repo.GetByUnitIdAsync(unitId);
+        return items.Where(r => !r.IsDeleted).Select(MapToDto);
+    }
+
+    public async Task<IEnumerable<MaintenanceRequestDto>> GetByTenantIdAsync(Guid tenantId)
+    {
+        var items = await _repo.GetByTenantIdAsync(tenantId);
+        return items.Where(r => !r.IsDeleted).Select(MapToDto);
+    }
+
+    public async Task<IEnumerable<MaintenanceRequestDto>> GetByOwnerIdAsync(Guid ownerId)
+    {
+        var items = await _repo.GetByOwnerIdAsync(ownerId);
+        return items.Where(r => !r.IsDeleted).Select(MapToDto);
+    }
 }

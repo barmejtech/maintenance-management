@@ -13,4 +13,7 @@ public interface IInvoiceService
     Task<IEnumerable<InvoiceDto>> GetByStatusAsync(InvoiceStatus status);
     Task<IEnumerable<InvoiceDto>> GetByClientIdAsync(Guid clientId);
     Task<IEnumerable<InvoiceDto>> GetByMaintenanceReportIdAsync(Guid reportId);
+    Task<IEnumerable<InvoiceDto>> GetByUnitIdAsync(Guid unitId);
+    Task<IEnumerable<InvoiceDto>> GetByTenantIdAsync(Guid tenantId);
+    Task<IEnumerable<InvoiceDto>> GetByUnitOwnershipIdAsync(Guid unitOwnershipId);
 }

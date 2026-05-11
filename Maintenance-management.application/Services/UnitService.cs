@@ -130,7 +130,7 @@ public class UnitService : IUnitService
         UnitTypeId = item.UnitTypeId,
         UnitTypeName = item.UnitType?.Name ?? string.Empty,
         CreatedAt = item.CreatedAt,
-        OwnershipHistory = item.OwnershipHistory
+        OwnershipHistory = (List<UnitOwnershipHistoryDto>)item.OwnershipHistory
             .Where(h => !h.IsDeleted)
             .OrderByDescending(h => h.PurchaseDate)
             .Select(h => new UnitOwnershipHistoryDto

@@ -44,8 +44,8 @@ public static class DataSeeder
             {
                 UserName = adminEmail,
                 Email = adminEmail,
-                FirstName = "عبدالله",
-                LastName = "الغامدي",
+                FirstName = "Wei Ming",
+                LastName = "Tan",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -73,8 +73,8 @@ public static class DataSeeder
             {
                 UserName = managerEmail,
                 Email = managerEmail,
-                FirstName = "فهد",
-                LastName = "القحطاني",
+                FirstName = "Jia Hui",
+                LastName = "Lim",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -102,8 +102,8 @@ public static class DataSeeder
             {
                 UserName = techEmail,
                 Email = techEmail,
-                FirstName = "خالد",
-                LastName = "الشهري",
+                FirstName = "Raj",
+                LastName = "Kumar",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -131,8 +131,8 @@ public static class DataSeeder
             {
                 UserName = dataEntryEmail,
                 Email = dataEntryEmail,
-                FirstName = "سعود",
-                LastName = "الدوسري",
+                FirstName = "Mei Lin",
+                LastName = "Wong",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -160,8 +160,8 @@ public static class DataSeeder
             {
                 UserName = supportEmail,
                 Email = supportEmail,
-                FirstName = "ياسر",
-                LastName = "العتيبي",
+                FirstName = "Kavin",
+                LastName = "Nair",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -180,7 +180,7 @@ public static class DataSeeder
         }
 
         // ── Seed second technician user ───────────────────────────────────────────
-        const string tech2Email = "tech2@maintenance.sa";
+        const string tech2Email = "tech2@maintenance.my";
         const string tech2Password = "Tech1234!";
 
         if (await userManager.FindByEmailAsync(tech2Email) is null)
@@ -189,8 +189,8 @@ public static class DataSeeder
             {
                 UserName = tech2Email,
                 Email = tech2Email,
-                FirstName = "عمر",
-                LastName = "الغامدي",
+                FirstName = "Arjun",
+                LastName = "Tan",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -209,7 +209,7 @@ public static class DataSeeder
         }
 
         // ── Seed third technician user ────────────────────────────────────────────
-        const string tech3Email = "tech3@maintenance.sa";
+        const string tech3Email = "tech3@maintenance.my";
         const string tech3Password = "Tech1234!";
 
         if (await userManager.FindByEmailAsync(tech3Email) is null)
@@ -218,8 +218,8 @@ public static class DataSeeder
             {
                 UserName = tech3Email,
                 Email = tech3Email,
-                FirstName = "سالم",
-                LastName = "المطيري",
+                FirstName = "Kok Beng",
+                LastName = "Lee",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -238,7 +238,7 @@ public static class DataSeeder
         }
 
         // ── Seed second manager user ──────────────────────────────────────────────
-        const string manager2Email = "manager2@maintenance.sa";
+        const string manager2Email = "manager2@maintenance.my";
         const string manager2Password = "Manager123!";
 
         if (await userManager.FindByEmailAsync(manager2Email) is null)
@@ -247,8 +247,8 @@ public static class DataSeeder
             {
                 UserName = manager2Email,
                 Email = manager2Email,
-                FirstName = "نورة",
-                LastName = "الحربي",
+                FirstName = "Pei Shan",
+                LastName = "Low",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -267,7 +267,7 @@ public static class DataSeeder
         }
 
         // ── Seed second data-entry user ───────────────────────────────────────────
-        const string dataEntry2Email = "dataentry2@maintenance.sa";
+        const string dataEntry2Email = "dataentry2@maintenance.my";
         const string dataEntry2Password = "DataEntry123!";
 
         if (await userManager.FindByEmailAsync(dataEntry2Email) is null)
@@ -276,8 +276,8 @@ public static class DataSeeder
             {
                 UserName = dataEntry2Email,
                 Email = dataEntry2Email,
-                FirstName = "محمد",
-                LastName = "السبيعي",
+                FirstName = "Viknesh",
+                LastName = "Menon",
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -296,14 +296,14 @@ public static class DataSeeder
         }
         var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
-        var techUser       = await userManager.FindByEmailAsync(techEmail);
-        var managerUser    = await userManager.FindByEmailAsync(managerEmail);
-        var dataEntryUser  = await userManager.FindByEmailAsync(dataEntryEmail);
-        var tech2User      = await userManager.FindByEmailAsync(tech2Email);
-        var tech3User      = await userManager.FindByEmailAsync(tech3Email);
-        var manager2User   = await userManager.FindByEmailAsync(manager2Email);
+        var techUser = await userManager.FindByEmailAsync(techEmail);
+        var managerUser = await userManager.FindByEmailAsync(managerEmail);
+        var dataEntryUser = await userManager.FindByEmailAsync(dataEntryEmail);
+        var tech2User = await userManager.FindByEmailAsync(tech2Email);
+        var tech3User = await userManager.FindByEmailAsync(tech3Email);
+        var manager2User = await userManager.FindByEmailAsync(manager2Email);
         var dataEntry2User = await userManager.FindByEmailAsync(dataEntry2Email);
-        var adminUser      = await userManager.FindByEmailAsync(configuration["AdminSettings:Email"] ?? "admin@maintenance.com");
+        var adminUser = await userManager.FindByEmailAsync(configuration["AdminSettings:Email"] ?? "admin@maintenance.com");
         if (adminUser is null)
         {
             logger.LogWarning("Admin user not found; skipping domain entity seeding.");
@@ -387,28 +387,28 @@ public static class DataSeeder
 
         var ownerSeeds = new List<Owner>
         {
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000001"), FullName = "أحمد بن صالح العتيبي", Email = "ahmad.otaibi@property.sa", Phone = "+966501110101", Address = "حي الياسمين، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000002"), FullName = "سارة محمد القحطاني", Email = "sarah.qahtani@property.sa", Phone = "+966501110102", Address = "حي الروضة، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000003"), FullName = "Faisal Al-Harbi", Email = "faisal.harbi@property.sa", Phone = "+966501110103", Address = "حي الشاطئ، الدمام", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000004"), FullName = "نورة عبدالله الغامدي", Email = "noura.ghamdi@property.sa", Phone = "+966501110104", Address = "حي العوالي، مكة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000005"), FullName = "محمد سعد الدوسري", Email = "m.dosari@property.sa", Phone = "+966501110105", Address = "حي الملك فهد، المدينة المنورة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000006"), FullName = "Hind Al-Shehri", Email = "hind.shehri@property.sa", Phone = "+966501110106", Address = "حي السليمانية، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000007"), FullName = "تركي فهد المطيري", Email = "turki.mutairi@property.sa", Phone = "+966501110107", Address = "حي النهضة، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000008"), FullName = "Mona Al-Zahrani", Email = "mona.zahrani@property.sa", Phone = "+966501110108", Address = "حي النزهة، الدمام", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000009"), FullName = "راشد علي الشمري", Email = "rashed.shammari@property.sa", Phone = "+966501110109", Address = "حي الحمراء، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000010"), FullName = "Laila Al-Otaibi", Email = "laila.otaibi@property.sa", Phone = "+966501110110", Address = "حي الزهراء، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000011"), FullName = "عبدالعزيز ناصر العنزي", Email = "abdulaziz.enezi@property.sa", Phone = "+966501110111", Address = "حي الفيصلية، الدمام", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000012"), FullName = "Hessa Al-Qahtani", Email = "hessa.q@property.sa", Phone = "+966501110112", Address = "حي الندى، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000013"), FullName = "عبدالرحمن الزهراني", Email = "abdurrahman.zahrani@property.sa", Phone = "+966501110113", Address = "حي الأندلس، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000014"), FullName = "Yousef Al-Ghamdi", Email = "yousef.ghamdi@property.sa", Phone = "+966501110114", Address = "حي المريكبات، الخبر", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000015"), FullName = "ريم خالد الحربي", Email = "reem.harbi@property.sa", Phone = "+966501110115", Address = "حي النرجس، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000016"), FullName = "Ibrahim Al-Subaie", Email = "ibrahim.subaie@property.sa", Phone = "+966501110116", Address = "حي الفيحاء، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000017"), FullName = "هند سليمان البلوي", Email = "hind.balawi@property.sa", Phone = "+966501110117", Address = "حي الحزام الذهبي، الخبر", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000018"), FullName = "Khaled Al-Dossary", Email = "khaled.dossary@property.sa", Phone = "+966501110118", Address = "حي الروابي، الرياض", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000019"), FullName = "أمل فهد العتيبي", Email = "amal.otaibi@property.sa", Phone = "+966501110119", Address = "حي مشرفة، جدة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000020"), FullName = "Saleh Al-Mutairi", Email = "saleh.mutairi@property.sa", Phone = "+966501110120", Address = "حي أحد، الدمام", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000021"), FullName = "منة الله الشريف", Email = "manna.sharif@property.sa", Phone = "+966501110121", Address = "حي جبل النور، مكة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0002-000000000022"), FullName = "Ziad Al-Qahtani", Email = "ziad.qahtani@property.sa", Phone = "+966501110122", Address = "حي العزيزية، المدينة المنورة", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000001"), FullName = "Daniel Iskandar Nair", Email = "daniel.nair@property.my", Phone = "+60101110101", Address = "دامنسارا هايتس، كوالالمبور", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000002"), FullName = "Mei Ling Viknesh Lim", Email = "meiling.lim@property.my", Phone = "+60101110102", Address = "تامان تون، جوهور باهرو", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000003"), FullName = "Adrian Low", Email = "adrian.low@property.my", Phone = "+60101110103", Address = "بندر سونواي، شاه عالم", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000004"), FullName = "Pei Shan Wei Ming Tan", Email = "peishan.tan@property.my", Phone = "+60101110104", Address = "سري هارتاماس، بوتراجايا", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000005"), FullName = "Viknesh Suren Wong", Email = "viknesh.wong@property.my", Phone = "+60101110105", Address = "مونت كيارا، إيبوه", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000006"), FullName = "Kavitha Kumar", Email = "kavitha.kumar@property.my", Phone = "+60101110106", Address = "بانغسار، كوالالمبور", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000007"), FullName = "Shawn Jia Hui Lee", Email = "shawn.lee@property.my", Phone = "+60101110107", Address = "تامان موليا، جوهور باهرو", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000008"), FullName = "Sabrina Teh", Email = "sabrina.teh@property.my", Phone = "+60101110108", Address = "كوتا دامنسارا، شاه عالم", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000009"), FullName = "Marcus Kelvin Ong", Email = "marcus.ong@property.my", Phone = "+60101110109", Address = "ديزا بارك سيتي، كوالالمبور", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000010"), FullName = "Carmen Nair", Email = "carmen.nair@property.my", Phone = "+60101110110", Address = "تامان سيبوتيه، جوهور باهرو", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000011"), FullName = "Brandon Pravin Cheah", Email = "brandon.cheah@property.my", Phone = "+60101110111", Address = "سكشن 13، شاه عالم", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000012"), FullName = "Cheryl Lim", Email = "cheryl.lim@property.my", Phone = "+60101110112", Address = "سيتي وانغسا، كوالالمبور", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000013"), FullName = "Darren Teh", Email = "darren.teh@property.my", Phone = "+60101110113", Address = "تامان بيلاڠي، جوهور باهرو", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000014"), FullName = "Ashwin Tan", Email = "ashwin.tan@property.my", Phone = "+60101110114", Address = "جورج تاون سنترال، جورج تاون", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000015"), FullName = "Pei Yee Raj Low", Email = "peiyee.low@property.my", Phone = "+60101110115", Address = "كيارا باي، كوالالمبور", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000016"), FullName = "Ian Menon", Email = "ian.menon@property.my", Phone = "+60101110116", Address = "تامان داناو ديسا، جوهور باهرو", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000017"), FullName = "Kavitha Jerome Krishnan", Email = "kavitha.krishnan@property.my", Phone = "+60101110117", Address = "غورني درايف، جورج تاون", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000018"), FullName = "Raj Wong", Email = "raj.wong@property.my", Phone = "+60101110118", Address = "تامان ديسا، كوالالمبور", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000019"), FullName = "Nisha Jia Hui Nair", Email = "nisha.nair@property.my", Phone = "+60101110119", Address = "تامان سنتوسا، جوهور باهرو", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000020"), FullName = "Brandon Lee", Email = "brandon.lee@property.my", Phone = "+60101110120", Address = "بوكيت جليل، شاه عالم", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000021"), FullName = "Alicia Ramli", Email = "alicia.ramli@property.my", Phone = "+60101110121", Address = "بريسينكت 8، بوتراجايا", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0002-000000000022"), FullName = "Marcus Lim", Email = "marcus.lim@property.my", Phone = "+60101110122", Address = "غريينتاون، إيبوه", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
         };
 
         var ownershipSeeds = new List<UnitOwnership>
@@ -440,18 +440,18 @@ public static class DataSeeder
 
         var tenantSeeds = new List<Tenant>
         {
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000001"), UnitId = unitSeeds[0].Id, FullName = "Omar Al-Qarni", Email = "tenant.omar1@email.sa", Phone = "+966551000201", EmergencyContactName = "منى القرني", EmergencyContactPhone = "+966551900201", LeaseStartDate = new DateTime(2025, 1, 1), LeaseEndDate = new DateTime(2025, 12, 31), RentalAmount = 3200m, DepositAmount = 3200m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000002"), UnitId = unitSeeds[3].Id, FullName = "ريم سعيد الشهراني", Email = "tenant.reem2@email.sa", Phone = "+966551000202", EmergencyContactName = "سعيد الشهراني", EmergencyContactPhone = "+966551900202", LeaseStartDate = new DateTime(2025, 2, 1), LeaseEndDate = new DateTime(2026, 1, 31), RentalAmount = 4500m, DepositAmount = 4500m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000003"), UnitId = unitSeeds[5].Id, FullName = "Mariam Al-Hazmi", Email = "tenant.mariam3@email.sa", Phone = "+966551000203", EmergencyContactName = "خالد الحازمي", EmergencyContactPhone = "+966551900203", LeaseStartDate = new DateTime(2025, 1, 15), LeaseEndDate = new DateTime(2026, 1, 14), RentalAmount = 4700m, DepositAmount = 4700m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000004"), UnitId = unitSeeds[6].Id, FullName = "ناصر عبدالله المطيري", Email = "tenant.nasser4@email.sa", Phone = "+966551000204", EmergencyContactName = "عبدالله المطيري", EmergencyContactPhone = "+966551900204", LeaseStartDate = new DateTime(2025, 3, 1), LeaseEndDate = new DateTime(2026, 2, 28), RentalAmount = 6200m, DepositAmount = 6200m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000005"), UnitId = unitSeeds[7].Id, FullName = "Lina Al-Qahtani", Email = "tenant.lina5@email.sa", Phone = "+966551000205", EmergencyContactName = "سالم القحطاني", EmergencyContactPhone = "+966551900205", LeaseStartDate = new DateTime(2025, 4, 1), LeaseEndDate = new DateTime(2026, 3, 31), RentalAmount = 6400m, DepositAmount = 6400m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000006"), UnitId = unitSeeds[9].Id, FullName = "عبدالعزيز العمري", Email = "tenant.aziz6@email.sa", Phone = "+966551000206", EmergencyContactName = "نوال العمري", EmergencyContactPhone = "+966551900206", LeaseStartDate = new DateTime(2025, 2, 20), LeaseEndDate = new DateTime(2026, 2, 19), RentalAmount = 6600m, DepositAmount = 6600m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000007"), UnitId = unitSeeds[10].Id, FullName = "Hamad Al-Shammari", Email = "tenant.hamad7@email.sa", Phone = "+966551000207", EmergencyContactName = "راشد الشمري", EmergencyContactPhone = "+966551900207", LeaseStartDate = new DateTime(2025, 1, 10), LeaseEndDate = new DateTime(2026, 1, 9), RentalAmount = 7900m, DepositAmount = 7900m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000008"), UnitId = unitSeeds[11].Id, FullName = "ميساء فهد الحربي", Email = "tenant.maisa8@email.sa", Phone = "+966551000208", EmergencyContactName = "فهد الحربي", EmergencyContactPhone = "+966551900208", LeaseStartDate = new DateTime(2025, 2, 5), LeaseEndDate = new DateTime(2026, 2, 4), RentalAmount = 8100m, DepositAmount = 8100m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000009"), UnitId = unitSeeds[14].Id, FullName = "Norah Al-Ghamdi", Email = "tenant.norah9@email.sa", Phone = "+966551000209", EmergencyContactName = "علي الغامدي", EmergencyContactPhone = "+966551900209", LeaseStartDate = new DateTime(2025, 1, 1), LeaseEndDate = new DateTime(2025, 12, 31), RentalAmount = 13500m, DepositAmount = 13500m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000010"), UnitId = unitSeeds[15].Id, FullName = "عبدالله عبدالرحمن الشهري", Email = "tenant.abdullah10@email.sa", Phone = "+966551000210", EmergencyContactName = "عبدالرحمن الشهري", EmergencyContactPhone = "+966551900210", LeaseStartDate = new DateTime(2025, 3, 12), LeaseEndDate = new DateTime(2026, 3, 11), RentalAmount = 13800m, DepositAmount = 13800m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000011"), UnitId = unitSeeds[18].Id, FullName = "Yara Al-Mutairi", Email = "tenant.yara11@email.sa", Phone = "+966551000211", EmergencyContactName = "هند المطيري", EmergencyContactPhone = "+966551900211", LeaseStartDate = new DateTime(2025, 4, 10), LeaseEndDate = new DateTime(2026, 4, 9), RentalAmount = 8600m, DepositAmount = 8600m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new() { Id = new Guid("10000000-0000-0000-0004-000000000012"), UnitId = unitSeeds[19].Id, FullName = "يوسف أحمد الدوسري", Email = "tenant.yousef12@email.sa", Phone = "+966551000212", EmergencyContactName = "أحمد الدوسري", EmergencyContactPhone = "+966551900212", LeaseStartDate = new DateTime(2025, 1, 25), LeaseEndDate = new DateTime(2026, 1, 24), RentalAmount = 4900m, DepositAmount = 4900m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000001"), UnitId = unitSeeds[0].Id, FullName = "Arjun Goh", Email = "tenant.arjun1@email.my", Phone = "+60111000201", EmergencyContactName = "Pei Ling Goh", EmergencyContactPhone = "+60111900201", LeaseStartDate = new DateTime(2025, 1, 1), LeaseEndDate = new DateTime(2025, 12, 31), RentalAmount = 3200m, DepositAmount = 3200m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000002"), UnitId = unitSeeds[3].Id, FullName = "Pei Yee Ganesan Kumar", Email = "tenant.peiyee2@email.my", Phone = "+60111000202", EmergencyContactName = "Ganesan Kumar", EmergencyContactPhone = "+60111900202", LeaseStartDate = new DateTime(2025, 2, 1), LeaseEndDate = new DateTime(2026, 1, 31), RentalAmount = 4500m, DepositAmount = 4500m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000003"), UnitId = unitSeeds[5].Id, FullName = "Priya Pillai", Email = "tenant.priya3@email.my", Phone = "+60111000203", EmergencyContactName = "Raj Pillai", EmergencyContactPhone = "+60111900203", LeaseStartDate = new DateTime(2025, 1, 15), LeaseEndDate = new DateTime(2026, 1, 14), RentalAmount = 4700m, DepositAmount = 4700m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000004"), UnitId = unitSeeds[6].Id, FullName = "Pravin Wei Ming Lee", Email = "tenant.pravin4@email.my", Phone = "+60111000204", EmergencyContactName = "Wei Ming Lee", EmergencyContactPhone = "+60111900204", LeaseStartDate = new DateTime(2025, 3, 1), LeaseEndDate = new DateTime(2026, 2, 28), RentalAmount = 6200m, DepositAmount = 6200m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000005"), UnitId = unitSeeds[7].Id, FullName = "Hannah Lim", Email = "tenant.hannah5@email.my", Phone = "+60111000205", EmergencyContactName = "Kok Beng Lim", EmergencyContactPhone = "+60111900205", LeaseStartDate = new DateTime(2025, 4, 1), LeaseEndDate = new DateTime(2026, 3, 31), RentalAmount = 6400m, DepositAmount = 6400m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000006"), UnitId = unitSeeds[9].Id, FullName = "Brandon Chan", Email = "tenant.brandon6@email.my", Phone = "+60111000206", EmergencyContactName = "Siew Ling Chan", EmergencyContactPhone = "+60111900206", LeaseStartDate = new DateTime(2025, 2, 20), LeaseEndDate = new DateTime(2026, 2, 19), RentalAmount = 6600m, DepositAmount = 6600m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000007"), UnitId = unitSeeds[10].Id, FullName = "Jason Ong", Email = "tenant.jason7@email.my", Phone = "+60111000207", EmergencyContactName = "Marcus Ong", EmergencyContactPhone = "+60111900207", LeaseStartDate = new DateTime(2025, 1, 10), LeaseEndDate = new DateTime(2026, 1, 9), RentalAmount = 7900m, DepositAmount = 7900m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000008"), UnitId = unitSeeds[11].Id, FullName = "Anjali Jia Hui Low", Email = "tenant.anjali8@email.my", Phone = "+60111000208", EmergencyContactName = "Jia Hui Low", EmergencyContactPhone = "+60111900208", LeaseStartDate = new DateTime(2025, 2, 5), LeaseEndDate = new DateTime(2026, 2, 4), RentalAmount = 8100m, DepositAmount = 8100m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000009"), UnitId = unitSeeds[14].Id, FullName = "Vanessa Tan", Email = "tenant.vanessa9@email.my", Phone = "+60111000209", EmergencyContactName = "Kelvin Tan", EmergencyContactPhone = "+60111900209", LeaseStartDate = new DateTime(2025, 1, 1), LeaseEndDate = new DateTime(2025, 12, 31), RentalAmount = 13500m, DepositAmount = 13500m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000010"), UnitId = unitSeeds[15].Id, FullName = "Wei Ming Darren Kumar", Email = "tenant.weiming10@email.my", Phone = "+60111000210", EmergencyContactName = "Darren Kumar", EmergencyContactPhone = "+60111900210", LeaseStartDate = new DateTime(2025, 3, 12), LeaseEndDate = new DateTime(2026, 3, 11), RentalAmount = 13800m, DepositAmount = 13800m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000011"), UnitId = unitSeeds[18].Id, FullName = "Trisha Lee", Email = "tenant.trisha11@email.my", Phone = "+60111000211", EmergencyContactName = "Kavitha Lee", EmergencyContactPhone = "+60111900211", LeaseStartDate = new DateTime(2025, 4, 10), LeaseEndDate = new DateTime(2026, 4, 9), RentalAmount = 8600m, DepositAmount = 8600m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = new Guid("10000000-0000-0000-0004-000000000012"), UnitId = unitSeeds[19].Id, FullName = "Ashwin Daniel Wong", Email = "tenant.ashwin12@email.my", Phone = "+60111000212", EmergencyContactName = "Daniel Wong", EmergencyContactPhone = "+60111900212", LeaseStartDate = new DateTime(2025, 1, 25), LeaseEndDate = new DateTime(2026, 1, 24), RentalAmount = 4900m, DepositAmount = 4900m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
         };
 
         var seededUnitTypes = 0;
@@ -521,14 +521,14 @@ public static class DataSeeder
             {
                 Id = tech1Id,
                 UserId = techUser.Id,
-                FirstName = "خالد",
-                LastName = "الشهري",
+                FirstName = "Raj",
+                LastName = "Kumar",
                 Email = techEmail,
-                Phone = "+966 55 123 4567",
+                Phone = "+60 11 123 4567",
                 Specialization = "ميكانيكا السيارات وتشخيص الأعطال",
-                Address = "حي النسيم، الرياض",
-                Latitude = 24.7136,
-                Longitude = 46.6753,
+                Address = "تامان ملوري، كوالالمبور",
+                Latitude = 3.1478,
+                Longitude = 101.7133,
                 Status = TechnicianStatus.Available,
                 CreatedAt = DateTime.UtcNow
             });
@@ -541,14 +541,14 @@ public static class DataSeeder
             {
                 Id = tech2Id,
                 UserId = managerUser.Id,
-                FirstName = "فهد",
-                LastName = "القحطاني",
+                FirstName = "Jia Hui",
+                LastName = "Lim",
                 Email = managerEmail,
-                Phone = "+966 55 234 5678",
+                Phone = "+60 11 234 5678",
                 Specialization = "الصيانة العامة",
-                Address = "حي العليا، الرياض",
-                Latitude = 24.6877,
-                Longitude = 46.6854,
+                Address = "بوكيت بينتانغ، كوالالمبور",
+                Latitude = 3.1390,
+                Longitude = 101.6869,
                 Status = TechnicianStatus.Available,
                 CreatedAt = DateTime.UtcNow
             });
@@ -564,18 +564,18 @@ public static class DataSeeder
             {
                 Id = tech3Id,
                 UserId = tech2User.Id,
-                FirstName = "عمر",
-                LastName = "الغامدي",
+                FirstName = "Arjun",
+                LastName = "Tan",
                 Email = tech2Email,
-                Phone = "+966 50 678 9012",
+                Phone = "+60 10 678 9012",
                 Specialization = "صيانة المحركات وناقل الحركة",
-                Address = "حي الروضة، جدة 23434",
-                Latitude = 21.5433,
-                Longitude = 39.1728,
+                Address = "تامان تون، جوهور باهرو 80250",
+                Latitude = 1.4927,
+                Longitude = 103.7414,
                 Status = TechnicianStatus.Available,
                 CreatedAt = DateTime.UtcNow
             });
-            logger.LogInformation("Seeding Technician tech3 (Jeddah).");
+            logger.LogInformation("Seeding Technician tech3 (Johor Bahru).");
         }
 
         if (tech3User is not null && !await context.Technicians.AnyAsync(t => t.Id == tech4Id))
@@ -584,18 +584,18 @@ public static class DataSeeder
             {
                 Id = tech4Id,
                 UserId = tech3User.Id,
-                FirstName = "سالم",
-                LastName = "المطيري",
+                FirstName = "Kok Beng",
+                LastName = "Lee",
                 Email = tech3Email,
-                Phone = "+966 53 789 0123",
+                Phone = "+60 12 789 0123",
                 Specialization = "كهرباء السيارات والبطاريات",
-                Address = "حي الفيصلية، الدمام 32234",
-                Latitude = 26.4207,
-                Longitude = 50.0888,
+                Address = "سكشن 13، شاه عالم 40100",
+                Latitude = 3.0738,
+                Longitude = 101.5183,
                 Status = TechnicianStatus.Busy,
                 CreatedAt = DateTime.UtcNow
             });
-            logger.LogInformation("Seeding Technician tech4 (Dammam).");
+            logger.LogInformation("Seeding Technician tech4 (Shah Alam).");
         }
 
         await context.SaveChangesAsync();
@@ -610,10 +610,10 @@ public static class DataSeeder
             {
                 Id = manager1Id,
                 UserId = managerUser.Id,
-                FirstName = "فهد",
-                LastName = "القحطاني",
+                FirstName = "Jia Hui",
+                LastName = "Lim",
                 Email = managerEmail,
-                Phone = "+966 55 234 5678",
+                Phone = "+60 11 234 5678",
                 Department = "إدارة المرافق والصيانة",
                 CreatedAt = DateTime.UtcNow
             });
@@ -626,10 +626,10 @@ public static class DataSeeder
             {
                 Id = manager2Id,
                 UserId = manager2User.Id,
-                FirstName = "نورة",
-                LastName = "الحربي",
+                FirstName = "Pei Shan",
+                LastName = "Low",
                 Email = manager2Email,
-                Phone = "+966 50 345 6789",
+                Phone = "+60 10 345 6789",
                 Department = "إدارة العمليات الميدانية",
                 CreatedAt = DateTime.UtcNow
             });
@@ -647,10 +647,10 @@ public static class DataSeeder
             {
                 Id = dataEntry1Id,
                 UserId = dataEntryUser.Id,
-                FirstName = "سعود",
-                LastName = "الدوسري",
+                FirstName = "Mei Lin",
+                LastName = "Wong",
                 Email = dataEntryEmail,
-                Phone = "+966 55 345 6789",
+                Phone = "+60 11 345 6789",
                 Section = "العمليات",
                 CreatedAt = DateTime.UtcNow
             });
@@ -665,10 +665,10 @@ public static class DataSeeder
             {
                 Id = dataEntry2Id,
                 UserId = dataEntry2User.Id,
-                FirstName = "محمد",
-                LastName = "السبيعي",
+                FirstName = "Viknesh",
+                LastName = "Menon",
                 Email = dataEntry2Email,
-                Phone = "+966 56 456 7890",
+                Phone = "+60 16 456 7890",
                 Section = "خدمة العملاء",
                 CreatedAt = DateTime.UtcNow
             });
@@ -688,8 +688,8 @@ public static class DataSeeder
             context.TechnicianGroups.Add(new TechnicianGroup
             {
                 Id = group1Id,
-                Name = "فريق منطقة الرياض",
-                Description = "فريق متخصص في صيانة المركبات الخفيفة وخدمات الورش في منطقة الرياض",
+                Name = "Pasukan Kuala Lumpur",
+                Description = "فريق متخصص في صيانة المركبات الخفيفة وخدمات الورش في منطقة كوالالمبور",
                 LeaderUserId = techUser?.Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -700,8 +700,8 @@ public static class DataSeeder
             context.TechnicianGroups.Add(new TechnicianGroup
             {
                 Id = group2Id,
-                Name = "فريق منطقة جدة",
-                Description = "فريق متخصص في أعمال الصيانة والطوارئ في منطقة جدة والمنطقة الغربية",
+                Name = "Pasukan Johor Bahru",
+                Description = "فريق متخصص في أعمال الصيانة والطوارئ في منطقة جوهور باهرو والمنطقة الجنوبية",
                 LeaderUserId = managerUser?.Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -712,8 +712,8 @@ public static class DataSeeder
             context.TechnicianGroups.Add(new TechnicianGroup
             {
                 Id = group3Id,
-                Name = "فريق المنطقة الشرقية",
-                Description = "فريق متخصص في صيانة أساطيل النقل والشاحنات الخفيفة في المنطقة الشرقية",
+                Name = "Pasukan Wilayah Utara",
+                Description = "فريق متخصص في صيانة أساطيل النقل والشاحنات الخفيفة في المنطقة الشمالية",
                 LeaderUserId = tech3User?.Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -724,8 +724,8 @@ public static class DataSeeder
             context.TechnicianGroups.Add(new TechnicianGroup
             {
                 Id = group4Id,
-                Name = "فريق منطقة مكة المكرمة",
-                Description = "فريق متخصص في صيانة مركبات الضيافة والنقل في مكة المكرمة",
+                Name = "Pasukan Putrajaya",
+                Description = "فريق متخصص في صيانة مركبات الضيافة والنقل في بوتراجايا",
                 LeaderUserId = manager2User?.Id,
                 CreatedAt = DateTime.UtcNow
             });
@@ -745,11 +745,11 @@ public static class DataSeeder
             context.Clients.Add(new Client
             {
                 Id = client1Id,
-                Name = "محمد العمري",
-                CompanyName = "مالك مركبة فردي",
-                Email = "mohammed@riyadhdev.sa",
-                Phone = "+966 11 456 7890",
-                Address = "طريق الملك فهد، حي العليا، الرياض 12211",
+                Name = "Viknesh Chan",
+                CompanyName = "Pemilik Kenderaan Individu",
+                Email = "farid@kualalumpurdev.my",
+                Phone = "+60 3 456 7890",
+                Address = "Jalan Sultan Ismail، بوكيت بينتانغ، كوالالمبور 50250",
                 Notes = "عميل فردي لصيانة دورية وإصلاحات ميكانيكية لمركبته",
                 CreatedAt = DateTime.UtcNow
             });
@@ -760,11 +760,11 @@ public static class DataSeeder
             context.Clients.Add(new Client
             {
                 Id = client2Id,
-                Name = "أحمد الزهراني",
-                CompanyName = "شركة أسطول جدة للنقليات",
-                Email = "ahmed@jeddahfleet.sa",
-                Phone = "+966 12 567 8901",
-                Address = "شارع التحلية، حي الروضة، جدة 23434",
+                Name = "Daniel Teh",
+                CompanyName = "Johor Fleet Transport Sdn. Bhd.",
+                Email = "hakim@johorfleet.my",
+                Phone = "+60 7 567 8901",
+                Address = "Jalan Tun Razak، تامان تون، جوهور باهرو 80250",
                 Notes = "عميل أساطيل يحتاج صيانة دورية لـ 45 مركبة",
                 CreatedAt = DateTime.UtcNow
             });
@@ -775,11 +775,11 @@ public static class DataSeeder
             context.Clients.Add(new Client
             {
                 Id = client3Id,
-                Name = "عبدالرحمن الشمري",
-                CompanyName = "شركة أرامكو للخدمات اللوجستية",
-                Email = "abdulrahman@aramcofleet.sa",
-                Phone = "+966 13 678 9012",
-                Address = "شارع الأمير محمد بن فهد، حي الفيصلية، الدمام 32234",
+                Name = "Darren Ong",
+                CompanyName = "Petronas Logistics Services Sdn. Bhd.",
+                Email = "amir@petronasfleet.my",
+                Phone = "+60 3 678 9012",
+                Address = "Persiaran Sultan، سكشن 13، شاه عالم 40100",
                 Notes = "عميل شركات بعقد صيانة لأسطول مركبات ميدانية",
                 CreatedAt = DateTime.UtcNow
             });
@@ -790,11 +790,11 @@ public static class DataSeeder
             context.Clients.Add(new Client
             {
                 Id = client4Id,
-                Name = "عبدالعزيز المالكي",
-                CompanyName = "شركة مكة للتنقل الذكي",
-                Email = "aziz@makkahrides.sa",
-                Phone = "+966 12 789 0123",
-                Address = "شارع إبراهيم الخليل، المسفلة، مكة المكرمة 24231",
+                Name = "Brandon Foong",
+                CompanyName = "KL Smart Mobility Sdn. Bhd.",
+                Email = "daniel@klrides.my",
+                Phone = "+60 7 789 0123",
+                Address = "Jalan Ampang، بريسينكت 15، بوتراجايا 62000",
                 Notes = "عميل نقل تشاركي يحتاج صيانة سريعة لمركبات الخدمة",
                 CreatedAt = DateTime.UtcNow
             });
@@ -805,11 +805,11 @@ public static class DataSeeder
             context.Clients.Add(new Client
             {
                 Id = client5Id,
-                Name = "هند القرشي",
-                CompanyName = "مجمع المدينة الطبي - أسطول النقل الطبي",
-                Email = "hind@mmc.sa",
-                Phone = "+966 14 890 1234",
-                Address = "شارع أبي ذر، حي العزيزية، المدينة المنورة 42313",
+                Name = "Kavitha Devi",
+                CompanyName = "Putrajaya Medical Centre - Medical Transport Fleet",
+                Email = "aina@putrajayamedical.my",
+                Phone = "+60 5 890 1234",
+                Address = "Persiaran Perdana، غريينتاون، إيبوه 30450",
                 Notes = "عميل قطاع صحي لصيانة سيارات الإسعاف والنقل الطبي",
                 CreatedAt = DateTime.UtcNow
             });
@@ -832,15 +832,15 @@ public static class DataSeeder
                 Make = "Toyota",
                 Model = "Camry",
                 Year = 2022,
-                LicensePlate = "ABC-1234",
+                LicensePlate = "WKL 1234",
                 Color = "أبيض",
                 Mileage = 32000,
                 EngineType = "2.5L 4-Cylinder",
                 TransmissionType = TransmissionType.Automatic,
                 FuelType = FuelType.Gasoline,
-                OwnerName = "أحمد الشمري",
-                OwnerPhone = "+966 50 111 2222",
-                OwnerEmail = "ahmed.shamri@email.sa",
+                OwnerName = "Daniel Ong",
+                OwnerPhone = "+60 10 111 2222",
+                OwnerEmail = "ahmed.shamri@email.my",
                 PurchaseDate = new DateTime(2022, 3, 15),
                 LastServiceDate = new DateTime(2024, 9, 10),
                 NextServiceDate = new DateTime(2025, 3, 10),
@@ -861,15 +861,15 @@ public static class DataSeeder
                 Make = "Toyota",
                 Model = "Corolla",
                 Year = 2021,
-                LicensePlate = "DEF-5678",
+                LicensePlate = "JQH 5678",
                 Color = "فضي",
                 Mileage = 51000,
                 EngineType = "1.8L 4-Cylinder",
                 TransmissionType = TransmissionType.Automatic,
                 FuelType = FuelType.Gasoline,
-                OwnerName = "سارة القحطاني",
-                OwnerPhone = "+966 55 333 4444",
-                OwnerEmail = "sara.q@email.sa",
+                OwnerName = "Mei Ling Lim",
+                OwnerPhone = "+60 11 333 4444",
+                OwnerEmail = "sara.q@email.my",
                 PurchaseDate = new DateTime(2021, 7, 20),
                 LastServiceDate = new DateTime(2024, 11, 5),
                 NextServiceDate = new DateTime(2025, 5, 5),
@@ -890,22 +890,22 @@ public static class DataSeeder
                 Make = "BMW",
                 Model = "320i",
                 Year = 2023,
-                LicensePlate = "GHI-9012",
+                LicensePlate = "BSA 9012",
                 Color = "أسود",
                 Mileage = 15000,
                 EngineType = "2.0L TwinPower Turbo",
                 TransmissionType = TransmissionType.Automatic,
                 FuelType = FuelType.Gasoline,
-                OwnerName = "فيصل العتيبي",
-                OwnerPhone = "+966 56 555 6666",
-                OwnerEmail = "faisal.otaibi@email.sa",
+                OwnerName = "Adrian Nair",
+                OwnerPhone = "+60 16 555 6666",
+                OwnerEmail = "faisal.otaibi@email.my",
                 PurchaseDate = new DateTime(2023, 1, 10),
                 LastServiceDate = new DateTime(2024, 8, 20),
                 NextServiceDate = new DateTime(2025, 2, 20),
                 LastServiceMileage = 10000,
                 NextServiceMileage = 20000,
                 Status = VehicleStatus.InService,
-                Notes = "سيارة فاخرة، تحت الصيانة الدورية في ورشة الرياض",
+                Notes = "سيارة فاخرة، تحت الصيانة الدورية في ورشة كوالالمبور",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -919,15 +919,15 @@ public static class DataSeeder
                 Make = "Hyundai",
                 Model = "Tucson",
                 Year = 2020,
-                LicensePlate = "JKL-3456",
+                LicensePlate = "PUT 3456",
                 Color = "رمادي",
                 Mileage = 78000,
                 EngineType = "2.0L 4-Cylinder",
                 TransmissionType = TransmissionType.Automatic,
                 FuelType = FuelType.Diesel,
-                OwnerName = "محمد الغامدي",
-                OwnerPhone = "+966 59 777 8888",
-                OwnerEmail = "m.alghamdi@email.sa",
+                OwnerName = "Viknesh Tan",
+                OwnerPhone = "+60 19 777 8888",
+                OwnerEmail = "m.alghamdi@email.my",
                 PurchaseDate = new DateTime(2020, 5, 25),
                 LastServiceDate = new DateTime(2024, 7, 15),
                 NextServiceDate = new DateTime(2025, 1, 15),
@@ -948,15 +948,15 @@ public static class DataSeeder
                 Make = "Toyota",
                 Model = "Prius",
                 Year = 2023,
-                LicensePlate = "MNO-7890",
+                LicensePlate = "PNG 7890",
                 Color = "أزرق",
                 Mileage = 22000,
                 EngineType = "1.8L Hybrid",
                 TransmissionType = TransmissionType.CVT,
                 FuelType = FuelType.Hybrid,
-                OwnerName = "نورة الدوسري",
-                OwnerPhone = "+966 54 999 0000",
-                OwnerEmail = "noura.dosari@email.sa",
+                OwnerName = "Pei Shan Wong",
+                OwnerPhone = "+60 14 999 0000",
+                OwnerEmail = "noura.dosari@email.my",
                 PurchaseDate = new DateTime(2023, 4, 5),
                 LastServiceDate = new DateTime(2024, 10, 1),
                 NextServiceDate = new DateTime(2025, 4, 1),
@@ -985,7 +985,7 @@ public static class DataSeeder
                 SerialNumber = "OBD-RUH-2024-001",
                 Model = "Bosch KTS 560",
                 Manufacturer = "بوش",
-                Location = "ورشة الرياض الرئيسية - قسم التشخيص الإلكتروني",
+                Location = "ورشة كوالالمبور الرئيسية - قسم التشخيص الإلكتروني",
                 InstallationDate = new DateTime(2020, 6, 15),
                 LastMaintenanceDate = new DateTime(2024, 1, 10),
                 NextMaintenanceDate = new DateTime(2024, 7, 10),
@@ -1005,7 +1005,7 @@ public static class DataSeeder
                 SerialNumber = "LFT-RUH-2024-002",
                 Model = "Rotary SPOA10",
                 Manufacturer = "روتاري",
-                Location = "ورشة الرياض الرئيسية - المسار رقم 2",
+                Location = "ورشة كوالالمبور الرئيسية - المسار رقم 2",
                 InstallationDate = new DateTime(2019, 3, 22),
                 LastMaintenanceDate = new DateTime(2023, 11, 5),
                 NextMaintenanceDate = new DateTime(2024, 5, 5),
@@ -1025,7 +1025,7 @@ public static class DataSeeder
                 SerialNumber = "TWA-JED-2023-003",
                 Model = "Hunter Hawkeye Elite",
                 Manufacturer = "هانتر",
-                Location = "مركز خدمة جدة - قسم الإطارات",
+                Location = "مركز خدمة جوهور باهرو - قسم الإطارات",
                 InstallationDate = new DateTime(2021, 9, 10),
                 LastMaintenanceDate = new DateTime(2024, 2, 20),
                 NextMaintenanceDate = new DateTime(2024, 8, 20),
@@ -1045,7 +1045,7 @@ public static class DataSeeder
                 SerialNumber = "ACB-DAM-2022-004",
                 Model = "Robinair AC1234-7 + Midtronics DSS-5000",
                 Manufacturer = "روبيناير",
-                Location = "مركز صيانة الدمام - قسم الكهرباء والتكييف",
+                Location = "مركز صيانة شاه عالم - قسم الكهرباء والتكييف",
                 InstallationDate = new DateTime(2022, 3, 5),
                 LastMaintenanceDate = new DateTime(2024, 1, 15),
                 NextMaintenanceDate = new DateTime(2024, 7, 15),
@@ -1069,14 +1069,14 @@ public static class DataSeeder
             context.HVACSystems.Add(new HVACSystem
             {
                 Id = hvac1Id,
-                Name = "منظومة خدمة تكييف سيارات - مركز الرياض",
+                Name = "منظومة خدمة تكييف سيارات - مركز كوالالمبور",
                 SystemType = "خدمة تكييف سيارات",
                 Brand = "روبيناير",
                 Model = "AC1234-7",
                 Capacity = 30m,
                 CapacityUnit = "سيارة/يوم",
                 RefrigerantType = "R-1234yf",
-                Location = "ورشة الرياض الرئيسية",
+                Location = "ورشة كوالالمبور الرئيسية",
                 InstallationDate = new DateTime(2020, 6, 15),
                 LastInspectionDate = new DateTime(2024, 1, 10),
                 NextInspectionDate = new DateTime(2024, 7, 10),
@@ -1098,7 +1098,7 @@ public static class DataSeeder
                 Capacity = 40m,
                 CapacityUnit = "فحص/يوم",
                 RefrigerantType = "غير مطبق",
-                Location = "ورشة الرياض - خط الصيانة السريعة",
+                Location = "ورشة كوالالمبور - خط الصيانة السريعة",
                 InstallationDate = new DateTime(2019, 3, 22),
                 LastInspectionDate = new DateTime(2023, 11, 5),
                 NextInspectionDate = new DateTime(2024, 5, 5),
@@ -1113,14 +1113,14 @@ public static class DataSeeder
             context.HVACSystems.Add(new HVACSystem
             {
                 Id = hvac3Id,
-                Name = "منظومة الإطارات والزوايا - مركز جدة",
+                Name = "منظومة الإطارات والزوايا - مركز جوهور باهرو",
                 SystemType = "خدمة إطارات",
                 Brand = "هانتر",
                 Model = "Hawkeye-Elite",
                 Capacity = 25m,
                 CapacityUnit = "سيارة/يوم",
                 RefrigerantType = "غير مطبق",
-                Location = "مركز خدمة جدة - المنطقة الغربية",
+                Location = "مركز خدمة جوهور باهرو - المنطقة الجنوبية",
                 InstallationDate = new DateTime(2021, 9, 10),
                 LastInspectionDate = new DateTime(2024, 2, 20),
                 NextInspectionDate = new DateTime(2024, 8, 20),
@@ -1135,14 +1135,14 @@ public static class DataSeeder
             context.HVACSystems.Add(new HVACSystem
             {
                 Id = hvac4Id,
-                Name = "منظومة كهرباء المركبات والبطاريات - الدمام",
+                Name = "منظومة كهرباء المركبات والبطاريات - شاه عالم",
                 SystemType = "خدمة كهرباء سيارات",
                 Brand = "ميدترونكس",
                 Model = "DSS-5000",
                 Capacity = 35m,
                 CapacityUnit = "فحص/يوم",
                 RefrigerantType = "غير مطبق",
-                Location = "مركز صيانة الدمام - المنطقة الشرقية",
+                Location = "مركز صيانة شاه عالم - المنطقة الشمالية",
                 InstallationDate = new DateTime(2022, 3, 5),
                 LastInspectionDate = new DateTime(2024, 1, 15),
                 NextInspectionDate = new DateTime(2024, 7, 15),
@@ -1166,7 +1166,7 @@ public static class DataSeeder
             context.TaskOrders.Add(new TaskOrder
             {
                 Id = task1Id,
-                Title = "خدمة 30 ألف كم وتغيير زيت - مركز الرياض",
+                Title = "خدمة 30 ألف كم وتغيير زيت - مركز كوالالمبور",
                 Description = "تنفيذ صيانة دورية 30 ألف كم تشمل تغيير زيت المحرك وفلتر الزيت وفحص الأنظمة الأساسية للمركبة",
                 Status = TaskStatus.InProgress,
                 Priority = TaskPriority.High,
@@ -1177,8 +1177,8 @@ public static class DataSeeder
                 CreatedByUserId = adminUserId,
                 TechnicianId = tech1Id,
                 EquipmentId = eq1Id,
-                ArrivalLatitude = 24.7136,
-                ArrivalLongitude = 46.6753,
+                ArrivalLatitude = 3.1478,
+                ArrivalLongitude = 101.7133,
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1199,8 +1199,8 @@ public static class DataSeeder
                 CreatedByUserId = adminUserId,
                 GroupId = group1Id,
                 EquipmentId = eq2Id,
-                ArrivalLatitude = 24.7136,
-                ArrivalLongitude = 46.6753,
+                ArrivalLatitude = 3.1478,
+                ArrivalLongitude = 101.7133,
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1210,7 +1210,7 @@ public static class DataSeeder
             context.TaskOrders.Add(new TaskOrder
             {
                 Id = task3Id,
-                Title = "تشخيص محرك وخدمة 60 ألف كم - مركز جدة",
+                Title = "تشخيص محرك وخدمة 60 ألف كم - مركز جوهور باهرو",
                 Description = "تنفيذ صيانة 60 ألف كم تشمل فحص كمبيوتر المحرك وتنظيف البخاخات وخدمة ناقل الحركة",
                 Status = TaskStatus.Completed,
                 Priority = TaskPriority.Medium,
@@ -1221,8 +1221,8 @@ public static class DataSeeder
                 CreatedByUserId = adminUserId,
                 TechnicianId = tech3Id,
                 EquipmentId = eq3Id,
-                ArrivalLatitude = 21.5433,
-                ArrivalLongitude = 39.1728,
+                ArrivalLatitude = 1.4927,
+                ArrivalLongitude = 103.7414,
                 CreatedAt = DateTime.UtcNow.AddDays(-20)
             });
         }
@@ -1232,7 +1232,7 @@ public static class DataSeeder
             context.TaskOrders.Add(new TaskOrder
             {
                 Id = task4Id,
-                Title = "ضبط زوايا واستبدال إطارات - مركز الدمام",
+                Title = "ضبط زوايا واستبدال إطارات - مركز شاه عالم",
                 Description = "فحص نظام التعليق وضبط زوايا العجلات واستبدال الإطارات المتآكلة مع الترصيص",
                 Status = TaskStatus.InProgress,
                 Priority = TaskPriority.High,
@@ -1243,8 +1243,8 @@ public static class DataSeeder
                 CreatedByUserId = adminUserId,
                 TechnicianId = tech4Id,
                 EquipmentId = eq4Id,
-                ArrivalLatitude = 26.4207,
-                ArrivalLongitude = 50.0888,
+                ArrivalLatitude = 3.0738,
+                ArrivalLongitude = 101.5183,
                 CreatedAt = DateTime.UtcNow.AddDays(-3)
             });
         }
@@ -1254,19 +1254,19 @@ public static class DataSeeder
             context.TaskOrders.Add(new TaskOrder
             {
                 Id = task5Id,
-                Title = "إصلاح تكييف سيارات واستبدال بطارية - أسطول مكة",
-                Description = "تنفيذ إصلاحات تكييف سيارات الأسطول مع فحص البطاريات واستبدال التالف قبل موسم الحج",
+                Title = "إصلاح تكييف سيارات واستبدال بطارية - أسطول كوالالمبور",
+                Description = "تنفيذ إصلاحات تكييف سيارات الأسطول مع فحص البطاريات واستبدال التالف قبل موسم الأعياد",
                 Status = TaskStatus.Pending,
                 Priority = TaskPriority.Medium,
                 MaintenanceType = MaintenanceType.Preventive,
                 ScheduledDate = DateTime.UtcNow.AddDays(10),
                 DueDate = DateTime.UtcNow.AddDays(20),
-                Notes = "أولوية للأسطول التشغيلي خلال موسم الحج",
+                Notes = "أولوية للأسطول التشغيلي خلال موسم الأعياد",
                 CreatedByUserId = adminUserId,
                 GroupId = group4Id,
                 EquipmentId = eq4Id,
-                ArrivalLatitude = 21.3891,
-                ArrivalLongitude = 39.8579,
+                ArrivalLatitude = 2.9264,
+                ArrivalLongitude = 101.6964,
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1284,16 +1284,16 @@ public static class DataSeeder
             context.Invoices.Add(new Invoice
             {
                 Id = inv1Id,
-                InvoiceNumber = "INV-2024-SA-001",
-                ClientName = "محمد العمري",
-                ClientEmail = "mohammed@riyadhdev.sa",
-                ClientAddress = "طريق الملك فهد، حي العليا، الرياض 12211",
+                InvoiceNumber = "INV-2024-MY-001",
+                ClientName = "Viknesh Chan",
+                ClientEmail = "farid@kualalumpurdev.my",
+                ClientAddress = "Jalan Sultan Ismail، بوكيت بينتانغ، كوالالمبور 50250",
                 IssueDate = DateTime.UtcNow.AddDays(-30),
                 DueDate = DateTime.UtcNow,
                 SubTotal = 1500m,
-                TaxRate = 15m,
-                TaxAmount = 225m,
-                TotalAmount = 1725m,
+                TaxRate = 8m,
+                TaxAmount = 120m,
+                TotalAmount = 1620m,
                 Status = InvoiceStatus.Sent,
                 Notes = "فاتورة خدمة 30 ألف كم وتغيير زيت وفلاتر",
                 CreatedByUserId = adminUserId,
@@ -1308,16 +1308,16 @@ public static class DataSeeder
             context.Invoices.Add(new Invoice
             {
                 Id = inv2Id,
-                InvoiceNumber = "INV-2024-SA-002",
-                ClientName = "شركة أسطول جدة للنقليات",
-                ClientEmail = "accounts@jeddahfleet.sa",
-                ClientAddress = "شارع التحلية، حي الروضة، جدة 23434",
+                InvoiceNumber = "INV-2024-MY-002",
+                ClientName = "Johor Fleet Transport Sdn. Bhd.",
+                ClientEmail = "accounts@johorfleet.my",
+                ClientAddress = "Jalan Tun Razak، تامان تون، جوهور باهرو 80250",
                 IssueDate = DateTime.UtcNow,
                 DueDate = DateTime.UtcNow.AddDays(30),
                 SubTotal = 3200m,
-                TaxRate = 15m,
-                TaxAmount = 480m,
-                TotalAmount = 3680m,
+                TaxRate = 8m,
+                TaxAmount = 256m,
+                TotalAmount = 3456m,
                 Status = InvoiceStatus.Draft,
                 Notes = "فاتورة صيانة 60 ألف كم وفحص ناقل الحركة",
                 CreatedByUserId = adminUserId,
@@ -1332,16 +1332,16 @@ public static class DataSeeder
             context.Invoices.Add(new Invoice
             {
                 Id = inv3Id,
-                InvoiceNumber = "INV-2024-SA-003",
-                ClientName = "شركة أرامكو للخدمات اللوجستية",
-                ClientEmail = "billing@aramcofleet.sa",
-                ClientAddress = "شارع الأمير محمد بن فهد، حي الفيصلية، الدمام 32234",
+                InvoiceNumber = "INV-2024-MY-003",
+                ClientName = "Petronas Logistics Services Sdn. Bhd.",
+                ClientEmail = "billing@petronasfleet.my",
+                ClientAddress = "Persiaran Sultan، سكشن 13، شاه عالم 40100",
                 IssueDate = DateTime.UtcNow.AddDays(-10),
                 DueDate = DateTime.UtcNow.AddDays(20),
                 SubTotal = 4100m,
-                TaxRate = 15m,
-                TaxAmount = 615m,
-                TotalAmount = 4715m,
+                TaxRate = 8m,
+                TaxAmount = 328m,
+                TotalAmount = 4428m,
                 Status = InvoiceStatus.Sent,
                 Notes = "فاتورة ضبط زوايا واستبدال إطارات وفحص منظومة التعليق",
                 CreatedByUserId = adminUserId,
@@ -1356,16 +1356,16 @@ public static class DataSeeder
             context.Invoices.Add(new Invoice
             {
                 Id = inv4Id,
-                InvoiceNumber = "INV-2024-SA-004",
-                ClientName = "شركة مكة للتنقل الذكي",
-                ClientEmail = "finance@makkahrides.sa",
-                ClientAddress = "شارع إبراهيم الخليل، المسفلة، مكة المكرمة 24231",
+                InvoiceNumber = "INV-2024-MY-004",
+                ClientName = "KL Smart Mobility Sdn. Bhd.",
+                ClientEmail = "finance@klrides.my",
+                ClientAddress = "Jalan Ampang، بريسينكت 15، بوتراجايا 62000",
                 IssueDate = DateTime.UtcNow.AddDays(-5),
                 DueDate = DateTime.UtcNow.AddDays(25),
                 SubTotal = 2400m,
-                TaxRate = 15m,
-                TaxAmount = 360m,
-                TotalAmount = 2760m,
+                TaxRate = 8m,
+                TaxAmount = 192m,
+                TotalAmount = 2592m,
                 Status = InvoiceStatus.Draft,
                 Notes = "خدمات إصلاح تكييف السيارات واستبدال البطاريات",
                 CreatedByUserId = adminUserId,
@@ -1476,14 +1476,14 @@ public static class DataSeeder
         var report2Id = new Guid("00000000-0000-0000-0003-000000000003");
         var report3Id = new Guid("00000000-0000-0000-0072-000000000072");
         var report4Id = new Guid("00000000-0000-0000-0100-000000000100");
-        var techFullName = techUser is not null ? "خالد الشهري" : "فني غير معروف";
+        var techFullName = techUser is not null ? "Raj Kumar" : "فني غير معروف";
 
         if (!await context.MaintenanceReports.AnyAsync(r => r.Id == report1Id))
         {
             context.MaintenanceReports.Add(new MaintenanceReport
             {
                 Id = report1Id,
-                Title = "تقرير صيانة 30 ألف كم - مركز الرياض",
+                Title = "تقرير صيانة 30 ألف كم - مركز كوالالمبور",
                 Content = "تم تنفيذ خدمة 30 ألف كم للمركبة بنجاح. شملت الخدمة تغيير زيت المحرك وفلتر الزيت وفلتر الهواء وفحص نظام الفرامل والإطارات. لم تُرصد أعطال حرجة وتمت إعادة ضبط تذكير الصيانة.",
                 TechnicianName = techFullName,
                 CreatedByUserId = adminUserId,
@@ -1518,9 +1518,9 @@ public static class DataSeeder
             context.MaintenanceReports.Add(new MaintenanceReport
             {
                 Id = report3Id,
-                Title = "تقرير صيانة 60 ألف كم - مركز جدة",
+                Title = "تقرير صيانة 60 ألف كم - مركز جوهور باهرو",
                 Content = "تمت خدمة 60 ألف كم بنجاح، وشملت فحص كمبيوتر المحرك وتنظيف البخاخات وتغيير شمعات الاحتراق وفحص ناقل الحركة. أداء المركبة تحسن بشكل ملحوظ بعد الصيانة.",
-                TechnicianName = "عمر الغامدي",
+                TechnicianName = "Arjun Tan",
                 CreatedByUserId = adminUserId,
                 ReportDate = DateTime.UtcNow.AddDays(-7),
                 LaborHours = 6m,
@@ -1536,9 +1536,9 @@ public static class DataSeeder
             context.MaintenanceReports.Add(new MaintenanceReport
             {
                 Id = report4Id,
-                Title = "تقرير ضبط زوايا وإطارات - مركز الدمام",
+                Title = "تقرير ضبط زوايا وإطارات - مركز شاه عالم",
                 Content = "تم تنفيذ ضبط زوايا العجلات الأربع وترصيص الإطارات بعد ملاحظة تآكل غير منتظم. نتائج جهاز القياس ضمن الحدود الموصى بها، وتم تحسين ثبات المركبة أثناء القيادة.",
-                TechnicianName = "سالم المطيري",
+                TechnicianName = "Kok Beng Lee",
                 CreatedByUserId = adminUserId,
                 ReportDate = DateTime.UtcNow.AddDays(-1),
                 LaborHours = 5m,
@@ -1597,7 +1597,7 @@ public static class DataSeeder
                 StartTime = DateTime.UtcNow.Date.AddHours(7),
                 EndTime = DateTime.UtcNow.Date.AddHours(16),
                 IsAvailable = true,
-                Notes = "ساعات العمل الاعتيادية — منطقة جدة",
+                Notes = "ساعات العمل الاعتيادية — منطقة جوهور باهرو",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1612,7 +1612,7 @@ public static class DataSeeder
                 StartTime = DateTime.UtcNow.Date.AddHours(8),
                 EndTime = DateTime.UtcNow.Date.AddHours(17),
                 IsAvailable = true,
-                Notes = "ساعات العمل الاعتيادية — المنطقة الشرقية",
+                Notes = "ساعات العمل الاعتيادية — المنطقة الشمالية",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -1724,8 +1724,8 @@ public static class DataSeeder
             context.Documents.Add(new Document
             {
                 Id = doc3Id,
-                FileName = "maintenance-contract-jeddah.pdf",
-                FileUrl = "/uploads/maintenance-contract-jeddah.pdf",
+                FileName = "maintenance-contract-johor-bahru.pdf",
+                FileUrl = "/uploads/maintenance-contract-johor-bahru.pdf",
                 ContentType = "application/pdf",
                 FileSize = 512000,
                 DocumentType = "عقد صيانة",
@@ -1740,8 +1740,8 @@ public static class DataSeeder
             context.Documents.Add(new Document
             {
                 Id = doc4Id,
-                FileName = "wheel-alignment-report-dammam.pdf",
-                FileUrl = "/uploads/wheel-alignment-report-dammam.pdf",
+                FileName = "wheel-alignment-report-shah-alam.pdf",
+                FileUrl = "/uploads/wheel-alignment-report-shah-alam.pdf",
                 ContentType = "application/pdf",
                 FileSize = 307200,
                 DocumentType = "تقرير فحص",
@@ -1768,9 +1768,9 @@ public static class DataSeeder
                 {
                     Id = msg1Id,
                     SenderId = managerUser.Id,
-                    SenderName = "فهد القحطاني",
+                    SenderName = "Jia Hui Lim",
                     ReceiverId = techUser.Id,
-                    Content = "مرحباً، تم تعيين مهمة خدمة 30 ألف كم لك. يرجى البدء بالمركبة الأولى في مركز الرياض.",
+                    Content = "مرحباً، تم تعيين مهمة خدمة 30 ألف كم لك. يرجى البدء بالمركبة الأولى في مركز كوالالمبور.",
                     MessageType = MessageType.Text,
                     CreatedAt = DateTime.UtcNow.AddHours(-2)
                 });
@@ -1782,7 +1782,7 @@ public static class DataSeeder
                 {
                     Id = msg2Id,
                     SenderId = techUser.Id,
-                    SenderName = "خالد الشهري",
+                    SenderName = "Raj Kumar",
                     ReceiverId = managerUser.Id,
                     Content = "تم الاستلام، سأبدأ العمل صباح الغد. هل هناك أي تعليمات خاصة لفحص نظام الفرامل؟",
                     MessageType = MessageType.Text,
@@ -1801,9 +1801,9 @@ public static class DataSeeder
                 {
                     Id = msg3Id,
                     SenderId = manager2User.Id,
-                    SenderName = "نورة الحربي",
+                    SenderName = "Pei Shan Low",
                     ReceiverId = tech2User.Id,
-                    Content = "عمر، تم تعيين مهمة صيانة 60 ألف كم لمركبات أسطول جدة لك. يرجى التنسيق مع مشرف الأسطول قبل البدء.",
+                    Content = "Arjun، تم تعيين مهمة صيانة 60 ألف كم لمركبات أسطول جوهور باهرو لك. يرجى التنسيق مع مشرف الأسطول قبل البدء.",
                     MessageType = MessageType.Text,
                     CreatedAt = DateTime.UtcNow.AddHours(-5)
                 });
@@ -1815,7 +1815,7 @@ public static class DataSeeder
                 {
                     Id = msg4Id,
                     SenderId = tech2User.Id,
-                    SenderName = "عمر الغامدي",
+                    SenderName = "Arjun Tan",
                     ReceiverId = manager2User.Id,
                     Content = "تم التواصل مع مشرف الأسطول. سأبدأ الصيانة يوم السبت القادم في الساعة السابعة صباحاً.",
                     MessageType = MessageType.Text,
@@ -1840,7 +1840,7 @@ public static class DataSeeder
                 Id = notif1Id,
                 UserId = techUser.Id,
                 Title = "مهمة جديدة",
-                Message = "تم تعيين مهمة خدمة 30 ألف كم لك في مركز الرياض.",
+                Message = "تم تعيين مهمة خدمة 30 ألف كم لك في مركز كوالالمبور.",
                 Type = NotificationType.Info,
                 IsRead = false,
                 RelatedEntityId = task1Id.ToString(),
@@ -1872,7 +1872,7 @@ public static class DataSeeder
                 Id = notif3Id,
                 UserId = adminUserId,
                 Title = "فاتورة متأخرة",
-                Message = "الفاتورة INV-2024-SA-001 تقترب من تاريخ استحقاقها.",
+                Message = "الفاتورة INV-2024-MY-001 تقترب من تاريخ استحقاقها.",
                 Type = NotificationType.Warning,
                 IsRead = false,
                 RelatedEntityId = inv1Id.ToString(),
@@ -1888,7 +1888,7 @@ public static class DataSeeder
                 Id = notif4Id,
                 UserId = tech2User.Id,
                 Title = "تم جدولة مهمة صيانة",
-                Message = "تم جدولة مهمة صيانة 60 ألف كم لأسطول جدة. الموعد: السبت القادم الساعة 7 صباحاً.",
+                Message = "تم جدولة مهمة صيانة 60 ألف كم لأسطول جوهور باهرو. الموعد: السبت القادم الساعة 7 صباحاً.",
                 Type = NotificationType.Info,
                 IsRead = false,
                 RelatedEntityId = task3Id.ToString(),
@@ -1904,7 +1904,7 @@ public static class DataSeeder
                 Id = notif5Id,
                 UserId = adminUserId,
                 Title = "تنبيه صيانة عاجلة",
-                Message = "تم رصد انحراف في نتائج جهاز ضبط الزوايا في مركز الدمام. يُوصى بإجراء فحص فوري.",
+                Message = "تم رصد انحراف في نتائج جهاز ضبط الزوايا في مركز شاه عالم. يُوصى بإجراء فحص فوري.",
                 Type = NotificationType.Warning,
                 IsRead = false,
                 RelatedEntityId = eq4Id.ToString(),
@@ -2010,7 +2010,7 @@ public static class DataSeeder
                 UsageHours = 14600,
                 LastKnownIssue = "انقطاع متقطع في كابل قراءة وحدة ECU",
                 LastSyncedAt = DateTime.UtcNow,
-                SimulationNotes = "يعمل ضمن المعايير الطبيعية — ورشة الرياض الرئيسية",
+                SimulationNotes = "يعمل ضمن المعايير الطبيعية — ورشة كوالالمبور الرئيسية",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -2046,7 +2046,7 @@ public static class DataSeeder
                 UsageHours = 10200,
                 LastKnownIssue = "لا توجد مشاكل مرصودة",
                 LastSyncedAt = DateTime.UtcNow,
-                SimulationNotes = "أداء ممتاز — مركز خدمة جدة",
+                SimulationNotes = "أداء ممتاز — مركز خدمة جوهور باهرو",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -2064,7 +2064,7 @@ public static class DataSeeder
                 UsageHours = 16800,
                 LastKnownIssue = "تفاوت بسيط في قراءات اختبار البطارية لبعض المركبات",
                 LastSyncedAt = DateTime.UtcNow,
-                SimulationNotes = "يعمل بكفاءة مقبولة — مركز صيانة الدمام — متابعة مستمرة مطلوبة",
+                SimulationNotes = "يعمل بكفاءة مقبولة — مركز صيانة شاه عالم — متابعة مستمرة مطلوبة",
                 CreatedAt = DateTime.UtcNow
             });
         }
@@ -2170,8 +2170,8 @@ public static class DataSeeder
                 QuantityInStock = 24,
                 MinimumStockLevel = 10,
                 UnitPrice = 35.00m,
-                Supplier = "شركة قطع غيار السيارات السعودية",
-                StorageLocation = "مستودع الرياض - رف أ3",
+                Supplier = "شركة قطع غيار السيارات الماليزية",
+                StorageLocation = "مستودع كوالالمبور - رف أ3",
                 Notes = "يُستبدل مع كل خدمة تغيير زيت",
                 QrCode = "فلتر زيت محرك OF-5W30-2024",
                 CreatedAt = DateTime.UtcNow
@@ -2190,8 +2190,8 @@ public static class DataSeeder
                 QuantityInStock = 4,
                 MinimumStockLevel = 5,
                 UnitPrice = 280.00m,
-                Supplier = "مؤسسة فرامل الخليج للسيارات",
-                StorageLocation = "مستودع الرياض - رف ب7",
+                Supplier = "مؤسسة فرامل آسيا للسيارات",
+                StorageLocation = "مستودع كوالالمبور - رف ب7",
                 Notes = "مخزون منخفض — أولوية للتوريد",
                 QrCode = "أقمشة فرامل BP-FRT-2024",
                 CreatedAt = DateTime.UtcNow
@@ -2211,7 +2211,7 @@ public static class DataSeeder
                 MinimumStockLevel = 2,
                 UnitPrice = 160.00m,
                 Supplier = "شركة الإمداد الذكي لقطع السيارات",
-                StorageLocation = "مستودع الرياض - رف ج5",
+                StorageLocation = "مستودع كوالالمبور - رف ج5",
                 Notes = "يُستخدم ضمن خدمات 60 ألف كم",
                 QrCode = "شمعات احتراق SPK-IR-SET4",
                 CreatedAt = DateTime.UtcNow
@@ -2230,8 +2230,8 @@ public static class DataSeeder
                 QuantityInStock = 3,
                 MinimumStockLevel = 2,
                 UnitPrice = 520.00m,
-                Supplier = "شركة الخليج لبطاريات السيارات",
-                StorageLocation = "مستودع الدمام - رف ب2",
+                Supplier = "شركة ماليزيا لبطاريات السيارات",
+                StorageLocation = "مستودع شاه عالم - رف ب2",
                 Notes = "مناسبة لأسطول النقل الخفيف وسيارات الخدمة",
                 QrCode = "بطارية سيارة BAT-70AH-AGM",
                 CreatedAt = DateTime.UtcNow
@@ -2250,9 +2250,9 @@ public static class DataSeeder
                 QuantityInStock = 40,
                 MinimumStockLevel = 20,
                 UnitPrice = 32.00m,
-                Supplier = "شركة زيوت الخليج للمحركات",
-                StorageLocation = "مستودع جدة - رف أ1",
-                Notes = "مخصص للمركبات العاملة في مناخ السعودية",
+                Supplier = "شركة ماليزيا لزيوت المحركات",
+                StorageLocation = "مستودع جوهور باهرو - رف أ1",
+                Notes = "مخصص للمركبات العاملة في مناخ ماليزيا الاستوائي",
                 QrCode = "سائل تبريد CLNT-LL-20L",
                 CreatedAt = DateTime.UtcNow
             });
@@ -2306,7 +2306,7 @@ public static class DataSeeder
                 SparePartId = part4Id,
                 TaskOrderId = task5Id,
                 QuantityUsed = 1,
-                Notes = "تم استبدال بطارية مركبة خدمة ضمن أسطول مكة",
+                Notes = "تم استبدال بطارية مركبة خدمة ضمن أسطول كوالالمبور",
                 UsedAt = DateTime.UtcNow.AddDays(-1),
                 UsedByUserId = adminUserId,
                 CreatedAt = DateTime.UtcNow
@@ -2327,7 +2327,7 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched1Id,
-                Name = "برنامج تغيير الزيت الدوري - مركز الرياض",
+                Name = "برنامج تغيير الزيت الدوري - مركز كوالالمبور",
                 Description = "تغيير زيت المحرك وفلتر الزيت وفحص 20 نقطة سلامة بشكل ربع سنوي للمركبات المتعاقدة",
                 MaintenanceType = MaintenanceType.Preventive,
                 Frequency = ScheduleFrequency.Quarterly,
@@ -2348,7 +2348,7 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched2Id,
-                Name = "خطة صيانة 60 ألف كم - أسطول جدة",
+                Name = "خطة صيانة 60 ألف كم - أسطول جوهور باهرو",
                 Description = "برنامج صيانة شامل يشمل فحص المحرك وناقل الحركة والفرامل والإطارات لأسطول الشركة",
                 MaintenanceType = MaintenanceType.Preventive,
                 Frequency = ScheduleFrequency.Annual,
@@ -2389,7 +2389,7 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched4Id,
-                Name = "عقد صيانة أسطول نصف سنوي - مكة",
+                Name = "عقد صيانة أسطول نصف سنوي - بوتراجايا",
                 Description = "خدمة نصف سنوية لأسطول النقل الذكي تشمل صيانة ميكانيكية وكهربائية وتقارير جاهزية",
                 MaintenanceType = MaintenanceType.Preventive,
                 Frequency = ScheduleFrequency.SemiAnnual,
@@ -2397,7 +2397,7 @@ public static class DataSeeder
                 LastExecutedAt = DateTime.UtcNow.AddDays(-14),
                 NextDueAt = DateTime.UtcNow.AddMonths(6),
                 IsActive = true,
-                Notes = "يشمل مركبات الخدمة الموسمية في مكة",
+                Notes = "يشمل مركبات الخدمة الموسمية في بوتراجايا",
                 CreatedByUserId = adminUserId,
                 EquipmentId = eq3Id,
                 AssignedGroupId = group2Id,
@@ -2410,8 +2410,8 @@ public static class DataSeeder
             context.MaintenanceSchedules.Add(new MaintenanceSchedule
             {
                 Id = sched5Id,
-                Name = "خطة فحص الطوارئ والمساعدة على الطريق - الدمام",
-                Description = "فحص دوري لمعدات الطوارئ والبطاريات والإطارات للمركبات الميدانية في المنطقة الشرقية",
+                Name = "خطة فحص الطوارئ والمساعدة على الطريق - شاه عالم",
+                Description = "فحص دوري لمعدات الطوارئ والبطاريات والإطارات للمركبات الميدانية في المنطقة الشمالية",
                 MaintenanceType = MaintenanceType.Inspection,
                 Frequency = ScheduleFrequency.Quarterly,
                 FrequencyValue = 1,
@@ -2503,8 +2503,8 @@ public static class DataSeeder
                 Status = PremiumMaintenanceStatus.Completed,
                 RequestDate = DateTime.UtcNow.AddDays(-20),
                 ScheduledDate = DateTime.UtcNow.AddDays(-18),
-                Notes = "تنفيذ مساعدة طريق لمركبة متوقفة بسبب عطل بطارية في الرياض",
-                Address = "طريق الملك فهد، حي العليا، الرياض 12211",
+                Notes = "تنفيذ مساعدة طريق لمركبة متوقفة بسبب عطل بطارية في كوالالمبور",
+                Address = "Jalan Sultan Ismail، بوكيت بينتانغ، كوالالمبور 50250",
                 CreatedAt = DateTime.UtcNow.AddDays(-20)
             });
         }
@@ -2522,7 +2522,7 @@ public static class DataSeeder
                 RequestDate = DateTime.UtcNow.AddDays(-5),
                 ScheduledDate = DateTime.UtcNow.AddDays(25),
                 Notes = "طلب عقد صيانة سنوي شامل لأسطول النقل التجاري",
-                Address = "شارع التحلية، حي الروضة، جدة 23434",
+                Address = "Jalan Tun Razak، تامان تون، جوهور باهرو 80250",
                 CreatedAt = DateTime.UtcNow.AddDays(-5)
             });
         }
@@ -2539,8 +2539,8 @@ public static class DataSeeder
                 Status = PremiumMaintenanceStatus.Paid,
                 RequestDate = DateTime.UtcNow.AddDays(-8),
                 ScheduledDate = DateTime.UtcNow.AddDays(5),
-                Notes = "خدمة فحص مركبة قبل الشراء لعميل شركة بالدمام",
-                Address = "شارع الأمير محمد بن فهد، حي الفيصلية، الدمام 32234",
+                Notes = "خدمة فحص مركبة قبل الشراء لعميل شركة في شاه عالم",
+                Address = "Persiaran Sultan، سكشن 13، شاه عالم 40100",
                 CreatedAt = DateTime.UtcNow.AddDays(-8)
             });
         }
@@ -2561,9 +2561,9 @@ public static class DataSeeder
                 Amount = 499.00m,
                 Status = PaymentStatus.Completed,
                 PaymentMethod = PaymentMethod.CreditCard,
-                TransactionId = "TXN-SA-RUH-2024-001",
+                TransactionId = "TXN-MY-KUL-2024-001",
                 PaymentDate = DateTime.UtcNow.AddDays(-20),
-                Notes = "دفعة خدمة المساعدة الطارئة على الطريق — الرياض",
+                Notes = "دفعة خدمة المساعدة الطارئة على الطريق — كوالالمبور",
                 CreatedAt = DateTime.UtcNow.AddDays(-20)
             });
         }
@@ -2578,9 +2578,9 @@ public static class DataSeeder
                 Amount = 350.00m,
                 Status = PaymentStatus.Completed,
                 PaymentMethod = PaymentMethod.BankTransfer,
-                TransactionId = "TXN-SA-DAM-2024-002",
+                TransactionId = "TXN-MY-SAL-2024-002",
                 PaymentDate = DateTime.UtcNow.AddDays(-7),
-                Notes = "دفعة خدمة فحص مركبة قبل الشراء — الدمام",
+                Notes = "دفعة خدمة فحص مركبة قبل الشراء — شاه عالم",
                 CreatedAt = DateTime.UtcNow.AddDays(-7)
             });
         }
@@ -2600,7 +2600,7 @@ public static class DataSeeder
             {
                 Id = req1Id,
                 Title = "المركبة لا تستجيب عند التشغيل",
-                Description = "مركبة العميل في الرياض لا تعمل صباحاً مع ضعف واضح في البطارية وتأخر تشغيل المحرك.",
+                Description = "مركبة العميل في كوالالمبور لا تعمل صباحاً مع ضعف واضح في البطارية وتأخر تشغيل المحرك.",
                 EquipmentDescription = "سيارة سيدان - فحص بطارية ونظام تشغيل",
                 RequestDate = DateTime.UtcNow.AddDays(-10),
                 Status = MaintenanceRequestStatus.Completed,
@@ -2641,7 +2641,7 @@ public static class DataSeeder
                 EquipmentDescription = "مركبة خدمة - فحص زوايا وترصيص",
                 RequestDate = DateTime.UtcNow.AddDays(-2),
                 Status = MaintenanceRequestStatus.InProgress,
-                Notes = "تم إرسال الفني سالم المطيري لضبط الزوايا فوراً",
+                Notes = "تم إرسال الفني Kok Beng Lee لضبط الزوايا فوراً",
                 ClientId = client3Id,
                 TaskOrderId = task4Id,
                 InvoiceId = inv3Id,
@@ -2655,12 +2655,12 @@ public static class DataSeeder
             context.MaintenanceRequests.Add(new MaintenanceRequest
             {
                 Id = req4Id,
-                Title = "طلب صيانة أسطول مركبات قبل موسم الحج",
-                Description = "شركة النقل تحتاج صيانة شاملة لمركبات الأسطول قبل موسم الحج لضمان الجاهزية التشغيلية الكاملة.",
-                EquipmentDescription = "أسطول مركبات شركة مكة للتنقل الذكي — جميع الفئات",
+                Title = "طلب صيانة أسطول مركبات قبل موسم الأعياد",
+                Description = "شركة النقل تحتاج صيانة شاملة لمركبات الأسطول قبل موسم الأعياد لضمان الجاهزية التشغيلية الكاملة.",
+                EquipmentDescription = "أسطول مركبات KL Smart Mobility Sdn. Bhd. — جميع الفئات",
                 RequestDate = DateTime.UtcNow.AddDays(-1),
                 Status = MaintenanceRequestStatus.Pending,
-                Notes = "أولوية قصوى — موسم الحج خلال شهر",
+                Notes = "أولوية قصوى — موسم الأعياد خلال شهر",
                 ClientId = client4Id,
                 TaskOrderId = task5Id,
                 CreatedAt = DateTime.UtcNow.AddDays(-1)
@@ -2683,8 +2683,8 @@ public static class DataSeeder
             {
                 Id = gps1Id,
                 TechnicianId = tech1Id,
-                Latitude = 24.7136,
-                Longitude = 46.6753,
+                Latitude = 3.1478,
+                Longitude = 101.7133,
                 RecordedAt = DateTime.UtcNow.AddHours(-1),
                 CreatedAt = DateTime.UtcNow
             });
@@ -2697,8 +2697,8 @@ public static class DataSeeder
             {
                 Id = gps2Id,
                 TechnicianId = tech1Id,
-                Latitude = 24.7200,
-                Longitude = 46.6800,
+                Latitude = 3.1502,
+                Longitude = 101.7159,
                 RecordedAt = DateTime.UtcNow.AddMinutes(-30),
                 CreatedAt = DateTime.UtcNow
             });
@@ -2711,8 +2711,8 @@ public static class DataSeeder
             {
                 Id = gps3Id,
                 TechnicianId = tech2Id,
-                Latitude = 24.6877,
-                Longitude = 46.6854,
+                Latitude = 3.1390,
+                Longitude = 101.6869,
                 RecordedAt = DateTime.UtcNow.AddHours(-2),
                 CreatedAt = DateTime.UtcNow
             });
@@ -2725,8 +2725,8 @@ public static class DataSeeder
             {
                 Id = gps4Id,
                 TechnicianId = tech3Id,
-                Latitude = 21.5433,
-                Longitude = 39.1728,
+                Latitude = 1.4927,
+                Longitude = 103.7414,
                 RecordedAt = DateTime.UtcNow.AddHours(-3),
                 CreatedAt = DateTime.UtcNow
             });
@@ -2739,8 +2739,8 @@ public static class DataSeeder
             {
                 Id = gps5Id,
                 TechnicianId = tech4Id,
-                Latitude = 26.4207,
-                Longitude = 50.0888,
+                Latitude = 3.0738,
+                Longitude = 101.5183,
                 RecordedAt = DateTime.UtcNow.AddHours(-1),
                 CreatedAt = DateTime.UtcNow
             });
@@ -2763,8 +2763,8 @@ public static class DataSeeder
                 EntityId = task1Id.ToString(),
                 Action = "تم الإنشاء",
                 PerformedByUserId = adminUserId,
-                PerformedByName = "عبدالله الغامدي",
-                Details = "تم إنشاء أمر عمل جديد لخدمة 30 ألف كم — مركز الرياض",
+                PerformedByName = "Wei Ming Tan",
+                Details = "تم إنشاء أمر عمل جديد لخدمة 30 ألف كم — مركز كوالالمبور",
                 CreatedAt = DateTime.UtcNow.AddDays(-7)
             });
         }
@@ -2778,7 +2778,7 @@ public static class DataSeeder
                 EntityId = eq1Id.ToString(),
                 Action = "تم التحديث",
                 PerformedByUserId = adminUserId,
-                PerformedByName = "عبدالله الغامدي",
+                PerformedByName = "Wei Ming Tan",
                 Details = "تم تحديث حالة جهاز التشخيص الإلكتروني بعد الصيانة",
                 CreatedAt = DateTime.UtcNow.AddDays(-5)
             });
@@ -2793,8 +2793,8 @@ public static class DataSeeder
                 EntityId = req3Id.ToString(),
                 Action = "تم التعيين",
                 PerformedByUserId = adminUserId,
-                PerformedByName = "عبدالله الغامدي",
-                Details = "تم تعيين الفني سالم المطيري لمعالجة انحراف الزوايا بمركز الدمام",
+                PerformedByName = "Wei Ming Tan",
+                Details = "تم تعيين الفني Kok Beng Lee لمعالجة انحراف الزوايا بمركز شاه عالم",
                 CreatedAt = DateTime.UtcNow.AddDays(-2)
             });
         }
@@ -2808,8 +2808,8 @@ public static class DataSeeder
                 EntityId = inv3Id.ToString(),
                 Action = "تم الإرسال",
                 PerformedByUserId = adminUserId,
-                PerformedByName = "عبدالله الغامدي",
-                Details = "تم إرسال الفاتورة INV-2024-SA-003 إلى شركة أرامكو للخدمات اللوجستية",
+                PerformedByName = "Wei Ming Tan",
+                Details = "تم إرسال الفاتورة INV-2024-MY-003 إلى Petronas Logistics Services Sdn. Bhd.",
                 CreatedAt = DateTime.UtcNow.AddDays(-10)
             });
         }

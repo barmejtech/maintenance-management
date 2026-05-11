@@ -12,4 +12,7 @@ public class UnitOwnership : BaseEntity
     public DateTime PurchaseDate { get; set; }
     public DateTime? SaleDate { get; set; }
     public bool IsActive { get; set; } = true;
+
+    public ICollection<MaintenanceRequest> MaintenanceRequests { get; set; } = new List<MaintenanceRequest>();
+    public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

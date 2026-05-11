@@ -42,4 +42,58 @@ public class InvoiceRepository : Repository<Invoice>, IInvoiceRepository
             .Include(i => i.MaintenanceReport)
             .Where(i => i.MaintenanceReportId == reportId && !i.IsDeleted)
             .ToListAsync();
+
+
+    public async Task<IEnumerable<Invoice>> GetByUnitIdAsync(Guid unitId)
+    {
+        return await _context.Invoices
+            .Where(i => i.UnitId == unitId && !i.IsDeleted)
+            .Include(i => i.Client)
+            .Include(i => i.TaskOrder)
+            .Include(i => i.MaintenanceReport)
+            .Include(i => i.LineItems)
+            .Include(i => i.Unit)
+            .Include(i => i.Tenant)
+            .Include(i => i.UnitOwnership)
+                .ThenInclude(uo => uo.Owner)
+            .OrderByDescending(i => i.IssueDate)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Invoice>> GetByTenantIdAsync(Guid tenantId)
+    {
+        return await _context.Invoices
+            .Where(i => i.TenantId == tenantId && !i.IsDeleted)
+            .Include(i => i.Client)
+            .Include(i => i.TaskOrder)
+            .Include(i => i.MaintenanceReport)
+            .Include(i => i.LineItems)
+            .Include(i => i.Unit)
+            .Include(i => i.Tenant)
+            .Include(i => i.UnitOwnership)
+                .ThenInclude(uo => uo.Owner)
+            .OrderByDescending(i => i.IssueDate)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Invoice>> GetByUnitOwnershipIdAsync(Guid unitOwnershipId)
+    {
+        return await _context.Invoices
+            .Where(i => i.UnitOwnershipId == unitOwnershipId && !i.IsDeleted)
+            .Include(i => i.Client)
+            .Include(i => i.TaskOrder)
+            .Include(i => i.MaintenanceReport)
+            .Include(i => i.LineItems)
+            .Include(i => i.Unit)
+            .Include(i => i.Tenant)
+            .Include(i => i.UnitOwnership)
+                .ThenInclude(uo => uo.Owner)
+            .OrderByDescending(i => i.IssueDate)
+            .ToListAsync();
+    }
+
+    public Task<IEnumerable<Invoice>> GetUnpaidInvoicesAsync(DateTime asOfDate)
+    {
+        throw new NotImplementedException();
+    }
 }

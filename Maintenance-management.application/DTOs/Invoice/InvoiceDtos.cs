@@ -24,6 +24,13 @@ public class InvoiceDto
     public string? ClientCompany { get; set; }
     public Guid? MaintenanceReportId { get; set; }
     public string? MaintenanceReportTitle { get; set; }
+    public Guid? UnitId { get; set; }
+    public string? UnitNumber { get; set; }
+    public Guid? TenantId { get; set; }
+    public string? TenantName { get; set; }
+    public Guid? UnitOwnershipId { get; set; }
+    public string? OwnerName { get; set; }
+
     public IList<InvoiceLineItemDto> LineItems { get; set; } = new List<InvoiceLineItemDto>();
     public DateTime CreatedAt { get; set; }
 }
@@ -48,6 +55,9 @@ public class CreateInvoiceDto
     public Guid? TaskOrderId { get; set; }
     public Guid? ClientId { get; set; }
     public Guid? MaintenanceReportId { get; set; }
+    public Guid? UnitId { get; set; }
+    public Guid? TenantId { get; set; }
+    public Guid? UnitOwnershipId { get; set; }
     public IList<CreateLineItemDto> LineItems { get; set; } = new List<CreateLineItemDto>();
 }
 

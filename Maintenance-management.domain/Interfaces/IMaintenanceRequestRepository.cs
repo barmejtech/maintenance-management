@@ -10,4 +10,7 @@ public interface IMaintenanceRequestRepository : IRepository<MaintenanceRequest>
     Task<MaintenanceRequest?> GetWithDetailsAsync(Guid id);
     Task AddAssignmentAsync(MaintenanceRequestAssignment assignment);
     Task RemoveAssignmentsAsync(Guid requestId);
+    Task<IEnumerable<MaintenanceRequest>> GetByUnitIdAsync(Guid unitId);
+    Task<IEnumerable<MaintenanceRequest>> GetByTenantIdAsync(Guid tenantId);
+    Task<IEnumerable<MaintenanceRequest>> GetByOwnerIdAsync(Guid ownerId);
 }

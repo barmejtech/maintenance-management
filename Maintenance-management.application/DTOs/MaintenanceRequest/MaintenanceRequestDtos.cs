@@ -23,6 +23,12 @@ public class MaintenanceRequestDto
     public string? ReviewedByUserId { get; set; }
     public DateTime? ReviewedAt { get; set; }
     public string? ReviewNotes { get; set; }
+    public Guid? UnitId { get; set; }
+    public string? UnitNumber { get; set; }
+    public Guid? TenantId { get; set; }
+    public string? TenantName { get; set; }
+    public Guid? OwnerId { get; set; }
+    public string? OwnerName { get; set; }
 
     // Assignment info
     public List<AssignedTechnicianDto> AssignedTechnicians { get; set; } = new();
@@ -54,6 +60,9 @@ public class CreateMaintenanceRequestDto
     public DateTime? RequestDate { get; set; }
     public Guid ClientId { get; set; }
     public string? Notes { get; set; }
+    public Guid? UnitId { get; set; }
+    public Guid? TenantId { get; set; }
+    public Guid? OwnerId { get; set; }
 }
 
 /// <summary>Used by clients submitting their own requests — ClientId is resolved server-side from JWT.</summary>
@@ -63,6 +72,8 @@ public class SubmitMaintenanceRequestDto
     public string? Description { get; set; }
     public string? EquipmentDescription { get; set; }
     public DateTime? RequestDate { get; set; }
+    public Guid? UnitId { get; set; }
+
     public string? Notes { get; set; }
 }
 

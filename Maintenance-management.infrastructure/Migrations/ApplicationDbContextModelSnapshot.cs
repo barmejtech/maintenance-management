@@ -22,6 +22,62 @@ namespace Maintenance_management.infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Account", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccountCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<decimal?>("OpeningBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("OpeningBalanceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ParentAccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountCode")
+                        .IsUnique();
+
+                    b.HasIndex("ParentAccountId");
+
+                    b.ToTable("Accounts");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.AppNotification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -159,6 +215,70 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.HasIndex("TechnicianId");
 
                     b.ToTable("Availabilities");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.BankReconciliation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BankAccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankAccountNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Difference")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsReconciled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReconciledAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReconciledByUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("StatementClosingBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("StatementDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StatementEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("StatementOpeningBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("StatementStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("SystemClosingBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SystemOpeningBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BankReconciliations");
                 });
 
             modelBuilder.Entity("Maintenance_management.domain.Entities.ChatMessage", b =>
@@ -336,6 +456,9 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Property<Guid?>("EquipmentId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ExpenseId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -355,6 +478,12 @@ namespace Maintenance_management.infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("MaintenanceReportId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PaymentVoucherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RenovationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("TaskOrderId")
@@ -377,9 +506,15 @@ namespace Maintenance_management.infrastructure.Migrations
 
                     b.HasIndex("EquipmentId");
 
+                    b.HasIndex("ExpenseId");
+
                     b.HasIndex("HVACSystemId");
 
                     b.HasIndex("MaintenanceReportId");
+
+                    b.HasIndex("PaymentVoucherId");
+
+                    b.HasIndex("RenovationId");
 
                     b.HasIndex("TaskOrderId");
 
@@ -562,6 +697,84 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.ToTable("EquipmentHealthPredictions");
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Expense", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ApprovedByUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpenseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ExpenseNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InvoiceNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("JournalEntryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("PaidDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("RenovationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SparePartId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("TaxAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("VendorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JournalEntryId");
+
+                    b.HasIndex("RenovationId");
+
+                    b.HasIndex("SparePartId");
+
+                    b.HasIndex("VendorId");
+
+                    b.ToTable("Expenses");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.HVACSystem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -679,6 +892,12 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("PaidAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime?>("PaidDate")
                         .HasColumnType("datetime2");
 
@@ -697,8 +916,17 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Property<decimal>("TaxRate")
                         .HasColumnType("decimal(5,2)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UnitOwnershipId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -709,9 +937,17 @@ namespace Maintenance_management.infrastructure.Migrations
 
                     b.HasIndex("MaintenanceReportId");
 
+                    b.HasIndex("OwnerId");
+
                     b.HasIndex("TaskOrderId")
                         .IsUnique()
                         .HasFilter("[TaskOrderId] IS NOT NULL");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("UnitId");
+
+                    b.HasIndex("UnitOwnershipId");
 
                     b.ToTable("Invoices");
                 });
@@ -752,6 +988,107 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.HasIndex("InvoiceId");
 
                     b.ToTable("InvoiceLineItems");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.JournalEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApprovedByUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EntryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EntryNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPosted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("PostedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SourceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SourceType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntryNumber")
+                        .IsUnique();
+
+                    b.ToTable("JournalEntries");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.JournalLineItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Credit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Debit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("JournalEntryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ReferenceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferenceType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("JournalEntryId");
+
+                    b.ToTable("JournalLineItems");
                 });
 
             modelBuilder.Entity("Maintenance_management.domain.Entities.MaintenanceReport", b =>
@@ -847,6 +1184,9 @@ namespace Maintenance_management.infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<Guid?>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 
@@ -867,10 +1207,19 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Property<Guid?>("TaskOrderId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid?>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UnitOwnershipId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -881,7 +1230,15 @@ namespace Maintenance_management.infrastructure.Migrations
 
                     b.HasIndex("InvoiceId");
 
+                    b.HasIndex("OwnerId");
+
                     b.HasIndex("TaskOrderId");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("UnitId");
+
+                    b.HasIndex("UnitOwnershipId");
 
                     b.ToTable("MaintenanceRequests");
                 });
@@ -1060,6 +1417,110 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.ToTable("Managers");
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.MeterReading", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("CalculatedAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<double?>("Consumption")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EquipmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("GeneratedInvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("PreviousReadingValue")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ReadByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ReadingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ReadingValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EquipmentId");
+
+                    b.HasIndex("GeneratedInvoiceId");
+
+                    b.HasIndex("UnitId", "Type", "ReadingDate");
+
+                    b.ToTable("MeterReadings");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Owner", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Owners");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.Payment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1108,6 +1569,89 @@ namespace Maintenance_management.infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.PaymentVoucher", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ApprovedByUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChequeDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChequeNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ExpenseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("InvoiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPrinted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PayeeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("PrintedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PrintedByUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("VoucherDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("VoucherNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpenseId");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("VoucherNumber")
+                        .IsUnique();
+
+                    b.ToTable("PaymentVouchers");
                 });
 
             modelBuilder.Entity("Maintenance_management.domain.Entities.PremiumMaintenanceRequest", b =>
@@ -1333,6 +1877,112 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.ToTable("QuotationLineItems");
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.ReconciliationEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("BankReconciliationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMatched")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("TransactionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankReconciliationId");
+
+                    b.ToTable("ReconciliationEntries");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Renovation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("ActualCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("ApprovedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApprovedByUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Budget")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ContractorName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContractorPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UnitId");
+
+                    b.ToTable("Renovations");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.SparePart", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1404,7 +2054,12 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("VendorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("VendorId");
 
                     b.ToTable("SpareParts");
                 });
@@ -1516,6 +2171,9 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Property<string>("ProofPhotoUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("RenovationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("ScheduledDate")
                         .HasColumnType("datetime2");
 
@@ -1544,6 +2202,8 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.HasIndex("EquipmentId");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("RenovationId");
 
                     b.HasIndex("TechnicianId");
 
@@ -1770,6 +2430,187 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.ToTable("TechnicianPerformanceScores");
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("DepositAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("EmergencyContactName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("EmergencyContactPhone")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LeaseEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LeaseStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("RentalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UnitId");
+
+                    b.ToTable("Tenants");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Unit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Floor")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("ShareValue")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal?>("SizeSqm")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnitNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("UnitTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UnitNumber")
+                        .IsUnique();
+
+                    b.HasIndex("UnitTypeId");
+
+                    b.ToTable("Units");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.UnitOwnership", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("OwnershipPercentage")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime>("PurchaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("SaleDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("UnitId", "IsActive");
+
+                    b.ToTable("UnitOwnerships");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.UnitType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("DefaultSizeSqm")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("UnitTypes");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.Vehicle", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1878,6 +2719,62 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Vehicles");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Vendor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankAccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaxNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email");
+
+                    b.ToTable("Vendors");
                 });
 
             modelBuilder.Entity("Maintenance_management.infrastructure.Identity.ApplicationUser", b =>
@@ -2110,6 +3007,16 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Account", b =>
+                {
+                    b.HasOne("Maintenance_management.domain.Entities.Account", "ParentAccount")
+                        .WithMany("ChildAccounts")
+                        .HasForeignKey("ParentAccountId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ParentAccount");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.Availability", b =>
                 {
                     b.HasOne("Maintenance_management.domain.Entities.Technician", "Technician")
@@ -2128,6 +3035,10 @@ namespace Maintenance_management.infrastructure.Migrations
                         .HasForeignKey("EquipmentId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("Maintenance_management.domain.Entities.Expense", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("ExpenseId");
+
                     b.HasOne("Maintenance_management.domain.Entities.HVACSystem", "HVACSystem")
                         .WithMany("Documents")
                         .HasForeignKey("HVACSystemId")
@@ -2137,6 +3048,14 @@ namespace Maintenance_management.infrastructure.Migrations
                         .WithMany("Documents")
                         .HasForeignKey("MaintenanceReportId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Maintenance_management.domain.Entities.PaymentVoucher", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("PaymentVoucherId");
+
+                    b.HasOne("Maintenance_management.domain.Entities.Renovation", null)
+                        .WithMany("Documents")
+                        .HasForeignKey("RenovationId");
 
                     b.HasOne("Maintenance_management.domain.Entities.TaskOrder", "TaskOrder")
                         .WithMany("Documents")
@@ -2188,6 +3107,36 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Navigation("Equipment");
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Expense", b =>
+                {
+                    b.HasOne("Maintenance_management.domain.Entities.JournalEntry", "JournalEntry")
+                        .WithMany()
+                        .HasForeignKey("JournalEntryId");
+
+                    b.HasOne("Maintenance_management.domain.Entities.Renovation", "Renovation")
+                        .WithMany("Expenses")
+                        .HasForeignKey("RenovationId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Maintenance_management.domain.Entities.SparePart", "SparePart")
+                        .WithMany()
+                        .HasForeignKey("SparePartId");
+
+                    b.HasOne("Maintenance_management.domain.Entities.Vendor", "Vendor")
+                        .WithMany("Expenses")
+                        .HasForeignKey("VendorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("JournalEntry");
+
+                    b.Navigation("Renovation");
+
+                    b.Navigation("SparePart");
+
+                    b.Navigation("Vendor");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.HVACSystem", b =>
                 {
                     b.HasOne("Maintenance_management.domain.Entities.Equipment", "Equipment")
@@ -2210,9 +3159,28 @@ namespace Maintenance_management.infrastructure.Migrations
                         .HasForeignKey("MaintenanceReportId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("Maintenance_management.domain.Entities.Owner", null)
+                        .WithMany("Invoices")
+                        .HasForeignKey("OwnerId");
+
                     b.HasOne("Maintenance_management.domain.Entities.TaskOrder", "TaskOrder")
                         .WithOne("Invoice")
                         .HasForeignKey("Maintenance_management.domain.Entities.Invoice", "TaskOrderId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Maintenance_management.domain.Entities.Tenant", "Tenant")
+                        .WithMany("Invoices")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Maintenance_management.domain.Entities.Unit", "Unit")
+                        .WithMany("Invoices")
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Maintenance_management.domain.Entities.UnitOwnership", "UnitOwnership")
+                        .WithMany("Invoices")
+                        .HasForeignKey("UnitOwnershipId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Client");
@@ -2220,6 +3188,12 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Navigation("MaintenanceReport");
 
                     b.Navigation("TaskOrder");
+
+                    b.Navigation("Tenant");
+
+                    b.Navigation("Unit");
+
+                    b.Navigation("UnitOwnership");
                 });
 
             modelBuilder.Entity("Maintenance_management.domain.Entities.InvoiceLineItem", b =>
@@ -2231,6 +3205,25 @@ namespace Maintenance_management.infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Invoice");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.JournalLineItem", b =>
+                {
+                    b.HasOne("Maintenance_management.domain.Entities.Account", "Account")
+                        .WithMany("JournalLineItems")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Maintenance_management.domain.Entities.JournalEntry", "JournalEntry")
+                        .WithMany("LineItems")
+                        .HasForeignKey("JournalEntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("JournalEntry");
                 });
 
             modelBuilder.Entity("Maintenance_management.domain.Entities.MaintenanceReport", b =>
@@ -2256,16 +3249,44 @@ namespace Maintenance_management.infrastructure.Migrations
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("Maintenance_management.domain.Entities.Owner", "Owner")
+                        .WithMany("MaintenanceRequests")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("Maintenance_management.domain.Entities.TaskOrder", "TaskOrder")
                         .WithMany()
                         .HasForeignKey("TaskOrderId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Maintenance_management.domain.Entities.Tenant", "Tenant")
+                        .WithMany("MaintenanceRequests")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Maintenance_management.domain.Entities.Unit", "Unit")
+                        .WithMany("MaintenanceRequests")
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Maintenance_management.domain.Entities.UnitOwnership", "UnitOwnership")
+                        .WithMany("MaintenanceRequests")
+                        .HasForeignKey("UnitOwnershipId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Client");
 
                     b.Navigation("Invoice");
 
+                    b.Navigation("Owner");
+
                     b.Navigation("TaskOrder");
+
+                    b.Navigation("Tenant");
+
+                    b.Navigation("Unit");
+
+                    b.Navigation("UnitOwnership");
                 });
 
             modelBuilder.Entity("Maintenance_management.domain.Entities.MaintenanceRequestAssignment", b =>
@@ -2318,6 +3339,29 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Navigation("Vehicle");
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.MeterReading", b =>
+                {
+                    b.HasOne("Maintenance_management.domain.Entities.Equipment", "Equipment")
+                        .WithMany()
+                        .HasForeignKey("EquipmentId");
+
+                    b.HasOne("Maintenance_management.domain.Entities.Invoice", "GeneratedInvoice")
+                        .WithMany()
+                        .HasForeignKey("GeneratedInvoiceId");
+
+                    b.HasOne("Maintenance_management.domain.Entities.Unit", "Unit")
+                        .WithMany("MeterReadings")
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Equipment");
+
+                    b.Navigation("GeneratedInvoice");
+
+                    b.Navigation("Unit");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.Payment", b =>
                 {
                     b.HasOne("Maintenance_management.domain.Entities.PremiumMaintenanceRequest", "PremiumMaintenanceRequest")
@@ -2327,6 +3371,29 @@ namespace Maintenance_management.infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("PremiumMaintenanceRequest");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.PaymentVoucher", b =>
+                {
+                    b.HasOne("Maintenance_management.domain.Entities.Expense", "Expense")
+                        .WithMany("PaymentVouchers")
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Maintenance_management.domain.Entities.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Maintenance_management.domain.Entities.Owner", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId");
+
+                    b.Navigation("Expense");
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Maintenance_management.domain.Entities.PremiumMaintenanceRequest", b =>
@@ -2376,6 +3443,35 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Navigation("Quotation");
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.ReconciliationEntry", b =>
+                {
+                    b.HasOne("Maintenance_management.domain.Entities.BankReconciliation", "BankReconciliation")
+                        .WithMany("Entries")
+                        .HasForeignKey("BankReconciliationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BankReconciliation");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Renovation", b =>
+                {
+                    b.HasOne("Maintenance_management.domain.Entities.Unit", "Unit")
+                        .WithMany("Renovations")
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.SparePart", b =>
+                {
+                    b.HasOne("Maintenance_management.domain.Entities.Vendor", null)
+                        .WithMany("SuppliedParts")
+                        .HasForeignKey("VendorId");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.SparePartUsage", b =>
                 {
                     b.HasOne("Maintenance_management.domain.Entities.SparePart", "SparePart")
@@ -2405,6 +3501,10 @@ namespace Maintenance_management.infrastructure.Migrations
                         .WithMany("Tasks")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Maintenance_management.domain.Entities.Renovation", null)
+                        .WithMany("RelatedTaskOrders")
+                        .HasForeignKey("RenovationId");
 
                     b.HasOne("Maintenance_management.domain.Entities.Technician", "Technician")
                         .WithMany("Tasks")
@@ -2466,6 +3566,47 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Navigation("Technician");
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Tenant", b =>
+                {
+                    b.HasOne("Maintenance_management.domain.Entities.Unit", "Unit")
+                        .WithMany("Tenants")
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Unit", b =>
+                {
+                    b.HasOne("Maintenance_management.domain.Entities.UnitType", "UnitType")
+                        .WithMany("Units")
+                        .HasForeignKey("UnitTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UnitType");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.UnitOwnership", b =>
+                {
+                    b.HasOne("Maintenance_management.domain.Entities.Owner", "Owner")
+                        .WithMany("UnitOwnerships")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Maintenance_management.domain.Entities.Unit", "Unit")
+                        .WithMany("OwnershipHistory")
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("Unit");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -2517,6 +3658,18 @@ namespace Maintenance_management.infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Account", b =>
+                {
+                    b.Navigation("ChildAccounts");
+
+                    b.Navigation("JournalLineItems");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.BankReconciliation", b =>
+                {
+                    b.Navigation("Entries");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.Client", b =>
                 {
                     b.Navigation("Invoices");
@@ -2533,12 +3686,24 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Navigation("Tasks");
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Expense", b =>
+                {
+                    b.Navigation("Attachments");
+
+                    b.Navigation("PaymentVouchers");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.HVACSystem", b =>
                 {
                     b.Navigation("Documents");
                 });
 
             modelBuilder.Entity("Maintenance_management.domain.Entities.Invoice", b =>
+                {
+                    b.Navigation("LineItems");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.JournalEntry", b =>
                 {
                     b.Navigation("LineItems");
                 });
@@ -2555,6 +3720,20 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Navigation("Assignments");
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Owner", b =>
+                {
+                    b.Navigation("Invoices");
+
+                    b.Navigation("MaintenanceRequests");
+
+                    b.Navigation("UnitOwnerships");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.PaymentVoucher", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.PremiumMaintenanceRequest", b =>
                 {
                     b.Navigation("Payment");
@@ -2568,6 +3747,15 @@ namespace Maintenance_management.infrastructure.Migrations
             modelBuilder.Entity("Maintenance_management.domain.Entities.Quotation", b =>
                 {
                     b.Navigation("LineItems");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Renovation", b =>
+                {
+                    b.Navigation("Documents");
+
+                    b.Navigation("Expenses");
+
+                    b.Navigation("RelatedTaskOrders");
                 });
 
             modelBuilder.Entity("Maintenance_management.domain.Entities.SparePart", b =>
@@ -2602,6 +3790,40 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Navigation("Tasks");
                 });
 
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Tenant", b =>
+                {
+                    b.Navigation("Invoices");
+
+                    b.Navigation("MaintenanceRequests");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Unit", b =>
+                {
+                    b.Navigation("Invoices");
+
+                    b.Navigation("MaintenanceRequests");
+
+                    b.Navigation("MeterReadings");
+
+                    b.Navigation("OwnershipHistory");
+
+                    b.Navigation("Renovations");
+
+                    b.Navigation("Tenants");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.UnitOwnership", b =>
+                {
+                    b.Navigation("Invoices");
+
+                    b.Navigation("MaintenanceRequests");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.UnitType", b =>
+                {
+                    b.Navigation("Units");
+                });
+
             modelBuilder.Entity("Maintenance_management.domain.Entities.Vehicle", b =>
                 {
                     b.Navigation("Documents");
@@ -2609,6 +3831,13 @@ namespace Maintenance_management.infrastructure.Migrations
                     b.Navigation("MaintenanceSchedules");
 
                     b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("Maintenance_management.domain.Entities.Vendor", b =>
+                {
+                    b.Navigation("Expenses");
+
+                    b.Navigation("SuppliedParts");
                 });
 #pragma warning restore 612, 618
         }

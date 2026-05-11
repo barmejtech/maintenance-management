@@ -46,6 +46,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Owner> Owners => Set<Owner>();
     public DbSet<UnitOwnership> UnitOwnerships => Set<UnitOwnership>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
+    public DbSet<MeterReading> MeterReadings => Set<MeterReading>();
+    public DbSet<Renovation> Renovations => Set<Renovation>();
+    public DbSet<Account> Accounts => Set<Account>();
+    public DbSet<JournalEntry> JournalEntries => Set<JournalEntry>();
+    public DbSet<JournalLineItem> JournalLineItems => Set<JournalLineItem>();
+    public DbSet<Vendor> Vendors => Set<Vendor>();
+    public DbSet<Expense> Expenses => Set<Expense>();
+    public DbSet<PaymentVoucher> PaymentVouchers => Set<PaymentVoucher>();
+    public DbSet<BankReconciliation> BankReconciliations => Set<BankReconciliation>();
+    public DbSet<ReconciliationEntry> ReconciliationEntries => Set<ReconciliationEntry>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -563,5 +573,178 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .HasForeignKey(t => t.UnitId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+
+        builder.Entity<MaintenanceRequest>(e =>
+        {
+            e.HasOne(r => r.Unit)
+                .WithMany(u => u.MaintenanceRequests)
+                .HasForeignKey(r => r.UnitId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            e.HasOne(r => r.Tenant)
+                .WithMany(t => t.MaintenanceRequests)
+                .HasForeignKey(r => r.TenantId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            e.HasOne(r => r.Owner)
+                .WithMany(o => o.MaintenanceRequests)
+                .HasForeignKey(r => r.OwnerId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            e.HasOne(r => r.UnitOwnership)
+                .WithMany(uo => uo.MaintenanceRequests)
+                .HasForeignKey(r => r.UnitOwnershipId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        // Invoice - Property links
+        builder.Entity<Invoice>(e =>
+        {
+            e.HasOne(i => i.Unit)
+                .WithMany(u => u.Invoices)
+                .HasForeignKey(i => i.UnitId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            e.HasOne(i => i.UnitOwnership)
+                .WithMany(uo => uo.Invoices)
+                .HasForeignKey(i => i.UnitOwnershipId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            e.HasOne(i => i.Tenant)
+                .WithMany(t => t.Invoices)
+                .HasForeignKey(i => i.TenantId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        // MeterReading
+        builder.Entity<MeterReading>(e =>
+        {
+            e.HasKey(m => m.Id);
+            e.Property(m => m.ReadingValue).HasColumnType("decimal(18,2)");
+            e.Property(m => m.CalculatedAmount).HasColumnType("decimal(18,2)");
+            e.HasOne(m => m.Unit)
+                .WithMany(u => u.MeterReadings)
+                .HasForeignKey(m => m.UnitId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasIndex(m => new { m.UnitId, m.Type, m.ReadingDate });
+        });
+
+        // Renovation
+        builder.Entity<Renovation>(e =>
+        {
+            e.HasKey(r => r.Id);
+            e.Property(r => r.Budget).HasColumnType("decimal(18,2)");
+            e.Property(r => r.ActualCost).HasColumnType("decimal(18,2)");
+            e.HasOne(r => r.Unit)
+                .WithMany(u => u.Renovations)
+                .HasForeignKey(r => r.UnitId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Account (GL)
+        builder.Entity<Account>(e =>
+        {
+            e.HasKey(a => a.Id);
+            e.Property(a => a.AccountCode).IsRequired().HasMaxLength(50);
+            e.Property(a => a.Name).IsRequired().HasMaxLength(200);
+            e.Property(a => a.Balance).HasColumnType("decimal(18,2)");
+            e.Property(a => a.OpeningBalance).HasColumnType("decimal(18,2)");
+            e.HasIndex(a => a.AccountCode).IsUnique();
+            e.HasOne(a => a.ParentAccount)
+                .WithMany(a => a.ChildAccounts)
+                .HasForeignKey(a => a.ParentAccountId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // JournalEntry
+        builder.Entity<JournalEntry>(e =>
+        {
+            e.HasKey(j => j.Id);
+            e.Property(j => j.EntryNumber).IsRequired().HasMaxLength(50);
+            e.HasIndex(j => j.EntryNumber).IsUnique();
+        });
+
+        // JournalLineItem
+        builder.Entity<JournalLineItem>(e =>
+        {
+            e.HasKey(j => j.Id);
+            e.Property(j => j.Debit).HasColumnType("decimal(18,2)");
+            e.Property(j => j.Credit).HasColumnType("decimal(18,2)");
+            e.HasOne(j => j.JournalEntry)
+                .WithMany(j => j.LineItems)
+                .HasForeignKey(j => j.JournalEntryId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(j => j.Account)
+                .WithMany(a => a.JournalLineItems)
+                .HasForeignKey(j => j.AccountId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // Vendor
+        builder.Entity<Vendor>(e =>
+        {
+            e.HasKey(v => v.Id);
+            e.Property(v => v.Name).IsRequired().HasMaxLength(200);
+            e.Property(v => v.Email).HasMaxLength(256);
+            e.HasIndex(v => v.Email);
+        });
+
+        // Expense
+        builder.Entity<Expense>(e =>
+        {
+            e.HasKey(ex => ex.Id);
+            e.Property(ex => ex.Amount).HasColumnType("decimal(18,2)");
+            e.Property(ex => ex.TaxAmount).HasColumnType("decimal(18,2)");
+            e.Property(ex => ex.TotalAmount).HasColumnType("decimal(18,2)");
+            e.HasOne(ex => ex.Vendor)
+                .WithMany(v => v.Expenses)
+                .HasForeignKey(ex => ex.VendorId)
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(ex => ex.Renovation)
+                .WithMany(r => r.Expenses)
+                .HasForeignKey(ex => ex.RenovationId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        // PaymentVoucher
+        builder.Entity<PaymentVoucher>(e =>
+        {
+            e.HasKey(p => p.Id);
+            e.Property(p => p.Amount).HasColumnType("decimal(18,2)");
+            e.Property(p => p.VoucherNumber).IsRequired().HasMaxLength(50);
+            e.HasIndex(p => p.VoucherNumber).IsUnique();
+            e.HasOne(p => p.Expense)
+                .WithMany(ex => ex.PaymentVouchers)
+                .HasForeignKey(p => p.ExpenseId)
+                .OnDelete(DeleteBehavior.SetNull);
+            e.HasOne(p => p.Invoice)
+                .WithMany()
+                .HasForeignKey(p => p.InvoiceId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        // BankReconciliation
+        builder.Entity<BankReconciliation>(e =>
+        {
+            e.HasKey(b => b.Id);
+            e.Property(b => b.StatementOpeningBalance).HasColumnType("decimal(18,2)");
+            e.Property(b => b.StatementClosingBalance).HasColumnType("decimal(18,2)");
+            e.Property(b => b.SystemOpeningBalance).HasColumnType("decimal(18,2)");
+            e.Property(b => b.SystemClosingBalance).HasColumnType("decimal(18,2)");
+            e.Property(b => b.Difference).HasColumnType("decimal(18,2)");
+        });
+
+        // ReconciliationEntry
+        builder.Entity<ReconciliationEntry>(e =>
+        {
+            e.HasKey(r => r.Id);
+            e.Property(r => r.Amount).HasColumnType("decimal(18,2)");
+            e.HasOne(r => r.BankReconciliation)
+                .WithMany(b => b.Entries)
+                .HasForeignKey(r => r.BankReconciliationId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+
     }
 }

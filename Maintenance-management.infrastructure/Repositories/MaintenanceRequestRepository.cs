@@ -61,4 +61,43 @@ public class MaintenanceRequestRepository : Repository<MaintenanceRequest>, IMai
         _context.Set<MaintenanceRequestAssignment>().RemoveRange(existing);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<MaintenanceRequest>> GetByUnitIdAsync(Guid unitId)
+     => await _dbSet
+         .Include(r => r.Client)
+         .Include(r => r.TaskOrder)
+         .Include(r => r.Invoice)
+         .Include(r => r.Assignments).ThenInclude(a => a.Technician)
+         .Include(r => r.Unit)
+         .Include(r => r.Tenant)
+         .Include(r => r.Owner)
+         .Where(r => r.UnitId == unitId && !r.IsDeleted)
+         .OrderByDescending(r => r.RequestDate)
+         .ToListAsync();
+
+    public async Task<IEnumerable<MaintenanceRequest>> GetByTenantIdAsync(Guid tenantId)
+        => await _dbSet
+            .Include(r => r.Client)
+            .Include(r => r.TaskOrder)
+            .Include(r => r.Invoice)
+            .Include(r => r.Assignments).ThenInclude(a => a.Technician)
+            .Include(r => r.Unit)
+            .Include(r => r.Tenant)
+            .Include(r => r.Owner)
+            .Where(r => r.TenantId == tenantId && !r.IsDeleted)
+            .OrderByDescending(r => r.RequestDate)
+            .ToListAsync();
+
+    public async Task<IEnumerable<MaintenanceRequest>> GetByOwnerIdAsync(Guid ownerId)
+        => await _dbSet
+            .Include(r => r.Client)
+            .Include(r => r.TaskOrder)
+            .Include(r => r.Invoice)
+            .Include(r => r.Assignments).ThenInclude(a => a.Technician)
+            .Include(r => r.Unit)
+            .Include(r => r.Tenant)
+            .Include(r => r.Owner)
+            .Where(r => r.OwnerId == ownerId && !r.IsDeleted)
+            .OrderByDescending(r => r.RequestDate)
+            .ToListAsync();
 }

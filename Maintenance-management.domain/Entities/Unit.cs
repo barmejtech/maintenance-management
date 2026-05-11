@@ -22,6 +22,12 @@ public class Unit : BaseEntity
     public Guid UnitTypeId { get; set; }
     public UnitType? UnitType { get; set; }
 
+    // EXISTING
     public ICollection<UnitOwnership> OwnershipHistory { get; set; } = new List<UnitOwnership>();
     public ICollection<Tenant> Tenants { get; set; } = new List<Tenant>();
+
+    public ICollection<MaintenanceRequest> MaintenanceRequests { get; set; } = new List<MaintenanceRequest>();
+    public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+    public ICollection<MeterReading> MeterReadings { get; set; } = new List<MeterReading>();
+    public ICollection<Renovation> Renovations { get; set; } = new List<Renovation>();
 }

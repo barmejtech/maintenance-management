@@ -9,4 +9,5 @@ public class InvoiceLineItem : BaseEntity
 
     public Guid InvoiceId { get; set; }
     public Invoice Invoice { get; set; } = null!;
+
 }

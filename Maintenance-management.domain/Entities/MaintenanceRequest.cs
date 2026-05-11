@@ -25,5 +25,23 @@ public class MaintenanceRequest : BaseEntity
     public Guid? InvoiceId { get; set; }
     public Invoice? Invoice { get; set; }
 
+
+    // Link to specific property unit
+    public Guid? UnitId { get; set; }
+    public Unit? Unit { get; set; }
+
+    // Link to specific tenant (if rented)
+    public Guid? TenantId { get; set; }
+    public Tenant? Tenant { get; set; }
+
+    // Link to specific owner (direct, if owner requested)
+    public Guid? OwnerId { get; set; }
+    public Owner? Owner { get; set; }
+
+    // Link to ownership record (to know which owner at time of request)
+    public Guid? UnitOwnershipId { get; set; }
+    public UnitOwnership? UnitOwnership { get; set; }
+
+    // EXISTING
     public ICollection<MaintenanceRequestAssignment> Assignments { get; set; } = new List<MaintenanceRequestAssignment>();
 }

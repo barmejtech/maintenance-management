@@ -221,10 +221,79 @@ export const routes: Routes = [
       {
         path: 'property-profiles/tenants',
         loadComponent: () => import('./components/property-profiles/tenants/tenant-list/tenant-list.component').then(m => m.TenantListComponent)
+      },
+
+      // ==================== NEW ACCOUNTING MODULES ====================
+      {
+        path: 'accounts',
+        loadComponent: () => import('./components/accounts/accountsGL.component').then(m => m.AccountsComponent),
+        canActivate: [managerGuard]
+      },
+      {
+        path: 'journal-entries',
+        loadComponent: () => import('./components/journal-entries/journal-entries.component').then(m => m.JournalEntriesComponent),
+        canActivate: [managerGuard]
+      },
+      {
+        path: 'vendors',
+        loadComponent: () => import('./components/vendors/vendors.component').then(m => m.VendorsComponent),
+        canActivate: [managerGuard]
+      },
+      {
+        path: 'expenses',
+        loadComponent: () => import('./components/expenses/expenses.component').then(m => m.ExpensesComponent),
+        canActivate: [managerGuard]
+      },
+      {
+        path: 'payment-vouchers',
+        loadComponent: () => import('./components/payment-vouchers/payment-vouchers.component').then(m => m.PaymentVouchersComponent),
+        canActivate: [managerGuard]
+      },
+      {
+        path: 'bank-reconciliation',
+        loadComponent: () => import('./components/bank-reconciliation/bank-reconciliation.component').then(m => m.BankReconciliationComponent),
+        canActivate: [managerGuard]
+      },
+
+      // ==================== NEW FINANCIAL REPORTS ====================
+      {
+        path: 'financial-reports/trial-balance',
+        loadComponent: () => import('./components/financial-reports/trial-balance/trial-balance.component').then(m => m.TrialBalanceComponent),
+        canActivate: [managerGuard]
+      },
+      {
+        path: 'financial-reports/profit-loss',
+        loadComponent: () => import('./components/financial-reports/profit-loss/profit-loss.component').then(m => m.ProfitLossComponent),
+        canActivate: [managerGuard]
+      },
+      {
+        path: 'financial-reports/balance-sheet',
+        loadComponent: () => import('./components/financial-reports/balance-sheet/balance-sheet.component').then(m => m.BalanceSheetComponent),
+        canActivate: [managerGuard]
+      },
+      {
+        path: 'financial-reports/cash-flow',
+        loadComponent: () => import('./components/financial-reports/cash-flow/cash-flow.component').then(m => m.CashFlowComponent),
+        canActivate: [managerGuard]
+      },
+      {
+        path: 'financial-reports/aging',
+        loadComponent: () => import('./components/financial-reports/aging-report/aging-report.component').then(m => m.AgingReportComponent),
+        canActivate: [managerGuard]
+      },
+
+      // ==================== NEW OPERATIONAL MODULES ====================
+      {
+        path: 'meter-readings',
+        loadComponent: () => import('./components/meter-readings/meter-readings.component').then(m => m.MeterReadingsComponent),
+        canActivate: [managerGuard]
+      },
+      {
+        path: 'renovations',
+        loadComponent: () => import('./components/renovations/renovations.component').then(m => m.RenovationsComponent),
+        canActivate: [managerGuard]
       }
     ]
   },
   { path: '**', redirectTo: '/dashboard' }
 ];
-
-

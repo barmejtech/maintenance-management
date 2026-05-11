@@ -1,4 +1,4 @@
-using Maintenance_management.application.DTOs.Invoice;
+﻿using Maintenance_management.application.DTOs.Invoice;
 using Maintenance_management.application.Interfaces;
 using Maintenance_management.domain.Entities;
 using Maintenance_management.domain.Enums;
@@ -50,6 +50,7 @@ public class InvoiceService : IInvoiceService
             Quantity = li.Quantity,
             UnitPrice = li.UnitPrice,
             Total = li.Quantity * li.UnitPrice
+           
         }).ToList();
 
         var subTotal = lineItems.Sum(li => li.Total);
@@ -71,13 +72,17 @@ public class InvoiceService : IInvoiceService
             ClientId = dto.ClientId,
             MaintenanceReportId = dto.MaintenanceReportId,
             CreatedByUserId = createdByUserId,
-            LineItems = lineItems
+            LineItems = lineItems,
+
+            // ✅ CORRECT - Add property links at Invoice level
+            UnitId = dto.UnitId,
+            TenantId = dto.TenantId,
+            UnitOwnershipId = dto.UnitOwnershipId
         };
 
         var created = await _repo.AddAsync(entity);
         return MapToDto(created);
     }
-
     public async Task<InvoiceDto?> UpdateAsync(Guid id, UpdateInvoiceDto dto)
     {
         var item = await _repo.GetWithLineItemsAsync(id);
@@ -147,4 +152,22 @@ public class InvoiceService : IInvoiceService
         }).ToList(),
         CreatedAt = inv.CreatedAt
     };
+
+    public async Task<IEnumerable<InvoiceDto>> GetByUnitIdAsync(Guid unitId)
+    {
+        var invoices = await _repo.GetByUnitIdAsync(unitId);
+        return invoices.Where(i => !i.IsDeleted).Select(MapToDto);
+    }
+
+    public async Task<IEnumerable<InvoiceDto>> GetByTenantIdAsync(Guid tenantId)
+    {
+        var invoices = await _repo.GetByTenantIdAsync(tenantId);
+        return invoices.Where(i => !i.IsDeleted).Select(MapToDto);
+    }
+
+    public async Task<IEnumerable<InvoiceDto>> GetByUnitOwnershipIdAsync(Guid unitOwnershipId)
+    {
+        var invoices = await _repo.GetByUnitOwnershipIdAsync(unitOwnershipId);
+        return invoices.Where(i => !i.IsDeleted).Select(MapToDto);
+    }
 }
