@@ -1,0 +1,69 @@
+using Maintenance_management.application.DTOs.NewEntities;
+using Maintenance_management.application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Maintenance_management.api.Controllers;
+
+[ApiController]
+[Route("api/vendors")]
+[Authorize]
+public class VendorsController : ControllerBase
+{
+    private readonly IVendorService _service;
+
+    public VendorsController(IVendorService service) => _service = service;
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+        => Ok(await _service.GetAllAsync());
+
+    [HttpGet("active")]
+    public async Task<IActionResult> GetActive()
+        => Ok(await _service.GetActiveAsync());
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var result = await _service.GetByIdAsync(id);
+        return result is null ? NotFound() : Ok(result);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin,Manager,DataEntry")]
+    public async Task<IActionResult> Create([FromBody] CreateVendorDto dto)
+    {
+        try
+        {
+            var result = await _service.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPut("{id:guid}")]
+    [Authorize(Roles = "Admin,Manager,DataEntry")]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateVendorDto dto)
+    {
+        try
+        {
+            var result = await _service.UpdateAsync(id, dto);
+            return result is null ? NotFound() : Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Admin,Manager")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var result = await _service.DeleteAsync(id);
+        return result ? NoContent() : NotFound();
+    }
+}

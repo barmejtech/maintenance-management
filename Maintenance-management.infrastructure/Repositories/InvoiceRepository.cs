@@ -92,8 +92,21 @@ public class InvoiceRepository : Repository<Invoice>, IInvoiceRepository
             .ToListAsync();
     }
 
-    public Task<IEnumerable<Invoice>> GetUnpaidInvoicesAsync(DateTime asOfDate)
+    public async Task<IEnumerable<Invoice>> GetUnpaidInvoicesAsync(DateTime asOfDate)
     {
-        throw new NotImplementedException();
+        return await _context.Invoices
+            .Where(i => i.Status != InvoiceStatus.Paid
+                     && i.Status != InvoiceStatus.Cancelled
+                     && i.DueDate.HasValue
+                     && i.DueDate.Value <= asOfDate
+                     && !i.IsDeleted)
+            .Include(i => i.Client)
+            .Include(i => i.Unit)
+            .Include(i => i.Tenant)
+            .Include(i => i.UnitOwnership)
+                .ThenInclude(uo => uo!.Owner)
+            .Include(i => i.LineItems)
+            .OrderBy(i => i.DueDate)
+            .ToListAsync();
     }
 }

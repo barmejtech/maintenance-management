@@ -147,13 +147,30 @@ public class MeterReadingService : IMeterReadingService
         CreatedAt = m.CreatedAt
     };
 
-    public Task<IEnumerable<MeterReadingDto>> GetByTypeAsync(domain.Enums.MeterType type)
+    public async Task<IEnumerable<MeterReadingDto>> GetByTypeAsync(domain.Enums.MeterType type)
     {
-        throw new NotImplementedException();
+        // Map Enums.MeterType to Entities.MeterType by name
+        if (!Enum.TryParse<MeterType>(type.ToString(), out var entityType))
+            return Enumerable.Empty<MeterReadingDto>();
+
+        var items = await _repo.GetByTypeAsync(entityType);
+        return items.Where(x => !x.IsDeleted).Select(MapToDto);
     }
 
-    public Task<MeterReadingChartDataDto> GetChartDataAsync(Guid unitId, domain.Enums.MeterType type, int months = 12)
+    public async Task<MeterReadingChartDataDto> GetChartDataAsync(Guid unitId, domain.Enums.MeterType type, int months = 12)
     {
-        throw new NotImplementedException();
+        if (!Enum.TryParse<MeterType>(type.ToString(), out var entityType))
+            return new MeterReadingChartDataDto { Label = type.ToString() };
+
+        var readings = await _repo.GetByUnitAndTypeWithDateRangeAsync(unitId, entityType, months);
+        var readingList = readings.Where(r => !r.IsDeleted).OrderBy(r => r.ReadingDate).ToList();
+
+        return new MeterReadingChartDataDto
+        {
+            Label = type.ToString(),
+            ReadingValue = readingList.LastOrDefault()?.ReadingValue ?? 0,
+            Consumption = readingList.Sum(r => r.Consumption ?? 0),
+            Amount = readingList.Sum(r => r.CalculatedAmount ?? 0)
+        };
     }
 }

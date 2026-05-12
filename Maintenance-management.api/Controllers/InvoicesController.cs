@@ -51,6 +51,22 @@ public class InvoicesController : ControllerBase
         return result is null ? NotFound() : Ok(result);
     }
 
+    [HttpGet("unit/{unitId:guid}")]
+    public async Task<IActionResult> GetByUnit(Guid unitId)
+        => Ok(await _service.GetByUnitIdAsync(unitId));
+
+    [HttpGet("tenant/{tenantId:guid}")]
+    public async Task<IActionResult> GetByTenant(Guid tenantId)
+        => Ok(await _service.GetByTenantIdAsync(tenantId));
+
+    [HttpGet("ownership/{unitOwnershipId:guid}")]
+    public async Task<IActionResult> GetByUnitOwnership(Guid unitOwnershipId)
+        => Ok(await _service.GetByUnitOwnershipIdAsync(unitOwnershipId));
+
+    [HttpGet("unpaid")]
+    public async Task<IActionResult> GetUnpaid([FromQuery] DateTime? asOfDate)
+        => Ok(await _service.GetUnpaidInvoicesAsync(asOfDate ?? DateTime.UtcNow));
+
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)

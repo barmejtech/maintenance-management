@@ -253,6 +253,18 @@ public class MaintenanceRequestsController : ControllerBase
         return result is null ? NotFound() : Ok(result);
     }
 
+    [HttpGet("unit/{unitId:guid}")]
+    public async Task<IActionResult> GetByUnit(Guid unitId)
+        => Ok(await _service.GetByUnitIdAsync(unitId));
+
+    [HttpGet("tenant/{tenantId:guid}")]
+    public async Task<IActionResult> GetByTenant(Guid tenantId)
+        => Ok(await _service.GetByTenantIdAsync(tenantId));
+
+    [HttpGet("owner/{ownerId:guid}")]
+    public async Task<IActionResult> GetByOwner(Guid ownerId)
+        => Ok(await _service.GetByOwnerIdAsync(ownerId));
+
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = "Admin,Manager")]
     public async Task<IActionResult> Delete(Guid id)

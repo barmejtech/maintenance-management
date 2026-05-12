@@ -15,5 +15,26 @@ public interface IUnitOfWork : IDisposable
     IReportRepository Reports { get; }
     IAvailabilityRepository Availabilities { get; }
     IDocumentRepository Documents { get; }
+
+    // Property domain
+    IUnitTypeRepository UnitTypes { get; }
+    IUnitRepository Units { get; }
+    IOwnerRepository Owners { get; }
+    IUnitOwnershipRepository UnitOwnerships { get; }
+    ITenantRepository Tenants { get; }
+    IMaintenanceRequestRepository MaintenanceRequests { get; }
+
+    // Accounting domain
+    IAccountRepository Accounts { get; }
+    IJournalEntryRepository JournalEntries { get; }
+    IVendorRepository Vendors { get; }
+    IExpenseRepository Expenses { get; }
+    IPaymentVoucherRepository PaymentVouchers { get; }
+    IBankReconciliationRepository BankReconciliations { get; }
+
+    // Operational
+    IMeterReadingRepository MeterReadings { get; }
+    IRenovationRepository Renovations { get; }
+
     Task<int> SaveChangesAsync();
 }
