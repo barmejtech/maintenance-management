@@ -1,6 +1,5 @@
 ﻿using Maintenance_management.domain.Entities;
 using Maintenance_management.domain.Enums;
-using MeterType = Maintenance_management.domain.Entities.MeterType;
 
 namespace Maintenance_management.domain.Interfaces;
 

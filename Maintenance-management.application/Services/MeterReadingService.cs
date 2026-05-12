@@ -1,6 +1,7 @@
 ﻿using Maintenance_management.application.DTOs.NewEntities;
 using Maintenance_management.application.Interfaces;
 using Maintenance_management.domain.Entities;
+using Maintenance_management.domain.Enums;
 using Maintenance_management.domain.Interfaces;
 
 namespace Maintenance_management.application.Services;
@@ -91,7 +92,6 @@ public class MeterReadingService : IMeterReadingService
         return true;
     }
 
-   
     public async Task<BulkMeterReadingResultDto> BulkCreateAsync(BulkMeterReadingDto dto, string readByUserId)
     {
         var results = new List<MeterReadingDto>();
@@ -147,22 +147,9 @@ public class MeterReadingService : IMeterReadingService
         CreatedAt = m.CreatedAt
     };
 
-    public async Task<IEnumerable<MeterReadingDto>> GetByTypeAsync(domain.Enums.MeterType type)
+    public async Task<MeterReadingChartDataDto> GetChartDataAsync(Guid unitId, MeterType type, int months = 12)
     {
-        // Map Enums.MeterType to Entities.MeterType by name
-        if (!Enum.TryParse<MeterType>(type.ToString(), out var entityType))
-            return Enumerable.Empty<MeterReadingDto>();
-
-        var items = await _repo.GetByTypeAsync(entityType);
-        return items.Where(x => !x.IsDeleted).Select(MapToDto);
-    }
-
-    public async Task<MeterReadingChartDataDto> GetChartDataAsync(Guid unitId, domain.Enums.MeterType type, int months = 12)
-    {
-        if (!Enum.TryParse<MeterType>(type.ToString(), out var entityType))
-            return new MeterReadingChartDataDto { Label = type.ToString() };
-
-        var readings = await _repo.GetByUnitAndTypeWithDateRangeAsync(unitId, entityType, months);
+        var readings = await _repo.GetByUnitAndTypeWithDateRangeAsync(unitId, type, months);
         var readingList = readings.Where(r => !r.IsDeleted).OrderBy(r => r.ReadingDate).ToList();
 
         return new MeterReadingChartDataDto

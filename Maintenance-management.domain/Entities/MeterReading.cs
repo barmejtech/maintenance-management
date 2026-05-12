@@ -2,13 +2,7 @@
 
 namespace Maintenance_management.domain.Entities;
 
-public enum MeterType
-{
-    Electricity = 0,
-    Water = 1,
-    Gas = 2,
-    Solar = 3
-}
+
 
 public class MeterReading : BaseEntity
 {

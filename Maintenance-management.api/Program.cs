@@ -183,10 +183,7 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IBankRe
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IFinancialReportService, Maintenance_management.application.Services.FinancialReportService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IMeterReadingService, Maintenance_management.application.Services.MeterReadingService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IRenovationService, Maintenance_management.application.Services.RenovationService>();
-builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPremiumServiceService, Maintenance_management.application.Services.PremiumServiceService>();
-builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPremiumMaintenanceRequestService, Maintenance_management.application.Services.PremiumMaintenanceRequestService>();
-builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPaymentService, Maintenance_management.application.Services.PaymentService>();
-builder.Services.AddScoped<Maintenance_management.application.Interfaces.IReportService, Maintenance_management.application.Services.ReportService>();
+
 
 // Notification service (SignalR-based)
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.INotificationService, Maintenance_management.api.Services.HubNotificationService>();
@@ -248,7 +245,19 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
-
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("========= ERROR =========");
+        Console.WriteLine(ex.ToString());
+        throw;
+    }
+});
 // ===================== DATABASE SEEDING =====================
 using (var scope = app.Services.CreateScope())
 {
@@ -263,7 +272,10 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
 // ===================== PIPELINE =====================
 app.UseSwagger();
 app.UseSwaggerUI(c =>

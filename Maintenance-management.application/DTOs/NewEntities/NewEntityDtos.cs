@@ -1,6 +1,6 @@
 ﻿using Maintenance_management.domain.Entities;
 using Maintenance_management.domain.Enums;
-using MeterType = Maintenance_management.domain.Entities.MeterType;
+using MeterType = Maintenance_management.domain.Enums.MeterType;
 
 namespace Maintenance_management.application.DTOs.NewEntities;
 
@@ -89,7 +89,7 @@ public class MeterReadingDto
     public string UnitNumber { get; set; } = string.Empty;
     public Guid? EquipmentId { get; set; }
     public string? EquipmentName { get; set; }
-    public domain.Entities.MeterType Type { get; set; }
+    public domain.Enums.MeterType Type { get; set; }
     public double ReadingValue { get; set; }
     public double? PreviousReadingValue { get; set; }
     public double? Consumption { get; set; }

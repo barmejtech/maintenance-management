@@ -1,8 +1,8 @@
 using Maintenance_management.domain.Entities;
+using Maintenance_management.domain.Enums;
 using Maintenance_management.domain.Interfaces;
 using Maintenance_management.infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using MeterType = Maintenance_management.domain.Entities.MeterType;
 
 namespace Maintenance_management.infrastructure.Repositories;
 
