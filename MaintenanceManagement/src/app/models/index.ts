@@ -1317,10 +1317,10 @@ export interface UpdateTenantDto {
 // ==================== METER READING MODELS ====================
 
 export enum MeterType {
-  Electricity = 0,
-  Water = 1,
+  Water = 0,
+  Electricity = 1,
   Gas = 2,
-  Solar = 3
+  ChilledWater = 3
 }
 
 export interface MeterReading {
@@ -1376,8 +1376,8 @@ export interface UnitMeterReading {
 export interface BulkMeterReadingResult {
   successCount: number;
   failedCount: number;
-  successfullyCreated: MeterReading[];
-  errors: BulkMeterReadingError[];
+  readings: MeterReading[];
+  errors: string[];
 }
 
 export interface BulkMeterReadingError {
@@ -1388,12 +1388,7 @@ export interface BulkMeterReadingError {
 
 export interface MeterReadingChartData {
   label: string;
-  readings: MeterReadingPoint[];
-}
-
-export interface MeterReadingPoint {
-  date: string;
-  value: number;
+  readingValue: number;
   consumption: number;
   amount: number;
 }
@@ -1403,9 +1398,22 @@ export interface MeterReadingPoint {
 export enum RenovationStatus {
   Planned = 0,
   InProgress = 1,
-  Completed = 2,
-  Cancelled = 3,
-  OnHold = 4
+  OnHold = 2,
+  Completed = 3,
+  Cancelled = 4
+}
+
+export interface RenovationDocument {
+  id: string;
+  fileName: string;
+  fileUrl: string;
+}
+
+export interface RenovationExpense {
+  id: string;
+  expenseNumber: string;
+  amount: number;
+  vendorName: string;
 }
 
 export interface Renovation {
@@ -1424,6 +1432,8 @@ export interface Renovation {
   approvedByUserId?: string;
   approvedAt?: string;
   notes?: string;
+  documents: RenovationDocument[];
+  expenses: RenovationExpense[];
   createdAt: string;
 }
 
@@ -1724,6 +1734,7 @@ export interface CreateBankReconciliationRequest {
 }
 
 export interface CompleteReconciliationRequest {
+  isReconciled?: boolean;
   notes?: string;
 }
 
@@ -1756,6 +1767,8 @@ export interface AccountBalance {
   accountId: string;
   accountCode: string;
   accountName: string;
+  debitBalance?: number;
+  creditBalance?: number;
   netBalance: number;
 }
 

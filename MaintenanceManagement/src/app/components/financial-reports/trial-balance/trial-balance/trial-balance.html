@@ -1,1 +1,28 @@
-<p>trial-balance works!</p>
+<div class="page-header">
+  <div>
+    <h2 class="mb-1">Trial Balance</h2>
+    <p class="text-muted mb-0">Fetch the double-entry trial balance from the accounting backend.</p>
+  </div>
+  <div class="d-flex gap-2 align-items-end flex-wrap">
+    <div>
+      <label class="form-label">As of date</label>
+      <input class="form-control" type="date" [(ngModel)]="filter.asOfDate">
+    </div>
+    <button class="btn btn-primary" type="button" (click)="load()">Refresh</button>
+  </div>
+</div>
+<div class="summary-grid mb-4">
+  <div class="card"><div class="card-body"><div class="text-muted small">Total debit</div><div class="fs-4 fw-semibold">{{ report()?.totalDebit ?? 0 | number:'1.2-2' }}</div></div></div>
+  <div class="card"><div class="card-body"><div class="text-muted small">Total credit</div><div class="fs-4 fw-semibold">{{ report()?.totalCredit ?? 0 | number:'1.2-2' }}</div></div></div>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Code</th><th>Account</th><th>Debit</th><th>Credit</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let line of report()?.accounts || []"><td>{{ line.accountCode }}</td><td>{{ line.accountName }}</td><td>{{ line.debit | number:'1.2-2' }}</td><td>{{ line.credit | number:'1.2-2' }}</td></tr>
+        <tr *ngIf="!(report()?.accounts?.length)"><td colspan="4" class="text-center text-muted py-4">No trial balance data.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>

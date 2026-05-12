@@ -102,6 +102,51 @@
     </a>
     }
 
+    <!-- ===== ACCOUNTING ===== -->
+    @if (isManagerOrAdmin()) {
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-label">Accounting</div>
+    <a routerLink="/accounts" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-diagram-3"></i> GL Accounts
+    </a>
+    <a routerLink="/journal-entries" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-journal-text"></i> Journal Entries
+    </a>
+    <a routerLink="/vendors" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-shop"></i> Vendors
+    </a>
+    <a routerLink="/expenses" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-cash-stack"></i> Expenses
+    </a>
+    <a routerLink="/payment-vouchers" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-receipt-cutoff"></i> Payment Vouchers
+    </a>
+    <a routerLink="/bank-reconciliation" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-bank"></i> Bank Reconciliation
+    </a>
+    <a routerLink="/financial-reports/trial-balance" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-table"></i> Trial Balance
+    </a>
+    <a routerLink="/financial-reports/profit-loss" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-graph-up"></i> Profit &amp; Loss
+    </a>
+    <a routerLink="/financial-reports/balance-sheet" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-columns-gap"></i> Balance Sheet
+    </a>
+    <a routerLink="/financial-reports/cash-flow" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-water"></i> Cash Flow
+    </a>
+    <a routerLink="/financial-reports/aging" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-hourglass-split"></i> Aging Report
+    </a>
+    <a routerLink="/meter-readings" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-speedometer2"></i> Meter Readings
+    </a>
+    <a routerLink="/renovations" routerLinkActive="active" class="nav-item">
+      <i class="bi bi-hammer"></i> Renovations
+    </a>
+    }
+
     <!-- ===== INTELLIGENCE ===== -->
     @if (isManagerOrAdmin() || isDataEntryRole() || isTechnicianRole()) {
     <div class="sidebar-divider"></div>

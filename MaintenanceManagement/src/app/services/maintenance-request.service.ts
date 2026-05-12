@@ -21,6 +21,9 @@ export class MaintenanceRequestService {
   getById(id: string): Observable<MaintenanceRequest> { return this.http.get<MaintenanceRequest>(`${this.base}/${id}`); }
   getByClient(clientId: string): Observable<MaintenanceRequest[]> { return this.http.get<MaintenanceRequest[]>(`${this.base}/client/${clientId}`); }
   getByStatus(status: MaintenanceRequestStatus): Observable<MaintenanceRequest[]> { return this.http.get<MaintenanceRequest[]>(`${this.base}/status/${status}`); }
+  getByUnit(unitId: string): Observable<MaintenanceRequest[]> { return this.http.get<MaintenanceRequest[]>(`${this.base}/unit/${unitId}`); }
+  getByTenant(tenantId: string): Observable<MaintenanceRequest[]> { return this.http.get<MaintenanceRequest[]>(`${this.base}/tenant/${tenantId}`); }
+  getByOwner(ownerId: string): Observable<MaintenanceRequest[]> { return this.http.get<MaintenanceRequest[]>(`${this.base}/owner/${ownerId}`); }
 
   /** Returns the current client's own maintenance requests (uses JWT to identify the client). */
   getMyRequests(): Observable<MaintenanceRequest[]> { return this.http.get<MaintenanceRequest[]>(`${this.base}/my`); }

@@ -1,1 +1,80 @@
-<p>vendors works!</p>
+<div class="page-header">
+  <div>
+    <h2 class="mb-1">Vendors</h2>
+    <p class="text-muted mb-0">Maintain supplier records used by expenses and payment vouchers.</p>
+  </div>
+  <button class="btn btn-primary" type="button" (click)="openAdd()">Add vendor</button>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Vendor</th>
+          <th>Contact</th>
+          <th>Banking</th>
+          <th>Balance due</th>
+          <th>Status</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let vendor of vendors()">
+          <td>
+            <div class="fw-semibold">{{ vendor.name }}</div>
+            <small class="text-muted">{{ vendor.companyName || '—' }}</small>
+          </td>
+          <td>
+            <div>{{ vendor.email }}</div>
+            <small class="text-muted">{{ vendor.phone || '—' }}</small>
+          </td>
+          <td>
+            <div>{{ vendor.bankName || '—' }}</div>
+            <small class="text-muted">{{ vendor.bankAccountNumber || '—' }}</small>
+          </td>
+          <td>{{ vendor.balanceDue ?? 0 | number:'1.2-2' }}</td>
+          <td><span class="badge" [class.text-bg-success]="vendor.isActive" [class.text-bg-secondary]="!vendor.isActive">{{ vendor.isActive ? 'Active' : 'Inactive' }}</span></td>
+          <td class="text-end d-flex gap-2 justify-content-end">
+            <button class="btn btn-sm btn-outline-primary" type="button" (click)="openEdit(vendor)">Edit</button>
+            <button class="btn btn-sm btn-outline-danger" type="button" (click)="delete(vendor)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="!vendors().length && !isLoading()"><td colspan="6" class="text-center text-muted py-4">No vendors available.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="showModal()" class="modal-backdrop-custom"></div>
+<div *ngIf="showModal()" class="modal-panel">
+  <div class="card modal-card shadow-lg">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <h3 class="h5 mb-0">{{ isEditing() ? 'Edit vendor' : 'New vendor' }}</h3>
+        <button class="btn-close" type="button" (click)="closeModal()"></button>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label">Name</label><input class="form-control" [(ngModel)]="form.name"></div>
+        <div class="col-md-6"><label class="form-label">Company</label><input class="form-control" [(ngModel)]="form.companyName"></div>
+        <div class="col-md-6"><label class="form-label">Email</label><input class="form-control" [(ngModel)]="form.email"></div>
+        <div class="col-md-6"><label class="form-label">Phone</label><input class="form-control" [(ngModel)]="form.phone"></div>
+        <div class="col-md-6"><label class="form-label">Tax number</label><input class="form-control" [(ngModel)]="form.taxNumber"></div>
+        <div class="col-md-6"><label class="form-label">Address</label><input class="form-control" [(ngModel)]="form.address"></div>
+        <div class="col-md-6"><label class="form-label">Bank name</label><input class="form-control" [(ngModel)]="form.bankName"></div>
+        <div class="col-md-6"><label class="form-label">Bank account number</label><input class="form-control" [(ngModel)]="form.bankAccountNumber"></div>
+        <div class="col-12"><label class="form-label">Notes</label><textarea class="form-control" rows="3" [(ngModel)]="form.notes"></textarea></div>
+        <div class="col-12">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="form.isActive" id="vendorActive">
+            <label class="form-check-label" for="vendorActive">Active vendor</label>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button class="btn btn-outline-secondary" type="button" (click)="closeModal()">Cancel</button>
+        <button class="btn btn-primary" type="button" [disabled]="isSaving()" (click)="save()">{{ isSaving() ? 'Saving...' : 'Save' }}</button>
+      </div>
+    </div>
+  </div>
+</div>

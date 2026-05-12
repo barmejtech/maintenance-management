@@ -1,0 +1,10 @@
+:host { display: block; }
+.page-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.layout-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; }
+.summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.detail-card { min-height: 100%; }
+.modal-backdrop-custom { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); z-index: 1040; }
+.modal-panel { position: fixed; inset: 0; z-index: 1050; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.modal-card { width: min(900px, 100%); max-height: calc(100vh - 2rem); overflow: auto; border-radius: 1rem; }
+.small-modal { width: min(560px, 100%); }
+@media (max-width: 992px) { .layout-grid { grid-template-columns: 1fr; } }
