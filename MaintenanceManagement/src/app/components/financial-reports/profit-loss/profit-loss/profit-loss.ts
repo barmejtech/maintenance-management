@@ -33,4 +33,3 @@ export class ProfitLossComponent implements OnInit {
   }
 }
 
-export { ProfitLossComponent as ProfitLoss };

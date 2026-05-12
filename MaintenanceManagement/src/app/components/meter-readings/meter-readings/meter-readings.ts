@@ -197,4 +197,3 @@ export class MeterReadingsComponent implements OnInit {
   }
 }
 
-export { MeterReadingsComponent as MeterReadings };

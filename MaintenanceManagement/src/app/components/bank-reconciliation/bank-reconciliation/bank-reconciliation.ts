@@ -140,4 +140,3 @@ export class BankReconciliationComponent implements OnInit {
   }
 }
 
-export { BankReconciliationComponent as BankReconciliation };

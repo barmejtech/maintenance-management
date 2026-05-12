@@ -162,4 +162,3 @@ export class ExpensesComponent implements OnInit {
   }
 }
 
-export { ExpensesComponent as Expenses };

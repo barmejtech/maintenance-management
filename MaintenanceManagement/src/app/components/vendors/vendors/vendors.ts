@@ -137,4 +137,3 @@ export class VendorsComponent implements OnInit {
   }
 }
 
-export { VendorsComponent as Vendors };

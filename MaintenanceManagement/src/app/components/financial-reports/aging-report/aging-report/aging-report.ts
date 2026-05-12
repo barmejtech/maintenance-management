@@ -28,4 +28,3 @@ export class AgingReportComponent implements OnInit {
   }
 }
 
-export { AgingReportComponent as AgingReport };

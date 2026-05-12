@@ -163,4 +163,3 @@ export class RenovationsComponent implements OnInit {
   }
 }
 
-export { RenovationsComponent as Renovations };

@@ -40,4 +40,3 @@ export class CashFlowComponent implements OnInit {
   }
 }
 
-export { CashFlowComponent as CashFlow };

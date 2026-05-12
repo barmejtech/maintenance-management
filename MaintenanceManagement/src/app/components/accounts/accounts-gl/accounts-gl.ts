@@ -172,4 +172,3 @@ export class AccountsComponent implements OnInit {
   }
 }
 
-export { AccountsComponent as AccountsGL };

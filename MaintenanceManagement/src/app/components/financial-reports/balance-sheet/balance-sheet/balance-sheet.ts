@@ -37,4 +37,3 @@ export class BalanceSheetComponent implements OnInit {
   }
 }
 
-export { BalanceSheetComponent as BalanceSheet };

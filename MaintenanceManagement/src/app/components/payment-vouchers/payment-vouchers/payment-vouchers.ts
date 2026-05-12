@@ -166,4 +166,3 @@ export class PaymentVouchersComponent implements OnInit {
   }
 }
 
-export { PaymentVouchersComponent as PaymentVouchers };

@@ -172,4 +172,3 @@ export class JournalEntriesComponent implements OnInit {
   }
 }
 
-export { JournalEntriesComponent as JournalEntries };

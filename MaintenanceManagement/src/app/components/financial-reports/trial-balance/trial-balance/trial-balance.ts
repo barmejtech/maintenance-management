@@ -30,4 +30,3 @@ export class TrialBalanceComponent implements OnInit {
   }
 }
 
-export { TrialBalanceComponent as TrialBalance };
