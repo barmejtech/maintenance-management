@@ -17,7 +17,7 @@
     <div class="card shadow-sm border-0 mb-3">
       <div class="card-body py-2">
         <div class="row g-2 align-items-end">
-          <div class="col-12 col-md-3">
+          <div class="col-12 col-md-2">
             <label class="form-label small mb-1">Status</label>
             <select class="form-select form-select-sm" [(ngModel)]="filterStatus">
               <option value="">All Statuses</option>
@@ -28,6 +28,15 @@
               <option value="4">Completed</option>
               <option value="5">Rejected</option>
               <option value="6">Cancelled</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-2">
+            <label class="form-label small mb-1">Unit</label>
+            <select class="form-select form-select-sm" [(ngModel)]="filterUnit">
+              <option value="">All Units</option>
+              @for (unit of units(); track unit.id) {
+                <option [value]="unit.id">{{ unit.unitNumber }}</option>
+              }
             </select>
           </div>
           <div class="col-12 col-md-3">
@@ -73,6 +82,7 @@
                 <tr>
                   <th><i class="bi bi-hash me-1"></i>Request</th>
                   <th><i class="bi bi-person me-1"></i>Client</th>
+                  <th><i class="bi bi-door-open me-1"></i>Unit</th>
                   <th><i class="bi bi-calendar3 me-1"></i>Date</th>
                   <th><i class="bi bi-flag me-1"></i>Status</th>
                   <th><i class="bi bi-person-gear me-1"></i>Assigned</th>
@@ -88,6 +98,13 @@
                     </td>
                     <td>
                       <span class="fw-medium">{{ req.clientName }}</span>
+                    </td>
+                    <td>
+                      @if (req.unitNumber) {
+                        <span class="fw-medium">{{ req.unitNumber }}</span>
+                      } @else {
+                        <span class="text-muted small">—</span>
+                      }
                     </td>
                     <td>
                       <small>{{ req.requestDate | date:'MMM d, y' }}</small>
@@ -173,6 +190,20 @@
 
                 <dt class="col-sm-4 text-muted">Request Date</dt>
                 <dd class="col-sm-8">{{ req.requestDate | date:'MMM d, y, h:mm a' }}</dd>
+
+                @if (req.unitNumber || req.tenantName || req.ownerName) {
+                  <dt class="col-sm-4 text-muted">Property Context</dt>
+                  <dd class="col-sm-8">
+                    @if (req.unitNumber) {<div><strong>Unit:</strong> {{ req.unitNumber }}</div>}
+                    @if (req.tenantName) {<div><strong>Tenant:</strong> {{ req.tenantName }}</div>}
+                    @if (req.ownerName) {<div><strong>Owner:</strong> {{ req.ownerName }}</div>}
+                  </dd>
+                }
+
+                @if (req.invoiceNumber) {
+                  <dt class="col-sm-4 text-muted">Invoice</dt>
+                  <dd class="col-sm-8">#{{ req.invoiceNumber }}</dd>
+                }
 
                 <dt class="col-sm-4 text-muted">Submitted</dt>
                 <dd class="col-sm-8">{{ req.createdAt | date:'MMM d, y, h:mm a' }}</dd>

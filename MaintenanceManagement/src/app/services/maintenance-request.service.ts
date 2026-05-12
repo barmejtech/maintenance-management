@@ -9,12 +9,13 @@ export class MaintenanceRequestService {
   private readonly base = `${environment.apiUrl}/maintenancerequests`;
   constructor(private http: HttpClient) {}
 
-  getAll(filters?: { status?: MaintenanceRequestStatus; search?: string; from?: string; to?: string }): Observable<MaintenanceRequest[]> {
+  getAll(filters?: { status?: MaintenanceRequestStatus; search?: string; from?: string; to?: string; unitId?: string }): Observable<MaintenanceRequest[]> {
     let params = new HttpParams();
     if (filters?.status !== undefined && filters.status !== null) params = params.set('status', filters.status.toString());
     if (filters?.search) params = params.set('search', filters.search);
     if (filters?.from) params = params.set('from', filters.from);
     if (filters?.to) params = params.set('to', filters.to);
+    if (filters?.unitId) params = params.set('unitId', filters.unitId);
     return this.http.get<MaintenanceRequest[]>(this.base, { params });
   }
 

@@ -7,7 +7,8 @@ import { InvoiceService } from '../../services/invoice.service';
 import { ClientService } from '../../services/client.service';
 import { TaskOrderService } from '../../services/task-order.service';
 import { EquipmentService } from '../../services/equipment.service';
-import { Invoice, InvoiceStatus, Client, TaskOrder, Equipment, EquipmentStatus } from '../../models';
+import { UnitService } from '../../services/unit.service';
+import { Invoice, InvoiceStatus, Client, TaskOrder, Equipment, EquipmentStatus, UnitDto } from '../../models';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translate.service';
 import { PdfService } from '../../services/pdf.service';
@@ -23,11 +24,13 @@ import { ToastService } from '../../services/toast.service';
 })
 export class InvoicesComponent implements OnInit {
   invoices = signal<Invoice[]>([]);
+  units = signal<UnitDto[]>([]);
   clients = signal<Client[]>([]);
   taskOrders = signal<TaskOrder[]>([]);
   equipmentMap = signal<Record<string, Equipment>>({});
   currentPage = signal(1);
   readonly pageSize = 10;
+  filterUnit = signal('');
   showModal = signal(false);
   isEditing = signal(false);
   isSaving = signal(false);
@@ -44,6 +47,7 @@ export class InvoicesComponent implements OnInit {
     clientEmail: '',
     clientAddress: '',
     taskOrderId: '',
+    unitId: '',
     issueDate: '',
     dueDate: '',
     subTotal: 0,
@@ -58,6 +62,7 @@ export class InvoicesComponent implements OnInit {
     private clientService: ClientService,
     private taskOrderService: TaskOrderService,
     private equipmentService: EquipmentService,
+    private unitService: UnitService,
     private translation: TranslationService,
     private pdf: PdfService,
     private toast: ToastService,
@@ -66,6 +71,7 @@ export class InvoicesComponent implements OnInit {
 
   ngOnInit() {
     this.load();
+    this.loadUnits();
     this.loadClients();
     this.loadTaskOrders();
   }
@@ -76,6 +82,10 @@ export class InvoicesComponent implements OnInit {
 
   loadClients() {
     this.clientService.getAll().subscribe({ next: d => this.clients.set(d), error: () => {} });
+  }
+
+  loadUnits() {
+    this.unitService.getAll().subscribe({ next: d => this.units.set(d), error: () => {} });
   }
 
   loadTaskOrders() {
@@ -101,7 +111,7 @@ export class InvoicesComponent implements OnInit {
   openAdd() {
     this.isEditing.set(false);
     this.editingId = '';
-    this.form = { invoiceNumber: '', clientId: '', clientName: '', clientEmail: '', clientAddress: '', taskOrderId: '', issueDate: '', dueDate: '', subTotal: 0, taxRate: 0, notes: '', status: InvoiceStatus.Draft };
+    this.form = { invoiceNumber: '', clientId: '', clientName: '', clientEmail: '', clientAddress: '', taskOrderId: '', unitId: '', issueDate: '', dueDate: '', subTotal: 0, taxRate: 0, notes: '', status: InvoiceStatus.Draft };
     this.selectedTaskOrder.set(null);
     this.selectedEquipment.set(null);
     this.showModal.set(true);
@@ -117,6 +127,7 @@ export class InvoicesComponent implements OnInit {
       clientEmail: inv.clientEmail ?? '',
       clientAddress: inv.clientAddress ?? '',
       taskOrderId: inv.taskOrderId ?? '',
+      unitId: inv.unitId ?? '',
       issueDate: inv.issueDate ? inv.issueDate.substring(0, 10) : '',
       dueDate: inv.dueDate ? inv.dueDate.substring(0, 10) : '',
       subTotal: inv.subTotal,
@@ -185,6 +196,7 @@ export class InvoicesComponent implements OnInit {
       ...this.form,
       clientId: this.form.clientId || null,
       taskOrderId: this.form.taskOrderId || null,
+      unitId: this.form.unitId || null,
       subTotal: Number(this.form.subTotal),
       taxRate: Number(this.form.taxRate),
       taxAmount,
@@ -231,6 +243,10 @@ export class InvoicesComponent implements OnInit {
   getPaidCount(): number { return this.invoices().filter(i => i.status === InvoiceStatus.Paid).length; }
   getOverdueCount(): number { return this.invoices().filter(i => i.status === InvoiceStatus.Overdue).length; }
   getTotalAmount(): number { return this.invoices().reduce((sum, i) => sum + (i.totalAmount ?? 0), 0); }
+  get displayedInvoices(): Invoice[] {
+    if (!this.filterUnit()) return this.invoices();
+    return this.invoices().filter(invoice => invoice.unitId === this.filterUnit());
+  }
 
   generatePdf(inv: Invoice): void {
     this.pdf.generateInvoicePdf(inv);

@@ -5,13 +5,15 @@ import { RouterLink } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MaintenanceRequestService } from '../../services/maintenance-request.service';
 import { TechnicianService } from '../../services/technician.service';
+import { UnitService } from '../../services/unit.service';
 import { ToastService } from '../../services/toast.service';
 import { TravelEstimationService, TravelEstimationResult } from '../../services/travel-estimation.service';
 import {
   MaintenanceRequest,
   MaintenanceRequestStatus,
   AuditLogEntry,
-  Technician
+  Technician,
+  UnitDto
 } from '../../models';
 
 @Component({
@@ -23,6 +25,7 @@ import {
 })
 export class RequestsComponent implements OnInit {
   requests = signal<MaintenanceRequest[]>([]);
+  units = signal<UnitDto[]>([]);
   availableTechnicians = signal<Technician[]>([]);
   auditLog = signal<AuditLogEntry[]>([]);
   isLoading = signal(true);
@@ -33,6 +36,7 @@ export class RequestsComponent implements OnInit {
   filterSearch = '';
   filterFrom = '';
   filterTo = '';
+  filterUnit = '';
 
   // Selected request for detail view
   selectedRequest = signal<MaintenanceRequest | null>(null);
@@ -63,12 +67,14 @@ export class RequestsComponent implements OnInit {
   constructor(
     private requestService: MaintenanceRequestService,
     private technicianService: TechnicianService,
+    private unitService: UnitService,
     private toast: ToastService,
     private travelService: TravelEstimationService
   ) {}
 
   ngOnInit() {
     this.load();
+    this.loadUnits();
   }
 
   load() {
@@ -78,6 +84,7 @@ export class RequestsComponent implements OnInit {
     if (this.filterSearch) filters.search = this.filterSearch;
     if (this.filterFrom) filters.from = this.filterFrom;
     if (this.filterTo) filters.to = this.filterTo;
+    if (this.filterUnit) filters.unitId = this.filterUnit;
 
     this.requestService.getAll(filters).subscribe({
       next: (data) => { this.requests.set(data); this.isLoading.set(false); },
@@ -95,7 +102,15 @@ export class RequestsComponent implements OnInit {
     this.filterSearch = '';
     this.filterFrom = '';
     this.filterTo = '';
+    this.filterUnit = '';
     this.load();
+  }
+
+  loadUnits() {
+    this.unitService.getAll().subscribe({
+      next: units => this.units.set(units),
+      error: () => this.units.set([])
+    });
   }
 
   viewDetail(req: MaintenanceRequest) {

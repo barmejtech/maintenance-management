@@ -43,7 +43,7 @@ import { ClientType } from '../../models';
       <nav class="client-sidebar" [class.open]="sidebarOpen()">
         <div class="sidebar-brand">
           <i class="bi bi-tools"></i>
-          <span>Client Portal</span>
+          <span>Owner / Tenant Portal</span>
         </div>
 
         <div class="nav-section">

@@ -55,6 +55,18 @@
     </div>
   }
 
+  <div class="row g-2 mb-3">
+    <div class="col-12 col-md-4">
+      <label class="form-label small mb-1">Filter by unit</label>
+      <select class="form-select form-select-sm" [ngModel]="filterUnit()" (ngModelChange)="filterUnit.set($event)">
+        <option value="">All Units</option>
+        @for (unit of units(); track unit.id) {
+          <option [value]="unit.id">{{ unit.unitNumber }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
   <div class="card shadow-sm border-0">
     <div class="card-body p-0">
       <div class="table-responsive">
@@ -63,6 +75,7 @@
             <tr>
               <th><i class="bi bi-hash me-1"></i>{{ 'invoices.table.invoiceNum' | translate }}</th>
               <th><i class="bi bi-person me-1"></i>{{ 'invoices.table.client' | translate }}</th>
+              <th><i class="bi bi-door-open me-1"></i>Unit</th>
               <th><i class="bi bi-calendar-plus me-1"></i>{{ 'invoices.table.issueDate' | translate }}</th>
               <th><i class="bi bi-calendar-x me-1"></i>{{ 'invoices.table.dueDate' | translate }}</th>
               <th><i class="bi bi-cash-stack me-1"></i>{{ 'invoices.table.total' | translate }}</th>
@@ -71,7 +84,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (inv of invoices() | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track inv.id) {
+            @for (inv of displayedInvoices | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track inv.id) {
               <tr>
                 <td>
                   <div class="d-flex align-items-center gap-2">
@@ -85,6 +98,13 @@
                   <div class="fw-semibold">{{ inv.clientName }}</div>
                   @if (inv.clientEmail) {
                     <small class="text-muted"><i class="bi bi-envelope me-1"></i>{{ inv.clientEmail }}</small>
+                  }
+                </td>
+                <td>
+                  @if (inv.unitNumber) {
+                    <span class="fw-semibold">{{ inv.unitNumber }}</span>
+                  } @else {
+                    <span class="text-muted">—</span>
                   }
                 </td>
                 <td><i class="bi bi-calendar3 me-1 text-muted"></i>{{ inv.issueDate | date:'mediumDate' }}</td>
@@ -126,9 +146,9 @@
                 </td>
               </tr>
             }
-            @if (invoices().length === 0) {
+            @if (displayedInvoices.length === 0) {
               <tr>
-                <td colspan="7" class="text-center text-muted py-5">
+                <td colspan="8" class="text-center text-muted py-5">
                   <i class="bi bi-receipt fs-1 d-block mb-2 opacity-50"></i>
                   <span class="fw-medium">{{ 'invoices.empty' | translate }}</span>
                 </td>
@@ -201,6 +221,15 @@
                 <option value="">{{ 'invoices.form.selectTaskOrderPlaceholder' | translate }}</option>
                 @for (task of taskOrders(); track task.id) {
                   <option [value]="task.id">{{ task.title }}@if (task.equipmentName) { — {{ task.equipmentName }}}</option>
+                }
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold"><i class="bi bi-door-open me-1 text-primary"></i>Property Unit</label>
+              <select class="form-select" [(ngModel)]="form.unitId">
+                <option value="">Select unit (optional)</option>
+                @for (unit of units(); track unit.id) {
+                  <option [value]="unit.id">{{ unit.unitNumber }}</option>
                 }
               </select>
             </div>

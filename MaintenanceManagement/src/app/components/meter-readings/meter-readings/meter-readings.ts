@@ -1,6 +1,7 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Chart } from 'chart.js/auto';
 import { MeterReadingService } from '../../../services/meter-reading.service';
 import { UnitService } from '../../../services/unit.service';
 import { ToastService } from '../../../services/toast.service';
@@ -14,7 +15,8 @@ import { BulkMeterReadingRequest, BulkMeterReadingResult, CreateMeterReadingRequ
   templateUrl: './meter-readings.html',
   styleUrls: ['./meter-readings.css']
 })
-export class MeterReadingsComponent implements OnInit {
+export class MeterReadingsComponent implements OnInit, OnDestroy {
+  @ViewChild('trendCanvas') trendCanvas?: ElementRef<HTMLCanvasElement>;
   readings = signal<MeterReading[]>([]);
   units = signal<UnitDto[]>([]);
   chartData = signal<MeterReadingChartData[]>([]);
@@ -31,6 +33,7 @@ export class MeterReadingsComponent implements OnInit {
   form: CreateMeterReadingRequest = this.emptyForm();
   bulkForm: BulkMeterReadingRequest = { type: MeterType.Water, readingDate: this.today, unitPrice: undefined, readings: [] };
   private editingId = '';
+  private trendChart?: Chart;
 
   constructor(
     private service: MeterReadingService,
@@ -170,7 +173,10 @@ export class MeterReadingsComponent implements OnInit {
       return;
     }
     this.service.getChartData(this.chartFilter.unitId, this.chartFilter.type, this.chartFilter.months).subscribe({
-      next: data => this.chartData.set(data),
+      next: data => {
+        this.chartData.set(data);
+        this.renderTrendChart();
+      },
       error: () => this.toast.error()
     });
   }
@@ -195,5 +201,36 @@ export class MeterReadingsComponent implements OnInit {
       unitPrice: undefined
     };
   }
-}
 
+  ngOnDestroy(): void {
+    this.trendChart?.destroy();
+  }
+
+  private renderTrendChart(): void {
+    if (!this.trendCanvas) return;
+    this.trendChart?.destroy();
+    const points = this.chartData();
+    this.trendChart = new Chart(this.trendCanvas.nativeElement, {
+      type: 'line',
+      data: {
+        labels: points.map(point => point.label),
+        datasets: [
+          {
+            label: 'Consumption',
+            data: points.map(point => point.consumption),
+            borderColor: '#0d6efd',
+            backgroundColor: 'rgba(13, 110, 253, 0.2)',
+            fill: true,
+            tension: 0.35
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: points.length > 0 }
+        }
+      }
+    });
+  }
+}

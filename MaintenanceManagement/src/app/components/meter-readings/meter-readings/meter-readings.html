@@ -22,6 +22,9 @@
         <div class="col-6"><label class="form-label">Months</label><input class="form-control" type="number" [(ngModel)]="chartFilter.months"></div>
       </div>
       <button class="btn btn-outline-primary mb-3" type="button" (click)="loadChart()">Load chart data</button>
+      <div class="border rounded p-2 mb-3 bg-white">
+        <canvas #trendCanvas aria-label="Meter consumption trend chart"></canvas>
+      </div>
       <div class="table-responsive"><table class="table table-sm mb-0"><thead><tr><th>Label</th><th>Reading</th><th>Consumption</th><th>Amount</th></tr></thead><tbody><tr *ngFor="let point of chartData()"><td>{{ point.label }}</td><td>{{ point.readingValue }}</td><td>{{ point.consumption }}</td><td>{{ point.amount | number:'1.2-2' }}</td></tr><tr *ngIf="!chartData().length"><td colspan="4" class="text-center text-muted py-3">No chart data loaded.</td></tr></tbody></table></div>
     </div>
   </div>
