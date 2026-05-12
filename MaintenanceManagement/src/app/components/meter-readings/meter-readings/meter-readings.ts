@@ -207,7 +207,10 @@ export class MeterReadingsComponent implements OnInit, OnDestroy {
   }
 
   private renderTrendChart(): void {
-    if (!this.trendCanvas) return;
+    if (!this.trendCanvas) {
+      console.warn('Meter trend chart canvas is not ready yet.');
+      return;
+    }
     this.trendChart?.destroy();
     const points = this.chartData();
     this.trendChart = new Chart(this.trendCanvas.nativeElement, {

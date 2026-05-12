@@ -42,7 +42,7 @@
         <tbody>
           @for (roll of filtered | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track roll.id) {
             <tr>
-              <td class="fw-semibold">{{ roll.unitNumber }}</td>
+              <td class="fw-semibold">{{ unitLabel(roll.unitId) }}</td>
               <td>{{ roll.fiscalYear }}</td>
               <td>{{ roll.totalShareValue | number:'1.2-2' }}</td>
               <td>{{ roll.feeAmount | number:'1.2-2' }}</td>

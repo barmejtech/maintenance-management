@@ -62,7 +62,7 @@ export class StrataRollListComponent implements OnInit {
     this.isLoading.set(true);
     this.strataService.getAll().subscribe({
       next: rolls => {
-        this.rolls.set(rolls.map(roll => ({ ...roll, unitNumber: this.unitLabel(roll.unitId) })));
+        this.rolls.set(rolls);
         this.isLoading.set(false);
       },
       error: () => {
@@ -81,7 +81,6 @@ export class StrataRollListComponent implements OnInit {
           return acc;
         }, {});
         this.strataService.seedUnitLabels(labels);
-        this.rolls.update(rolls => rolls.map(roll => ({ ...roll, unitNumber: labels[roll.unitId] ?? roll.unitNumber })));
       },
       error: () => this.units.set([])
     });
