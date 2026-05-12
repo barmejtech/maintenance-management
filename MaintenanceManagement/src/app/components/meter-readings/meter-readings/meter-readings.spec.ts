@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MeterReadings } from './meter-readings';
+import { MeterReadingsComponent } from './meter-readings';
 
-describe('MeterReadings', () => {
-  let component: MeterReadings;
-  let fixture: ComponentFixture<MeterReadings>;
+describe('MeterReadingsComponent', () => {
+  let component: MeterReadingsComponent;
+  let fixture: ComponentFixture<MeterReadingsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MeterReadings]
+      imports: [MeterReadingsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MeterReadings);
+    fixture = TestBed.createComponent(MeterReadingsComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

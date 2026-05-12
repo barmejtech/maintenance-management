@@ -1,1 +1,117 @@
-<p>bank-reconciliation works!</p>
+<div class="page-header">
+  <div>
+    <h2 class="mb-1">Bank Reconciliation</h2>
+    <p class="text-muted mb-0">Track statement balances, differences, and matched reconciliation entries.</p>
+  </div>
+  <button class="btn btn-primary" type="button" (click)="openAdd()">New reconciliation</button>
+</div>
+
+<div class="layout-grid">
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Bank account</th>
+            <th>Statement date</th>
+            <th>Difference</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of reconciliations()" [class.table-active]="selected()?.id === item.id">
+            <td>
+              <button class="btn btn-link p-0 text-decoration-none fw-semibold" type="button" (click)="select(item)">{{ item.bankAccountName }}</button>
+              <div class="small text-muted">{{ item.bankAccountNumber }}</div>
+            </td>
+            <td>{{ item.statementDate | date:'mediumDate' }}</td>
+            <td>{{ item.difference | number:'1.2-2' }}</td>
+            <td><span class="badge" [class.text-bg-success]="item.isReconciled" [class.text-bg-warning]="!item.isReconciled">{{ item.isReconciled ? 'Reconciled' : 'Open' }}</span></td>
+            <td class="text-end d-flex gap-2 justify-content-end">
+              <button class="btn btn-sm btn-outline-success" type="button" (click)="openReconcile(item)" [disabled]="item.isReconciled">Reconcile</button>
+              <button class="btn btn-sm btn-outline-danger" type="button" (click)="delete(item)">Delete</button>
+            </td>
+          </tr>
+          <tr *ngIf="!reconciliations().length && !isLoading()"><td colspan="5" class="text-center text-muted py-4">No reconciliations available.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card detail-card" *ngIf="selected() as item">
+    <div class="card-body">
+      <h3 class="h5 mb-3">{{ item.bankAccountName }}</h3>
+      <div class="summary-grid mb-3">
+        <div><div class="text-muted small">Statement range</div><div>{{ item.statementStartDate | date:'mediumDate' }} - {{ item.statementEndDate | date:'mediumDate' }}</div></div>
+        <div><div class="text-muted small">Opening balance</div><div>{{ item.statementOpeningBalance | number:'1.2-2' }}</div></div>
+        <div><div class="text-muted small">Closing balance</div><div>{{ item.statementClosingBalance | number:'1.2-2' }}</div></div>
+        <div><div class="text-muted small">System closing</div><div>{{ item.systemClosingBalance | number:'1.2-2' }}</div></div>
+      </div>
+      <p class="mb-3 text-muted">{{ item.notes || 'No notes added.' }}</p>
+      <h4 class="h6">Matched entries</h4>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-0">
+          <thead><tr><th>Type</th><th>Date</th><th>Amount</th><th>Matched</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let entry of item.entries">
+              <td>{{ entry.transactionType }}</td>
+              <td>{{ entry.transactionDate | date:'mediumDate' }}</td>
+              <td>{{ entry.amount | number:'1.2-2' }}</td>
+              <td>{{ entry.isMatched ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr *ngIf="!item.entries.length"><td colspan="4" class="text-center text-muted py-3">No reconciliation entries returned by the backend yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showCreateModal()" class="modal-backdrop-custom"></div>
+<div *ngIf="showCreateModal()" class="modal-panel">
+  <div class="card modal-card shadow-lg">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <h3 class="h5 mb-0">New bank reconciliation</h3>
+        <button class="btn-close" type="button" (click)="closeAdd()"></button>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label">Bank account name</label><input class="form-control" [(ngModel)]="form.bankAccountName"></div>
+        <div class="col-md-6"><label class="form-label">Bank account number</label><input class="form-control" [(ngModel)]="form.bankAccountNumber"></div>
+        <div class="col-md-4"><label class="form-label">Statement date</label><input class="form-control" type="date" [(ngModel)]="form.statementDate"></div>
+        <div class="col-md-4"><label class="form-label">Statement start</label><input class="form-control" type="date" [(ngModel)]="form.statementStartDate"></div>
+        <div class="col-md-4"><label class="form-label">Statement end</label><input class="form-control" type="date" [(ngModel)]="form.statementEndDate"></div>
+        <div class="col-md-6"><label class="form-label">Opening balance</label><input class="form-control" type="number" [(ngModel)]="form.statementOpeningBalance"></div>
+        <div class="col-md-6"><label class="form-label">Closing balance</label><input class="form-control" type="number" [(ngModel)]="form.statementClosingBalance"></div>
+        <div class="col-12"><label class="form-label">Notes</label><textarea class="form-control" rows="3" [(ngModel)]="form.notes"></textarea></div>
+      </div>
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button class="btn btn-outline-secondary" type="button" (click)="closeAdd()">Cancel</button>
+        <button class="btn btn-primary" type="button" [disabled]="isSaving()" (click)="save()">{{ isSaving() ? 'Saving...' : 'Save' }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showReconcileModal()" class="modal-backdrop-custom"></div>
+<div *ngIf="showReconcileModal()" class="modal-panel">
+  <div class="card modal-card shadow-lg small-modal">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <h3 class="h5 mb-0">Complete reconciliation</h3>
+        <button class="btn-close" type="button" (click)="closeReconcile()"></button>
+      </div>
+      <div class="form-check form-switch mb-3">
+        <input class="form-check-input" type="checkbox" [(ngModel)]="reconcileForm.isReconciled" id="reconciledFlag">
+        <label class="form-check-label" for="reconciledFlag">Mark as reconciled</label>
+      </div>
+      <label class="form-label">Notes</label>
+      <textarea class="form-control" rows="3" [(ngModel)]="reconcileForm.notes"></textarea>
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button class="btn btn-outline-secondary" type="button" (click)="closeReconcile()">Cancel</button>
+        <button class="btn btn-primary" type="button" [disabled]="isSaving()" (click)="reconcile()">{{ isSaving() ? 'Saving...' : 'Save' }}</button>
+      </div>
+    </div>
+  </div>
+</div>

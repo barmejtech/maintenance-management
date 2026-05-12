@@ -226,71 +226,71 @@ export const routes: Routes = [
       // ==================== NEW ACCOUNTING MODULES ====================
       {
         path: 'accounts',
-        loadComponent: () => import('./components/accounts/accountsGL.component').then(m => m.AccountsComponent),
+        loadComponent: () => import('./components/accounts/accounts-gl/accounts-gl').then(m => m.AccountsComponent),
         canActivate: [managerGuard]
       },
       {
         path: 'journal-entries',
-        loadComponent: () => import('./components/journal-entries/journal-entries.component').then(m => m.JournalEntriesComponent),
+        loadComponent: () => import('./components/journal-entries/journal-entries/journal-entries').then(m => m.JournalEntriesComponent),
         canActivate: [managerGuard]
       },
       {
         path: 'vendors',
-        loadComponent: () => import('./components/vendors/vendors.component').then(m => m.VendorsComponent),
+        loadComponent: () => import('./components/vendors/vendors/vendors').then(m => m.VendorsComponent),
         canActivate: [managerGuard]
       },
       {
         path: 'expenses',
-        loadComponent: () => import('./components/expenses/expenses.component').then(m => m.ExpensesComponent),
+        loadComponent: () => import('./components/expenses/expenses/expenses').then(m => m.ExpensesComponent),
         canActivate: [managerGuard]
       },
       {
         path: 'payment-vouchers',
-        loadComponent: () => import('./components/payment-vouchers/payment-vouchers.component').then(m => m.PaymentVouchersComponent),
+        loadComponent: () => import('./components/payment-vouchers/payment-vouchers/payment-vouchers').then(m => m.PaymentVouchersComponent),
         canActivate: [managerGuard]
       },
       {
         path: 'bank-reconciliation',
-        loadComponent: () => import('./components/bank-reconciliation/bank-reconciliation.component').then(m => m.BankReconciliationComponent),
+        loadComponent: () => import('./components/bank-reconciliation/bank-reconciliation/bank-reconciliation').then(m => m.BankReconciliationComponent),
         canActivate: [managerGuard]
       },
 
       // ==================== NEW FINANCIAL REPORTS ====================
       {
         path: 'financial-reports/trial-balance',
-        loadComponent: () => import('./components/financial-reports/trial-balance/trial-balance.component').then(m => m.TrialBalanceComponent),
+        loadComponent: () => import('./components/financial-reports/trial-balance/trial-balance/trial-balance').then(m => m.TrialBalanceComponent),
         canActivate: [managerGuard]
       },
       {
         path: 'financial-reports/profit-loss',
-        loadComponent: () => import('./components/financial-reports/profit-loss/profit-loss.component').then(m => m.ProfitLossComponent),
+        loadComponent: () => import('./components/financial-reports/profit-loss/profit-loss/profit-loss').then(m => m.ProfitLossComponent),
         canActivate: [managerGuard]
       },
       {
         path: 'financial-reports/balance-sheet',
-        loadComponent: () => import('./components/financial-reports/balance-sheet/balance-sheet.component').then(m => m.BalanceSheetComponent),
+        loadComponent: () => import('./components/financial-reports/balance-sheet/balance-sheet/balance-sheet').then(m => m.BalanceSheetComponent),
         canActivate: [managerGuard]
       },
       {
         path: 'financial-reports/cash-flow',
-        loadComponent: () => import('./components/financial-reports/cash-flow/cash-flow.component').then(m => m.CashFlowComponent),
+        loadComponent: () => import('./components/financial-reports/cash-flow/cash-flow/cash-flow').then(m => m.CashFlowComponent),
         canActivate: [managerGuard]
       },
       {
         path: 'financial-reports/aging',
-        loadComponent: () => import('./components/financial-reports/aging-report/aging-report.component').then(m => m.AgingReportComponent),
+        loadComponent: () => import('./components/financial-reports/aging-report/aging-report/aging-report').then(m => m.AgingReportComponent),
         canActivate: [managerGuard]
       },
 
       // ==================== NEW OPERATIONAL MODULES ====================
       {
         path: 'meter-readings',
-        loadComponent: () => import('./components/meter-readings/meter-readings.component').then(m => m.MeterReadingsComponent),
+        loadComponent: () => import('./components/meter-readings/meter-readings/meter-readings').then(m => m.MeterReadingsComponent),
         canActivate: [managerGuard]
       },
       {
         path: 'renovations',
-        loadComponent: () => import('./components/renovations/renovations.component').then(m => m.RenovationsComponent),
+        loadComponent: () => import('./components/renovations/renovations/renovations').then(m => m.RenovationsComponent),
         canActivate: [managerGuard]
       }
     ]

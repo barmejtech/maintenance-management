@@ -1,1 +1,107 @@
-<p>journal-entries works!</p>
+<div class="page-header">
+  <div>
+    <h2 class="mb-1">Journal Entries</h2>
+    <p class="text-muted mb-0">Create balanced journal entries and post them when ready.</p>
+  </div>
+  <button class="btn btn-primary" type="button" (click)="openAdd()">New journal entry</button>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Entry #</th>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Lines</th>
+          <th>Total debit</th>
+          <th>Status</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of entries()">
+          <td class="fw-semibold">{{ entry.entryNumber }}</td>
+          <td>{{ entry.entryDate | date:'mediumDate' }}</td>
+          <td>{{ entry.description || '—' }}</td>
+          <td>{{ entry.lineItems.length }}</td>
+          <td>{{ getEntryTotal(entry) | number:'1.2-2' }}</td>
+          <td><span class="badge" [class.text-bg-success]="entry.isPosted" [class.text-bg-warning]="!entry.isPosted">{{ entry.isPosted ? 'Posted' : 'Draft' }}</span></td>
+          <td class="text-end d-flex gap-2 justify-content-end">
+            <button class="btn btn-sm btn-outline-primary" type="button" (click)="openEdit(entry)" [disabled]="entry.isPosted">Edit</button>
+            <button class="btn btn-sm btn-outline-success" type="button" (click)="post(entry)" [disabled]="entry.isPosted">Post</button>
+            <button class="btn btn-sm btn-outline-danger" type="button" (click)="delete(entry)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="!entries().length && !isLoading()"><td colspan="7" class="text-center text-muted py-4">No journal entries available.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="showModal()" class="modal-backdrop-custom"></div>
+<div *ngIf="showModal()" class="modal-panel">
+  <div class="card modal-card shadow-lg">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+          <h3 class="h5 mb-1">{{ isEditing() ? 'Edit journal entry' : 'New journal entry' }}</h3>
+          <p class="text-muted mb-0">Debits and credits must remain balanced.</p>
+        </div>
+        <button class="btn-close" type="button" (click)="closeModal()"></button>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Entry date</label>
+          <input class="form-control" type="date" [(ngModel)]="form.entryDate">
+        </div>
+        <div class="col-md-8">
+          <label class="form-label">Description</label>
+          <input class="form-control" [(ngModel)]="form.description">
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Account</th>
+              <th>Debit</th>
+              <th>Credit</th>
+              <th>Description</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let line of form.lineItems; let i = index">
+              <td>
+                <select class="form-select" [(ngModel)]="line.accountId" [ngModelOptions]="{ standalone: true }">
+                  <option value="">Select account</option>
+                  <option *ngFor="let account of accounts()" [value]="account.id">{{ account.accountCode }} - {{ account.name }}</option>
+                </select>
+              </td>
+              <td><input class="form-control" type="number" [(ngModel)]="line.debit" [ngModelOptions]="{ standalone: true }"></td>
+              <td><input class="form-control" type="number" [(ngModel)]="line.credit" [ngModelOptions]="{ standalone: true }"></td>
+              <td><input class="form-control" [(ngModel)]="line.description" [ngModelOptions]="{ standalone: true }"></td>
+              <td class="text-end"><button class="btn btn-sm btn-outline-danger" type="button" (click)="removeLine(i)">Remove</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+        <button class="btn btn-outline-primary" type="button" (click)="addLine()">Add line</button>
+        <div class="d-flex gap-3 fw-semibold">
+          <span>Debit: {{ totalDebit | number:'1.2-2' }}</span>
+          <span>Credit: {{ totalCredit | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button class="btn btn-outline-secondary" type="button" (click)="closeModal()">Cancel</button>
+        <button class="btn btn-primary" type="button" [disabled]="isSaving()" (click)="save()">{{ isSaving() ? 'Saving...' : 'Save' }}</button>
+      </div>
+    </div>
+  </div>
+</div>

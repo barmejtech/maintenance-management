@@ -1,1 +1,85 @@
-<p>expenses works!</p>
+<div class="page-header">
+  <div>
+    <h2 class="mb-1">Expenses</h2>
+    <p class="text-muted mb-0">Capture supplier expenses and approve them into the accounting flow.</p>
+  </div>
+  <button class="btn btn-primary" type="button" (click)="openAdd()">Add expense</button>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Expense #</th>
+          <th>Vendor</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let expense of expenses()">
+          <td class="fw-semibold">{{ expense.expenseNumber }}</td>
+          <td>{{ expense.vendorName }}</td>
+          <td>{{ expense.expenseDate | date:'mediumDate' }}</td>
+          <td>{{ expense.totalAmount | number:'1.2-2' }}</td>
+          <td><span class="badge text-bg-light border">{{ getStatusLabel(expense.status) }}</span></td>
+          <td>{{ expense.description || expense.invoiceNumber || '—' }}</td>
+          <td class="text-end d-flex gap-2 justify-content-end">
+            <button class="btn btn-sm btn-outline-success" type="button" (click)="approve(expense)" [disabled]="expense.status !== 0">Approve</button>
+            <button class="btn btn-sm btn-outline-primary" type="button" (click)="openEdit(expense)">Edit</button>
+            <button class="btn btn-sm btn-outline-danger" type="button" (click)="delete(expense)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="!expenses().length && !isLoading()"><td colspan="7" class="text-center text-muted py-4">No expenses available.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="showModal()" class="modal-backdrop-custom"></div>
+<div *ngIf="showModal()" class="modal-panel">
+  <div class="card modal-card shadow-lg">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <h3 class="h5 mb-0">{{ isEditing() ? 'Edit expense' : 'New expense' }}</h3>
+        <button class="btn-close" type="button" (click)="closeModal()"></button>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Vendor</label>
+          <select class="form-select" [(ngModel)]="form.vendorId" [disabled]="isEditing()">
+            <option value="">Select vendor</option>
+            <option *ngFor="let vendor of vendors()" [value]="vendor.id">{{ vendor.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-3"><label class="form-label">Amount</label><input class="form-control" type="number" [(ngModel)]="form.amount"></div>
+        <div class="col-md-3"><label class="form-label">Tax amount</label><input class="form-control" type="number" [(ngModel)]="form.taxAmount"></div>
+        <div class="col-md-4"><label class="form-label">Expense date</label><input class="form-control" type="date" [(ngModel)]="form.expenseDate"></div>
+        <div class="col-md-4"><label class="form-label">Due date</label><input class="form-control" type="date" [(ngModel)]="form.dueDate"></div>
+        <div class="col-md-4">
+          <label class="form-label">Status</label>
+          <select class="form-select" [(ngModel)]="form.status" [disabled]="!isEditing()">
+            <option *ngFor="let status of statuses" [ngValue]="status">{{ getStatusLabel(status) }}</option>
+          </select>
+        </div>
+        <div class="col-md-6"><label class="form-label">Invoice number</label><input class="form-control" [(ngModel)]="form.invoiceNumber"></div>
+        <div class="col-md-6">
+          <label class="form-label">Renovation</label>
+          <select class="form-select" [(ngModel)]="form.renovationId">
+            <option [ngValue]="undefined">None</option>
+            <option *ngFor="let renovation of renovations()" [ngValue]="renovation.id">{{ renovation.unitNumber }} - {{ renovation.title }}</option>
+          </select>
+        </div>
+        <div class="col-12"><label class="form-label">Description</label><textarea class="form-control" rows="3" [(ngModel)]="form.description"></textarea></div>
+      </div>
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button class="btn btn-outline-secondary" type="button" (click)="closeModal()">Cancel</button>
+        <button class="btn btn-primary" type="button" [disabled]="isSaving()" (click)="save()">{{ isSaving() ? 'Saving...' : 'Save' }}</button>
+      </div>
+    </div>
+  </div>
+</div>

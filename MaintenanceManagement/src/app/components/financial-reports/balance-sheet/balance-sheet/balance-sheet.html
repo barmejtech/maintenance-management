@@ -1,1 +1,21 @@
-<p>balance-sheet works!</p>
+<div class="page-header">
+  <div>
+    <h2 class="mb-1">Balance Sheet</h2>
+    <p class="text-muted mb-0">View assets, liabilities, and equity positions as of a date.</p>
+  </div>
+  <div class="d-flex gap-2 align-items-end flex-wrap">
+    <div><label class="form-label">As of date</label><input class="form-control" type="date" [(ngModel)]="filter.asOfDate"></div>
+    <button class="btn btn-primary" type="button" (click)="load()">Refresh</button>
+  </div>
+</div>
+<div class="summary-grid mb-4">
+  <div class="card"><div class="card-body"><div class="text-muted small">Assets</div><div class="fs-4 fw-semibold">{{ report()?.totalAssets ?? 0 | number:'1.2-2' }}</div></div></div>
+  <div class="card"><div class="card-body"><div class="text-muted small">Liabilities</div><div class="fs-4 fw-semibold">{{ report()?.totalLiabilities ?? 0 | number:'1.2-2' }}</div></div></div>
+  <div class="card"><div class="card-body"><div class="text-muted small">Equity</div><div class="fs-4 fw-semibold">{{ report()?.totalEquity ?? 0 | number:'1.2-2' }}</div></div></div>
+</div>
+<div class="report-grid">
+  <div class="card" *ngFor="let section of sections">
+    <div class="card-header fw-semibold">{{ section.label }}</div>
+    <div class="table-responsive"><table class="table table-sm mb-0"><thead><tr><th>Code</th><th>Name</th><th>Balance</th></tr></thead><tbody><tr *ngFor="let item of list(section.key)"><td>{{ item.accountCode }}</td><td>{{ item.accountName }}</td><td>{{ item.netBalance | number:'1.2-2' }}</td></tr><tr *ngIf="!list(section.key).length"><td colspan="3" class="text-center text-muted py-3">No {{ section.label.toLowerCase() }} accounts.</td></tr></tbody></table></div>
+  </div>
+</div>
