@@ -17,8 +17,10 @@ public class AccountRepository : Repository<Account>, IAccountRepository
 
     public async Task<IEnumerable<Account>> GetByTypeAsync(domain.Enums.AccountType type)
     {
-        // Both AccountType enums have identical values, safe to cast
-        var entityType = (AccountType)(int)type;
+        // Map by name to avoid relying on matching integer values between the two AccountType enums
+        if (!Enum.TryParse<AccountType>(type.ToString(), out var entityType))
+            return Enumerable.Empty<Account>();
+
         return await _dbSet
             .Where(a => a.Type == entityType && !a.IsDeleted)
             .OrderBy(a => a.AccountCode)

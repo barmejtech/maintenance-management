@@ -83,12 +83,25 @@ public class AccountGLService : IAccountGLService
         var accounts = await _repo.GetAllAsync();
         var activeAccounts = accounts.Where(a => !a.IsDeleted && a.IsActive).ToList();
 
-        var accountLines = activeAccounts.Select(a => new TrialBalanceAccountDto
+        // Normal balance conventions:
+        // Debit-normal: Asset (0), Expense (4)
+        // Credit-normal: Liability (1), Equity (2), Revenue (3)
+        var debitNormalTypes = new[] { AccountType.Asset, AccountType.Expense };
+
+        var accountLines = activeAccounts.Select(a =>
         {
-            AccountCode = a.AccountCode,
-            AccountName = a.Name,
-            Debit = a.Balance >= 0 ? a.Balance : 0,
-            Credit = a.Balance < 0 ? Math.Abs(a.Balance) : 0
+            bool isDebitNormal = debitNormalTypes.Contains(a.Type);
+            return new TrialBalanceAccountDto
+            {
+                AccountCode = a.AccountCode,
+                AccountName = a.Name,
+                Debit = isDebitNormal && a.Balance >= 0 ? a.Balance
+                      : !isDebitNormal && a.Balance < 0 ? Math.Abs(a.Balance)
+                      : 0,
+                Credit = !isDebitNormal && a.Balance >= 0 ? a.Balance
+                       : isDebitNormal && a.Balance < 0 ? Math.Abs(a.Balance)
+                       : 0
+            };
         }).ToList();
 
         return new TrialBalanceDto
