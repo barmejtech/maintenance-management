@@ -39,7 +39,7 @@ interface ClientDashboardStats {
           @if (auth.currentUser()?.companyName) {
             <p class="company-name"><i class="bi bi-building"></i> {{ auth.currentUser()?.companyName }}</p>
           }
-          <p class="subtitle">Track your maintenance requests and stay updated</p>
+          <p class="subtitle">Owner/Tenant portal dashboard to track maintenance requests and updates</p>
         </div>
         <a routerLink="/client-portal/new-request" class="btn-new-request">
           <i class="bi bi-plus-circle"></i> New Request

@@ -1,0 +1,133 @@
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h4 class="mb-0 fw-bold"><i class="bi bi-journal-richtext text-primary me-2"></i>Strata Rolls</h4>
+    @if (auth.canManageData()) {
+      <button class="btn btn-primary btn-sm" (click)="openAdd()">
+        <i class="bi bi-plus-circle me-1"></i>Add Strata Roll
+      </button>
+    }
+  </div>
+
+  <div class="row g-2 mb-3">
+    <div class="col-6 col-md-3">
+      <input class="form-control form-control-sm" type="number" placeholder="Fiscal year"
+        [ngModel]="filterYear()" (ngModelChange)="filterYear.set($event)" />
+    </div>
+    <div class="col-6 col-md-4">
+      <select class="form-select form-select-sm" [ngModel]="filterUnit()" (ngModelChange)="filterUnit.set($event)">
+        <option value="">All Units</option>
+        @for (unit of units(); track unit.id) {
+          <option [value]="unit.id">{{ unit.unitNumber }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+  } @else {
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Unit</th>
+            <th>Fiscal Year</th>
+            <th>Total Share Value</th>
+            <th>Fee Amount</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (roll of filtered | paginate: { itemsPerPage: pageSize, currentPage: currentPage() }; track roll.id) {
+            <tr>
+              <td class="fw-semibold">{{ unitLabel(roll.unitId) }}</td>
+              <td>{{ roll.fiscalYear }}</td>
+              <td>{{ roll.totalShareValue | number:'1.2-2' }}</td>
+              <td>{{ roll.feeAmount | number:'1.2-2' }}</td>
+              <td>{{ roll.dueDate | date:'mediumDate' }}</td>
+              <td>
+                <span class="badge" [class.bg-secondary]="roll.status === 0" [class.bg-primary]="roll.status === 1" [class.bg-success]="roll.status === 2">
+                  {{ getStatusLabel(roll.status) }}
+                </span>
+              </td>
+              <td class="text-end">
+                @if (auth.canManageData()) {
+                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openEdit(roll)"><i class="bi bi-pencil"></i></button>
+                }
+                @if (auth.canManageTasks()) {
+                  <button class="btn btn-sm btn-outline-danger" (click)="delete(roll)"><i class="bi bi-trash"></i></button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="7" class="text-center text-muted py-4">No strata rolls found.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <pagination-controls (pageChange)="currentPage.set($event)" [autoHide]="true"></pagination-controls>
+  }
+</div>
+
+@if (showModal()) {
+  <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isEditing() ? 'Edit Strata Roll' : 'Add Strata Roll' }}</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Unit</label>
+            <select class="form-select" [(ngModel)]="form.unitId">
+              <option value="">Select unit...</option>
+              @for (unit of units(); track unit.id) {
+                <option [value]="unit.id">{{ unit.unitNumber }}</option>
+              }
+            </select>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Fiscal year</label>
+              <input class="form-control" type="number" [(ngModel)]="form.fiscalYear" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Due date</label>
+              <input class="form-control" type="date" [(ngModel)]="form.dueDate" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Total share value</label>
+              <input class="form-control" type="number" [(ngModel)]="form.totalShareValue" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Fee amount</label>
+              <input class="form-control" type="number" [(ngModel)]="form.feeAmount" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Status</label>
+              <select class="form-select" [(ngModel)]="form.status">
+                @for (option of statusOptions; track option.value) {
+                  <option [ngValue]="option.value">{{ option.label }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Notes</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="form.notes"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button class="btn btn-primary" (click)="save()" [disabled]="isSaving() || !form.unitId || !form.dueDate">
+            @if (isSaving()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+            {{ isEditing() ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

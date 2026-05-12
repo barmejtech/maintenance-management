@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MaintenanceRequestService } from '../../services/maintenance-request.service';
+import { UnitService } from '../../services/unit.service';
+import { UnitDto } from '../../models';
 
 @Component({
   selector: 'app-new-request',
@@ -51,6 +53,16 @@ import { MaintenanceRequestService } from '../../services/maintenance-request.se
             <input id="equipmentDescription" type="text" formControlName="equipmentDescription"
               placeholder="e.g. AC unit model XYZ-200 in 3rd floor office" />
             <small>Optional: Describe the equipment or location involved</small>
+          </div>
+
+          <div class="form-group">
+            <label for="unitId">Property Unit</label>
+            <select id="unitId" formControlName="unitId">
+              <option value="">Select unit (optional)</option>
+              @for (unit of units(); track unit.id) {
+                <option [value]="unit.id">{{ unit.unitNumber }}</option>
+              }
+            </select>
           </div>
 
           <!-- Request Date -->
@@ -141,7 +153,7 @@ import { MaintenanceRequestService } from '../../services/maintenance-request.se
     form { display: flex; flex-direction: column; gap: 20px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group label { font-weight: 600; color: #333; font-size: 0.9rem; }
-    .form-group input, .form-group textarea {
+    .form-group input, .form-group textarea, .form-group select {
       padding: 11px 14px;
       border: 1.5px solid #e0e0e0;
       border-radius: 8px;
@@ -151,7 +163,7 @@ import { MaintenanceRequestService } from '../../services/maintenance-request.se
       resize: vertical;
       transition: border-color 0.2s;
     }
-    .form-group input:focus, .form-group textarea:focus { border-color: #1565c0; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #1565c0; }
     .form-group small { color: #888; font-size: 0.8rem; }
     .field-error { color: #c62828; font-size: 0.82rem; }
 
@@ -197,6 +209,7 @@ export class NewRequestComponent {
   isLoading = signal(false);
   errorMessage = signal('');
   successMessage = signal('');
+  units = signal<UnitDto[]>([]);
   today = new Date().toISOString().split('T')[0];
 
   form: ReturnType<FormBuilder['group']>;
@@ -204,14 +217,21 @@ export class NewRequestComponent {
   constructor(
     private fb: FormBuilder,
     private requestService: MaintenanceRequestService,
+    private unitService: UnitService,
     private router: Router
   ) {
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
       description: [''],
       equipmentDescription: [''],
+      unitId: [''],
       requestDate: [''],
       notes: ['']
+    });
+
+    this.unitService.getAll().subscribe({
+      next: units => this.units.set(units),
+      error: () => this.units.set([])
     });
   }
 
@@ -221,13 +241,14 @@ export class NewRequestComponent {
     this.errorMessage.set('');
 
     const v = this.form.value;
-    this.requestService.submitRequest({
-      title: v.title!,
-      description: v.description || undefined,
-      equipmentDescription: v.equipmentDescription || undefined,
-      requestDate: v.requestDate || undefined,
-      notes: v.notes || undefined
-    }).subscribe({
+      this.requestService.submitRequest({
+        title: v.title!,
+        description: v.description || undefined,
+        equipmentDescription: v.equipmentDescription || undefined,
+        unitId: v.unitId || undefined,
+        requestDate: v.requestDate || undefined,
+        notes: v.notes || undefined
+      }).subscribe({
       next: () => {
         this.successMessage.set('Your maintenance request has been submitted successfully!');
         this.isLoading.set(false);

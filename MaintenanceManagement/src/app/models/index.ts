@@ -921,6 +921,7 @@ export interface SubmitMaintenanceRequestRequest {
   equipmentDescription?: string;
   requestDate?: string;
   notes?: string;
+  unitId?: string;
 }
 
 export interface UpdateMaintenanceRequestRequest {
@@ -1314,6 +1315,37 @@ export interface UpdateTenantDto {
   rentalAmount: number;
   depositAmount?: number;
 }
+
+export enum StrataRollStatus {
+  Draft = 0,
+  Published = 1,
+  Closed = 2
+}
+
+export interface StrataRollDto {
+  id: string;
+  unitId: string;
+  unitNumber: string;
+  fiscalYear: number;
+  totalShareValue: number;
+  feeAmount: number;
+  dueDate: string;
+  notes?: string;
+  status: StrataRollStatus;
+  createdAt: string;
+}
+
+export interface CreateStrataRollDto {
+  unitId: string;
+  fiscalYear: number;
+  totalShareValue: number;
+  feeAmount: number;
+  dueDate: string;
+  notes?: string;
+  status: StrataRollStatus;
+}
+
+export interface UpdateStrataRollDto extends CreateStrataRollDto {}
 // ==================== METER READING MODELS ====================
 
 export enum MeterType {

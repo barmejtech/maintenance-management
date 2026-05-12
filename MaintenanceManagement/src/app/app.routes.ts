@@ -26,6 +26,11 @@ export const routes: Routes = [
     path: 'client-register',
     loadComponent: () => import('./components/auth/client-register.component').then(m => m.ClientRegisterComponent)
   },
+  {
+    path: 'owner-tenant-portal',
+    redirectTo: 'client-portal',
+    pathMatch: 'full'
+  },
   // ── Client Portal ───────────────────────────────────────────────────────────
   {
     path: 'client-portal',
@@ -222,6 +227,10 @@ export const routes: Routes = [
         path: 'property-profiles/tenants',
         loadComponent: () => import('./components/property-profiles/tenants/tenant-list/tenant-list.component').then(m => m.TenantListComponent)
       },
+      {
+        path: 'property-profiles/strata-rolls',
+        loadComponent: () => import('./components/property-profiles/strata-rolls/strata-roll-list/strata-roll-list.component').then(m => m.StrataRollListComponent)
+      },
 
       // ==================== NEW ACCOUNTING MODULES ====================
       {
@@ -292,6 +301,11 @@ export const routes: Routes = [
         path: 'renovations',
         loadComponent: () => import('./components/renovations/renovations/renovations').then(m => m.RenovationsComponent),
         canActivate: [managerGuard]
+      },
+      {
+        path: 'committee-portal',
+        loadComponent: () => import('./components/committee-portal/committee-dashboard.component').then(m => m.CommitteeDashboardComponent),
+        canActivate: [authGuard]
       }
     ]
   },
