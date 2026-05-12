@@ -16,4 +16,5 @@ public interface IInvoiceService
     Task<IEnumerable<InvoiceDto>> GetByUnitIdAsync(Guid unitId);
     Task<IEnumerable<InvoiceDto>> GetByTenantIdAsync(Guid tenantId);
     Task<IEnumerable<InvoiceDto>> GetByUnitOwnershipIdAsync(Guid unitOwnershipId);
+    Task<IEnumerable<InvoiceDto>> GetUnpaidInvoicesAsync(DateTime asOfDate);
 }

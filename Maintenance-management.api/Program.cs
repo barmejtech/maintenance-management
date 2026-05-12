@@ -130,6 +130,14 @@ builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IUnitReposit
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IOwnerRepository, Maintenance_management.infrastructure.Repositories.OwnerRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IUnitOwnershipRepository, Maintenance_management.infrastructure.Repositories.UnitOwnershipRepository>();
 builder.Services.AddScoped<Maintenance_management.domain.Interfaces.ITenantRepository, Maintenance_management.infrastructure.Repositories.TenantRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IAccountRepository, Maintenance_management.infrastructure.Repositories.AccountRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IJournalEntryRepository, Maintenance_management.infrastructure.Repositories.JournalEntryRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IVendorRepository, Maintenance_management.infrastructure.Repositories.VendorRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IExpenseRepository, Maintenance_management.infrastructure.Repositories.ExpenseRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IPaymentVoucherRepository, Maintenance_management.infrastructure.Repositories.PaymentVoucherRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IBankReconciliationRepository, Maintenance_management.infrastructure.Repositories.BankReconciliationRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IMeterReadingRepository, Maintenance_management.infrastructure.Repositories.MeterReadingRepository>();
+builder.Services.AddScoped<Maintenance_management.domain.Interfaces.IRenovationRepository, Maintenance_management.infrastructure.Repositories.RenovationRepository>();
 
 // Application services
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAuthService, Maintenance_management.infrastructure.Services.AuthService>();
@@ -166,6 +174,15 @@ builder.Services.AddScoped<Maintenance_management.application.Interfaces.IUnitTy
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IUnitService, Maintenance_management.application.Services.UnitService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IOwnerService, Maintenance_management.application.Services.OwnerService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.ITenantService, Maintenance_management.application.Services.TenantService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IAccountGLService, Maintenance_management.application.Services.AccountGLService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IJournalEntryService, Maintenance_management.application.Services.JournalEntryService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IVendorService, Maintenance_management.application.Services.VendorService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IExpenseService, Maintenance_management.application.Services.ExpenseService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPaymentVoucherService, Maintenance_management.application.Services.PaymentVoucherService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IBankReconciliationService, Maintenance_management.application.Services.BankReconciliationService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IFinancialReportService, Maintenance_management.application.Services.FinancialReportService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IMeterReadingService, Maintenance_management.application.Services.MeterReadingService>();
+builder.Services.AddScoped<Maintenance_management.application.Interfaces.IRenovationService, Maintenance_management.application.Services.RenovationService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPremiumServiceService, Maintenance_management.application.Services.PremiumServiceService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPremiumMaintenanceRequestService, Maintenance_management.application.Services.PremiumMaintenanceRequestService>();
 builder.Services.AddScoped<Maintenance_management.application.Interfaces.IPaymentService, Maintenance_management.application.Services.PaymentService>();

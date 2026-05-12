@@ -472,12 +472,19 @@ export interface Invoice {
   taxRate: number;
   taxAmount: number;
   totalAmount: number;
+  paidAmount?: number;
   status: InvoiceStatus;
   notes?: string;
   taskOrderId?: string;
   taskTitle?: string;
   maintenanceReportId?: string;
   maintenanceReportTitle?: string;
+  unitId?: string;
+  unitNumber?: string;
+  tenantId?: string;
+  tenantName?: string;
+  unitOwnershipId?: string;
+  ownerName?: string;
   lineItems: InvoiceLineItem[];
   createdAt: string;
 }
@@ -867,6 +874,12 @@ export interface MaintenanceRequest {
   taskTitle?: string;
   invoiceId?: string;
   invoiceNumber?: string;
+  unitId?: string;
+  unitNumber?: string;
+  tenantId?: string;
+  tenantName?: string;
+  ownerId?: string;
+  ownerName?: string;
   createdAt: string;
   reviewedByUserId?: string;
   reviewedAt?: string;
@@ -897,6 +910,9 @@ export interface CreateMaintenanceRequestRequest {
   requestDate?: string;
   clientId: string;
   notes?: string;
+  unitId?: string;
+  tenantId?: string;
+  ownerId?: string;
 }
 
 export interface SubmitMaintenanceRequestRequest {

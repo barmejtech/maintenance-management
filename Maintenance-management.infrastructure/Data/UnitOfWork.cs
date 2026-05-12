@@ -21,7 +21,21 @@ public class UnitOfWork : IUnitOfWork
         IInvoiceRepository invoices,
         IReportRepository reports,
         IAvailabilityRepository availabilities,
-        IDocumentRepository documents)
+        IDocumentRepository documents,
+        IUnitTypeRepository unitTypes,
+        IUnitRepository units,
+        IOwnerRepository owners,
+        IUnitOwnershipRepository unitOwnerships,
+        ITenantRepository tenants,
+        IMaintenanceRequestRepository maintenanceRequests,
+        IAccountRepository accounts,
+        IJournalEntryRepository journalEntries,
+        IVendorRepository vendors,
+        IExpenseRepository expenses,
+        IPaymentVoucherRepository paymentVouchers,
+        IBankReconciliationRepository bankReconciliations,
+        IMeterReadingRepository meterReadings,
+        IRenovationRepository renovations)
     {
         _context = context;
         Technicians = technicians;
@@ -34,6 +48,20 @@ public class UnitOfWork : IUnitOfWork
         Reports = reports;
         Availabilities = availabilities;
         Documents = documents;
+        UnitTypes = unitTypes;
+        Units = units;
+        Owners = owners;
+        UnitOwnerships = unitOwnerships;
+        Tenants = tenants;
+        MaintenanceRequests = maintenanceRequests;
+        Accounts = accounts;
+        JournalEntries = journalEntries;
+        Vendors = vendors;
+        Expenses = expenses;
+        PaymentVouchers = paymentVouchers;
+        BankReconciliations = bankReconciliations;
+        MeterReadings = meterReadings;
+        Renovations = renovations;
     }
 
     public ITechnicianRepository Technicians { get; }
@@ -46,6 +74,26 @@ public class UnitOfWork : IUnitOfWork
     public IReportRepository Reports { get; }
     public IAvailabilityRepository Availabilities { get; }
     public IDocumentRepository Documents { get; }
+
+    // Property domain
+    public IUnitTypeRepository UnitTypes { get; }
+    public IUnitRepository Units { get; }
+    public IOwnerRepository Owners { get; }
+    public IUnitOwnershipRepository UnitOwnerships { get; }
+    public ITenantRepository Tenants { get; }
+    public IMaintenanceRequestRepository MaintenanceRequests { get; }
+
+    // Accounting domain
+    public IAccountRepository Accounts { get; }
+    public IJournalEntryRepository JournalEntries { get; }
+    public IVendorRepository Vendors { get; }
+    public IExpenseRepository Expenses { get; }
+    public IPaymentVoucherRepository PaymentVouchers { get; }
+    public IBankReconciliationRepository BankReconciliations { get; }
+
+    // Operational
+    public IMeterReadingRepository MeterReadings { get; }
+    public IRenovationRepository Renovations { get; }
 
     public IRepository<T> Repository<T>() where T : BaseEntity
     {

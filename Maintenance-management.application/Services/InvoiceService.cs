@@ -170,4 +170,10 @@ public class InvoiceService : IInvoiceService
         var invoices = await _repo.GetByUnitOwnershipIdAsync(unitOwnershipId);
         return invoices.Where(i => !i.IsDeleted).Select(MapToDto);
     }
+
+    public async Task<IEnumerable<InvoiceDto>> GetUnpaidInvoicesAsync(DateTime asOfDate)
+    {
+        var invoices = await _repo.GetUnpaidInvoicesAsync(asOfDate);
+        return invoices.Select(MapToDto);
+    }
 }
