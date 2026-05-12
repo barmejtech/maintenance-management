@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using AccountType = Maintenance_management.domain.Entities.AccountType;
+using RenovationStatus = Maintenance_management.domain.Entities.RenovationStatus;
 using TaskStatus = Maintenance_management.domain.Enums.TaskStatus;
 
 namespace Maintenance_management.infrastructure.Data;
@@ -2879,6 +2881,584 @@ public static class DataSeeder
                 AssignedByUserId = adminUserId,
                 AssignedAt = DateTime.UtcNow.AddDays(-1),
                 CreatedAt = DateTime.UtcNow.AddDays(-1)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── Quotations ───────────────────────────────────────────────────────────
+        var quotation1Id = new Guid("00000000-0000-0000-0115-000000000115");
+        var quotation2Id = new Guid("00000000-0000-0000-0116-000000000116");
+
+        if (!await context.Quotations.AnyAsync(q => q.Id == quotation1Id))
+        {
+            context.Quotations.Add(new Quotation
+            {
+                Id = quotation1Id,
+                QuotationNumber = "QTN-2024-MY-001",
+                ClientName = "Viknesh Chan",
+                ClientEmail = "farid@kualalumpurdev.my",
+                ClientAddress = "Jalan Sultan Ismail، بوكيت بينتانغ، كوالالمبور 50250",
+                ClientPhone = "+60 11 3456 7890",
+                IssueDate = DateTime.UtcNow.AddDays(-12),
+                ValidUntil = DateTime.UtcNow.AddDays(18),
+                EstimatedDurationDays = 3,
+                SubTotal = 1800m,
+                TaxRate = 8m,
+                TaxAmount = 144m,
+                TotalAmount = 1944m,
+                Status = QuotationStatus.Sent,
+                Notes = "عرض سعر صيانة دورية واستبدال قطع استهلاكية",
+                TermsAndConditions = "الدفع خلال 14 يومًا من تاريخ الإصدار.",
+                CreatedByUserId = adminUserId,
+                MaintenanceRequestId = req1Id,
+                ClientId = client1Id,
+                CreatedAt = DateTime.UtcNow.AddDays(-12)
+            });
+        }
+
+        if (!await context.Quotations.AnyAsync(q => q.Id == quotation2Id))
+        {
+            context.Quotations.Add(new Quotation
+            {
+                Id = quotation2Id,
+                QuotationNumber = "QTN-2024-MY-002",
+                ClientName = "Petronas Logistics Services Sdn. Bhd.",
+                ClientEmail = "billing@petronasfleet.my",
+                ClientAddress = "Persiaran Sultan، سكشن 13، شاه عالم 40100",
+                ClientPhone = "+60 3 5511 2233",
+                IssueDate = DateTime.UtcNow.AddDays(-4),
+                ValidUntil = DateTime.UtcNow.AddDays(10),
+                EstimatedDurationDays = 2,
+                SubTotal = 2200m,
+                TaxRate = 8m,
+                TaxAmount = 176m,
+                TotalAmount = 2376m,
+                Status = QuotationStatus.Accepted,
+                Notes = "عرض سعر لضبط الزوايا واستبدال الإطارات",
+                TermsAndConditions = "يشمل العرض أجور العمل فقط، والقطع حسب المتوفر.",
+                CreatedByUserId = adminUserId,
+                MaintenanceRequestId = req3Id,
+                ClientId = client3Id,
+                CreatedAt = DateTime.UtcNow.AddDays(-4)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── QuotationLineItems ───────────────────────────────────────────────────
+        var quotationLine1Id = new Guid("00000000-0000-0000-0117-000000000117");
+        var quotationLine2Id = new Guid("00000000-0000-0000-0118-000000000118");
+        var quotationLine3Id = new Guid("00000000-0000-0000-0119-000000000119");
+
+        if (!await context.QuotationLineItems.AnyAsync(li => li.Id == quotationLine1Id))
+        {
+            context.QuotationLineItems.Add(new QuotationLineItem
+            {
+                Id = quotationLine1Id,
+                Description = "خدمة صيانة دورية 30 ألف كم",
+                Quantity = 1m,
+                UnitPrice = 1200m,
+                Total = 1200m,
+                QuotationId = quotation1Id,
+                CreatedAt = DateTime.UtcNow.AddDays(-12)
+            });
+        }
+
+        if (!await context.QuotationLineItems.AnyAsync(li => li.Id == quotationLine2Id))
+        {
+            context.QuotationLineItems.Add(new QuotationLineItem
+            {
+                Id = quotationLine2Id,
+                Description = "مواد وقطع استهلاكية",
+                Quantity = 1m,
+                UnitPrice = 600m,
+                Total = 600m,
+                QuotationId = quotation1Id,
+                CreatedAt = DateTime.UtcNow.AddDays(-12)
+            });
+        }
+
+        if (!await context.QuotationLineItems.AnyAsync(li => li.Id == quotationLine3Id))
+        {
+            context.QuotationLineItems.Add(new QuotationLineItem
+            {
+                Id = quotationLine3Id,
+                Description = "ضبط زوايا + ترصيص + اختبار طريق",
+                Quantity = 1m,
+                UnitPrice = 2200m,
+                Total = 2200m,
+                QuotationId = quotation2Id,
+                CreatedAt = DateTime.UtcNow.AddDays(-4)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── MeterReadings ─────────────────────────────────────────────────────────
+        var meterReading1Id = new Guid("00000000-0000-0000-0120-000000000120");
+        var meterReading2Id = new Guid("00000000-0000-0000-0121-000000000121");
+
+        if (!await context.MeterReadings.AnyAsync(m => m.Id == meterReading1Id))
+        {
+            context.MeterReadings.Add(new MeterReading
+            {
+                Id = meterReading1Id,
+                UnitId = unitSeeds[0].Id,
+                Type = MeterType.Electricity,
+                ReadingValue = 16540,
+                PreviousReadingValue = 16485,
+                Consumption = 55,
+                ReadingDate = DateTime.UtcNow.AddDays(-2),
+                ReadByUserId = adminUserId,
+                UnitPrice = 0.57m,
+                CalculatedAmount = 31.35m,
+                GeneratedInvoiceId = inv1Id,
+                Notes = "قراءة شهرية - عداد الطابق الأول",
+                CreatedAt = DateTime.UtcNow.AddDays(-2)
+            });
+        }
+
+        if (!await context.MeterReadings.AnyAsync(m => m.Id == meterReading2Id))
+        {
+            context.MeterReadings.Add(new MeterReading
+            {
+                Id = meterReading2Id,
+                UnitId = unitSeeds[1].Id,
+                Type = MeterType.Water,
+                ReadingValue = 8842,
+                PreviousReadingValue = 8826,
+                Consumption = 16,
+                ReadingDate = DateTime.UtcNow.AddDays(-1),
+                ReadByUserId = adminUserId,
+                UnitPrice = 2.10m,
+                CalculatedAmount = 33.60m,
+                Notes = "قراءة شهرية - استهلاك المياه",
+                CreatedAt = DateTime.UtcNow.AddDays(-1)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── Renovations ───────────────────────────────────────────────────────────
+        var renovation1Id = new Guid("00000000-0000-0000-0122-000000000122");
+        var renovation2Id = new Guid("00000000-0000-0000-0123-000000000123");
+
+        if (!await context.Renovations.AnyAsync(r => r.Id == renovation1Id))
+        {
+            context.Renovations.Add(new Renovation
+            {
+                Id = renovation1Id,
+                UnitId = unitSeeds[4].Id,
+                Title = "تجديد دورة المياه الرئيسية",
+                Description = "تحديث السباكة واستبدال الأدوات الصحية والأرضيات.",
+                StartDate = DateTime.UtcNow.AddDays(-45),
+                EndDate = DateTime.UtcNow.AddDays(-20),
+                Status = RenovationStatus.Completed,
+                Budget = 15000m,
+                ActualCost = 14850m,
+                ContractorName = "KL Renovation Works",
+                ContractorPhone = "+60 12 888 2222",
+                ApprovedByUserId = adminUserId,
+                ApprovedAt = DateTime.UtcNow.AddDays(-47),
+                Notes = "تم التسليم دون ملاحظات.",
+                CreatedAt = DateTime.UtcNow.AddDays(-50)
+            });
+        }
+
+        if (!await context.Renovations.AnyAsync(r => r.Id == renovation2Id))
+        {
+            context.Renovations.Add(new Renovation
+            {
+                Id = renovation2Id,
+                UnitId = unitSeeds[8].Id,
+                Title = "تجديد نظام الإضاءة الداخلية",
+                Description = "استبدال إنارة LED ولوحة التحكم الذكية.",
+                StartDate = DateTime.UtcNow.AddDays(-5),
+                Status = RenovationStatus.InProgress,
+                Budget = 9800m,
+                ActualCost = 4200m,
+                ContractorName = "Shah Alam Electrical",
+                ContractorPhone = "+60 13 777 1111",
+                ApprovedByUserId = adminUserId,
+                ApprovedAt = DateTime.UtcNow.AddDays(-7),
+                Notes = "المرحلة الثانية قيد التنفيذ.",
+                CreatedAt = DateTime.UtcNow.AddDays(-8)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── Vendors ───────────────────────────────────────────────────────────────
+        var vendor1Id = new Guid("00000000-0000-0000-0124-000000000124");
+        var vendor2Id = new Guid("00000000-0000-0000-0125-000000000125");
+
+        if (!await context.Vendors.AnyAsync(v => v.Id == vendor1Id))
+        {
+            context.Vendors.Add(new Vendor
+            {
+                Id = vendor1Id,
+                Name = "Alpha Building Supplies",
+                CompanyName = "Alpha Building Supplies Sdn. Bhd.",
+                Email = "ap@alphabuilding.my",
+                Phone = "+60 3 6200 1100",
+                Address = "Mont Kiara, Kuala Lumpur",
+                TaxNumber = "SST-ALPHA-2024-019",
+                BankName = "Maybank",
+                BankAccountNumber = "514288992211",
+                IsActive = true,
+                Notes = "مورّد مواد تجديد داخلية.",
+                CreatedAt = DateTime.UtcNow.AddDays(-120)
+            });
+        }
+
+        if (!await context.Vendors.AnyAsync(v => v.Id == vendor2Id))
+        {
+            context.Vendors.Add(new Vendor
+            {
+                Id = vendor2Id,
+                Name = "Metro M&E Services",
+                CompanyName = "Metro M&E Services Sdn. Bhd.",
+                Email = "finance@metrome.my",
+                Phone = "+60 3 7722 3344",
+                Address = "Shah Alam, Selangor",
+                TaxNumber = "SST-METRO-2024-044",
+                BankName = "CIMB",
+                BankAccountNumber = "800113245500",
+                IsActive = true,
+                Notes = "مورّد خدمات كهربائية وميكانيكية.",
+                CreatedAt = DateTime.UtcNow.AddDays(-95)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── Expenses ──────────────────────────────────────────────────────────────
+        var expense1Id = new Guid("00000000-0000-0000-0126-000000000126");
+        var expense2Id = new Guid("00000000-0000-0000-0127-000000000127");
+
+        if (!await context.Expenses.AnyAsync(ex => ex.Id == expense1Id))
+        {
+            context.Expenses.Add(new Expense
+            {
+                Id = expense1Id,
+                ExpenseNumber = "EXP-2024-MY-001",
+                VendorId = vendor1Id,
+                Amount = 13750m,
+                TaxAmount = 1100m,
+                TotalAmount = 14850m,
+                ExpenseDate = DateTime.UtcNow.AddDays(-20),
+                DueDate = DateTime.UtcNow.AddDays(-5),
+                PaidDate = DateTime.UtcNow.AddDays(-4),
+                Status = ExpenseStatus.Paid,
+                Description = "مصاريف مواد وأعمال تجديد دورة المياه.",
+                InvoiceNumber = "ABS-INV-8821",
+                CreatedByUserId = adminUserId,
+                ApprovedByUserId = adminUserId,
+                RenovationId = renovation1Id,
+                CreatedAt = DateTime.UtcNow.AddDays(-20)
+            });
+        }
+
+        if (!await context.Expenses.AnyAsync(ex => ex.Id == expense2Id))
+        {
+            context.Expenses.Add(new Expense
+            {
+                Id = expense2Id,
+                ExpenseNumber = "EXP-2024-MY-002",
+                VendorId = vendor2Id,
+                Amount = 4200m,
+                TaxAmount = 336m,
+                TotalAmount = 4536m,
+                ExpenseDate = DateTime.UtcNow.AddDays(-3),
+                DueDate = DateTime.UtcNow.AddDays(12),
+                Status = ExpenseStatus.Approved,
+                Description = "دفعة أولى لتجديد نظام الإضاءة الداخلية.",
+                InvoiceNumber = "MME-INV-3307",
+                CreatedByUserId = adminUserId,
+                ApprovedByUserId = adminUserId,
+                RenovationId = renovation2Id,
+                CreatedAt = DateTime.UtcNow.AddDays(-3)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── Accounts / JournalEntries / JournalLineItems ─────────────────────────
+        var accountCashId = new Guid("00000000-0000-0000-0128-000000000128");
+        var accountPayableId = new Guid("00000000-0000-0000-0129-000000000129");
+        var accountExpenseId = new Guid("00000000-0000-0000-0130-000000000130");
+        var journalEntry1Id = new Guid("00000000-0000-0000-0131-000000000131");
+        var journalEntry2Id = new Guid("00000000-0000-0000-0132-000000000132");
+        var journalLine1Id = new Guid("00000000-0000-0000-0133-000000000133");
+        var journalLine2Id = new Guid("00000000-0000-0000-0134-000000000134");
+        var journalLine3Id = new Guid("00000000-0000-0000-0135-000000000135");
+        var journalLine4Id = new Guid("00000000-0000-0000-0136-000000000136");
+
+        if (!await context.Accounts.AnyAsync(a => a.Id == accountCashId))
+        {
+            context.Accounts.Add(new Account
+            {
+                Id = accountCashId,
+                AccountCode = "1000",
+                Name = "Cash at Bank",
+                Type = AccountType.Asset,
+                Balance = 250000m,
+                OpeningBalance = 200000m,
+                OpeningBalanceDate = new DateTime(DateTime.UtcNow.Year, 1, 1),
+                Description = "Primary operating bank account",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow.AddDays(-180)
+            });
+        }
+
+        if (!await context.Accounts.AnyAsync(a => a.Id == accountPayableId))
+        {
+            context.Accounts.Add(new Account
+            {
+                Id = accountPayableId,
+                AccountCode = "2100",
+                Name = "Accounts Payable",
+                Type = AccountType.Liability,
+                Balance = 10000m,
+                OpeningBalance = 5000m,
+                OpeningBalanceDate = new DateTime(DateTime.UtcNow.Year, 1, 1),
+                Description = "Outstanding vendor obligations",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow.AddDays(-180)
+            });
+        }
+
+        if (!await context.Accounts.AnyAsync(a => a.Id == accountExpenseId))
+        {
+            context.Accounts.Add(new Account
+            {
+                Id = accountExpenseId,
+                AccountCode = "5200",
+                Name = "Renovation Expense",
+                Type = AccountType.Expense,
+                Balance = 19386m,
+                OpeningBalance = 0m,
+                OpeningBalanceDate = new DateTime(DateTime.UtcNow.Year, 1, 1),
+                Description = "Renovation and improvement expenses",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow.AddDays(-180)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        if (!await context.JournalEntries.AnyAsync(j => j.Id == journalEntry1Id))
+        {
+            context.JournalEntries.Add(new JournalEntry
+            {
+                Id = journalEntry1Id,
+                EntryNumber = "JE-2024-001",
+                EntryDate = DateTime.UtcNow.AddDays(-20),
+                Description = "إثبات مصروف تجديد دورة المياه",
+                IsPosted = true,
+                PostedDate = DateTime.UtcNow.AddDays(-20),
+                CreatedByUserId = adminUserId,
+                ApprovedByUserId = adminUserId,
+                ApprovedAt = DateTime.UtcNow.AddDays(-20),
+                SourceType = "Expense",
+                SourceId = expense1Id.ToString(),
+                CreatedAt = DateTime.UtcNow.AddDays(-20)
+            });
+        }
+
+        if (!await context.JournalEntries.AnyAsync(j => j.Id == journalEntry2Id))
+        {
+            context.JournalEntries.Add(new JournalEntry
+            {
+                Id = journalEntry2Id,
+                EntryNumber = "JE-2024-002",
+                EntryDate = DateTime.UtcNow.AddDays(-3),
+                Description = "إثبات دفعة أولى لتجديد الإضاءة",
+                IsPosted = true,
+                PostedDate = DateTime.UtcNow.AddDays(-3),
+                CreatedByUserId = adminUserId,
+                ApprovedByUserId = adminUserId,
+                ApprovedAt = DateTime.UtcNow.AddDays(-3),
+                SourceType = "Expense",
+                SourceId = expense2Id.ToString(),
+                CreatedAt = DateTime.UtcNow.AddDays(-3)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        if (!await context.JournalLineItems.AnyAsync(j => j.Id == journalLine1Id))
+        {
+            context.JournalLineItems.Add(new JournalLineItem
+            {
+                Id = journalLine1Id,
+                JournalEntryId = journalEntry1Id,
+                AccountId = accountExpenseId,
+                Debit = 14850m,
+                Credit = 0m,
+                Description = "Renovation expense recognition",
+                ReferenceType = "Expense",
+                ReferenceId = expense1Id.ToString(),
+                CreatedAt = DateTime.UtcNow.AddDays(-20)
+            });
+        }
+
+        if (!await context.JournalLineItems.AnyAsync(j => j.Id == journalLine2Id))
+        {
+            context.JournalLineItems.Add(new JournalLineItem
+            {
+                Id = journalLine2Id,
+                JournalEntryId = journalEntry1Id,
+                AccountId = accountCashId,
+                Debit = 0m,
+                Credit = 14850m,
+                Description = "Cash payment for renovation",
+                ReferenceType = "Expense",
+                ReferenceId = expense1Id.ToString(),
+                CreatedAt = DateTime.UtcNow.AddDays(-20)
+            });
+        }
+
+        if (!await context.JournalLineItems.AnyAsync(j => j.Id == journalLine3Id))
+        {
+            context.JournalLineItems.Add(new JournalLineItem
+            {
+                Id = journalLine3Id,
+                JournalEntryId = journalEntry2Id,
+                AccountId = accountExpenseId,
+                Debit = 4536m,
+                Credit = 0m,
+                Description = "Lighting renovation expense",
+                ReferenceType = "Expense",
+                ReferenceId = expense2Id.ToString(),
+                CreatedAt = DateTime.UtcNow.AddDays(-3)
+            });
+        }
+
+        if (!await context.JournalLineItems.AnyAsync(j => j.Id == journalLine4Id))
+        {
+            context.JournalLineItems.Add(new JournalLineItem
+            {
+                Id = journalLine4Id,
+                JournalEntryId = journalEntry2Id,
+                AccountId = accountPayableId,
+                Debit = 0m,
+                Credit = 4536m,
+                Description = "Outstanding payable to vendor",
+                ReferenceType = "Expense",
+                ReferenceId = expense2Id.ToString(),
+                CreatedAt = DateTime.UtcNow.AddDays(-3)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── PaymentVouchers ───────────────────────────────────────────────────────
+        var paymentVoucher1Id = new Guid("00000000-0000-0000-0137-000000000137");
+        var paymentVoucher2Id = new Guid("00000000-0000-0000-0138-000000000138");
+
+        if (!await context.PaymentVouchers.AnyAsync(v => v.Id == paymentVoucher1Id))
+        {
+            context.PaymentVouchers.Add(new PaymentVoucher
+            {
+                Id = paymentVoucher1Id,
+                VoucherNumber = "PV-2024-MY-001",
+                VoucherDate = DateTime.UtcNow.AddDays(-4),
+                Amount = 14850m,
+                PaymentMethod = PaymentMethod.BankTransfer,
+                ExpenseId = expense1Id,
+                PayeeName = "Alpha Building Supplies",
+                Description = "دفعة كاملة لمصاريف تجديد دورة المياه",
+                CreatedByUserId = adminUserId,
+                ApprovedByUserId = adminUserId,
+                IsPrinted = true,
+                PrintedAt = DateTime.UtcNow.AddDays(-4),
+                PrintedByUserId = adminUserId,
+                CreatedAt = DateTime.UtcNow.AddDays(-4)
+            });
+        }
+
+        if (!await context.PaymentVouchers.AnyAsync(v => v.Id == paymentVoucher2Id))
+        {
+            context.PaymentVouchers.Add(new PaymentVoucher
+            {
+                Id = paymentVoucher2Id,
+                VoucherNumber = "PV-2024-MY-002",
+                VoucherDate = DateTime.UtcNow.AddDays(-1),
+                Amount = 2592m,
+                PaymentMethod = PaymentMethod.CreditCard,
+                InvoiceId = inv4Id,
+                PayeeName = "KL Smart Mobility Sdn. Bhd.",
+                Description = "تحصيل جزئي لفاتورة INV-2024-MY-004",
+                CreatedByUserId = adminUserId,
+                ApprovedByUserId = adminUserId,
+                IsPrinted = false,
+                CreatedAt = DateTime.UtcNow.AddDays(-1)
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        // ── BankReconciliations / ReconciliationEntries ──────────────────────────
+        var reconciliation1Id = new Guid("00000000-0000-0000-0139-000000000139");
+        var reconciliationEntry1Id = new Guid("00000000-0000-0000-0140-000000000140");
+        var reconciliationEntry2Id = new Guid("00000000-0000-0000-0141-000000000141");
+
+        if (!await context.BankReconciliations.AnyAsync(b => b.Id == reconciliation1Id))
+        {
+            context.BankReconciliations.Add(new BankReconciliation
+            {
+                Id = reconciliation1Id,
+                BankAccountName = "Operations Current Account",
+                BankAccountNumber = "514288992211",
+                StatementDate = DateTime.UtcNow.Date,
+                StatementStartDate = DateTime.UtcNow.Date.AddDays(-30),
+                StatementEndDate = DateTime.UtcNow.Date,
+                StatementOpeningBalance = 245000m,
+                StatementClosingBalance = 230150m,
+                SystemOpeningBalance = 245000m,
+                SystemClosingBalance = 230150m,
+                Difference = 0m,
+                IsReconciled = true,
+                ReconciledAt = DateTime.UtcNow,
+                ReconciledByUserId = adminUserId,
+                Notes = "مطابقة كشف البنك لشهر التشغيل الحالي.",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        await context.SaveChangesAsync();
+
+        if (!await context.ReconciliationEntries.AnyAsync(r => r.Id == reconciliationEntry1Id))
+        {
+            context.ReconciliationEntries.Add(new ReconciliationEntry
+            {
+                Id = reconciliationEntry1Id,
+                BankReconciliationId = reconciliation1Id,
+                TransactionType = "PaymentVoucher",
+                TransactionId = paymentVoucher1Id,
+                TransactionDate = DateTime.UtcNow.AddDays(-4),
+                Amount = -14850m,
+                IsMatched = true,
+                Notes = "دفعة مورّد Alpha Building Supplies",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
+
+        if (!await context.ReconciliationEntries.AnyAsync(r => r.Id == reconciliationEntry2Id))
+        {
+            context.ReconciliationEntries.Add(new ReconciliationEntry
+            {
+                Id = reconciliationEntry2Id,
+                BankReconciliationId = reconciliation1Id,
+                TransactionType = "PaymentVoucher",
+                TransactionId = paymentVoucher2Id,
+                TransactionDate = DateTime.UtcNow.AddDays(-1),
+                Amount = 2592m,
+                IsMatched = true,
+                Notes = "تحصيل عميل KL Smart Mobility",
+                CreatedAt = DateTime.UtcNow
             });
         }
 
