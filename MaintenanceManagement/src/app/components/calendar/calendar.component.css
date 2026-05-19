@@ -103,6 +103,42 @@
   padding-left: 4px;
 }
 
+/* ===== RESPONSIVE ===== */
+@media (max-width: 767.98px) {
+  .calendar-cell {
+    min-height: 70px;
+    padding: 2px;
+  }
+
+  .task-chip {
+    font-size: 0.65rem;
+    padding: 1px 3px;
+  }
+
+  .cell-date {
+    font-size: 0.75rem;
+    width: 22px;
+    height: 22px;
+  }
+
+  .calendar-header-cell {
+    font-size: 0.65rem;
+    padding: 6px 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-cell {
+    min-height: 52px;
+  }
+
+  /* Shorten day names to single letter on very small screens */
+  .calendar-header-cell {
+    font-size: 0.6rem;
+    padding: 4px 1px;
+  }
+}
+
 /* Legend */
 .legend-item {
   display: flex;

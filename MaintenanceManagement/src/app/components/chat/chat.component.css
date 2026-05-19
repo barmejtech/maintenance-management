@@ -4,6 +4,33 @@
 .users-list { max-height: 100%; }
 .messages-area { flex: 1; min-height: 0; height: 0; flex-grow: 1; }
 
+/* ===== RESPONSIVE ===== */
+@media (max-width: 767.98px) {
+  :host { height: auto; min-height: 0; }
+
+  /* Users list stacks above messages; limit its height so messages are visible */
+  .chat-layout-row {
+    height: auto;
+    min-height: 0;
+  }
+
+  .chat-card { height: auto; }
+
+  /* Users sidebar: compact scrollable list */
+  .users-list {
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  /* Message area: give it a defined scrollable height */
+  .messages-area {
+    height: 45vh;
+    min-height: 200px;
+    flex-grow: 0;
+    overflow-y: auto;
+  }
+}
+
 /* User list */
 .user-row { transition: background 0.15s; }
 .user-row:hover { background: #f0f4ff; }

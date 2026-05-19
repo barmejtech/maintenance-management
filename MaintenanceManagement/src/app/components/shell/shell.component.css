@@ -397,6 +397,13 @@
 
 @media (max-width: 480px) {
   .dash-header { padding: 0 1rem; }
+  .main-content { padding: 0.875rem; }
+}
+
+@media (max-width: 375px) {
+  .dash-header { padding: 0 0.75rem; }
+  .main-content { padding: 0.625rem; }
+  .dash-title h1 { font-size: 0.9rem; }
 }
 
 /* ===== DARK MODE ===== */
