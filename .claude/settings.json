@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-Content \"c:\\\\Users\\\\najib\\\\Desktop\\\\Maintenance-management\\\\MaintenanceManagement\\\\angular.json\")",
+      "Bash(Select-String \"outputPath\")",
+      "Bash(Select-Object -First 5)"
+    ]
+  }
+}

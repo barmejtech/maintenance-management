@@ -1,7 +1,7 @@
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: studies-sqlserver
+    container_name: maintenance-sqlserver
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "Admin@2026"
@@ -9,8 +9,8 @@ services:
     ports:
       - "1434:1433"
     volumes:
-      - studies_sqldata:/var/opt/mssql
+      - maintenance_sqldata:/var/opt/mssql
     restart: unless-stopped
 
 volumes:
-  studies_sqldata:
+  maintenance_sqldata:

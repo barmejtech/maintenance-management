@@ -1,10 +1,10 @@
 [Unit]
 Description=Maintenance Management API
-After=network.target
+After=network.target docker.service
 
 [Service]
 WorkingDirectory=/opt/maintenance-api
-ExecStart=/root/.dotnet/dotnet /opt/maintenance-api/MaintenanceManagement.Api.dll
+ExecStart=/usr/bin/dotnet /opt/maintenance-api/MaintenanceManagement.Api.dll
 Restart=always
 RestartSec=10
 User=root

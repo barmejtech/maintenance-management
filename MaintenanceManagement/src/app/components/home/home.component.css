@@ -40,10 +40,10 @@
   letter-spacing: -0.01em;
 }
 
-.nav-brand i {
-  font-size: 1.4rem;
-  color: var(--home-accent-blue);
-  filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.45));
+.brand-img {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
 }
 
 .nav-links {
@@ -825,10 +825,6 @@
   letter-spacing: -0.01em;
 }
 
-.footer-brand i {
-  color: var(--home-accent-blue);
-  font-size: 1.35rem;
-}
 
 .footer-tagline {
   color: rgba(255, 255, 255, 0.45);
