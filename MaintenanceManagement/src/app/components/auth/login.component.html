@@ -13,42 +13,43 @@
     <i class="bi bi-globe2"></i> {{ 'lang.toggle' | translate }}
   </button>
   <div class="auth-card">
-    <div class="auth-header">
-      <div class="auth-logo"><img src="maintenance.png" alt="Maintenance" class="auth-logo-img" /></div>
-      <h1>VehicleRepairPro</h1>
-      <h2>{{ 'login.signIn' | translate }}</h2>
+    <img src="maintenance.png" alt="Maintenance" class="auth-banner-img" />
+    <div class="auth-inner">
+      <div class="auth-header">
+        <h2>{{ 'login.signIn' | translate }}</h2>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">{{ 'login.emailLabel' | translate }}</label>
+          <input id="email" type="email" formControlName="email" [placeholder]="'login.emailPlaceholder' | translate" />
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <span class="error">{{ 'login.emailRequired' | translate }}</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="password">{{ 'login.passwordLabel' | translate }}</label>
+          <input id="password" type="password" formControlName="password" [placeholder]="'login.passwordPlaceholder' | translate" />
+          @if (form.get('password')?.invalid && form.get('password')?.touched) {
+            <span class="error">{{ 'login.passwordRequired' | translate }}</span>
+          }
+        </div>
+        <div class="forgot-password-row">
+          <a routerLink="/forgot-password" class="forgot-password-link">{{ 'login.forgotPassword' | translate }}</a>
+        </div>
+        @if (errorMessage()) {
+          <div class="alert-error">{{ errorMessage() }}</div>
+        }
+        <button type="submit" [disabled]="form.invalid || isLoading()" class="btn-primary">
+          {{ isLoading() ? ('login.signingIn' | translate) : ('login.submit' | translate) }}
+        </button>
+      </form>
+      <p class="auth-footer">
+        {{ 'login.noAccount' | translate }} <a routerLink="/register">{{ 'login.createOne' | translate }}</a>
+      </p>
+      <p class="auth-footer client-register-link">
+        New client? <a routerLink="/client-register">Create a client account</a>
+      </p>
     </div>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="email">{{ 'login.emailLabel' | translate }}</label>
-        <input id="email" type="email" formControlName="email" [placeholder]="'login.emailPlaceholder' | translate" />
-        @if (form.get('email')?.invalid && form.get('email')?.touched) {
-          <span class="error">{{ 'login.emailRequired' | translate }}</span>
-        }
-      </div>
-      <div class="form-group">
-        <label for="password">{{ 'login.passwordLabel' | translate }}</label>
-        <input id="password" type="password" formControlName="password" [placeholder]="'login.passwordPlaceholder' | translate" />
-        @if (form.get('password')?.invalid && form.get('password')?.touched) {
-          <span class="error">{{ 'login.passwordRequired' | translate }}</span>
-        }
-      </div>
-      <div class="forgot-password-row">
-        <a routerLink="/forgot-password" class="forgot-password-link">{{ 'login.forgotPassword' | translate }}</a>
-      </div>
-      @if (errorMessage()) {
-        <div class="alert-error">{{ errorMessage() }}</div>
-      }
-      <button type="submit" [disabled]="form.invalid || isLoading()" class="btn-primary">
-        {{ isLoading() ? ('login.signingIn' | translate) : ('login.submit' | translate) }}
-      </button>
-    </form>
-    <p class="auth-footer">
-      {{ 'login.noAccount' | translate }} <a routerLink="/register">{{ 'login.createOne' | translate }}</a>
-    </p>
-    <p class="auth-footer client-register-link">
-      New client? <a routerLink="/client-register">Create a client account</a>
-    </p>
   </div>
   <a routerLink="/home" class="auth-home-link">{{ 'login.backToHome' | translate }}</a>
 </div>
